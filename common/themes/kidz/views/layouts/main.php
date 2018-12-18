@@ -14,7 +14,7 @@ $themeAsset = Yii::$app->assetManager->getPublishedUrl('@kidz/assets/dist');
     <!-- ====================================
       ——— PRELOADER
       ===================================== -->
-    <div id="preloader" class="smooth-loader-wrapper">
+    <!--<div id="preloader" class="smooth-loader-wrapper">
        <div class="smooth-loader">
          <div class="loader">
            <span class="dot dot-1"></span>
@@ -23,7 +23,7 @@ $themeAsset = Yii::$app->assetManager->getPublishedUrl('@kidz/assets/dist');
            <span class="dot dot-4"></span>
          </div>
        </div>
-     </div>
+     </div>-->
 
     <div class="main-wrapper">
         <?= $this->render('_header', ['themeAsset' => $themeAsset]); ?>
