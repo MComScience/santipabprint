@@ -36,7 +36,7 @@ return [
         ],
         'languagepicker' => [
             'class' => 'lajax\languagepicker\Component',
-            'languages' => ['en' => 'English (US)', 'th' => 'ภาษาไทย'],
+            'languages' => ['th' => 'ภาษาไทย', 'en' => 'English (US)'],
         ],
     ],
     'modules' => [
