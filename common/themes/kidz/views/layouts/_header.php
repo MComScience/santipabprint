@@ -233,7 +233,7 @@ use yii\helpers\Html;
                         </a>
                     </li>
                     <?php if (Yii::$app->user->isGuest): ?>
-                    <li class="dropdown singleDrop color-2 ">
+                    <li class="dropdown singleDrop color-2 hidden-lg hidden-md">
                         <a href="<?= Url::to(['/auth/login']) ?>" role="modal-remote"><i class="fa fa-sign-in bg-color-2"></i>
                             <span>เข้าสู่ระบบ</span>
                         </a>
