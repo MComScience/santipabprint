@@ -232,6 +232,13 @@ use yii\helpers\Html;
                             <span>ติดต่อเรา</span>
                         </a>
                     </li>
+                    <?php if (Yii::$app->user->isGuest): ?>
+                    <li class="dropdown singleDrop color-2 ">
+                        <a href="<?= Url::to(['/auth/login']) ?>" role="modal-remote"><i class="fa fa-sign-in bg-color-2"></i>
+                            <span>เข้าสู่ระบบ</span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
                     <?php if (!Yii::$app->user->isGuest): ?>
                         <li class="dropdown singleDrop color-4 ">
                             <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button"
