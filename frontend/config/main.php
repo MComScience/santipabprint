@@ -73,7 +73,7 @@ return [
                     'class' => 'common\clients\Line',
                     'clientId' => '1631959964',
                     'clientSecret' => 'a5b6a3136ae0eb30009c3612dcfbb578',
-                    'returnUrl' => 'http://santipab.local/user/security/auth?authclient=line'
+                    'returnUrl' => 'http://203.150.78.203/user/security/auth?authclient=line'
                 ],
             ],
         ],
