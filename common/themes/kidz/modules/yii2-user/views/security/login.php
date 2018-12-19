@@ -68,7 +68,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endif; ?>
     <?php ActiveForm::end(); ?>
     <?= Connect::widget([
+        'id' => 'auth-choice',
         'baseAuthUrl' => ['/user/security/auth'],
+        'popupMode' => false,
     ]) ?>
 <?php else: ?>
     <?= $this->render('/_alert', ['module' => Yii::$app->getModule('user')]) ?>
