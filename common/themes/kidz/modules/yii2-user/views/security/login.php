@@ -25,8 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php if (Yii::$app->request->isAjax): ?>
     <style>
-        #ajaxCrudModal .modal-dialog {
-            width: 350px;
+        
+        /* Small devices (tablets, 768px and up) */
+        @media (min-width: 768px) { 
+            #ajaxCrudModal .modal-dialog {
+                width: 350px;
+            }
+        }
+        @media (max-width: 576px) { 
+            #ajaxCrudModal .modal-dialog {
+                width: auto;
+            }
         }
     </style>
     <?php $form = ActiveForm::begin([

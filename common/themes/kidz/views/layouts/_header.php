@@ -35,7 +35,7 @@ use yii\helpers\Html;
                         <li><i class="fa fa-envelope bg-color-1" aria-hidden="true"></i> <a
                                     href="mailto:santipabprint@gmail.com">santipabprint@gmail.com</a></li>
                         <li><i class="fa fa-phone bg-color-2" aria-hidden="true"></i> 053-241-519</li>
-                        <li><i class="fa fa-clock-o bg-color-6" aria-hidden="true"></i> เวลาทำการ: 09:00 - 16:00 น.</li>
+                        <li class="hidden-md hidden-xs hidden-sm"><i class="fa fa-clock-o bg-color-6" aria-hidden="true"></i> เวลาทำการ: 09:00 - 16:00 น.</li>
                     </ul>
                 </div>
                 <div class="col-sm-5">
