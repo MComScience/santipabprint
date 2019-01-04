@@ -16,7 +16,7 @@ class LineBotBuilder extends Component
 {
     public $access_token;
 
-    public $channelSecret = '47bd335446ef3278b98b3e80cfd0d0cb';
+    public $channelSecret = 'e7ea194db06c7d844d24505ed3e2a916';
 
     private $_httpClient;
 
@@ -28,7 +28,7 @@ class LineBotBuilder extends Component
     {
         parent::init();
         if ($this->access_token == null) {
-            $this->access_token = 'QA/I2F4zcaQCnx5k7RmUOF/8BCScrjh8pedCOq20IDmIwNqNY7YjmjYQN994sB4ZVYH1ypCp5xPqaLFwY+B6kieGP8CZiFr0Htj50IaT6Wq/fe4qZ3IL6IHr4QEE5l2kxyTcO+n6sQK1D3kK29iYOAdB04t89/1O/w1cDnyilFU=';
+            $this->access_token = '1t6nQ9r4R9DQvdMttAeM8RO11d+RuhC1cLvg0jtY+5AcItMSGuyK62RtUpm9zZl55WXKi9NSuqHdj5uzi+hHKwrJPeOzDiNIuqlMwICmkH9p1e4cYuvX/S48wqc7svlTSQgvdunNelC9+wuLFwhnEQdB04t89/1O/w1cDnyilFU=';
         }
         $this->createHttpClient();
     }

@@ -94,5 +94,8 @@ return [
                 'user' => null, // disable menu
             ],
         ],
+        'webhook' => [
+            'class' => 'common\modules\webhook\Module',
+        ],
     ],
 ];
