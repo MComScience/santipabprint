@@ -86,6 +86,7 @@ return [
             'user/registration/*',
             'user/recovery/*',
             'user/security/*',
+            'webhook/*'
         ]
     ],
     'params' => $params,
