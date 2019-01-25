@@ -27,7 +27,7 @@ class SecurityController extends BaseSecurityController
             $response->format = \yii\web\Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title' => 'Login',
+                    'title' => Yii::t('user', 'Sign in'),
                     'content' => $this->renderAjax('login',[
                         'model'  => $model,
                         'module' => $this->module,
@@ -39,7 +39,7 @@ class SecurityController extends BaseSecurityController
                 return $this->goBack();
             }else{
                 return [
-                    'title' => 'Login',
+                    'title' => Yii::t('user', 'Sign in'),
                     'content' => $this->renderAjax('login',[
                         'model'  => $model,
                         'module' => $this->module,

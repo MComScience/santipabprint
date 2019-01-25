@@ -2,6 +2,9 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\widgets\Menu;
+use kartik\icons\Icon;
+use yii\bootstrap\Nav;
 
 ?>
 <!-- ====================================
@@ -32,108 +35,58 @@ use yii\helpers\Html;
             <div class="row">
                 <div class="col-sm-7">
                     <ul class="list-inline topList">
-                        <li><i class="fa fa-envelope bg-color-1" aria-hidden="true"></i> <a
-                                    href="mailto:santipabprint@gmail.com">santipabprint@gmail.com</a></li>
-                        <li><i class="fa fa-phone bg-color-2" aria-hidden="true"></i> 053-241-519</li>
-                        <li class="hidden-md hidden-xs hidden-sm"><i class="fa fa-clock-o bg-color-6" aria-hidden="true"></i> เวลาทำการ: 09:00 - 16:00 น.</li>
+                        <li>
+                            <i class="fa fa-envelope bg-color-1" aria-hidden="true"></i>
+                            <a href="mailto:santipabprint@gmail.com">santipabprint@gmail.com</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-phone bg-color-2" aria-hidden="true"></i> 053-241-519
+                        </li>
+                        <li class="hidden-md hidden-xs hidden-sm">
+                            <i class="fa fa-clock-o bg-color-6" aria-hidden="true"></i> เวลาทำการ: 09:00 - 16:00 น.
+                        </li>
                     </ul>
                 </div>
                 <div class="col-sm-5">
-                    <ul class="list-inline functionList">
-                        <li class="">
-                            <?= \lajax\languagepicker\widgets\LanguagePicker::widget([
-                                'skin' => \lajax\languagepicker\widgets\LanguagePicker::SKIN_DROPDOWN,
-                                'size' => \lajax\languagepicker\widgets\LanguagePicker::SIZE_LARGE
-                            ]); ?>
-                            &nbsp;
-                        </li>
-                        <li>
-                            <?php if (Yii::$app->user->isGuest): ?>
-                                <i class="fa fa-lock bg-color-5" aria-hidden="true"></i>
-                                <?= Html::a('Login', ['/auth/login'], ['role' => 'modal-remote']); ?>
-                                <span>or</span>
-                                <?= Html::a('Register', ['/user/registration/register'], ['role' => 'modal-remote']); ?>
-                            <?php else: ?>
-                                <i class="fa fa-unlock-alt bg-color-5" aria-hidden="true"></i>
-                                <?= Html::a('Logout ' . '(' . Yii::$app->user->identity->username . ')', ['/auth/logout'], ['data-method' => 'post']); ?>
-                            <?php endif; ?>
-                        </li>
-                        <li class="cart-dropdown">
-                            <a href="#" class="bg-color-6 shop-cart">
-                                <i class="fa fa-shopping-basket " aria-hidden="true"></i>
-                                <span class="badge bg-color-1">3</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><i class="fa fa-shopping-basket " aria-hidden="true"></i>3 items in your cart</li>
-                                <li>
-                                    <a href="single-product.html">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <img src="<?= $themeAsset ?>/img/home/cart/cart-img.png"
-                                                     alt="cart-Image">
-                                            </div>
-                                            <div class="media-body">
-                                                <h4>Barbie Racing Car</h4>
-                                                <div class="price">
-                                                    <span class="color-1">$50</span>
-                                                </div>
-                                                <span class="amount">Qnt: 1</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <span class="cancel"><i class="fa fa-close" aria-hidden="true"></i></span>
-                                </li>
-                                <li>
-                                    <a href="single-product.html">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <img src="<?= $themeAsset ?>/img/home/cart/cart-img.png"
-                                                     alt="cart-Image">
-                                            </div>
-                                            <div class="media-body">
-                                                <h4>Barbie Racing Car</h4>
-                                                <div class="price">
-                                                    <span class="color-1">$50</span>
-                                                </div>
-                                                <span class="amount">Qnt: 1</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <span class="cancel"><i class="fa fa-close" aria-hidden="true"></i></span>
-                                </li>
-                                <li>
-                                    <a href="single-product.html">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <img src="<?= $themeAsset ?>/img/home/cart/cart-img.png"
-                                                     alt="cart-Image">
-                                            </div>
-                                            <div class="media-body">
-                                                <h4>Barbie Racing Car</h4>
-                                                <div class="price">
-                                                    <span class="color-1">$50</span>
-                                                </div>
-                                                <span class="amount">Qnt: 1</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <span class="cancel"><i class="fa fa-close" aria-hidden="true"></i></span>
-                                </li>
-                                <li>
-                                    <span class="cart-total">Subtotal</span>
-                                    <span class="cart-price">$150</span>
-                                    <div class="cart-button">
-                                        <button type="button" class="btn btn-primary"
-                                                onclick="location.href='checkout-step-1.html';">Checkout
-                                        </button>
-                                        <button type="button" class="btn btn-primary"
-                                                onclick="location.href='cart-page.html';">View Cart
-                                        </button>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <?php
+                    $session = Yii::$app->session;
+                    $cart = $session->get('cart');
+                    $count = 0;
+                    if ($session->has('cart') && $cart && is_array($cart)){
+                        $count = count($cart);
+                    }
+                    $items = [
+                        [
+                            'label' => Icon::show('shopping-basket') . Html::tag('span', $count, [
+                                    'class' => 'badge bg-color-1 header-cart'
+                                ]),
+                            'url' => ['/product/cart'],
+                            'options' => ['class' => 'cart-dropdown'],
+                            'template' => '<a href="{url}" class="bg-color-6 shop-cart">{label}</a>',
+                        ],
+                    ];
+                    echo Menu::widget([
+                        'items' => array_merge([
+                            [
+                                'label' => \lajax\languagepicker\widgets\LanguagePicker::widget([
+                                    'skin' => \lajax\languagepicker\widgets\LanguagePicker::SKIN_DROPDOWN,
+                                    'size' => \lajax\languagepicker\widgets\LanguagePicker::SIZE_LARGE
+                                ])
+                            ],
+                            [
+                                'label' => 'เข้าสู่ระบบ',
+                                'template' => Icon::show('lock', ['class' => 'bg-color-5']) .
+                                    '<a href="{url}" role="modal-remote">{label}</a><span>or</span>' .
+                                    Html::a('ลงทะเบียน', ['/user/registration/register'], ['role' => 'modal-remote']),
+                                'url' => ['/auth/login'],
+                                'visible' => Yii::$app->user->isGuest
+                            ],
+                        ], $items),
+                        'options' => ['class' => 'list-inline functionList'],
+                        'encodeLabels' => false,
+                        'submenuTemplate' => "\n<ul class='dropdown-menu dropdown-menu-right'>\n{items}\n</ul>\n"
+                    ]);
+                    ?>
                 </div>
             </div>
         </div>
@@ -150,59 +103,123 @@ use yii\helpers\Html;
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?= Url::base(true) ?>"><img
-                            src="<?= Yii::getAlias('@web/images/santipab_logo.png') ?>" alt="Kidz School"></a>
+                <a class="navbar-brand" href="<?= Url::base(true) ?>">
+                    <img src="<?= Yii::getAlias('@web/images/santipab_logo.png') ?>" alt="<?= Yii::$app->name ?>">
+                </a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <?php
+                $dropDownOptions = ['class' => 'dropdown-menu dropdown-menu-right'];
+                echo Nav::widget([
+                    'items' => [
+                        [
+                            'label' => Icon::show('home', ['class' => 'bg-color-1']) . '<span>หน้าแรก</span>',
+                            'url' => ['/site/index'],
+                            'options' => [
+                                'class' => 'singleDrop color-1'
+                            ],
+                            'visible' => false
+                        ],
+                        [
+                            'label' => Icon::show('th', ['class' => 'bg-color-3']) . '<span>สินค้า</span>',
+                            'url' => ['/app/product/index'],
+                            'options' => [
+                                'class' => 'singleDrop color-3'
+                            ]
+                        ],
+                        [
+                            'label' => Icon::show('cogs', ['class' => 'bg-color-3']) . '<span>ตั้งค่า</span>',
+                            'url' => 'javascript:void(0)',
+                            'options' => [
+                                'class' => 'singleDrop color-3'
+                            ],
+                            'items' => [
+                                [
+                                    'label' => Icon::show('shopping-cart') . 'สินค้า',
+                                    'url' => ['/app/setting/index'],
+                                ],
+                                [
+                                    'label' => Icon::show('users') . 'ผู้ใช้งาน',
+                                    'url' => ['/user/admin/index'],
+                                ],
+                                [
+                                    'label' => Icon::show('circle-thin') . 'สิทธิ์',
+                                    'url' => ['/rbac'],
+                                ],
+                            ],
+                            'dropDownOptions' => $dropDownOptions,
+                            'visible' => !Yii::$app->user->isGuest && Yii::$app->user->can('admin')
+                        ],
+                        [
+                            'label' => Icon::show('th', ['class' => 'bg-color-5']) . '<span>เกี่ยวกับเรา</span>',
+                            'url' => ['/site/about'],
+                            'options' => [
+                                'class' => 'singleDrop color-5'
+                            ]
+                        ],
+                        [
+                            'label' => Icon::show('phone', ['class' => 'bg-color-6']) . '<span>ติดต่อเรา</span>',
+                            'url' => ['/site/contact'],
+                            'options' => [
+                                'class' => 'singleDrop color-6'
+                            ]
+                        ],
+                        [
+                            'label' => Icon::show('sign-in', ['class' => 'bg-color-6']) . '<span>เข้าสู่ระบบ</span>',
+                            'url' => ['/auth/login'],
+                            'options' => [
+                                'class' => 'singleDrop color-2 hidden-lg hidden-md'
+                            ],
+                            'linkOptions' => ['role' => 'modal-remote'],
+                            'visible' => Yii::$app->user->isGuest
+                        ],
+                        [
+                            'label' => Icon::show('user', ['class' => 'bg-color-4']) . '<span>บัญชีผู้ใช้</span>',
+                            'url' => 'javascript:void(0)',
+                            'options' => [
+                                'class' => 'singleDrop color-4'
+                            ],
+                            'items' => [
+                                [
+                                    'label' => Icon::show('address-card-o') . 'ข้อมูลส่วนตัว',
+                                    'url' => ['/user/settings/profile'],
+                                ],
+                                [
+                                    'label' => Icon::show('address-card-o') . 'บัญชี',
+                                    'url' => ['/user/settings/account'],
+                                ],
+                            ],
+                            'dropDownOptions' => $dropDownOptions,
+                            'visible' => !Yii::$app->user->isGuest
+                        ],
+                        [
+                            'label' => Icon::show('sign-out',['class' => 'bg-color-4']) . '<span>ออกจากระบบ</span>',
+                            'url' => ['/auth/logout'],
+                            'linkOptions' => ['data-method' => 'post'],
+                            'options' => [
+                                'class' => 'singleDrop color-4'
+                            ],
+                            'visible' => !Yii::$app->user->isGuest
+                        ],
+                    ],
+                    'options' => ['class' => 'nav navbar-nav navbar-right'],
+                    'encodeLabels' => false,
+                    'dropDownCaret' => '',
+                ]);
+                ?>
+                <?php /*
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown singleDrop color-1   active ">
+                    <li class="dropdown singleDrop color-1">
                         <a href="<?= Url::base(true) ?>">
                             <i class="fa fa-home bg-color-1" aria-hidden="true"></i> <span class="active">หน้าแรก</span>
                         </a>
                     </li>
-                    <li class="dropdown singleDrop color-3 ">
-                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-haspopup="true" aria-expanded="false"><i class="fa fa-print bg-color-3"
-                                                                         aria-hidden="true"></i>
-                            <span>ดิจิตอลพริ้นท์</span></a>
-                        <ul class="dropdown-menu dropdown-menu-left">
-                            <li class=" "><a href="#">Print On Demend</a></li>
-                            <li class=" "><a href="#">Personalized Printing</a></li>
-                        </ul>
-                    </li>
-                    <li class=" dropdown singleDrop color-2 ">
-                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown"
-                           data-hover="dropdown" data-delay="300" data-close-others="true" aria-expanded="false">
-                            <i class="fa fa-newspaper-o bg-color-2" aria-hidden="true"></i>
-                            <span>สื่อสิ่งพิมพ์</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-left" style="border-top: 4px solid #b5d56a;">
-                            <li class=" "><a href="#">หนังสือ และ วารสาร</a></li>
-                            <li class=" "><a href="#">ไดอารี่ และ สมุด</a></li>
-                            <li class=" "><a href="#">การ์ด และ นามบัตร</a></li>
-                            <li class=" "><a href="#">ใบปลิว และ แผ่นพั</a></li>
-                            <li class=" "><a href="#">ปฏิทิน</a></li>
-                            <li class=" "><a href="#">เอกสารสำนักงาน</a></li>
-                            <li class=" "><a href="#">อื่นๆ</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown singleDrop color-4 ">
-                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-cubes bg-color-4" aria-hidden="true"></i>
-                            <span>บรรจุภัณฑ์</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li class=" "><a href="#">ฉลากและป้ายสินค้า</a></li>
-                            <li class=" "><a href="#">กล่องกระดาษ</a></li>
-                            <li class=" "><a href="#">กล่องออฟเซ็ท</a></li>
-                            <li class=" "><a href="#">กล่องกระดาษหุ้มแข็ง</a></li>
-                            <li class=" "><a href="#">กระป๋องกระดาษ</a></li>
-                            <li class=" "><a href="#">ถุงกระดาษ</a></li>
-                            <li class=" "><a href="#">กล่องพลาสติก</a></li>
-                        </ul>
+                    <li class="singleDrop color-3 ">
+                        <a href="<?= Url::to(['/product/index']) ?>">
+                            <i class="fa fa-th bg-color-3" aria-hidden="true"></i>
+                            <span>สินค้า</span></a>
                     </li>
                     <?php if (!Yii::$app->user->isGuest && Yii::$app->user->can('admin')): ?>
                         <li class="dropdown singleDrop color-3 ">
@@ -211,6 +228,9 @@ use yii\helpers\Html;
                                                                              aria-hidden="true"></i>
                                 <span>ตั้งค่า</span></a>
                             <ul class="dropdown-menu dropdown-menu-right">
+                                <li class="">
+                                    <?= Html::a('<i class="fa fa-shopping-cart"></i>&nbsp;สินค้า', ['/settings/default/index']) ?>
+                                </li>
                                 <li class="">
                                     <?= Html::a('<i class="fa fa-users"></i>&nbsp;ผู้ใช้งาน', ['/user/admin/index']) ?>
                                 </li>
@@ -222,7 +242,7 @@ use yii\helpers\Html;
                     <?php endif; ?>
 
                     <li class="dropdown singleDrop color-5  ">
-                        <a href="<?= Url::to(['/site/about']) ?>" >
+                        <a href="<?= Url::to(['/site/about']) ?>">
                             <i class="fa fa-exclamation bg-color-5" aria-hidden="true"></i>
                             <span>เกี่ยวกับเรา</span>
                         </a>
@@ -233,11 +253,12 @@ use yii\helpers\Html;
                         </a>
                     </li>
                     <?php if (Yii::$app->user->isGuest): ?>
-                    <li class="dropdown singleDrop color-2 hidden-lg hidden-md">
-                        <a href="<?= Url::to(['/auth/login']) ?>" role="modal-remote"><i class="fa fa-sign-in bg-color-2"></i>
-                            <span>เข้าสู่ระบบ</span>
-                        </a>
-                    </li>
+                        <li class="dropdown singleDrop color-2 hidden-lg hidden-md">
+                            <a href="<?= Url::to(['/auth/login']) ?>" role="modal-remote"><i
+                                        class="fa fa-sign-in bg-color-2"></i>
+                                <span>เข้าสู่ระบบ</span>
+                            </a>
+                        </li>
                     <?php endif; ?>
                     <?php if (!Yii::$app->user->isGuest): ?>
                         <li class="dropdown singleDrop color-4 ">
@@ -258,80 +279,13 @@ use yii\helpers\Html;
                             </ul>
                         </li>
                     <?php endif; ?>
-                </ul>
+                </ul>*/ ?>
             </div>
-
             <div class="cart-dropdown">
-                <a href="#" class="bg-color-6 shop-cart">
+                <a href="<?= Url::to(['/product/cart']) ?>" class="bg-color-6 shop-cart">
                     <i class="fa fa-shopping-basket " aria-hidden="true"></i>
-                    <span class="badge bg-color-1">3</span>
+                    <span class="badge bg-color-1"><?= $count ?></span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li><i class="fa fa-shopping-basket " aria-hidden="true"></i>3 items in your cart</li>
-                    <li>
-                        <a href="single-product.html">
-                            <div class="media">
-                                <div class="media-left">
-                                    <img src="<?= $themeAsset ?>/img/home/cart/cart-img.png" alt="cart-Image">
-                                </div>
-                                <div class="media-body">
-                                    <h4>Barbie Racing Car</h4>
-                                    <div class="price">
-                                        <span class="color-1">$50</span>
-                                    </div>
-                                    <span class="amount">Qnt: 1</span>
-                                </div>
-                            </div>
-                        </a>
-                        <span class="cancel"><i class="fa fa-close" aria-hidden="true"></i></span>
-                    </li>
-                    <li>
-                        <a href="single-product.html">
-                            <div class="media">
-                                <div class="media-left">
-                                    <img src="<?= $themeAsset ?>/img/home/cart/cart-img.png" alt="cart-Image">
-                                </div>
-                                <div class="media-body">
-                                    <h4>Barbie Racing Car</h4>
-                                    <div class="price">
-                                        <span class="color-1">$50</span>
-                                    </div>
-                                    <span class="amount">Qnt: 1</span>
-                                </div>
-                            </div>
-                        </a>
-                        <span class="cancel"><i class="fa fa-close" aria-hidden="true"></i></span>
-                    </li>
-                    <li>
-                        <a href="single-product.html">
-                            <div class="media">
-                                <div class="media-left">
-                                    <img src="<?= $themeAsset ?>/img/home/cart/cart-img.png" alt="cart-Image">
-                                </div>
-                                <div class="media-body">
-                                    <h4>Barbie Racing Car</h4>
-                                    <div class="price">
-                                        <span class="color-1">$50</span>
-                                    </div>
-                                    <span class="amount">Qnt: 1</span>
-                                </div>
-                            </div>
-                        </a>
-                        <span class="cancel"><i class="fa fa-close" aria-hidden="true"></i></span>
-                    </li>
-                    <li>
-                        <span class="cart-total">Subtotal</span>
-                        <span class="cart-price">$150</span>
-                        <div class="cart-button">
-                            <button type="button" class="btn btn-primary"
-                                    onclick="location.href='checkout-step-1.html';">Checkout
-                            </button>
-                            <button type="button" class="btn btn-primary" onclick="location.href='cart-page.html';">View
-                                Cart
-                            </button>
-                        </div>
-                    </li>
-                </ul>
             </div>
         </div>
     </nav>

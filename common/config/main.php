@@ -6,6 +6,8 @@ return [
         '@kidz'   => '@common/themes/kidz',
         '@kidz/user' => '@kidz/modules/yii2-user',
         '@kidz/bootstraptoggle' => '@kidz/widgets/yii2-bootstrap-toggle/src',
+        '@adminlte' => '@common/themes/adminlte',
+        '@Mpdf' => '@common/lib/mpdf/src',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'name' => 'บริษัท สันติภาพแพ็คพริ้นท์ จำกัด',
@@ -36,7 +38,7 @@ return [
         ],
         'languagepicker' => [
             'class' => 'lajax\languagepicker\Component',
-            'languages' => ['th' => 'ภาษาไทย', 'en' => 'English (US)'],
+            'languages' => ['en' => 'English (US)', 'th' => 'ภาษาไทย'],
         ],
     ],
     'modules' => [
@@ -96,6 +98,20 @@ return [
         ],
         'webhook' => [
             'class' => 'common\modules\webhook\Module',
+        ],
+        'settings' => [
+            'class' => 'common\modules\settings\Module',
+            'layout' => '@adminlte/views/layouts/main',
+        ],
+        'redactor' => [
+            'class' => 'yii\redactor\RedactorModule',
+            'uploadDir' => '@webroot/uploads',
+            'uploadUrl' => '@web/uploads',
+            'imageAllowExtensions'=>['jpg','png','gif']
+        ],
+        'app' => [
+            'class' => 'common\modules\app\Module',
+            'layout' => '@adminlte/views/layouts/main',
         ],
     ],
 ];

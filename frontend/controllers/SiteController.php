@@ -242,4 +242,9 @@ class SiteController extends Controller
             return @rmdir($path);
         }
     }
+
+    public function actionInvoice()
+    {
+        return $this->renderAjax('invoice');
+    }
 }

@@ -21,11 +21,19 @@ if (Yii::$app->id == 'app-frontend') {
 KidzAsset::register($this);
 AjaxCrudAsset::register($this);
 $this->registerMetaTag([
-    'name' => 'keywords',
-    'content' => Yii::$app->name,
+    'name' => 'description',
+    'content' => $this->title,
 ]);
 $this->registerMetaTag([
-    'name' => 'description',
+    'name' => 'keywords',
+    'content' => 'บริษัท สันติภาพแพ็คพริ้นท์ จำกัด',
+]);
+$this->registerMetaTag([
+    'name' => 'og:description',
+    'content' => 'บริษัท สันติภาพแพ็คพริ้นท์ จำกัด ผลิตสิ่งพิมพ์และบรรจุภัณฑ์ ให้บริการครบวงจร',
+]);
+$this->registerMetaTag([
+    'name' => 'og:description',
     'content' => $this->title,
 ]);
 $this->registerMetaTag([
@@ -36,6 +44,18 @@ $this->registerMetaTag([
     'name' => 'keywords',
     'content' => 'MComScience',
 ]);
+$this->registerMetaTag([
+    'name' => 'og:image',
+    'content' => \yii\helpers\Url::base(true).'/images/santipab_logo.png',
+]);
+$this->registerMetaTag([
+    'name' => 'twitter:description',
+    'content' => 'บริษัท สันติภาพแพ็คพริ้นท์ จำกัด ผลิตสิ่งพิมพ์และบรรจุภัณฑ์ ให้บริการครบวงจร',
+]);
+$this->registerMetaTag([
+    'name' => 'twitter:image',
+    'content' => \yii\helpers\Url::base(true).'/images/santipab_logo.png',
+]);
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -43,7 +63,7 @@ $this->registerMetaTag([
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Icons -->
         <link rel="shortcut icon" href="<?= Yii::getAlias('@web/images/favicon.ico') ?>">
         <?= Html::csrfMetaTags() ?>

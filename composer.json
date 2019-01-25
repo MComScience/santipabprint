@@ -35,7 +35,18 @@
         "kartik-v/yii2-mpdf": "*",
         "lajax/yii2-language-picker": "^1.2",
         "linecorp/line-bot-sdk": "^3.6",
-        "monolog/monolog": "^1.24"
+        "monolog/monolog": "^1.24",
+        "mdmsoft/yii2-autonumber": "~1.0",
+        "almasaeed2010/adminlte": "^2.4.0",
+        "bower-asset/fancybox": "*",
+        "m-comscience/yii2-widget-datatables": "^1.0",
+        "m-comscience/yii2-widget-bootstrap-table": "^1.0",
+        "m-comscience/yii2-data-column": "^1.0",
+        "kartik-v/yii2-popover-x": "*",
+        "2amigos/yii2-ckeditor-widget": "^2.1",
+        "yiidoc/yii2-redactor": "*",
+        "wbraganca/yii2-dynamicform": "dev-master",
+        "codemix/yii2-localeurls": "^1.7"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

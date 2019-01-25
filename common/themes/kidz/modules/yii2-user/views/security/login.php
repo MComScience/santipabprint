@@ -48,13 +48,13 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
     <div class="form-group formField">
         <?= $form->field($model, 'login',
-            ['inputOptions' => ['autofocus' => 'autofocus', 'class' => 'form-control', 'tabindex' => '1', 'placeholder' => 'Username']]
+            ['inputOptions' => ['autofocus' => 'autofocus', 'class' => 'form-control', 'tabindex' => '1', 'placeholder' => $model->getAttributeLabel('login')]]
         )->label(false);
         ?>
     </div>
     <div class="form-group formField">
         <?= $form->field($model, 'password',
-            ['inputOptions' => ['class' => 'form-control', 'tabindex' => '2', 'placeholder' => 'Password']])
+            ['inputOptions' => ['class' => 'form-control', 'tabindex' => '2', 'placeholder' => $model->getAttributeLabel('password')]])
             ->passwordInput()
             ->label(false) ?>
     </div>

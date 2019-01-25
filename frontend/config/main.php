@@ -11,6 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log','languagepicker'],
     'controllerNamespace' => 'frontend\controllers',
+    'defaultRoute' => 'app/product/index',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -44,6 +45,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'สินค้า' => 'app/product/index',
+                '<slug>' => 'app/product/quotation',
             ],
         ],
         'view' => [
@@ -77,6 +80,9 @@ return [
                 ],
             ],
         ],
+        'slugUrl' => [
+            'class' => 'common\components\SlugUrl',
+        ],
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
@@ -86,7 +92,9 @@ return [
             'user/registration/*',
             'user/recovery/*',
             'user/security/*',
-            'webhook/*'
+            'webhook/*',
+            'product/*',
+            'app/product/*'
         ]
     ],
     'params' => $params,

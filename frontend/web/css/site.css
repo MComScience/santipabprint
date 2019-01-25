@@ -2,7 +2,6 @@ html,
 body {
     height: 100%;
 }
-
 .wrap {
     min-height: 100%;
     height: auto;
@@ -139,7 +138,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 }
 
 .auth-icon.line {
-    background: url("/images/btn_login_hover.png");
+    background: url("../images/btn_login_hover.png");
     margin-top: 5px;
     width: 110px;
     border-radius: 5px;
@@ -147,4 +146,24 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 .auth-clients li {
     float: unset !important;
     margin: 0 3em 0 0;
+}
+.uppercase {
+    text-transform: uppercase;
+}
+.nowrap {
+    white-space: nowrap;
+}
+.border-right {
+    border-right: 1px solid #eaeaea;
+}
+.language-picker {
+    margin-right: 15px;
+}
+
+#ajaxCrudModal .modal-content {
+    border-radius: 5px;
+}
+
+.color-red {
+    color: red;
 }

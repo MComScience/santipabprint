@@ -34,7 +34,7 @@
                         <p> แฟ็กซ์ : 053-248660</p>
                     </div>
                 </div>
-                <div class="col-sm-3 col-xs-12">
+                <!--<div class="col-sm-3 col-xs-12">
                     <div class="footerTitle">
                         <h4>Useful Links</h4>
                     </div>
@@ -79,7 +79,7 @@
                                 <div class="media">
                                     <a class="media-left" href="single-blog.html">
                                         <img class="media-object img-rounded border-color-1"
-                                             src="<?= $themeAsset ?>/img/footer/footer-img-1.png" alt="Image">
+                                             src="<?/*= $themeAsset */?>/img/footer/footer-img-1.png" alt="Image">
                                     </a>
                                     <div class="media-body">
                                         <h5 class="media-heading"><a href="single-blog.html">A Clean Website Gives More
@@ -92,7 +92,7 @@
                                 <div class="media">
                                     <a class="media-left" href="single-blog-left-sidebar.html">
                                         <img class="media-object img-rounded border-color-2"
-                                             src="<?= $themeAsset ?>/img/footer/footer-img-2.png" alt="Image">
+                                             src="<?/*= $themeAsset */?>/img/footer/footer-img-2.png" alt="Image">
                                     </a>
                                     <div class="media-body">
                                         <h5 class="media-heading"><a href="single-blog-left-sidebar.html">A Clean
@@ -105,7 +105,7 @@
                                 <div class="media">
                                     <a class="media-left" href="single-blog-left-sidebar.html">
                                         <img class="media-object img-rounded border-color-4"
-                                             src="<?= $themeAsset ?>/img/footer/footer-img-3.png" alt="Image">
+                                             src="<?/*= $themeAsset */?>/img/footer/footer-img-3.png" alt="Image">
                                     </a>
                                     <div class="media-body">
                                         <h5 class="media-heading"><a href="single-blog-left-sidebar.html">A Clean
@@ -131,7 +131,7 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
