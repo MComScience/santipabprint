@@ -11,7 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log','languagepicker'],
     'controllerNamespace' => 'frontend\controllers',
-    //'defaultRoute' => 'app/product/index',
+    'defaultRoute' => 'app/product/index',
     'controllerMap' => [
         'glide' => '\trntv\glide\controllers\GlideController'
     ],
@@ -49,13 +49,13 @@ return [
             'showScriptName' => false,
             'rules' => [
                 /* 'สินค้า' => 'app/product/index',*/
-                /* [
+                [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['app/product'],
                     'patterns' => [
                         '<slug>' => 'quotation',
                     ],
-                ], */
+                ],
             ],
         ],
         'view' => [
@@ -99,9 +99,9 @@ return [
         ],
         'glide' => [
             'class' => 'trntv\glide\components\Glide',
-            'sourcePath' => '@webroot/uploads',
+            'sourcePath' => '@webroot',
             'cachePath' => '@runtime/glide',
-            //'signKey' => false '4XBqD5icTH/ST9HVgOSfhr+kssBGFi5GE3RI84n/DE6WqfB/rd/twPdLxo+yAnv6BJ92OqCxr7sjhqzw9rIiXg==' // "false" if you do not want to use HTTP signatures
+            'signKey' => '4XBqD5icTH/ST9HVgOSfhr+kssBGFi5GE3RI84n/DE6WqfB/rd/twPdLxo+yAnv6BJ92OqCxr7sjhqzw9rIiXg==' // "false" if you do not want to use HTTP signatures
         ],
     ],
     'as access' => [
