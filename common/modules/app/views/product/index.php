@@ -6,8 +6,8 @@ use adminlte\helpers\Html;
 $this->title = 'สินค้า';
 
 $css = [
-    '@web/css/product-grid.css',
-    '@web/css/animate.css',
+    '@web/css/product-grid.min.css',
+    '@web/css/animate.min.css',
     '@web/js/waitMe/waitMe.min.css',
 ];
 
