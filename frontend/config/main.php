@@ -83,6 +83,9 @@ return [
         'slugUrl' => [
             'class' => 'common\components\SlugUrl',
         ],
+        'assetManager' => [
+            'appendTimestamp' => true,
+        ],
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
