@@ -94,8 +94,8 @@ return [
         ],
         'assetManager' => [
             'appendTimestamp' => true,
-            'linkAssets' => true,
-            'bundles' => require __DIR__ . '/bundles.php',
+            /* 'linkAssets' => true,
+            'bundles' => require __DIR__ . '/bundles.php', */
         ],
         'glide' => [
             'class' => 'trntv\glide\components\Glide',
