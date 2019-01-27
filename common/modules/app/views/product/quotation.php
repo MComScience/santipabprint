@@ -18,9 +18,9 @@ $this->title = $modelProduct['product_name'];
 
 //style
 $styles = [
-    '@web/js/waitMe/waitMe.min.css',
-    '@web/css/quotation.css',
-    '@web/css/checkbox-style.css'
+    '@web/bundle/waitMe.css',
+    '@web/bundle/quotation.css',
+    '@web/bundle/checkboxStyle.css'
 ];
 foreach ($styles as $style) {
     $this->registerCssFile($style, [
@@ -129,14 +129,14 @@ foreach ($styles as $style) {
 </section>
 <?php
 $this->registerJsFile(
-    '@web/js/waitMe/waitMe.min.js',
+    '@web/bundle/waitMe.js',
     ['depends' => [
         \yii\web\JqueryAsset::className(),
         \kidz\assets\KidzAsset::className()
     ]]
 );
 $this->registerJsFile(
-    '@web/js/quo-print.js',
+    '@web/bundle/quoPrint.js',
     ['depends' => [
         \yii\web\JqueryAsset::className(),
         \kidz\assets\KidzAsset::className()

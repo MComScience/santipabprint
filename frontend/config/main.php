@@ -12,6 +12,9 @@ return [
     'bootstrap' => ['log','languagepicker'],
     'controllerNamespace' => 'frontend\controllers',
     'defaultRoute' => 'app/product/index',
+    'controllerMap' => [
+        'glide' => '\trntv\glide\controllers\GlideController'
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -45,8 +48,14 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'สินค้า' => 'app/product/index',
-                '<slug>' => 'app/product/quotation',
+                /* 'สินค้า' => 'app/product/index',*/
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['app/product'],
+                    'patterns' => [
+                        '<slug>' => 'quotation',
+                    ],
+                ],
             ],
         ],
         'view' => [
@@ -85,6 +94,14 @@ return [
         ],
         'assetManager' => [
             'appendTimestamp' => true,
+            'linkAssets' => true,
+            'bundles' => require __DIR__ . '/bundles.php',
+        ],
+        'glide' => [
+            'class' => 'trntv\glide\components\Glide',
+            'sourcePath' => '@webroot',
+            'cachePath' => '@runtime/glide',
+            'signKey' => '4XBqD5icTH/ST9HVgOSfhr+kssBGFi5GE3RI84n/DE6WqfB/rd/twPdLxo+yAnv6BJ92OqCxr7sjhqzw9rIiXg==' // "false" if you do not want to use HTTP signatures
         ],
     ],
     'as access' => [
@@ -97,7 +114,8 @@ return [
             'user/security/*',
             'webhook/*',
             'product/*',
-            'app/product/*'
+            'app/product/*',
+            'glide/*'
         ]
     ],
     'params' => $params,

@@ -6,9 +6,9 @@ use adminlte\helpers\Html;
 $this->title = 'สินค้า';
 
 $css = [
-    '@web/css/product-grid.min.css',
-    '@web/css/animate.min.css',
-    '@web/js/waitMe/waitMe.min.css',
+    '@web/bundle/product_grid.css',
+    '@web/bundle/animate.css',
+    '@web/bundle/waitMe.css',
 ];
 
 foreach ($css as $css_path) {

@@ -8,7 +8,7 @@ class AjaxCrudAsset extends AssetBundle
     public $sourcePath = '@kidz/assets/ajaxcrud';
 
     public $css = [
-        'css/ajaxcrud.css'
+        'css/ajaxcrud.min.css'
     ];
 
     public $depends = [

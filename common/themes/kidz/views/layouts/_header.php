@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\Menu;
 use kartik\icons\Icon;
 use yii\bootstrap\Nav;
-
+$urlBuilder = Yii::$app->glide->urlBuilder;
 ?>
 <!-- ====================================
     ——— HEADER
@@ -104,7 +104,7 @@ use yii\bootstrap\Nav;
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="<?= Url::base(true) ?>">
-                    <img src="<?= Yii::getAlias('@web/images/santipab_logo.png') ?>" alt="<?= Yii::$app->name ?>">
+                    <img src="<?= $urlBuilder->getUrl('images/santipab_logo.png', []) ?>" alt="<?= Yii::$app->name ?>">
                 </a>
             </div>
 

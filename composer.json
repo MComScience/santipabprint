@@ -46,7 +46,8 @@
         "2amigos/yii2-ckeditor-widget": "^2.1",
         "yiidoc/yii2-redactor": "*",
         "wbraganca/yii2-dynamicform": "dev-master",
-        "codemix/yii2-localeurls": "^1.7"
+        "codemix/yii2-localeurls": "^1.7",
+        "trntv/yii2-glide": "^1.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
