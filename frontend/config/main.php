@@ -99,7 +99,7 @@ return [
         ],
         'glide' => [
             'class' => 'trntv\glide\components\Glide',
-            'sourcePath' => '@webroot',
+            'sourcePath' => '@webroot/uploads',
             'cachePath' => '@runtime/glide',
             //'signKey' => false '4XBqD5icTH/ST9HVgOSfhr+kssBGFi5GE3RI84n/DE6WqfB/rd/twPdLxo+yAnv6BJ92OqCxr7sjhqzw9rIiXg==' // "false" if you do not want to use HTTP signatures
         ],
