@@ -11,7 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log','languagepicker'],
     'controllerNamespace' => 'frontend\controllers',
-    'defaultRoute' => 'app/product/index',
+    //'defaultRoute' => 'app/product/index',
     'controllerMap' => [
         'glide' => '\trntv\glide\controllers\GlideController'
     ],
@@ -94,8 +94,8 @@ return [
         ],
         'assetManager' => [
             'appendTimestamp' => true,
-            /* 'linkAssets' => true,
-            'bundles' => require __DIR__ . '/bundles.php', */
+            'linkAssets' => true,
+            'bundles' => require __DIR__ . '/bundles.php',
         ],
         'glide' => [
             'class' => 'trntv\glide\components\Glide',
