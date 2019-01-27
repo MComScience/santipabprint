@@ -94,14 +94,14 @@ return [
         ],
         'assetManager' => [
             'appendTimestamp' => true,
-            //'linkAssets' => true,
-            //'bundles' => require __DIR__ . '/bundles.php',
+            'linkAssets' => true,
+            'bundles' => require __DIR__ . '/bundles.php',
         ],
         'glide' => [
             'class' => 'trntv\glide\components\Glide',
             'sourcePath' => '@webroot',
             'cachePath' => '@runtime/glide',
-            'signKey' => '4XBqD5icTH/ST9HVgOSfhr+kssBGFi5GE3RI84n/DE6WqfB/rd/twPdLxo+yAnv6BJ92OqCxr7sjhqzw9rIiXg==' // "false" if you do not want to use HTTP signatures
+            'signKey' => false//'4XBqD5icTH/ST9HVgOSfhr+kssBGFi5GE3RI84n/DE6WqfB/rd/twPdLxo+yAnv6BJ92OqCxr7sjhqzw9rIiXg==' // "false" if you do not want to use HTTP signatures
         ],
     ],
     'as access' => [

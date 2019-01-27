@@ -5,7 +5,6 @@ use yii\helpers\Html;
 use yii\widgets\Menu;
 use kartik\icons\Icon;
 use yii\bootstrap\Nav;
-$urlBuilder = Yii::$app->glide->urlBuilder;
 ?>
 <!-- ====================================
     ——— HEADER
@@ -104,7 +103,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="<?= Url::base(true) ?>">
-                    <img src="<?= $urlBuilder->getUrl('images/santipab_logo.png', []) ?>" alt="<?= Yii::$app->name ?>">
+                    <img src="<?= Url::to(['/glide', 'path' => 'images/santipab_logo.png']) ?>" alt="<?= Yii::$app->name ?>">
                 </a>
             </div>
 
