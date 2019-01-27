@@ -45,6 +45,7 @@ class ProductController extends \yii\web\Controller
             ],
             'httpCache' => [
                 'class' => 'yii\filters\HttpCache',
+                'only' => ['index'],
                 'lastModified' => function ($action, $params) {
                     return time();
                 },
