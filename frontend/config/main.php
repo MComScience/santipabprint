@@ -49,13 +49,13 @@ return [
             'showScriptName' => false,
             'rules' => [
                 /* 'สินค้า' => 'app/product/index',*/
-                [
+                /* [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['app/product'],
                     'patterns' => [
                         '<slug>' => 'quotation',
                     ],
-                ],
+                ], */
             ],
         ],
         'view' => [
@@ -94,8 +94,8 @@ return [
         ],
         'assetManager' => [
             'appendTimestamp' => true,
-            /* 'linkAssets' => true,
-            'bundles' => require __DIR__ . '/bundles.php', */
+            'linkAssets' => true,
+            'bundles' => require __DIR__ . '/bundles.php',
         ],
         'glide' => [
             'class' => 'trntv\glide\components\Glide',
