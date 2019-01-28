@@ -48,14 +48,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                /* 'สินค้า' => 'app/product/index',*/
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['app/product'],
-                    'patterns' => [
-                        '<slug>' => 'quotation',
-                    ],
-                ],
+                'สินค้า' => 'app/product/index',
+                '<slug>' => 'app/product/quotation',
             ],
         ],
         'view' => [

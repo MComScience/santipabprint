@@ -43,7 +43,7 @@ class ProductController extends \yii\web\Controller
                     ],
                 ],
             ],
-            'httpCache' => [
+            /* 'httpCache' => [
                 'class' => 'yii\filters\HttpCache',
                 'only' => ['index'],
                 'lastModified' => function ($action, $params) {
@@ -51,7 +51,7 @@ class ProductController extends \yii\web\Controller
                 },
                 //'sessionCacheLimiter' => 'public',
                 'cacheControlHeader' => 'public, max-age=3600',
-            ]
+            ] */
         ];
     }
 
