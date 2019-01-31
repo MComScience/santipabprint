@@ -39,7 +39,7 @@ class TblDiecutGroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['diecut_group_name'], 'required'],
+            [['diecut_group_name', 'diecut_group_value'], 'required'],
             [['diecut_group_id'], 'string', 'max' => 100],
             [['diecut_group_name'], 'string', 'max' => 255],
             [['diecut_group_id'], 'unique'],

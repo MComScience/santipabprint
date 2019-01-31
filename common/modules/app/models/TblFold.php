@@ -40,7 +40,7 @@ class TblFold extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fold_name'], 'required'],
+            [['fold_name','fold_count'], 'required'],
             [['fold_id'], 'string', 'max' => 100],
             [['fold_name', 'fold_description'], 'string', 'max' => 255],
             [['fold_count'], 'integer'],
