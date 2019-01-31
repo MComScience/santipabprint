@@ -39,7 +39,8 @@ class TblPaperType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['paper_type_name'], 'required'],
+            [['paper_type_name', 'paper_type_flag'], 'required'],
+            [['paper_type_flag'], 'integer'],
             [['paper_type_id'], 'string', 'max' => 100],
             [['paper_type_name'], 'string', 'max' => 255],
             [['paper_type_id'], 'unique'],
@@ -54,6 +55,7 @@ class TblPaperType extends \yii\db\ActiveRecord
         return [
             'paper_type_id' => Yii::t('app', 'รหัส'),
             'paper_type_name' => Yii::t('app', 'ชื่อประเภทกระดาษ'),
+            'paper_type_flag' => Yii::t('app', 'เป็นกระดาษสติ๊กเกอร์หรือไม่?'),
         ];
     }
 
@@ -66,5 +68,13 @@ class TblPaperType extends \yii\db\ActiveRecord
     {
         parent::afterDelete();
         TblPaper::deleteAll(['paper_type_id' => $this->paper_type_id]);
+    }
+
+    public function getFlagOptions()
+    {
+        return [
+            '0' => 'ไม่ใช่สติ๊กเกอร์',
+            '1' => 'สติ๊กเกอร์'
+        ];
     }
 }

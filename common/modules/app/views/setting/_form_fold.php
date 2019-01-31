@@ -20,6 +20,15 @@ use adminlte\helpers\Html;
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-2">
+                <?= $form->field($model, 'fold_count')->textInput([
+                    'placeholder' => '',
+                    'autocomplete' => 'off',
+                    'type' => 'number'
+                ])->label($model->getAttributeLabel('fold_count').Html::starRequired()); ?>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-12">
                 <?= $form->field($model, 'fold_description')->textarea([
                     'rows' => 3

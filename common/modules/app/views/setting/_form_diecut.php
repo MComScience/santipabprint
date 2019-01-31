@@ -24,6 +24,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
             'autocomplete' => 'off'
         ])->label($model->getAttributeLabel('diecut_group_name') . Html::starRequired()); ?>
     </div>
+    <div class="col-sm-2">
+        <?= $form->field($model, 'diecut_group_value')->textInput([
+            'placeholder' => '',
+            'autocomplete' => 'off',
+            'type' => 'number'
+        ])->label($model->getAttributeLabel('diecut_group_value') . Html::starRequired()); ?>
+    </div>
 </div>
 <?php DynamicFormWidget::begin([
     'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]

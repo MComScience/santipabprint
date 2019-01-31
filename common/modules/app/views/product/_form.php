@@ -144,7 +144,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 <?php
                 echo $form->field($model, 'book_binding_id')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getBookBindingOption(),
-                    'options' => ['placeholder' => 'วิธีเข้าเล่ม'],
+                    //'options' => ['placeholder' => 'วิธีเข้าเล่ม'],
                     'pluginOptions' => [
                         'allowClear' => true,
                         'templateResult' => new JsExpression('format'),
@@ -226,13 +226,12 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             </div>
         </div>
         <!-- เคลือบ -->
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 coating-id"
-                 style="display: <?= $queryBuilder->isShowInput($option, 'coating_id') ? '' : 'none'; ?>">
+        <div class="row" style="display: <?= $queryBuilder->isShowInput($option, 'coating_id') ? '' : 'none'; ?>">
+            <div class="col-xs-6 col-sm-6 col-md-6 coating-id">
                 <?php
                 echo $form->field($model, 'coating_id')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getCoatingOption(),
-                    'options' => ['placeholder' => 'เลือกวิธีเคลือบ'],
+                    //'options' => ['placeholder' => 'เลือกวิธีเคลือบ'],
                     'pluginOptions' => [
                         'allowClear' => true,
                         'templateResult' => new JsExpression('format'),
@@ -244,6 +243,26 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 ])->label($queryBuilder->getInputLabel($option, 'coating_id', $model));
                 ?>
             </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 coating-option">
+                <?php
+                echo $form->field($model, 'coating_option')->radioList([
+                    'one_page' => 'ด้านเดียว',
+                    'two_page' => 'สองด้าน'
+                ], [
+                    'inline' => true,
+                    'item' => function ($index, $label, $name, $checked, $value) use ($model) {
+                        $radio = Html::beginTag('div', ['class' => 'radio inline-block']) .
+                            Html::beginTag('label', ['class' => 'radio-inline']) .
+                            Html::radio($name, $checked, ['value' => $value, 'id' => Html::getInputId($model, 'coating_option').'-'.$index]) .
+                            Html::tag('span', Icon::show('circle', ['class' => 'cr-icon']), ['class' => 'cr']) .
+                            ucwords($label) .
+                            Html::endTag('label') .
+                            Html::endTag('div');
+                        return $radio;
+                    }
+                ])->label('เคลือบด้านเดียว หรือ สองด้าน?');
+                ?>
+            </div>
         </div>
         <!-- ไดคัท -->
         <div class="row">
@@ -252,7 +271,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 <?php
                 echo $form->field($model, 'diecut_id')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getDiecutOption(),
-                    'options' => ['placeholder' => 'เลือกวิธีไดคัท'],
+                    //'options' => ['placeholder' => 'เลือกวิธีไดคัท'],
                     'pluginOptions' => [
                         'allowClear' => true,
                         'templateResult' => new JsExpression('format'),
@@ -272,7 +291,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 <?php
                 echo $form->field($model, 'fold_id')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getFoldOption(),
-                    'options' => ['placeholder' => 'เลือกวิธีพับ'],
+                    //'options' => ['placeholder' => 'เลือกวิธีพับ'],
                     'pluginOptions' => [
                         'allowClear' => true,
                         'templateResult' => new JsExpression('format'),

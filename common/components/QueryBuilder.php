@@ -101,7 +101,9 @@ class QueryBuilder extends Component
         $condition = static::decodeOption($option['coating_option']);
         $query = TblCoating::find()->where(['coating_id' => $condition])->asArray()->all();
         $options = $this->renderOption($query, 'coating_id', 'coating_name', 'coating_description');
-        return $options;
+        return ArrayHelper::merge([
+            'N' => 'ไม่เคลือบ'
+        ], $options);
     }
 
     //ไดคัท
@@ -123,7 +125,10 @@ class QueryBuilder extends Component
                 $options[$diecutGroup['diecut_group_name']] = $children;
             }
         }
-        return $options;
+        return ArrayHelper::merge([
+            'N' => 'ไม่ไดคัท',
+            'default' => 'ไดคัทตามรูปแบบ'
+        ], $options);
     }
 
     //วิธีพับ
@@ -133,7 +138,9 @@ class QueryBuilder extends Component
         $condition = static::decodeOption($option['fold_option']);
         $query = TblFold::find()->where(['fold_id' => $condition])->asArray()->all();
         $options = $this->renderOption($query, 'fold_id', 'fold_name', 'fold_description');
-        return $options;
+        return ArrayHelper::merge([
+            'N' => 'ไม่พับ',
+        ], $options);
     }
 
     //สีฟอยล์
@@ -153,7 +160,9 @@ class QueryBuilder extends Component
         $condition = static::decodeOption($option['book_binding_option']);
         $query = TblBookBinding::find()->where(['book_binding_id' => $condition])->asArray()->all();
         $options = $this->renderOption($query, 'book_binding_id', 'book_binding_name', 'book_binding_description');
-        return $options;
+        return ArrayHelper::merge([
+            'N' => 'ไม่เข้าเล่ม'
+        ], $options);
     }
 
     public static function decodeOption($option)
@@ -182,7 +191,7 @@ class QueryBuilder extends Component
     public function getInputLabel($option, $field, $model)
     {
         $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
-        if (isset($option[$field]['label'])){
+        if (isset($option[$field]['label'])) {
             return $option[$field]['label'] . ($option[$field]['required'] === '1' ? $textRequired : '');
         }
         return $model->getAttributeLabel($field);

@@ -19,6 +19,13 @@ use adminlte\helpers\Html;
                 ])->label($model->getAttributeLabel('paper_type_name').Html::starRequired()); ?>
             </div>
         </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <?= $form->field($model, 'paper_type_flag')->radioList($model->getFlagOptions(),[
+
+                ]); ?>
+            </div>
+        </div>
     </div><!-- /.box-body -->
     <div class="box-footer">
         <div class="row">

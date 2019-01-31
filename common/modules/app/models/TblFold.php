@@ -43,6 +43,7 @@ class TblFold extends \yii\db\ActiveRecord
             [['fold_name'], 'required'],
             [['fold_id'], 'string', 'max' => 100],
             [['fold_name', 'fold_description'], 'string', 'max' => 255],
+            [['fold_count'], 'integer'],
             [['fold_id'], 'unique'],
         ];
     }
@@ -55,6 +56,7 @@ class TblFold extends \yii\db\ActiveRecord
         return [
             'fold_id' => Yii::t('app', 'รหัส'),
             'fold_name' => Yii::t('app', 'วิธีพับ'),
+            'fold_count' => Yii::t('app', 'Fold Count'),
             'fold_description' => Yii::t('app', 'รายละเอียด'),
         ];
     }

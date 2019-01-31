@@ -49,6 +49,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             [['paper_size_id', 'product_id', 'paper_id'], 'required'],
             [['paper_size_width', 'paper_size_height', 'paper_size_unit', 'page_qty', 'foil_size_width', 'foil_size_height', 'foil_size_unit', 'emboss_size_width', 'emboss_size_height', 'emboss_size_unit', 'land_orient'], 'integer'],
             [['quotation_id', 'product_id', 'paper_size_id', 'before_print', 'after_print', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id'], 'string', 'max' => 100],
+            [['coating_option'], 'string', 'max' => 10],
         ];
     }
 
@@ -70,6 +71,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'after_print' => Yii::t('app', 'ด้านหลังพิมพ์'),
             'paper_id' => Yii::t('app', 'กระดาษ'),
             'coating_id' => Yii::t('app', 'เคลือบ'),
+            'coating_option' => Yii::t('app', 'เคลือบด้านเดียวหรือสองด้าน'),
             'diecut_id' => Yii::t('app', 'ไดคัท'),
             'fold_id' => Yii::t('app', 'วิธีพับ'),
             'foil_size_width' => Yii::t('app', 'กว้าง(ฟอยล์)'),

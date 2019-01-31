@@ -32,7 +32,7 @@ foreach ($styles as $style) {
     ]);
 }
 ?>
-<div id="preloader" class="smooth-loader-wrapper">
+<!--<div id="preloader" class="smooth-loader-wrapper">
     <div class="smooth-loader">
         <div class="loader">
             <span class="dot dot-1"></span>
@@ -41,7 +41,7 @@ foreach ($styles as $style) {
             <span class="dot dot-4"></span>
         </div>
     </div>
-</div>
+</div>-->
 <section class="whiteSection full-width clearfix qoutationSection" style="padding: 20px 0;">
     <div class="container">
 
@@ -136,7 +136,7 @@ $this->registerJsFile(
     ]]
 );
 $this->registerJsFile(
-    '@web/bundle/quoPrint.js',
+    '@web/js/quo-print.js',
     ['depends' => [
         \yii\web\JqueryAsset::className(),
         \kidz\assets\KidzAsset::className()

@@ -20,6 +20,7 @@
         $afterPrint = $('#tblquotationdetail-after_print'),
         $opAfterPrint = $('#op_after_print'),
         $coatingId = $('#tblquotationdetail-coating_id'),
+        $coatingOption = $('#tblquotationdetail-coating_option'),
         $opCoating = $('#op_coating_id'),
         $diecutId = $('#tblquotationdetail-diecut_id'),
         $opDiecut = $('#op_diecut_id'),
@@ -186,6 +187,13 @@
     $coatingId.on('change', function () {
         var options = $q.select2Options($(this));
         if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
+            if ($(this).val() === 'N'){
+                $('.coating-option').hide();
+                $('#tblquotationdetail-coating_option-0').prop('checked', false);
+                $('#tblquotationdetail-coating_option-1').prop('checked', false);
+            }else{
+                $('.coating-option').show();
+            }
             $opCoating.html(options[$(this).val()]);
         } else {
             $opCoating.html('-');

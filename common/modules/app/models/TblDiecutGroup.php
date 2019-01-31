@@ -43,6 +43,7 @@ class TblDiecutGroup extends \yii\db\ActiveRecord
             [['diecut_group_id'], 'string', 'max' => 100],
             [['diecut_group_name'], 'string', 'max' => 255],
             [['diecut_group_id'], 'unique'],
+            [['diecut_group_value'], 'integer'],
         ];
     }
 
@@ -54,6 +55,7 @@ class TblDiecutGroup extends \yii\db\ActiveRecord
         return [
             'diecut_group_id' => Yii::t('app', 'รหัส'),
             'diecut_group_name' => Yii::t('app', 'รูปแบบไดคัท'),
+            'diecut_group_value' => Yii::t('app', 'จำนวนมุม'),
         ];
     }
 
