@@ -202,18 +202,38 @@ class ProductController extends \yii\web\Controller
             }
             //เคลือบ
             if (!empty($item['coating_id'])) {
-                $modelCoating = $this->findModelCoating($item['coating_id']);
-                $details .= 'เคลือบ : ' . '&nbsp;' . $modelCoating['coating_name'] . "\n";
+                if ($item['coating_id'] === 'N') {
+                    $details .= 'เคลือบ : ' . '&nbsp;' . 'ไม่เคลือบ' . "\n";
+                } else {
+                    $modelCoating = $this->findModelCoating($item['coating_id']);
+                    if ($item['coating_option'] === 'one_page') {
+                        $details .= 'เคลือบ : ' . '&nbsp;' . $modelCoating['coating_name'] . ' (ด้านเดียว)' . "\n";
+                    } elseif ($item['coating_option'] === 'two_page') {
+                        $details .= 'เคลือบ : ' . '&nbsp;' . $modelCoating['coating_name'] . ' (สองด้าน)' . "\n";
+                    } else {
+                        $details .= 'เคลือบ : ' . '&nbsp;' . $modelCoating['coating_name'] . "\n";
+                    }
+                }
             }
             //ไดคัท
             if (!empty($item['diecut_id'])) {
-                $modelDiecut = $this->findModelDiecut($item['diecut_id']);
-                $details .= 'ไดคัท : ' . '&nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . "\n";
+                if ($item['diecut_id'] === 'N') {
+                    $details .= 'ไดคัท : ' . '&nbsp;' . 'ไม่ไดคัท' . "\n";
+                } elseif ($item['diecut_id'] === 'default') {
+                    $details .= 'ไดคัท : ' . '&nbsp;' . 'ตามรูปแบบ' . "\n";
+                } else {
+                    $modelDiecut = $this->findModelDiecut($item['diecut_id']);
+                    $details .= 'ไดคัท : ' . '&nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . "\n";
+                }
             }
             //วิธีพับ
             if (!empty($item['fold_id'])) {
-                $modelFold = $this->findModelFold($item['fold_id']);
-                $details .= 'วิธีพับ : ' . '&nbsp;' . $modelFold['fold_name'] . "\n";
+                if ($item['fold_id'] === 'N') {
+                    $details .= 'วิธีพับ : ' . '&nbsp;' . 'ไม่พับ' . "\n";
+                } else {
+                    $modelFold = $this->findModelFold($item['fold_id']);
+                    $details .= 'วิธีพับ : ' . '&nbsp;' . $modelFold['fold_name'] . "\n";
+                }
             }
             //ฟอยล์
             if (!empty($item['foil_color_id'])) {
@@ -232,8 +252,12 @@ class ProductController extends \yii\web\Controller
             }
             //เข้าเล่ม
             if (!empty($item['book_binding_id'])) {
-                $modelBookBinding = $this->findModelBookBinding($item['book_binding_id']);
-                $details .= 'เข้าเล่ม : ' . '&nbsp;' . $modelBookBinding['book_binding_name'] . "\n";
+                if ($item['book_binding_id'] === 'N') {
+                    $details .= 'เข้าเล่ม : ' . '&nbsp;' . 'ไม่เข้าเล่ม' . "\n";
+                } else {
+                    $modelBookBinding = $this->findModelBookBinding($item['book_binding_id']);
+                    $details .= 'เข้าเล่ม : ' . '&nbsp;' . $modelBookBinding['book_binding_name'] . "\n";
+                }
             }
             $items[] = [
                 'product_id' => $item['product_id'],
