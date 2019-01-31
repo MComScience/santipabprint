@@ -20,7 +20,7 @@
         $afterPrint = $('#tblquotationdetail-after_print'),
         $opAfterPrint = $('#op_after_print'),
         $coatingId = $('#tblquotationdetail-coating_id'),
-        $coatingOption = $('#tblquotationdetail-coating_option'),
+        $coatingOption = $('input[name="TblQuotationDetail[coating_option]"]'),
         $opCoating = $('#op_coating_id'),
         $diecutId = $('#tblquotationdetail-diecut_id'),
         $opDiecut = $('#op_diecut_id'),
@@ -200,6 +200,23 @@
         }
     });
 
+    //
+    $coatingOption.on('change', function () {
+        var options = $q.select2Options($coatingId);
+        var text = '';
+        if ($(this).val() === 'one_page') {
+            text = 'ด้านเดียว';
+        } else {
+            text = 'สองด้าน';
+        }
+        if (!$q.isEmpty($coatingId.val()) && !$q.isEmpty(options[$coatingId.val()])) {
+            $opCoating.html(options[$coatingId.val()] + ' (' + text + ')');
+        }else{
+            $opCoating.html('(' + text + ')');
+        }
+        $form.trigger("change");
+    });
+
     //ไดคัท
     $diecutId.on('change', function () {
         var options = $q.select2Options($(this));
@@ -354,6 +371,16 @@
                                 if (!$q.isEmpty(productOps['land_orient']) && productOps['land_orient'] === '2') {
                                     $('#tblquotationdetail-land_orient-1').prop('checked', true);
                                     $opLandOrient.html('แนวนอน');
+                                }
+                            }
+                            if ($(this).attr('name') === 'TblQuotationDetail[coating_option]') {
+                                if (!$q.isEmpty(productOps['coating_option']) && productOps['coating_option'] === 'one_page') {
+                                    $('#tblquotationdetail-coating_option-0').prop('checked', true);
+                                    $('#tblquotationdetail-coating_option-0').change();
+                                }
+                                if (!$q.isEmpty(productOps['coating_option']) && productOps['coating_option'] === 'two_page') {
+                                    $('#tblquotationdetail-coating_option-1').prop('checked', true);
+                                    $('#tblquotationdetail-coating_option-1').change();
                                 }
                             }
                         }

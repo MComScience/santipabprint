@@ -231,7 +231,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 <?php
                 echo $form->field($model, 'coating_id')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getCoatingOption(),
-                    //'options' => ['placeholder' => 'เลือกวิธีเคลือบ'],
+                    'options' => ['placeholder' => 'เลือกวิธีเคลือบ'],
                     'pluginOptions' => [
                         'allowClear' => true,
                         'templateResult' => new JsExpression('format'),
@@ -243,7 +243,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 ])->label($queryBuilder->getInputLabel($option, 'coating_id', $model));
                 ?>
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 coating-option">
+            <div class="col-xs-6 col-sm-6 col-md-6 coating-option" style="display: none;">
                 <?php
                 echo $form->field($model, 'coating_option')->radioList([
                     'one_page' => 'ด้านเดียว',
