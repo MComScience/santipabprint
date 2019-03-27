@@ -68,13 +68,13 @@ $classes = [
     ],
 ];
 ?>
-<ul class="quotation-detail" style="padding: 0">
+<ul class="quotation-detail" style="font-size: 14px;padding: 0;">
     <li>
         <span>สินค้า</span>
         <span class="float-right"><?= $modelProduct['product_name'] ?></span>
     </li>
 </ul>
-<ul class="quotation-detail" style="font-size: 11px;padding: 0;">
+<ul class="quotation-detail" style="font-size: 14px;padding: 0;">
     <?php foreach ($classes as $item): ?>
         <li style="<?= $item['visible'] ? '' : 'display:none;' ?>">
             <span><?= $item['label']; ?></span>

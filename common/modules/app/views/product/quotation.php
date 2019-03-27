@@ -31,6 +31,73 @@ foreach ($styles as $style) {
         ],
     ]);
 }
+$this->registerCss(<<<CSS
+.icon-container {
+    margin: 10px;
+    display: inline-block;
+}
+.list-item-content {
+    margin: 10px;
+    display: inline-block;
+}
+.list-price-content {
+    display: inline-block;
+    float: right;
+    margin: 21px 10px;
+    font-weight: 700;
+}
+.list-price-content h4 {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+.list-price-content i {
+    display: inline-block;
+    float: right;
+}
+.list-group-item {
+    cursor: pointer;
+}
+/* .list-group a:hover {
+    background-color: #3ecdf1;
+    color: #fff;
+} */
+/* .list-group a:hover h3, .list-group a:hover h4, .list-group a:hover p {
+    color: #fff;
+} */
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    background-color: #9cd584 !important;
+    color: #fff !important;
+    border-color: #9cd584;
+}
+.list-group a:focus h3, .list-group a:focus h4, .list-group a:focus p {
+    color: #fff !important;
+}
+.list-group-item.active h3, .list-group-item.active:focus h3, .list-group-item.active:hover h3,
+.list-group-item.active h4, .list-group-item.active:focus h4, .list-group-item.active:hover h4,
+.list-group-item.active p, .list-group-item.active:focus p, .list-group-item.active:hover p {
+    color: #fff !important;
+}
+.on-remove-item {
+    color: #ef694b !important;
+}
+/* Small devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+    .quotation-detail {
+        font-size: 20px !important;
+    }
+    .control-label, .select2-container--bootstrap .select2-selection {
+        font-size: 18px !important;
+    }
+    .select2-container--bootstrap .select2-dropdown {
+        font-size: 16px !important;
+    }
+    ul.quotation-detail li {
+        margin-bottom: 10px !important;
+    }
+}
+CSS
+);
 ?>
 <!--<div id="preloader" class="smooth-loader-wrapper">
     <div class="smooth-loader">
@@ -56,7 +123,7 @@ foreach ($styles as $style) {
             </h2>
         </div>
         <?php $form = ActiveForm::begin(['type' => ActiveForm::TYPE_VERTICAL, 'id' => 'form-quotation']); ?>
-        <div class="row">
+        <div class="row" id="form-container">
             <div class="col-md-7 col-lg-8 order-1 order-md-0">
                 <!-- Icon -->
                 <div class="row">
@@ -110,6 +177,7 @@ foreach ($styles as $style) {
                     </div>
                 </div>
                 <p>
+                    <?php /*
                     <?= Html::submitButton(($update ? 'แก้ไข' : Icon::show('cart-plus') . 'เพิ่มลงตระกร้า'), [
                         'class' => 'btn btn-primary btn-block btn-add-to-cart',
                         'data-loading-text' => ($update ? 'อัพเดทรายการ...' : 'เพิ่มลงตระกร้า...'),
@@ -121,10 +189,93 @@ foreach ($styles as $style) {
                         'role' => 'modal-remote'
                         //'onclick' => 'return DownloadQO();'
                     ]) ?>
+                    */?>
+                    <?= Html::a('ขั้นตอนถัดไป', 'javascript:void(0);', [
+                        'class' => 'btn btn-info btn-block',
+                        'onclick' => 'return nextStepOne();'
+                    ]) ?>
                 </p>
             </div>
         </div>
+        
+
+        <div class="row">
+            <div class="col-md-5 col-lg-4 col-md-offset-4 preview-detail" style="display: none;">
+                <!-- Icon -->
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <p class="text-center" style="line-height: 15px">
+                            <?= Html::img(Yii::getAlias('@web/images/checklist.png'), [
+                                'width' => '50px',
+                                'class' => 'img-responsive center-block',
+                                'style' => 'margin-bottom: 5px;'
+                            ]) . Html::tag('span', 'รายละเอียด', ['class' => 'text-center']) ?>
+                        </p>
+                    </div>
+                </div>
+                <div id="preview-detail"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 list-group-price" style="display: none;">
+                <div class="alert alert-info" role="alert">
+                    Notice! เลือกจำนวนที่ต้องการพิมพ์โดยกดที่เครื่องหมายถูก <i class="fa fa-check-circle-o fa-2x"></i>
+                </div>
+                <ul class="list-group">
+                    
+                </ul>
+            </div>
+        </div>
+
+        <div class="row list-group-price" style="display: none;">
+            <div class="col-xs-4">
+                <?php
+                    echo $form->field($model, 'cust_quantity')->textInput([
+                        'type' => 'tel',
+                        'min' => 1,
+                        'placeholder' => 'จำนวน'
+                    ])->label('เพิ่มจำนวนอื่นๆ');
+                ?>
+            </div>
+            <div class="col-xs-4">
+                <p style="margin-top: 25px;">
+                    <?= Html::a('<i class="fa fa-plus"></i>', 'javascript:void(0);', [
+                        'class' => 'btn btn-primary btn-sm',
+                        'onclick' => 'return onAddQty();'
+                    ]) ?>
+                </p>
+            </div>
+            <div class="col-xs-4">
+                <?php
+                echo Html::activeHiddenInput($model, 'final_price');
+                ?>
+            </div>
+        </div>
+
+        <div class="row list-group-price" style="display: none;">
+            <div class="col-xs-6">
+                <p>
+                    <?= Html::a('<i class="fa fa-angle-left"></i> ขั้นตอนก่อนหน้า', 'javascript:void(0);', [
+                        'class' => 'btn btn-info btn-block',
+                        'onclick' => 'return onPrevious();'
+                    ]) ?>
+                </p>
+            </div>
+            <div class="col-xs-6">
+                <p>
+                    <?= Html::a(Icon::show('file-text-o') . 'ใบเสนอราคา', ['/app/product/download','p' => $modelProduct['product_id']], [
+                        'class' => 'btn btn-info btn-block',
+                        'id' => 'btn-download-quotation',
+                        'role' => 'modal-remote'
+                        //'onclick' => 'return DownloadQO();'
+                    ]) ?>
+                </p>
+            </div>
+        </div>
+
         <?php ActiveForm::end(); ?>
+
     </div>
 </section>
 <?php
@@ -166,7 +317,8 @@ DownloadQO = function() {
                     type: 'success',
                     showCancelButton: true,
                     confirmButtonText: 'เลือกสินค้าต่อ',
-                    cancelButtonText: 'ไปยังตระกร้าสินค้า'
+                    cancelButtonText: 'ไปยังตระกร้าสินค้า',
+                    heightAuto: false
                 }).then((result) => {
                     if (result.value) {
                         window.location.href = '/product/index';
@@ -192,10 +344,138 @@ DownloadQO = function() {
                 type: 'error',
                 title: textStatus,
                 text: errorThrown,
+                heightAuto: false
             });
         }
     });
 };
+
+onPrevious = function() {
+    $(".list-group").find('a.active').removeClass('active');
+    $('#form-container').show();
+    $( "#preview-detail" ).html("").hide();
+    $('.list-group-price, .preview-detail').hide();
+}
+
+nextStepOne = function() {
+    \$form.yiiActiveForm('validate', true);
+    Swal.fire({
+        type: 'warning',
+        title: 'รอสักครู่...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        showCancelButton: false,
+        onBeforeOpen: () => {
+            Swal.showLoading()
+        },
+    });
+    setTimeout(function(){
+        if(\$form.find('.has-error').length === 0) {
+            $(".list-group").find('a.active').removeClass('active');
+            $('#form-container').hide();
+            $( "#preview-detail" ).html($('.product-panel').clone()).show();
+            $('.list-group-price, .preview-detail').show();
+            Calculate();
+            /* Swal({
+                type: 'warning',
+                title: 'ระบุจำนวนที่ต้องการพิมพ์',
+                text: '',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                input: 'text',
+                inputValue: '',
+                showCancelButton: false,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'กรุณาระบุจำนวน!'
+                    }
+                }
+            }).then((result) => {
+                if (result.value) {
+                    console.log(result.value)
+                }
+            }); */
+        } else {
+            Swal({
+                type: 'warning',
+                title: 'กรุณาระบุข้อมูลให้ครบ!',
+                text: '',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            });
+        }
+    },500);
+}
+
+onAddQty = function() {
+    var \$items = $('.list-group').find('.list-group-item');
+    var qty = [];
+    var isDuplicate = false;
+    \$items.each(function( i,v ) {
+        if($(this).data('qty') == $('#tblquotationdetail-cust_quantity').val()){
+            isDuplicate = true;
+        } else {
+            qty.push($(this).data('qty'));
+        }
+    });
+    if(!isDuplicate){
+        qty.push($('#tblquotationdetail-cust_quantity').val());
+        Calculate(qty);
+    }
+}
+
+handleClickItem = function() {
+    $("a.list-group-item").on('click', function(){
+        $(".list-group").find('a.active').removeClass('active');
+        $(this).toggleClass('active');
+    });
+    $('.on-remove-item').on('click', function() {
+        $(this).closest( "a" ).remove()
+    });
+}
+handleClickItem();
+
+Calculate = function(qty = []) {
+    var data = \$form.serialize();
+    var formData = { };
+    $.each(\$form.serializeArray(), function() {
+        formData[this.name] = this.value;
+    });
+    $.ajax({
+        url: '/product/calculate-price',
+        type: \$form.attr('method'),
+        data: Object.assign(formData, {qty: qty}),
+        dataType: 'json',
+        success: function (response) {
+            $('.list-group-item').remove();
+            $.each(response, function (key, item) {
+                $('.list-group').append(`<a href="javascript:void(0);" class="list-group-item" data-qty="\${item.cust_quantity}" data-final_price="\${item.final_price}" id="a-\${key}">
+                    <div class="icon-container">
+                        <i class="fa fa-check-circle-o fa-2x"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h3>\${item.cust_quantity} ชิ้น</h3>
+                        <p>\${item.final_price} THB ต่อชิ้น</p>
+                    </div>
+                    <div class="list-price-content">
+                        <h4>\${item.final_price} THB</h4>
+                        <i class="fa fa-times-circle-o fa-2x on-remove-item" data-id="a-\${key}"></i>
+                    </div>
+                </a>`);
+            });
+            handleClickItem();
+            Swal.close();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            Swal({
+                type: 'error',
+                title: textStatus,
+                text: errorThrown,
+            });
+        }
+    });
+}
 /*
 getInput = function (name, value) {
     return $('<textarea/>', {'name': name}).val(value).hide();

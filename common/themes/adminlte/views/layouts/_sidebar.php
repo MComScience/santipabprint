@@ -28,6 +28,7 @@ use adminlte\widgets\Menu;
                 'items' => [
                     ['label' => 'Menus', 'options' => ['class' => 'header']],
                     ['label' => 'หน้าหลัก', 'icon' => 'home', 'url' => ['/site/index']],
+                    ['label' => 'ใบเสนอราคา', 'icon' => 'file-text-o', 'url' => ['/app/quotation/index']],
                     ['label' => 'ต้งค่า', 'icon' => 'cogs', 'url' => ['/app/setting/index']],
                     /*[
                         'label' => 'Some tools',

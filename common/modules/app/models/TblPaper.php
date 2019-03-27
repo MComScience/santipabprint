@@ -41,7 +41,9 @@ class TblPaper extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['paper_type_id', 'paper_name'], 'required'],
+            [['paper_type_id', 'paper_name', 'paper_price'], 'required'],
+            [['paper_price', 'paper_width', 'paper_length'], 'number'],
+            [['paper_gram'], 'integer'],
             [['paper_id', 'paper_type_id'], 'string', 'max' => 100],
             [['paper_name', 'paper_description'], 'string', 'max' => 255],
             [['paper_id'], 'unique'],
@@ -57,7 +59,11 @@ class TblPaper extends \yii\db\ActiveRecord
             'paper_id' => Yii::t('app', 'รหัส'),
             'paper_type_id' => Yii::t('app', 'รหัสประเภท'),
             'paper_name' => Yii::t('app', 'ชื่อกระดาษ'),
+            'paper_gram' => Yii::t('app', 'ขนาดแกรม'),
             'paper_description' => Yii::t('app', 'รายละเอียด'),
+            'paper_price' => Yii::t('app', 'ราคากระดาษ'),
+            'paper_width' => Yii::t('app', 'ขนาดกว้าง'),
+            'paper_length' => Yii::t('app', 'ขนาดยาว'),
         ];
     }
 

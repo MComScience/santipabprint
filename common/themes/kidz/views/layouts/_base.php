@@ -67,7 +67,7 @@ $this->registerMetaTag([
         <!-- Icons -->
         <link rel="shortcut icon" href="<?= Yii::getAlias('@web/images/favicon.ico') ?>">
         <?= Html::csrfMetaTags() ?>
-        <title><?php echo Html::encode(!empty($this->title) ? strtoupper($this->title) . ' | ' . Yii::$app->name : Yii::$app->name); ?></title>
+        <title><?php echo Html::encode(!empty($this->title) ? strtoupper($this->title) . ' | ' . Yii::$app->name.' ผลิตสิ่งพิมพ์และบรรจุภัณฑ์ ให้บริการครบวงจร' : Yii::$app->name); ?></title>
         <?php $this->head() ?>
     </head>
     <?= Html::beginTag('body', ['class' => $class]); ?>

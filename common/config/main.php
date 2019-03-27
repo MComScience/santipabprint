@@ -40,6 +40,9 @@ return [
             'class' => 'lajax\languagepicker\Component',
             'languages' => ['en' => 'English (US)', 'th' => 'ภาษาไทย'],
         ],
+        'NumberThai' => [
+            'class' => 'common\components\NumberThai',
+        ],
     ],
     'modules' => [
         'user' => [

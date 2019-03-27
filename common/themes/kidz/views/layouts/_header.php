@@ -153,6 +153,14 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                             'visible' => !Yii::$app->user->isGuest && Yii::$app->user->can('admin')
                         ],
                         [
+                            'label' => Icon::show('file-text-o', ['class' => 'bg-color-5']) . '<span>ใบเสนอราคา</span>',
+                            'url' => ['/app/quotation/index'],
+                            'options' => [
+                                'class' => 'singleDrop color-5'
+                            ],
+                            'visible' => !Yii::$app->user->isGuest && Yii::$app->user->can('admin')
+                        ],
+                        [
                             'label' => Icon::show('th', ['class' => 'bg-color-5']) . '<span>เกี่ยวกับเรา</span>',
                             'url' => ['/site/about'],
                             'options' => [

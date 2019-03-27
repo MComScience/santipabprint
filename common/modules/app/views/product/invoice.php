@@ -216,8 +216,8 @@ $this->registerCssFile("@web/css/invoice-style.css", [
                     <tr>
                         <td class="align-left" style="white-space:nowrap;font-size:16px;"><?= $item['product_id']; ?></td>
                         <td class="align-left border-tbl-left is-acceptSlashN"><?= $item['details']; ?></td>
-                        <td class="align-right" style="font-size:16px;">100</td>
-                        <td class="align-right">500.00</td>
+                        <td class="align-right" style="font-size:16px;"><?= Yii::$app->formatter->format($item['data']['cust_quantity'], ['decimal', 0]) ?></td>
+                        <td class="align-right"><?= Yii::$app->formatter->format($item['data']['final_price'], ['decimal', 2]) ?></td>
 
 
                         <td class="align-right border-tbl-left">1,000.00</td>
@@ -237,27 +237,27 @@ $this->registerCssFile("@web/css/invoice-style.css", [
                     <tbody>
                     <tr>
                         <td class="grand-total-desc"><strong>ส่วนลด (บาท) /</strong> Discount</td>
-                        <td class="align-right grand-total-number border-tbl-left">20.00</td>
+                        <td class="align-right grand-total-number border-tbl-left">0.00</td>
                     </tr>
                     <tr>
                         <td class="grand-total-desc"><strong>ราคาสุทธิสินค้าที่เสียภาษี (บาท) /</strong> Pre-VAT Amount
                         </td>
-                        <td class="align-right grand-total-number border-tbl-left">3,975.16</td>
+                        <td class="align-right grand-total-number border-tbl-left">0.00</td>
                     </tr>
                     <tr>
                         <td class="grand-total-desc"><strong>ภาษีมูลค่าเพิ่ม (บาท) /</strong> VAT</td>
-                        <td class="align-right grand-total-number border-tbl-left">224.00</td>
+                        <td class="align-right grand-total-number border-tbl-left">0.00</td>
                     </tr>
                     <tr>
                         <td class="grand-total-desc"><strong>จำนวนเงินรวมทั้งสิ้น (บาท) /</strong> Grand Total</td>
-                        <td class="align-right grand-total-number grand-total-txt border-tbl-left">3,424.00</td>
+                        <td class="align-right grand-total-number grand-total-txt border-tbl-left"><?= Yii::$app->formatter->format($summary, ['decimal', 2]) ?></td>
                     </tr>
 
                     </tbody>
                 </table>
                 <div class="grand-total-txtbtm" style="border-bottom:1px solid #929292">
                     <div>จำนวนเงินรวมทั้งสิ้น</div>
-                    <span style="font-size:16px;">สามพันสี่ร้อยยี่สิบสี่บาทถ้วน</span>
+                    <span style="font-size:16px;"><?= Yii::$app->NumberThai->convertBaht($summary); ?></span>
                 </div>
 
             </section>

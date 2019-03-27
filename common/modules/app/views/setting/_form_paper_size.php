@@ -33,12 +33,12 @@ use yii\helpers\ArrayHelper;
             <div class="row">
                 <div class="col-sm-4">
                     <?= $form->field($model, 'paper_size_width')->textInput([
-                        'type' => 'number'
+                        //'type' => 'number'
                     ]); ?>
                 </div>
                 <div class="col-sm-4">
                     <?= $form->field($model, 'paper_size_height')->textInput([
-                        'type' => 'number'
+                        //'type' => 'number'
                     ]); ?>
                 </div>
                 <div class="col-sm-4">

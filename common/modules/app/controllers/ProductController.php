@@ -133,6 +133,7 @@ class ProductController extends \yii\web\Controller
                 ];
             } elseif ($model->load($request->post())) {
                 $modelDetail->setAttributes($request->post('TblQuotationDetail'));
+                $modelDetail->final_price = str_replace(',','',$request->post('final_price'));
                 if ($model->save()) {
                     $modelDetail->quotation_id = $model['quotation_id'];
                     if ($modelDetail->save()) {
@@ -165,40 +166,43 @@ class ProductController extends \yii\web\Controller
         $model = $this->findModelQuotation($q);
         $modelItems = TblQuotationDetail::find()->where(['quotation_id' => $q])->all();
         $items = [];
+        $summary = 0;
         foreach ($modelItems as $item) {
             $modelProduct = $this->findModelProduct($item['product_id']);
             $option = $modelProduct->options;
+            $modelProductOption = $this->findModelProductOption($item['product_id']);
+            $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
             $details = Html::tag('strong', $modelProduct['product_name']) . "\n";
             //ขนาด
             if (!empty($item['paper_size_id'])) {
                 if ($item['paper_size_id'] === 'custom') {
                     $modelUnit = $this->findModelUnit($item['paper_size_unit']);
-                    $details .= 'ขนาด : ' . '&nbsp;' .
+                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . ': &nbsp;' .
                         $item['paper_size_width'] . 'x' . $item['paper_size_height'] . '&nbsp' .
                         $modelUnit['unit_name'] . "\n";
                 } else {
                     $modelPaperSize = $this->findModelPaperSize($item['paper_size_id']);
-                    $details .= 'ขนาด : ' . '&nbsp;' . $modelPaperSize['paper_size_name'] . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . ': &nbsp;' . $modelPaperSize['paper_size_name'] . "\n";
                 }
             }
             //จำนวน
             if (!empty($item['page_qty'])) {
-                $details .= 'จำนวน : ' . '&nbsp;' . $item['page_qty'] . "\n";
+                $details .= $queryBuilder->getInputLabel($option, 'page_qty', $item) . ': &nbsp;' . $item['page_qty'] . "\n";
             }
             //ด้านหน้าพิมพ์
             if (!empty($item['before_print'])) {
                 $modelBeforePrint = $this->findModelColorPrinting($item['before_print']);
-                $details .= 'ด้านหน้าพิมพ์ : ' . '&nbsp;' . $modelBeforePrint['color_printing_name'] . "\n";
+                $details .= $queryBuilder->getInputLabel($option, 'before_print', $item). ': &nbsp;' . $modelBeforePrint['color_printing_name'] . "\n";
             }
             //ด้านหลังพิมพ์
             if (!empty($item['after_print'])) {
                 $modelBeforePrint = $this->findModelColorPrinting($item['after_print']);
-                $details .= 'ด้านหลังพิมพ์ : ' . '&nbsp;' . $modelBeforePrint['color_printing_name'] . "\n";
+                $details .= $queryBuilder->getInputLabel($option, 'after_print', $item). ': &nbsp;' . $modelBeforePrint['color_printing_name'] . "\n";
             }
             //กระดาษ
             if (!empty($item['paper_id'])) {
                 $modelPaper = $this->findModelPaper($item['paper_id']);
-                $details .= 'กระดาษ : ' . '&nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . "\n";
+                $details .= $queryBuilder->getInputLabel($option, 'paper_id', $item). ': &nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . "\n";
             }
             //เคลือบ
             if (!empty($item['coating_id'])) {
@@ -207,32 +211,32 @@ class ProductController extends \yii\web\Controller
                 } else {
                     $modelCoating = $this->findModelCoating($item['coating_id']);
                     if ($item['coating_option'] === 'one_page') {
-                        $details .= 'เคลือบ : ' . '&nbsp;' . $modelCoating['coating_name'] . ' (ด้านเดียว)' . "\n";
+                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . ': &nbsp;' . $modelCoating['coating_name'] . ' (ด้านเดียว)' . "\n";
                     } elseif ($item['coating_option'] === 'two_page') {
-                        $details .= 'เคลือบ : ' . '&nbsp;' . $modelCoating['coating_name'] . ' (สองด้าน)' . "\n";
+                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . ': &nbsp;' . $modelCoating['coating_name'] . ' (สองด้าน)' . "\n";
                     } else {
-                        $details .= 'เคลือบ : ' . '&nbsp;' . $modelCoating['coating_name'] . "\n";
+                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . ': &nbsp;' . $modelCoating['coating_name'] . "\n";
                     }
                 }
             }
             //ไดคัท
             if (!empty($item['diecut_id'])) {
                 if ($item['diecut_id'] === 'N') {
-                    $details .= 'ไดคัท : ' . '&nbsp;' . 'ไม่ไดคัท' . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;' . 'ไม่ไดคัท' . "\n";
                 } elseif ($item['diecut_id'] === 'default') {
-                    $details .= 'ไดคัท : ' . '&nbsp;' . 'ตามรูปแบบ' . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;' . 'ตามรูปแบบ' . "\n";
                 } else {
                     $modelDiecut = $this->findModelDiecut($item['diecut_id']);
-                    $details .= 'ไดคัท : ' . '&nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . "\n";
                 }
             }
             //วิธีพับ
             if (!empty($item['fold_id'])) {
                 if ($item['fold_id'] === 'N') {
-                    $details .= 'วิธีพับ : ' . '&nbsp;' . 'ไม่พับ' . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . ': &nbsp;' . 'ไม่พับ' . "\n";
                 } else {
                     $modelFold = $this->findModelFold($item['fold_id']);
-                    $details .= 'วิธีพับ : ' . '&nbsp;' . $modelFold['fold_name'] . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . ': &nbsp;' . $modelFold['fold_name'] . "\n";
                 }
             }
             //ฟอยล์
@@ -261,13 +265,16 @@ class ProductController extends \yii\web\Controller
             }
             $items[] = [
                 'product_id' => $item['product_id'],
+                'data' => $item,
                 'product_name' => $modelProduct['product_name'],
-                'details' => $details
+                'details' => str_replace('<span class="text-danger">*</span>', '', $details)
             ];
+            $summary = $summary + $item['final_price'];
         }
         return $this->renderAjax('invoice', [
             'model' => $model,
-            'items' => $items
+            'items' => $items,
+            'summary' => $summary
         ]);
     }
 

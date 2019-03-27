@@ -107,8 +107,8 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             <div class="col-xs-6 col-sm-3 col-md-3 paper-size-width">
                 <?php
                 echo $form->field($model, 'paper_size_width')->textInput([
-                    'type' => 'number',
-                    'min' => 0,
+                    //'type' => 'number',
+                    //'min' => 0,
                     'placeholder' => 'กว้าง'
                 ])->label('กว้าง' . $textRequired);
                 ?>
@@ -116,8 +116,8 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             <div class="col-xs-6 col-sm-3 col-md-3 paper-size-height">
                 <?php
                 echo $form->field($model, 'paper_size_height')->textInput([
-                    'type' => 'number',
-                    'min' => 0,
+                    //'type' => 'number',
+                    //'min' => 0,
                     'placeholder' => 'ยาว'
                 ])->label('ยาว' . $textRequired);
                 ?>
@@ -265,13 +265,40 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             </div>
         </div>
         <!-- ไดคัท -->
-        <div class="row">
+        <span class="label label-option"
+              style="display: <?= $queryBuilder->isShowInput($option, 'diecut') ? '' : 'none'; ?>">
+            <?= Icon::show('angle-double-down') . ' ไดคัท ' . Icon::show('angle-double-down') ?>
+        </span>
+        <div class="row" style="display: <?= $queryBuilder->isShowInput($option, 'diecut') ? '' : 'none'; ?>">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <?php
+                echo $form->field($model, 'diecut')->radioList([
+                    'N' => 'ไม่ไดคัท',
+                    'Default' => 'ไดคัทตามรูปแบบ',
+                    'Curve' => 'ไดคัทมุมมน'
+                ], [
+                    'inline' => true,
+                    'item' => function ($index, $label, $name, $checked, $value) use ($model) {
+                        $radio = Html::beginTag('div', ['class' => 'radio inline-block']) .
+                            Html::beginTag('label', ['class' => 'radio-inline']) .
+                            Html::radio($name, $checked, ['value' => $value, 'id' => Html::getInputId($model, 'diecut').'-'.$index]) .
+                            Html::tag('span', Icon::show('circle', ['class' => 'cr-icon']), ['class' => 'cr']) .
+                            ucwords($label) .
+                            Html::endTag('label') .
+                            Html::endTag('div');
+                        return $radio;
+                    }
+                ])->label(false);
+                ?>
+            </div>
+        </div>
+        <div class="row diecut-id" style="display: none">
             <div class="col-xs-6 col-sm-6 col-md-6 diecut-id"
                  style="display: <?= $queryBuilder->isShowInput($option, 'diecut_id') ? '' : 'none'; ?>">
                 <?php
                 echo $form->field($model, 'diecut_id')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getDiecutOption(),
-                    //'options' => ['placeholder' => 'เลือกวิธีไดคัท'],
+                    'options' => ['placeholder' => 'เลือกไดคัท'],
                     'pluginOptions' => [
                         'allowClear' => true,
                         'templateResult' => new JsExpression('format'),
@@ -285,6 +312,10 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             </div>
         </div>
         <!-- วิธีพับ -->
+        <span class="label label-option"
+              style="display: <?= $queryBuilder->isShowInput($option, 'fold_id') ? '' : 'none'; ?>">
+            <?= Icon::show('angle-double-down') . ' วิธีพับ ' . Icon::show('angle-double-down') ?>
+        </span>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 fold-id"
                  style="display: <?= $queryBuilder->isShowInput($option, 'fold_id') ? '' : 'none'; ?>">
@@ -313,8 +344,8 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             <div class="col-xs-6 col-sm-3 col-md-3 foil-size-width">
                 <?php
                 echo $form->field($model, 'foil_size_width')->textInput([
-                    'type' => 'number',
-                    'min' => 0,
+                    //'type' => 'number',
+                    //'min' => 0,
                     'placeholder' => 'กว้าง'
                 ])->label($queryBuilder->getInputLabel($option, 'foil_size_width', $model));
                 ?>
@@ -322,8 +353,8 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             <div class="col-xs-6 col-sm-3 col-md-3 foil-size-height">
                 <?php
                 echo $form->field($model, 'foil_size_height')->textInput([
-                    'type' => 'number',
-                    'min' => 0,
+                    //'type' => 'number',
+                    //'min' => 0,
                     'placeholder' => 'ยาว'
                 ])->label($queryBuilder->getInputLabel($option, 'foil_size_height', $model));
                 ?>
@@ -368,8 +399,8 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             <div class="col-xs-6 col-sm-3 col-md-3 emboss-size-width">
                 <?php
                 echo $form->field($model, 'emboss_size_width')->textInput([
-                    'type' => 'number',
-                    'min' => 0,
+                    //'type' => 'number',
+                    //'min' => 0,
                     'placeholder' => 'กว้าง'
                 ])->label($queryBuilder->getInputLabel($option, 'emboss_size_width', $model));
                 ?>
@@ -377,8 +408,8 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             <div class="col-xs-6 col-sm-3 col-md-3 emboss-size-height">
                 <?php
                 echo $form->field($model, 'emboss_size_height')->textInput([
-                    'type' => 'number',
-                    'min' => 0,
+                    //'type' => 'number',
+                    //'min' => 0,
                     'placeholder' => 'ยาว'
                 ])->label($queryBuilder->getInputLabel($option, 'emboss_size_height', $model));
                 ?>

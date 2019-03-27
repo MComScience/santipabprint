@@ -74,6 +74,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         'group' => true,
                     ],
                     'paper_name',
+                    [
+                        'attribute' => 'paper_gram',
+                        'hAlign' => 'center'
+                    ],
+                    [
+                        'attribute' => 'paper_price',
+                        'format' => ['decimal', 2],
+                        'hAlign' => 'right'
+                    ],
                     'paper_description:text',
                     [
                         'class' => '\kartik\grid\ActionColumn',

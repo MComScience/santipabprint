@@ -44,7 +44,8 @@ class TblPaperSize extends \yii\db\ActiveRecord
     {
         return [
             [['paper_size_name'], 'required'],
-            [['paper_size_width', 'paper_size_height', 'paper_unit_id'], 'integer'],
+            [['paper_unit_id'], 'integer'],
+            [['paper_size_width', 'paper_size_height'], 'number'],
             [['paper_size_id'], 'string', 'max' => 100],
             [['paper_size_name', 'paper_size_description'], 'string', 'max' => 255],
             [['paper_size_id'], 'unique'],

@@ -22,6 +22,7 @@
         $coatingId = $('#tblquotationdetail-coating_id'),
         $coatingOption = $('input[name="TblQuotationDetail[coating_option]"]'),
         $opCoating = $('#op_coating_id'),
+        $diecut = $('input[name="TblQuotationDetail[diecut]"]'),
         $diecutId = $('#tblquotationdetail-diecut_id'),
         $opDiecut = $('#op_diecut_id'),
         $foldId = $('#tblquotationdetail-fold_id'),
@@ -218,10 +219,35 @@
     });
 
     //ไดคัท
+    $diecut.on('change', function(){
+        var options = $q.select2Options($diecutId);
+        if ($(this).val() === 'Curve' && $('#tblquotationdetail-diecut-2').is(':checked')) {
+            $('.diecut-id').show();
+            if (!$q.isEmpty($diecutId.val()) && !$q.isEmpty(options[$diecutId.val()])) {
+                $opDiecut.html('ไดคัทมุมมน ' + options[$diecutId.val()]);
+            }else{
+                $opDiecut.html('ไดคัทมุมมน');
+            }
+        }else{
+            $('.diecut-id').hide();
+            $diecutId.val(null).trigger('change');
+            if ($(this).val() === 'Default') {
+                $opDiecut.html('ไดตัทตามรูปแบบ');
+            } else {
+                $opDiecut.html('ไม่ไดคัท');
+            }
+        }
+    });
+
+    //ไดคัทมุมมน
     $diecutId.on('change', function () {
         var options = $q.select2Options($(this));
         if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
-            $opDiecut.html(options[$(this).val()]);
+            if ($('#tblquotationdetail-diecut-2').val() === 'Curve') {
+                $opDiecut.html('ไดคัทมุมมน ' +  options[$(this).val()]);
+            }else{
+                $opDiecut.html(options[$(this).val()]);
+            }
         } else {
             $opDiecut.html('-');
         }
@@ -382,6 +408,20 @@
                                     $('#tblquotationdetail-coating_option-1').prop('checked', true);
                                     $('#tblquotationdetail-coating_option-1').change();
                                 }
+                            }
+                            if ($(this).attr('name') === 'TblQuotationDetail[diecut]') {
+                                if (!$q.isEmpty(productOps['diecut']) && productOps['diecut'] === 'N') {
+                                    $('#tblquotationdetail-diecut-0').prop('checked', true);
+                                    $('.diecut-id').hide();
+                                }
+                                if (!$q.isEmpty(productOps['diecut']) && productOps['diecut'] === 'Default') {
+                                    $('#tblquotationdetail-diecut-1').prop('checked', true);
+                                    $('.diecut-id').hide();
+                                }
+                                if (!$q.isEmpty(productOps['diecut']) && productOps['diecut'] === 'Curve') {
+                                    $('#tblquotationdetail-diecut-2').prop('checked', true);
+                                }
+                                $diecut.change();
                             }
                         }
                     });

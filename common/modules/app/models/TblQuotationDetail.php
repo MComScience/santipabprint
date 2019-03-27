@@ -47,9 +47,11 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
     {
         return [
             [['paper_size_id', 'product_id', 'paper_id'], 'required'],
-            [['paper_size_width', 'paper_size_height', 'paper_size_unit', 'page_qty', 'foil_size_width', 'foil_size_height', 'foil_size_unit', 'emboss_size_width', 'emboss_size_height', 'emboss_size_unit', 'land_orient'], 'integer'],
+            [['paper_size_width', 'paper_size_height', 'foil_size_width', 'foil_size_height', 'emboss_size_width', 'emboss_size_height', 'cust_quantity', 'final_price'], 'number'],
+            [['paper_size_unit', 'page_qty', 'foil_size_unit', 'emboss_size_unit', 'land_orient'], 'integer'],
             [['quotation_id', 'product_id', 'paper_size_id', 'before_print', 'after_print', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id'], 'string', 'max' => 100],
             [['coating_option'], 'string', 'max' => 10],
+            [['diecut'], 'string', 'max' => 50],
         ];
     }
 
@@ -72,7 +74,8 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'paper_id' => Yii::t('app', 'กระดาษ'),
             'coating_id' => Yii::t('app', 'เคลือบ'),
             'coating_option' => Yii::t('app', 'เคลือบด้านเดียวหรือสองด้าน'),
-            'diecut_id' => Yii::t('app', 'ไดคัท'),
+            'diecut' => Yii::t('app', 'ไม่ไดคัท, ไดคัทมุมมน, ไดคัทตามรูปแบบ'),
+            'diecut_id' => Yii::t('app', 'ไดคัทมุมมน'),
             'fold_id' => Yii::t('app', 'วิธีพับ'),
             'foil_size_width' => Yii::t('app', 'กว้าง(ฟอยล์)'),
             'foil_size_height' => Yii::t('app', 'ยาว(ฟอยล์)'),
@@ -83,6 +86,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'emboss_size_unit' => Yii::t('app', 'หน่วย(ปั๊มนุน)'),
             'land_orient' => Yii::t('app', 'แนวตั้ง/แนวนอน'),
             'book_binding_id' => Yii::t('app', 'วิธีเข้าเล่ม'),
+            'final_price' => Yii::t('app', 'ราคา'),
         ];
     }
 

@@ -31,7 +31,39 @@ use common\modules\app\models\TblPaperType;
                 <?= $form->field($model, 'paper_name')->textInput([
                     'placeholder' => '',
                     'autocomplete' => 'off'
-                ])->label($model->getAttributeLabel('paper_name').Html::starRequired()); ?>
+                ])->label($model->getAttributeLabel('paper_name')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <?= $form->field($model, 'paper_gram')->textInput([
+                    'placeholder' => '',
+                    'autocomplete' => 'off',
+                    'type' => 'number',
+                    'min' => 0
+                ])->label($model->getAttributeLabel('paper_gram')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <?= $form->field($model, 'paper_width')->textInput([
+                    'placeholder' => '',
+                    'autocomplete' => 'off',
+                ])->label($model->getAttributeLabel('paper_width')); ?>
+            </div>
+            <div class="col-sm-2">
+                <?= $form->field($model, 'paper_length')->textInput([
+                    'placeholder' => '',
+                    'autocomplete' => 'off',
+                ])->label($model->getAttributeLabel('paper_length')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <?= $form->field($model, 'paper_price')->textInput([
+                    'placeholder' => '',
+                    'autocomplete' => 'off',
+                ])->label($model->getAttributeLabel('paper_price')); ?>
             </div>
         </div>
         <div class="row">

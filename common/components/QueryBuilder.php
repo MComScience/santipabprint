@@ -125,10 +125,11 @@ class QueryBuilder extends Component
                 $options[$diecutGroup['diecut_group_name']] = $children;
             }
         }
-        return ArrayHelper::merge([
+        /* return ArrayHelper::merge([
             'N' => 'ไม่ไดคัท',
             'default' => 'ไดคัทตามรูปแบบ'
-        ], $options);
+        ], $options); */
+        return $options;
     }
 
     //วิธีพับ

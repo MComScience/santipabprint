@@ -63,21 +63,39 @@ use kartik\icons\Icon;
 <?php
 $this->registerJs(<<<JS
 $('#ajaxCrudModal .modal-footer').hide();
+if($('.list-group').find('a.list-group-item.active').length === 0){
+    Swal({
+        type: 'warning',
+        title: 'Oops!',
+        text: 'กรุณาเลือกจำนวนที่ต้องการพิมพ์',
+    });
+    $('#ajaxCrudModal').modal('hide');
+}
 var \$form = $('#form-download');
 var \$formQuo = $('#form-quotation');
 \$form.on('beforeSubmit', function() {
     var dataObj = {}, dataQO = {};
+    var \$items = $('.list-group').find('.list-group-item.active');
+    var qty = 0, final_price = 0;
+    \$items.each(function( i,v ) {
+        qty = $(this).data('qty');
+        final_price = $(this).data('final_price');
+    });
     \$form.serializeArray().map(function (x) {
         dataObj[x.name] = x.value;
     });
     \$formQuo.serializeArray().map(function (x) {
-        dataQO[x.name] = x.value;
+        if(x.name === 'TblQuotationDetail[cust_quantity]'){
+            dataQO[x.name] = qty;
+        } else {
+            dataQO[x.name] = x.value;
+        }
     });
     var \$btn = $('#form-download button[type="submit"]').button('loading');
     $.ajax({
         url: \$form.attr('action'),
         type: \$form.attr('method'),
-        data: $.extend(dataObj, dataQO),
+        data: $.extend(dataObj, dataQO, {final_price: final_price}),
         success: function (response) {
             // Implement successful
             \$btn.button('reset');
