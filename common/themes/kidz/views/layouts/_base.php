@@ -75,5 +75,14 @@ $this->registerMetaTag([
     <?= $content ?>
     <?php $this->endBody() ?>
     <?= Html::endTag('body') ?>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105362419-6"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-105362419-6');
+    </script>
     </html>
 <?php $this->endPage() ?>
