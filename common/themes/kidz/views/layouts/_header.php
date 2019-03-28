@@ -130,6 +130,13 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                             ]
                         ],
                         [
+                            'label' => Icon::show('th', ['class' => 'bg-color-3']) . '<span>สินค้า</span>',
+                            'url' => ['/product/catalog-list'],
+                            'options' => [
+                                'class' => 'singleDrop color-3'
+                            ]
+                        ],
+                        [
                             'label' => Icon::show('cogs', ['class' => 'bg-color-3']) . '<span>ตั้งค่า</span>',
                             'url' => 'javascript:void(0)',
                             'options' => [
@@ -146,7 +153,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                                 ],
                                 [
                                     'label' => Icon::show('circle-thin') . 'สิทธิ์',
-                                    'url' => ['/rbac'],
+                                    'url' => ['/rbac/assignment'],
                                 ],
                             ],
                             'dropDownOptions' => $dropDownOptions,

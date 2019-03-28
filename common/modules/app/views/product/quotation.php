@@ -190,10 +190,18 @@ CSS
                         //'onclick' => 'return DownloadQO();'
                     ]) ?>
                     */?>
-                    <?= Html::a('ขั้นตอนถัดไป', 'javascript:void(0);', [
+                    <?= Html::a('ขั้นตอนถัดไป '.Icon::show('angle-right'), 'javascript:void(0);', [
                         'class' => 'btn btn-info btn-block',
                         'onclick' => 'return nextStepOne();'
-                    ]) ?>
+                    ]); ?>
+                    <?php 
+                        if(Yii::$app->user->can('admin')) {
+                            echo Html::a(Icon::show('plus').'เพิ่มไปยัง Catalog', 'javascript:void(0);', [
+                                'class' => 'btn btn-primary btn-block',
+                                'onclick' => 'return onAddtoCatalog();'
+                            ]); 
+                        }
+                    ?>
                 </p>
             </div>
         </div>
@@ -476,6 +484,57 @@ Calculate = function(qty = []) {
                 title: textStatus,
                 text: errorThrown,
             });
+        }
+    });
+}
+
+onAddtoCatalog = function () {
+    var data = \$form.serialize();
+    swal({
+        title: 'ยืนยัน',
+        text: '',
+        type: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'ยืนยัน',
+        cancelButtonText: 'ยกเลิก',
+        allowOutsideClick: false,
+        showLoaderOnConfirm: true,
+        preConfirm: function () {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    method: "POST",
+                    url: '/product/add-to-catalog',
+                    dataType: "json",
+                    data: data,
+                    success: function (response) {
+                        if(response.isSuccess) {
+                            Swal({
+                                type: 'success',
+                                title: 'เพิ่มลง Catalog เรียบร้อย!',
+                                text: '',
+                            });
+                        } else {
+                            Swal({
+                                type: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: '',
+                            });
+                            console.error(response);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal({
+                            type: 'error',
+                            title: textStatus,
+                            text: errorThrown,
+                        });
+                    }
+                });
+            });
+        },
+    }).then((result) => {
+        if (result.value) { //Confirm
+            swal.close();
         }
     });
 }

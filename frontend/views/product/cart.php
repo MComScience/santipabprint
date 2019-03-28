@@ -49,7 +49,7 @@ $this->title = 'ตระกร้าสินค้า';
                 </span>
                 </h2>
                 <p class="text-center">
-                    <?= Html::a('Shopping', ['/product/index'], ['class' => 'btn btn-info']) ?>
+                    <?= Html::a('Shopping', ['/app/product/index'], ['class' => 'btn btn-info']) ?>
                 </p>
             </div>
         <?php else: ?>

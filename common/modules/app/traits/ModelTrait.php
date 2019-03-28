@@ -23,6 +23,7 @@ use common\modules\app\models\TblProductOption;
 use common\modules\app\models\TblQuotation;
 use common\modules\app\models\TblQuotationDetail;
 use common\modules\app\models\TblUnit;
+use common\modules\settings\models\TblProductCatalog;
 use yii\web\NotFoundHttpException;
 
 trait ModelTrait
@@ -150,6 +151,14 @@ trait ModelTrait
     protected function findModelQuotationDetail($id)
     {
         if (($model = TblQuotationDetail::findOne($id)) !== null) {
+            return $model;
+        }
+        $this->handleError();
+    }
+
+    protected function findModelProductCatalog($id)
+    {
+        if (($model = TblProductCatalog::findOne($id)) !== null) {
             return $model;
         }
         $this->handleError();
