@@ -1091,7 +1091,7 @@ class ProductController extends \yii\web\Controller
                     $modelUnit = $this->findModelUnit($model['paper_size_unit']);
                     $details[] = [
                         'label' => $queryBuilder->getInputLabel($option, 'paper_size_id', $model),
-                        'info' =>  $model['paper_size_width'] . 'x' . $item['paper_size_height'] . '&nbsp' .$modelUnit['unit_name'],
+                        'info' =>  $model['paper_size_width'] . 'x' . $model['paper_size_height'] . '&nbsp' .$modelUnit['unit_name'],
                     ];
                 } else {
                     $modelPaperSize = $this->findModelPaperSize($model['paper_size_id']);
@@ -1108,7 +1108,7 @@ class ProductController extends \yii\web\Controller
                             'info' =>  'ไม่เข้าเล่ม',
                         ];
                     } else {
-                        $modelBookBinding = $this->findModelBookBinding($item['book_binding_id']);
+                        $modelBookBinding = $this->findModelBookBinding($model['book_binding_id']);
                         $details[] = [
                             'label' => $queryBuilder->getInputLabel($option, 'book_binding_id', $model),
                             'info' =>  $modelBookBinding['book_binding_name'],
