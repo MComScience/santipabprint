@@ -56,7 +56,7 @@ class QueryBuilder extends Component
     {
         $option = $this->modelOption;
         $condition = static::decodeOption($option['paper_option']);
-        $papers = TblPaper::find()->where(['paper_id' => $condition])->asArray()->all();
+        $papers = TblPaper::find()->where(['paper_id' => $condition])->all();
         $paperTypes = TblPaperType::find()->where(['paper_type_id' => ArrayHelper::getColumn($papers, 'paper_type_id')])->all();
         $options = [];
         foreach ($paperTypes as $paperType) {
@@ -64,7 +64,7 @@ class QueryBuilder extends Component
             $children = [];
             foreach ($papers as $paper) {
                 if ($paper['paper_type_id'] === $paperType['paper_type_id']) {
-                    $children[$paper['paper_id']] = $paper['paper_name'];
+                    $children[$paper['paper_id']] = $paper->paperName;
                 }
             }
             if ($children) {

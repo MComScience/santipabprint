@@ -71,4 +71,11 @@ class TblPaper extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TblPaperType::className(), ['paper_type_id' => 'paper_type_id']);
     }
+
+    public function getPaperName()
+    {
+        $gram = !empty($this->paper_gram) ? $this->paper_gram. ' แกรม' : '';
+        $size = !empty($this->paper_width) && !empty($this->paper_length) ? 'ขนาด ('.number_format($this->paper_width, 0).'x'.number_format($this->paper_length,0).')' : '';
+        return $this->paper_name.' '.$gram.' '.$size;
+    }
 }

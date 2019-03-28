@@ -73,7 +73,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'group' => true,
                     ],
-                    'paper_name',
+                    [
+                        'attribute' => 'paper_name',
+                        'value' => function ($model, $key, $index) {
+                            return $model->paperName;
+                        },
+                    ],
                     [
                         'attribute' => 'paper_gram',
                         'hAlign' => 'center'
