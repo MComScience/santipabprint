@@ -61,12 +61,22 @@ CSS
     <!-- /.box-header -->
     <div class="box-body">
         <div class="row">
-            <div class="col-sm-2 col-sm-offset-5">
+            <div class="col-sm-5">
                 <?= $form->field($model, 'icon')->widget(Upload::classname(), [
                     'url' => ['upload-icon'],
                     'acceptFileTypes' => new JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
                     'id' => 'product-icon'
                 ]); ?>
+            </div>
+            <div class="col-sm-7">
+                <?= $form->field($model, 'files')->widget(Upload::className(), [
+                    'url' => ['upload-file'],
+                    'maxFileSize' => 100 * 1024 * 1024, // 10 MiB
+                    'maxNumberOfFiles' => 20,
+                    //'sortable' => true,
+                    'acceptFileTypes' => new \yii\web\JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
+                    'id' => 'files-uploads'
+                ])->hint('<span class="text-danger">**ขนาดไฟล์: ไม่เกิน 10MB/ไฟล์</span> ,ชนิดไฟล์: gif, jpeg, png')->label('ภาพตัวอย่างสินค้า'); ?>
             </div>
         </div>
         <div class="row">

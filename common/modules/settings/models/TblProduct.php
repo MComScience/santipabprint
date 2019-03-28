@@ -11,7 +11,8 @@ use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\Expression;
 use yii\helpers\Url;
-
+use common\models\FileAttachment;
+use common\behaviors\FileUploadBehavior;
 /**
  * This is the model class for table "tbl_product".
  *
@@ -30,6 +31,7 @@ use yii\helpers\Url;
 class TblProduct extends \yii\db\ActiveRecord
 {
     public $icon;
+    public $files;
     /**
      * {@inheritdoc}
      */
@@ -68,6 +70,21 @@ class TblProduct extends \yii\db\ActiveRecord
                 'group' => $this->product_id,
                 'digit' => 5
             ],
+            'files_uploads' => [
+                'class' => FileUploadBehavior::className(),
+                'filesStorage' => 'fileStorage', // my custom fileStorage from configuration(for properly remove the file from disk)
+                'multiple' => true,
+                'attribute' => 'files',
+                'uploadRelation' => 'fileAttachments',
+                'pathAttribute' => 'path',
+                'baseUrlAttribute' => 'base_url',
+                'typeAttribute' => 'type',
+                'sizeAttribute' => 'size',
+                'nameAttribute' => 'name',
+                'orderAttribute' => 'order',
+                'ref_id' => 'product_id',
+                'ref_table_name' => 'tbl_product',
+            ],
         ];
     }
 
@@ -80,7 +97,7 @@ class TblProduct extends \yii\db\ActiveRecord
             [['product_type_id', 'product_name'], 'required'],
             [['product_description'], 'string'],
             [['product_status', 'created_by', 'updated_by'], 'integer'],
-            [['created_at', 'updated_at', 'icon'], 'safe'],
+            [['created_at', 'updated_at', 'icon', 'files'], 'safe'],
             [['product_id', 'product_type_id'], 'string', 'max' => 100],
             [['product_name', 'product_icon_path', 'product_icon_base_url'], 'string', 'max' => 255],
             [['product_id'], 'unique'],
@@ -182,5 +199,10 @@ class TblProduct extends \yii\db\ActiveRecord
             ]);
         }
         return null;
+    }
+
+    public function getfileAttachments() {
+        return $this->hasMany(FileAttachment::className(), ['ref_id' => 'product_id'])
+                        ->andOnCondition(['ref_table_name' => 'tbl_product']);
     }
 }

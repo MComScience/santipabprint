@@ -98,7 +98,43 @@ $this->registerJs('var options = '. Json::encode($model). ';', View::POS_HEAD);
         </div>
          <!-- Panel -->
          <div class="row">
-            <div class="col-md-6 col-lg-6 col-md-offset-3">
+            <div class="col-md-6 col-lg-6">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <p class="text-center" style="line-height: 15px">
+                            <?= Html::img(Yii::getAlias('@web/images/photo-gallery.png'), [
+                                'width' => '50px',
+                                'class' => 'img-responsive center-block',
+                                'style' => 'margin-bottom: 5px;',
+                            ]) . Html::tag('span', 'ภาพสินค้า', ['class' => 'text-center']) ?>
+                        </p>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-body">
+                        <div class="row isotopeContainer" id="container">
+                            <?php foreach ($modelProduct->fileAttachments as $key => $file) : ?>
+                            <div class="col-md-4 col-sm-4 col-xs-4 isotopeSelector">
+                                <article class="wow fadeInUp">
+                                    <figure>
+                                        <img src="<?= Yii::getAlias('@web'.$file['base_url'].$file['path']); ?>" alt="image" class="img-rounded">
+                                        <div class="overlay-background">
+                                        <div class="inner"></div>
+                                        </div>
+                                        <div class="overlay">
+                                        <a data-fancybox="images" href="<?= Yii::getAlias('@web'.$file['base_url'].$file['path']); ?>">
+                                            <i class="fa fa-search-plus" aria-hidden="true"></i>
+                                        </a>
+                                        </div>
+                                    </figure>
+                                </article>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
                 <!-- Icon -->
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3">

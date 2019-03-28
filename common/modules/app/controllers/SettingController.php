@@ -99,6 +99,16 @@ class SettingController extends \yii\web\Controller
             'delete-icon' => [
                 'class' => DeleteAction::className(),
             ],
+            'upload-file' => [
+                'class' => 'trntv\filekit\actions\UploadAction',
+                'deleteRoute' => 'delete-file',
+                'allowChangeFilestorage' => false,
+                'fileStorage' => 'fileStorage', // Yii::$app->get('fileStorage')
+                'fileStorageParam' => 'fileStorage', // ?fileStorage=someStorageComponent
+            ],
+            'delete-file' => [
+                'class' => DeleteAction::className(),
+            ],
         ];
     }
 
