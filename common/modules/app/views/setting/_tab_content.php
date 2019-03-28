@@ -149,6 +149,9 @@ $productOption = $modelProduct->productOption;
                 ],
                 [
                     'attribute' => 'paper_name',
+                    'value' => function ($model, $key, $index) {
+                        return $model->paperName;
+                    },
                 ],
                 [
                     'class' => '\adminlte\widgets\CheckboxColumn',
