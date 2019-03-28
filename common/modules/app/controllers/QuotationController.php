@@ -8,6 +8,7 @@ use common\modules\app\models\TblQuotationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\modules\app\models\TblQuotationDetail;
 
 /**
  * QuotationController implements the CRUD actions for TblQuotation model.
@@ -105,6 +106,7 @@ class QuotationController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        TblQuotationDetail::deleteAll(['quotation_id' => $id]);
 
         return $this->redirect(['index']);
     }
@@ -123,5 +125,14 @@ class QuotationController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionQuoDetails() {
+        if (isset($_POST['expandRowKey'])) {
+            $model = $this->findModel($_POST['expandRowKey']);
+            return $this->renderPartial('_quo-details', ['model'=>$model]);
+        } else {
+            return '<div class="alert alert-danger">No data found</div>';
+        }
     }
 }

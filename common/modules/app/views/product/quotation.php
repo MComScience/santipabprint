@@ -355,6 +355,7 @@ onPrevious = function() {
     $('#form-container').show();
     $( "#preview-detail" ).html("").hide();
     $('.list-group-price, .preview-detail').hide();
+    $("html, body").animate({ scrollTop: $("#form-quotation").offset().top }, "slow");
 }
 
 nextStepOne = function() {
@@ -366,6 +367,7 @@ nextStepOne = function() {
         allowEscapeKey: false,
         showConfirmButton: false,
         showCancelButton: false,
+        animation: false,
         onBeforeOpen: () => {
             Swal.showLoading()
         },
@@ -377,6 +379,7 @@ nextStepOne = function() {
             $( "#preview-detail" ).html($('.product-panel').clone()).show();
             $('.list-group-price, .preview-detail').show();
             Calculate();
+            $("html, body").animate({ scrollTop: $(".list-group-price").offset().top }, "slow");
             /* Swal({
                 type: 'warning',
                 title: 'ระบุจำนวนที่ต้องการพิมพ์',

@@ -123,7 +123,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                             'visible' => false
                         ],
                         [
-                            'label' => Icon::show('th', ['class' => 'bg-color-3']) . '<span>สินค้า</span>',
+                            'label' => Icon::show('th', ['class' => 'bg-color-3']) . '<span>ประเมินราคา</span>',
                             'url' => ['/app/product/index'],
                             'options' => [
                                 'class' => 'singleDrop color-3'

@@ -56,16 +56,17 @@ class TblQuotationSearch extends TblQuotation
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+        /* $query->andFilterWhere([
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-        ]);
+        ]); */
 
         $query->andFilterWhere(['like', 'quotation_id', $this->quotation_id])
             ->andFilterWhere(['like', 'quotation_customer_name', $this->quotation_customer_name])
             ->andFilterWhere(['like', 'quotation_customer_address', $this->quotation_customer_address])
             ->andFilterWhere(['like', 'quotation_customer_email', $this->quotation_customer_email])
-            ->andFilterWhere(['like', 'quotation_customer_tel', $this->quotation_customer_tel]);
+            ->andFilterWhere(['like', 'quotation_customer_tel', $this->quotation_customer_tel])
+            ->andFilterWhere(['like', 'created_at', $this->created_at]);
 
         return $dataProvider;
     }

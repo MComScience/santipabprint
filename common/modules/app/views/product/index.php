@@ -3,7 +3,7 @@
 
 use adminlte\helpers\Html;
 
-$this->title = 'สินค้า';
+$this->title = 'ประเมินราคา';
 
 $css = [
     '@web/bundle/product_grid.css',
