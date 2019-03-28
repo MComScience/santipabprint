@@ -213,7 +213,7 @@ Calculate = function(qty = []) {
                     </div>
                     <div class="list-item-content">
                         <h3>\${item.cust_quantity} ชิ้น</h3>
-                        <p>\${item.final_price} THB ต่อชิ้น</p>
+                        <p>\${item.price_per_item} THB ต่อชิ้น</p>
                     </div>
                     <div class="list-price-content">
                         <h4>\${item.final_price} THB</h4>
