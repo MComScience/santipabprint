@@ -63,7 +63,7 @@ $checkboxTemplate = '{input}
                     <span>
                     <?= $modelProduct['product_name'] ?>
                 </span>
-                    <span class="shape shape-right bg-color-4"></span>
+                <span class="shape shape-right bg-color-4"></span>
                 </h2>
             </div>
             <!--<div class="row progress-wizard" style="border-bottom:0;">

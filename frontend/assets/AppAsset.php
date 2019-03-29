@@ -12,7 +12,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'bundle/site.min.css',
+        'bundle/site.css',
         'bundle/mobilemenu.css',
         'https://fonts.googleapis.com/css?family=Prompt:400'
     ];

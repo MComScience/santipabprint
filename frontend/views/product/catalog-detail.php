@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use kartik\icons\Icon;
 //style
 $styles = [
     '@web/bundle/waitMe.css',
@@ -27,6 +28,15 @@ foreach ($styles as $style) {
                 </span>
                 <span class="shape shape-right bg-color-4"></span>
             </h2>
+            <ol class="breadcrumb">
+                <li>
+                    <?= Html::a(Icon::show('th').'ตัวอย่างผลิตภัณฑ์',['/product/catalog-list']); ?>
+                </li>
+                <li>
+                    <?= Html::a($catalogType['catalog_type_name'],['/product/catalog', 'p' => $catalogType['catalog_type_id']]); ?>
+                </li>
+                <li class="active"><?= $catalog['catalog_name'] ?></li>
+            </ol>
         </div>
          <!-- Panel -->
          <div class="row">

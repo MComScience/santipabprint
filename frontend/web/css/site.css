@@ -3,6 +3,9 @@ body {
     height: 100%;
     font-family: 'Prompt', sans-serif;
 }
+.sectionTitle h2 {
+    font-family: 'Prompt', sans-serif !important;
+}
 .wrap {
     min-height: 100%;
     height: auto;
@@ -171,4 +174,23 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 
 .navbar-default .navbar-nav>li>a>span {
     min-width: 140px !important;
+}
+
+.santipab-logo {
+    max-width: 75px;
+    max-height: 75px;
+}
+
+@media (max-width: 768px) {
+    .navbar-default .navbar-nav>li>a>span {
+        text-align: left;
+    }
+    .santipab-logo {
+        max-width: 50px;
+        max-height: 50px;
+    }
+}
+
+.sectionTitle .breadcrumb {
+    background-color: transparent !important;
 }

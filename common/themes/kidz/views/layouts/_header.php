@@ -104,7 +104,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="<?= Url::base(true) ?>">
-                    <img src="<?= $urlBuilder->getUrl('images/santipab_logo.png', []) ?>" alt="<?= Yii::$app->name ?>">
+                    <img src="<?= $urlBuilder->getUrl('images/logo-png.png', []) ?>" alt="<?= Yii::$app->name ?>" class="santipab-logo">
                 </a>
             </div>
 

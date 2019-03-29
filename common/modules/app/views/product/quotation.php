@@ -121,6 +121,12 @@ CSS
                 </span>
                 <span class="shape shape-right bg-color-4"></span>
             </h2>
+            <ol class="breadcrumb">
+                <li>
+                    <?= Html::a(Icon::show('file-text-o').' ขอใบเสนอราคา',['/app/product/index']); ?>
+                </li>
+                <li class="active"><?= $modelProduct['product_name'] ?></li>
+            </ol>
         </div>
         <?php $form = ActiveForm::begin(['type' => ActiveForm::TYPE_VERTICAL, 'id' => 'form-quotation']); ?>
         <div class="row" id="form-container">

@@ -65,7 +65,7 @@ $this->registerMetaTag([
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Icons -->
-        <link rel="shortcut icon" href="<?= Yii::getAlias('@web/images/favicon.ico') ?>">
+        <link rel="shortcut icon" href="<?= Yii::getAlias('@web/images/favicon-32x32.ico') ?>">
         <?= Html::csrfMetaTags() ?>
         <title><?php echo Html::encode(!empty($this->title) ? strtoupper($this->title) . ' | ' . Yii::$app->name.' ผลิตสิ่งพิมพ์และบรรจุภัณฑ์ ให้บริการครบวงจร' : Yii::$app->name); ?></title>
         <?php $this->head() ?>

@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Url;
 use adminlte\helpers\Html;
+use kartik\icons\Icon;
 
 $css = [
     '@web/bundle/product_grid.css',
@@ -29,6 +30,12 @@ foreach ($css as $css_path) {
                 </span>
                 <span class="shape shape-right bg-color-4"></span>
             </h2>
+            <ol class="breadcrumb">
+                <li>
+                    <?= Html::a(Icon::show('th').'ตัวอย่างผลิตภัณฑ์',['/product/catalog-list']); ?>
+                </li>
+                <li class="active"><?= $catalogType['catalog_type_name'] ?></li>
+            </ol>
         </div>
         <!-- end title -->
         <!-- Product List -->

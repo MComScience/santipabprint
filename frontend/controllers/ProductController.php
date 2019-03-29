@@ -1259,11 +1259,13 @@ class ProductController extends \yii\web\Controller
     public function actionCatalogDetail($id)
     {
         $catalog = TblCatalog::findOne($id);
-        if(!$catalog){
+        $catalogType = TblCatalogType::findOne(['catalog_type_id' => $catalog['catalog_type_id']]);
+        if(!$catalog || !$catalogType){
             return $this->render('empty-page');
         }
         return $this->render('catalog-detail',[
             'catalog' => $catalog,
+            'catalogType' => $catalogType
         ]);
     }
 }
