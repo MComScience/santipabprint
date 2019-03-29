@@ -42,11 +42,11 @@ class CatalogController extends Controller
             'upload-icon' => [
                 'class' => UploadAction::className(),
                 'deleteRoute' => 'delete-icon',
-                'on afterSave' => function ($event) {
+                /* 'on afterSave' => function ($event) {
                     $file = $event->file;
                     $img = ImageManagerStatic::make($file->read())->fit(112, 112);
                     $file->put($img->encode());
-                },
+                }, */
             ],
             'delete-icon' => [
                 'class' => DeleteAction::className(),
