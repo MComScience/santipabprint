@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    font-family: 'Prompt', sans-serif;
 }
 .wrap {
     min-height: 100%;
@@ -166,4 +167,8 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 
 .color-red {
     color: red;
+}
+
+.navbar-default .navbar-nav>li>a>span {
+    min-width: 140px !important;
 }

@@ -195,12 +195,14 @@ CSS
                         'onclick' => 'return nextStepOne();'
                     ]); ?>
                     <?php 
+                    /*
                         if(Yii::$app->user->can('admin')) {
                             echo Html::a(Icon::show('plus').'เพิ่มไปยัง Catalog', 'javascript:void(0);', [
                                 'class' => 'btn btn-primary btn-block',
                                 'onclick' => 'return onAddtoCatalog();'
                             ]); 
                         }
+                        */
                     ?>
                 </p>
             </div>

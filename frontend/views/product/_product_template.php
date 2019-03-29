@@ -7,22 +7,22 @@
  */
 use yii\helpers\Url;
 use adminlte\helpers\Html;
-$className = strtolower(str_replace('.', '_', $product['product_category_id']));
+$className = '';
 ?>
 <div class="col">
     <div class="media open-collapse" data-toggle="collapse__35" role="button"
          aria-expanded="true" aria-controls="collapse__35">
         <a class="product-link product-cate-sub"
-           href="<?= Url::to(['/product/catalog', 'p' => $product['product_id']]) ?>"
+           href="<?= Url::to(['/product/catalog', 'p' => $category['catalog_type_id']]) ?>"
            data-block-id="block_coll_<?= $className ?>"
            data-point-id="point-active-<?= $className ?>">
             <span class="icon"></span>
             <div class="product-sub">
-                <?= Html::img($product->imageUrl, ['class' => 'img-fluid img-responsive center-block']) ?>
+                <?= Html::img($category->imageUrl, ['class' => 'img-fluid img-responsive center-block']) ?>
             </div>
             <div class="media-body">
                 <p class="product-sub-name">
-                    <?= $product['product_name'] ?>
+                    <?= $category['catalog_type_name'] ?>
                 </p>
             </div>
         </a>

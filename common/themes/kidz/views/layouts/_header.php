@@ -123,30 +123,34 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                             'visible' => false
                         ],
                         [
-                            'label' => Icon::show('th', ['class' => 'bg-color-3']) . '<span>ประเมินราคา</span>',
+                            'label' => Icon::show('file-text-o', ['style' => 'background-color: #b5d56a;color:#fff;']) . '<span> ขอใบเสนอราคา</span><span class="hidden-xs hidden-sm">Quotation</span>',
                             'url' => ['/app/product/index'],
                             'options' => [
-                                'class' => 'singleDrop color-3'
+                                'class' => 'singleDrop',
                             ]
                         ],
                         [
-                            'label' => Icon::show('th', ['class' => 'bg-color-3']) . '<span>สินค้า</span>',
+                            'label' => Icon::show('th', ['class' => 'bg-color-3']) . '<span>ตัวอย่างผลิตภัณฑ์</span><span class="hidden-xs hidden-sm">Products</span>',
                             'url' => ['/product/catalog-list'],
                             'options' => [
                                 'class' => 'singleDrop color-3'
                             ]
                         ],
                         [
-                            'label' => Icon::show('cogs', ['class' => 'bg-color-3']) . '<span>ตั้งค่า</span>',
+                            'label' => Icon::show('cogs', ['class' => 'bg-color-1']) . '<span>ตั้งค่า</span><span class="hidden-xs hidden-sm">Settings</span>',
                             'url' => 'javascript:void(0)',
                             'options' => [
-                                'class' => 'singleDrop color-3'
+                                'class' => 'singleDrop color-1'
                             ],
                             'items' => [
                                 [
-                                    'label' => Icon::show('shopping-cart') . 'สินค้า',
+                                    'label' => Icon::show('file-text-o') . 'ใบเสนอราคา',
                                     'url' => ['/app/setting/index'],
                                 ],
+                                /* [
+                                    'label' => Icon::show('shopping-cart') . 'สินค้า',
+                                    'url' => ['/app/setting/index'],
+                                ], */
                                 [
                                     'label' => Icon::show('users') . 'ผู้ใช้งาน',
                                     'url' => ['/user/admin/index'],
@@ -155,34 +159,42 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                                     'label' => Icon::show('circle-thin') . 'สิทธิ์',
                                     'url' => ['/rbac/assignment'],
                                 ],
+                                [
+                                    'label' => Icon::show('address-card-o') . 'ข้อมูลส่วนตัว',
+                                    'url' => ['/user/settings/profile'],
+                                ],
+                                [
+                                    'label' => Icon::show('address-card-o') . 'บัญชี',
+                                    'url' => ['/user/settings/account'],
+                                ],
                             ],
                             'dropDownOptions' => $dropDownOptions,
                             'visible' => !Yii::$app->user->isGuest && Yii::$app->user->can('admin')
                         ],
-                        [
+                        /* [
                             'label' => Icon::show('file-text-o', ['class' => 'bg-color-5']) . '<span>ใบเสนอราคา</span>',
                             'url' => ['/app/quotation/index'],
                             'options' => [
                                 'class' => 'singleDrop color-5'
                             ],
                             'visible' => !Yii::$app->user->isGuest && Yii::$app->user->can('admin')
-                        ],
-                        [
+                        ], */
+                        /* [
                             'label' => Icon::show('th', ['class' => 'bg-color-5']) . '<span>เกี่ยวกับเรา</span>',
                             'url' => ['/site/about'],
                             'options' => [
                                 'class' => 'singleDrop color-5'
                             ]
-                        ],
+                        ], */
                         [
-                            'label' => Icon::show('phone', ['class' => 'bg-color-6']) . '<span>ติดต่อเรา</span>',
+                            'label' => Icon::show('phone', ['class' => 'bg-color-6']) . '<span>ติดต่อเรา</span><span class="hidden-xs hidden-sm">Contact us</span>',
                             'url' => ['/site/contact'],
                             'options' => [
                                 'class' => 'singleDrop color-6'
                             ]
                         ],
                         [
-                            'label' => Icon::show('sign-in', ['class' => 'bg-color-6']) . '<span>เข้าสู่ระบบ</span>',
+                            'label' => Icon::show('sign-in', ['class' => 'bg-color-6']) . '<span>เข้าสู่ระบบ</span><span class="hidden-xs hidden-sm">Sign In</span>',
                             'url' => ['/auth/login'],
                             'options' => [
                                 'class' => 'singleDrop color-2 hidden-lg hidden-md'
@@ -190,7 +202,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                             'linkOptions' => ['role' => 'modal-remote'],
                             'visible' => Yii::$app->user->isGuest
                         ],
-                        [
+                        /* [
                             'label' => Icon::show('user', ['class' => 'bg-color-4']) . '<span>บัญชีผู้ใช้</span>',
                             'url' => 'javascript:void(0)',
                             'options' => [
@@ -208,9 +220,9 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                             ],
                             'dropDownOptions' => $dropDownOptions,
                             'visible' => !Yii::$app->user->isGuest
-                        ],
+                        ], */
                         [
-                            'label' => Icon::show('sign-out',['class' => 'bg-color-4']) . '<span>ออกจากระบบ</span>',
+                            'label' => Icon::show('sign-out',['class' => 'bg-color-4']) . '<span>ออกจากระบบ</span><span class="hidden-xs hidden-sm">Sign Out</span>',
                             'url' => ['/auth/logout'],
                             'linkOptions' => ['data-method' => 'post'],
                             'options' => [

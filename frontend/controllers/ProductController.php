@@ -37,6 +37,8 @@ use common\modules\app\traits\ModelTrait;
 use yii\helpers\Json;
 use common\components\QueryBuilder;
 use common\modules\app\models\TblProductCategory;
+use common\modules\app\models\TblCatalogType;
+use common\modules\app\models\TblCatalog;
 
 class ProductController extends \yii\web\Controller
 {
@@ -1053,8 +1055,8 @@ class ProductController extends \yii\web\Controller
     public function actionCatalogList()
     {
         //หมวดหมู่
-        $categorys = TblProductCategory::find()->all();
-        //สินค้าทั้งหมด
+        $categorys = TblCatalogType::find()->all();
+        /* //สินค้าทั้งหมด
         $allProducts = \common\modules\app\models\TblProduct::find()->all();
         $productGroups = [];
         foreach ($categorys as $category) {
@@ -1063,19 +1065,24 @@ class ProductController extends \yii\web\Controller
                 'product_category_name' => $category['product_category_name'],
                 'items' => \common\modules\app\models\TblProduct::find()->where(['product_category_id' => $category['product_category_id']])->all()
             ];
-        }
+        } */
         return $this->render('catalog-list', [
             'categorys' => $categorys,
-            'allProducts' => $allProducts,
-            'productGroups' => $productGroups
+            //'allProducts' => $allProducts,
+            //'productGroups' => $productGroups
         ]);
     }
 
     public function actionCatalog($p)
     {
+        $products = TblCatalog::find()->where(['catalog_type_id' => $p])->all();
+        $catalogType = TblCatalogType::findOne($p);
+        if(!$catalogType){
+            return $this->render('empty-page');
+        }
         /* $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON; */
-        $model = TblProductCatalog::findOne(['product_id' => $p]);
+        /* $model = TblProductCatalog::findOne(['product_id' => $p]);
         if(!$model){
             return $this->render('empty-page');
         } else {
@@ -1242,6 +1249,21 @@ class ProductController extends \yii\web\Controller
                 'details' => $details,
                 'model' => $model
             ]);
+        }*/
+        return $this->render('catalog2',[
+            'products' => $products,
+            'catalogType' => $catalogType,
+        ]);
+    }
+
+    public function actionCatalogDetail($id)
+    {
+        $catalog = TblCatalog::findOne($id);
+        if(!$catalog){
+            return $this->render('empty-page');
         }
+        return $this->render('catalog-detail',[
+            'catalog' => $catalog,
+        ]);
     }
 }

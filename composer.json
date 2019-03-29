@@ -47,7 +47,9 @@
         "yiidoc/yii2-redactor": "*",
         "wbraganca/yii2-dynamicform": "dev-master",
         "codemix/yii2-localeurls": "^1.7",
-        "trntv/yii2-glide": "^1.2"
+        "trntv/yii2-glide": "^1.2",
+        "froala/yii2-froala-editor": "^2.9",
+        "2amigos/yii2-tinymce-widget": "~1.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

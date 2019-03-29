@@ -28,7 +28,7 @@ foreach ($css as $css_path) {
             <h2 class="wow">
                 <span class="shape shape-left bg-color-4"></span>
                 <span>
-                    <?= Html::encode('เลือกหมวดหมู่การพิมพ์') ?>
+                    <?= Html::encode('ตัวอย่างผลิตภัณฑ์') ?>
                 </span>
                 <span class="shape shape-right bg-color-4"></span>
             </h2>
@@ -36,47 +36,17 @@ foreach ($css as $css_path) {
         <!-- end title -->
         <!-- Product List -->
         <div class="product-grid container-fluid">
-            <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-all" role="tab"
-                       aria-controls="pills-home" aria-selected="true">ทั้งหมด</a>
-                </li>
-                <?php
-                foreach ($categorys as $category) {
-                    $id = strtolower($category['product_category_id']);
-                    echo Html::beginTag('li', ['class' => 'nav-item']) .
-                        Html::a($category['product_category_name'], '#pills-' . $id, [
-                            'id' => "pills-$id-tab",
-                            'data-toggle' => 'pill',
-                            'role' => 'tab',
-                            'aria-controls' => "pills-$id",
-                            'aria-selected' => 'false',
-                            'class' => 'nav-link'
-                        ]) .
-                        Html::endTag('li');
-                } ?>
-            </ul>
             <div class="padding-v-sm">
                 <div class="line line-dashed"></div>
             </div>
             <div class="tab-content product-grid-tab" id="pills-tabContent">
                 <div class="tab-pane fade active in" id="pills-all" role="tabpanel" aria-labelledby="pills-home-tab">
                     <div class="row row-product">
-                        <?php foreach ($allProducts as $product) : ?>
-                            <?php echo $this->render('_product_template', ['product' => $product]) ?>
+                        <?php foreach ($categorys as $category) : ?>
+                            <?php echo $this->render('_product_template', ['category' => $category]) ?>
                         <?php endforeach; ?>
                     </div>
                 </div>
-                <?php foreach ($productGroups as $product) { ?>
-                    <div class="tab-pane fade"
-                         id="pills-<?= strtolower($product['product_category_id']); ?>"
-                         role="tabpanel"
-                         aria-labelledby="pills-<?= strtolower($product['product_category_id']); ?>-tab">
-                        <?php foreach ($product['items'] as $item) : ?>
-                            <?php echo $this->render('_product_template', ['product' => $item]) ?>
-                        <?php endforeach; ?>
-                    </div>
-                <?php } ?>
             </div>
         </div>
         <!-- End Product List -->
