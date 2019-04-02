@@ -144,7 +144,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                             ],
                             'items' => [
                                 [
-                                    'label' => Icon::show('file-text-o') . 'ใบเสนอราคา',
+                                    'label' => Icon::show('cog') . 'ตั้งค่าระบบ',
                                     'url' => ['/app/setting/index'],
                                 ],
                                 /* [
@@ -160,7 +160,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                                     'url' => ['/rbac/assignment'],
                                 ],
                                 [
-                                    'label' => Icon::show('address-card-o') . 'ข้อมูลส่วนตัว',
+                                    'label' => Icon::show('user-circle') . 'ข้อมูลส่วนตัว',
                                     'url' => ['/user/settings/profile'],
                                 ],
                                 [
