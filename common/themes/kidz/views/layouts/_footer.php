@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-sm-3 col-xs-12">
                     <div class="footerTitle">
-                        <a href="index.html"><img src="<?= Yii::getAlias('@web/images/logo-png.png') ?>"></a>
+                        <a href="index.html"><img src="<?= Yii::getAlias('@web/images/logo-png.png') ?>" style="max-width:45%"></a>
                     </div>
                     <div class="footerInfo">
                         <p> บริษัท สันติภาพแพ็คพริ้นท์ จำกัด 214-216 ถนนแก้วนวรัฐ ต.วัดเกต อ.เมือง จ.เชียงใหม่ 50000</p>
