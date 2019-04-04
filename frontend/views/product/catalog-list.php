@@ -20,6 +20,9 @@ foreach ($css as $css_path) {
         ],
     ]);
 }
+$i = 0;
+$x = 0;
+$count = count($categorys);
 ?>
 <section class="whiteSection full-width clearfix productsSection">
     <div class="container">
@@ -41,11 +44,21 @@ foreach ($css as $css_path) {
             </div>
             <div class="tab-content product-grid-tab" id="pills-tabContent">
                 <div class="tab-pane fade active in" id="pills-all" role="tabpanel" aria-labelledby="pills-home-tab">
-                    <div class="row row-product">
-                        <?php foreach ($categorys as $category) : ?>
-                            <?php echo $this->render('_product_template', ['category' => $category]) ?>
-                        <?php endforeach; ?>
-                    </div>
+                    <?php
+                    foreach ($categorys as $category) {
+                        $i++;
+                        if ($i == 1) {
+                            echo '<!-- begin row ' . $i . '-->';
+                            echo '<div class="row row-product">';
+                        }
+                        echo $this->render('_product_template', ['category' => $category]);
+                        $x++;
+                        if ($i == 6 || $x == $count) {
+                            echo '</div>' . '<!-- end row ' . $i . '-->';
+                            $i = 0;
+                        }
+                    }
+                    ?>
                 </div>
             </div>
         </div>
