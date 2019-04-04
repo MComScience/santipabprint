@@ -192,7 +192,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     .navbar-header .navbar-brand {
         height: 110px !important;
         padding: 10px 15px !important;
-        width: 196px !important;
+        min-width: 270px;
     }
 }
 
@@ -218,4 +218,16 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 
 .sectionTitle .breadcrumb {
     background-color: transparent !important;
+}
+
+.navbar-brand>img {
+    display: inline-block !important;
+}
+
+@media (min-width: 320px){
+    .navbar-header .navbar-brand {
+        height: auto;
+        padding: 15px;
+        min-width: 240px;
+    }
 }
