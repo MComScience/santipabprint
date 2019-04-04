@@ -9,7 +9,7 @@ use yii\helpers\Url;
 use adminlte\helpers\Html;
 $className = '';
 ?>
-<div class="col">
+<div class="col-sm-2">
     <div class="media open-collapse" data-toggle="collapse__35" role="button"
          aria-expanded="true" aria-controls="collapse__35">
         <a class="product-link product-cate-sub"
