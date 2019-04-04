@@ -4,7 +4,7 @@ use kartik\icons\Icon;
 //style
 $styles = [
     '@web/bundle/waitMe.css',
-    '@web/bundle/quotation.css',
+    //'@web/bundle/quotation.css',
     '@web/bundle/checkboxStyle.css'
 ];
 foreach ($styles as $style) {

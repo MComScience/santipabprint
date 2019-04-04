@@ -1,3 +1,7 @@
+.row-product {
+    display: flex;
+}
+
 .nav-pills .nav-link {
     border-radius: 0.25rem;
 }

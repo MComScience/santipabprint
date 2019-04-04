@@ -177,9 +177,34 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 }
 
 .santipab-logo {
-    max-width: 75px;
-    max-height: 75px;
+    max-width: 68px;
+    max-height: 76px;
 }
+
+@media (min-width: 480px)
+#menuBar.bb-fixed-header .navbar-brand {
+    height: auto !important;
+    padding: 15px !important;
+    width: 160px !important;
+}
+
+@media (min-width: 768px){
+    .navbar-header .navbar-brand {
+        height: 110px !important;
+        padding: 10px 15px !important;
+        width: 196px !important;
+    }
+}
+
+
+@media (min-width: 768px){
+    #menuBar.bb-fixed-header .navbar-brand {
+        height: auto;
+        padding: 10px 15px;
+        width: 190px;
+    }
+}
+
 
 @media (max-width: 768px) {
     .navbar-default .navbar-nav>li>a>span {
