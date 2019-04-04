@@ -275,8 +275,8 @@ ul#pills-tab {
     text-align: center;
 }
 .product-sub img {
-    max-width: 112px;
-    max-height: 112px;
+    width: 112px;
+    height: 112px;
 }
 ul#pills-tab li.nav-item {
     padding-bottom: 10px;
