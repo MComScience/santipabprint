@@ -5,7 +5,7 @@ use kartik\icons\Icon;
 
 $css = [
     '@web/bundle/product_grid.css',
-    '@web/bundle/animate.css',
+    //'@web/bundle/animate.css',
     '@web/bundle/waitMe.css',
 ];
 
@@ -47,7 +47,7 @@ foreach ($css as $css_path) {
                 <div class="tab-pane fade active in" id="pills-all" role="tabpanel" aria-labelledby="pills-home-tab">
                     <div class="row row-product">
                         <?php foreach ($products as $product) : ?>
-                            <div class="col">
+                            <div class="col-sm-6 col-xs-6 col-md-2 col-lg-2">
                                 <div class="media open-collapse" data-toggle="collapse__35" role="button"
                                     aria-expanded="true" aria-controls="collapse__35">
                                     <a class="product-link product-cate-sub"
