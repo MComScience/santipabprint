@@ -94,7 +94,7 @@ span {
 .product-grid .product-grid-tab .tab-pane .product-link
 .product-sub {
     /*background: #f4f0f0;*/
-    box-shadow: 0 3px 0 rgba(0,0,0,.1);
+    /*box-shadow: 0 3px 0 rgba(0,0,0,.1);*/
 }
 
 .product-grid .product-grid-tab .tab-pane .product-link span:not(.icon) {
