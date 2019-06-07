@@ -75,7 +75,7 @@ class TblPaper extends \yii\db\ActiveRecord
     public function getPaperName()
     {
         $gram = !empty($this->paper_gram) ? $this->paper_gram. ' แกรม' : '';
-        $size = !empty($this->paper_width) && !empty($this->paper_length) ? 'ขนาด ('.number_format($this->paper_width, 0).'x'.number_format($this->paper_length,0).')' : '';
+        $size = !empty($this->paper_width) && !empty($this->paper_length) ? 'ขนาด ('.$this->paper_width.'x'.$this->paper_length.')' : '';
         return $this->paper_name.' '.$gram.' '.$size;
     }
 }
