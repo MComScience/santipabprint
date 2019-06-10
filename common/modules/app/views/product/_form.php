@@ -115,13 +115,24 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             </div>
             <div class="col-xs-6 col-sm-3 col-md-3 paper-size-height">
                 <?php
-                echo $form->field($model, 'paper_size_height')->textInput([
+                echo $form->field($model, 'paper_size_length')->textInput([
                     //'type' => 'number',
                     //'min' => 0,
                     'placeholder' => 'ยาว'
                 ])->label('ยาว' . $textRequired);
                 ?>
             </div>
+           
+            <div class="col-xs-6 col-sm-3 col-md-3 paper-size-height">
+                <?php
+                echo $form->field($model, 'paper_size_height')->textInput([
+                    //'type' => 'number',
+                    //'min' => 0,
+                    'placeholder' => 'สูง'
+                ])->label('สูง' . $textRequired);
+                ?>
+            </div>
+        
             <div class="col-xs-6 col-sm-3 col-md-3 paper-size-unit">
                 <?php
                 echo $form->field($model, 'paper_size_unit')->widget(Select2::classname(), [
