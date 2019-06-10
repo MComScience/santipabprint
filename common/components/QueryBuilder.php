@@ -137,7 +137,7 @@ class QueryBuilder extends Component
     {
         $option = $this->modelOption;
         $condition = static::decodeOption($option['fold_option']);
-        $query = TblFold::find()->where(['fold_id' => $condition])->asArray()->all();
+        $query = TblFold::find()->where(['fold_id' => $condition])->asArray()->orderBy('fold_id asc')->all();
         $options = $this->renderOption($query, 'fold_id', 'fold_name', 'fold_description');
         return ArrayHelper::merge([
             'N' => 'ไม่พับ',
