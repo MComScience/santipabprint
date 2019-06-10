@@ -17,7 +17,7 @@ class TblPaperSearch extends TblPaper
     public function rules()
     {
         return [
-            [['paper_id', 'paper_type_id', 'paper_name', 'paper_description'], 'safe'],
+            [['paper_id', 'paper_type_id', 'paper_name', 'paper_description','paper_gram'], 'safe'],
         ];
     }
 
@@ -46,6 +46,8 @@ class TblPaperSearch extends TblPaper
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        
+        $query->joinWith('paperType');
 
         $this->load($params);
 
@@ -57,7 +59,7 @@ class TblPaperSearch extends TblPaper
 
         // grid filtering conditions
         $query->andFilterWhere(['like', 'paper_id', $this->paper_id])
-            ->andFilterWhere(['like', 'paper_type_id', $this->paper_type_id])
+            ->andFilterWhere(['like', 'tbl_paper_type.paper_type_name', $this->paper_type_id])
             ->andFilterWhere(['like', 'paper_name', $this->paper_name])
             ->andFilterWhere(['like', 'paper_description', $this->paper_description]);
 

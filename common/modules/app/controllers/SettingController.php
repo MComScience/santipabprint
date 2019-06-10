@@ -146,6 +146,7 @@ class SettingController extends \yii\web\Controller
     {
         $searchModel = new TblPaperSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->orderBy('paper_type_id asc,paper_gram asc');
 
         return $this->render('_paper', [
             'searchModel' => $searchModel,
@@ -158,6 +159,7 @@ class SettingController extends \yii\web\Controller
     {
         $searchModel = new TblFoldSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->orderBy('fold_id asc');
 
         return $this->render('_fold', [
             'searchModel' => $searchModel,

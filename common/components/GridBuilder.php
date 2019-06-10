@@ -80,7 +80,7 @@ class GridBuilder extends Component
     public static function getDataFold($model)
     {
         $provider = new ActiveDataProvider([
-            'query' => TblFold::find(),
+            'query' => TblFold::find()->orderBy('fold_id  asc'),
             'pagination' => [
                 'pageSize' => false,
             ],
