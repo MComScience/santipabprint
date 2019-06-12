@@ -25,6 +25,8 @@ use common\modules\app\models\TblQuotationDetail;
 use common\modules\app\models\TblUnit;
 use common\modules\settings\models\TblProductCatalog;
 use yii\web\NotFoundHttpException;
+use common\modules\app\models\TblPerforate;
+use common\modules\app\models\TblPerforateOption;
 
 trait ModelTrait
 {
@@ -167,5 +169,21 @@ trait ModelTrait
     protected function handleError()
     {
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
+        protected function findModelPerforate($id)
+    {
+        if (($model = TblPerforate::findOne($id)) !== null) {
+            return $model;
+        }
+        $this->handleError();
+    }
+
+    protected function findModelPerforateOption($id)
+    {
+        if (($model = TblPerforateOption::findOne($id)) !== null) {
+            return $model;
+        }
+        $this->handleError();
     }
 }

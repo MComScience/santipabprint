@@ -46,13 +46,16 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Response;
+use common\modules\app\models\TblPerforate;
+use common\modules\app\models\TblPerforateOption;
+use common\modules\app\models\TblPerforateSearch;
+use yii\data\ActiveDataProvider;
 
-class SettingController extends \yii\web\Controller
-{
+class SettingController extends \yii\web\Controller {
+
     use ModelTrait;
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -79,13 +82,14 @@ class SettingController extends \yii\web\Controller
                     'delete-printing' => ['POST'],
                     'delete-product-category' => ['POST'],
                     'delete-product' => ['POST'],
+                    'delete-perforate' => ['POST'],
+                    'delete-perforate-option' => ['POST'],
                 ],
             ],
         ];
     }
 
-    public function actions()
-    {
+    public function actions() {
         return [
             'upload-icon' => [
                 'class' => UploadAction::className(),
@@ -112,148 +116,147 @@ class SettingController extends \yii\web\Controller
         ];
     }
 
-    public function actionIndex()
-    {
+    public function actionIndex() {
         return $this->render('index');
     }
 
     /* ###### ขนาดกระดาษ ##### */
-    public function actionPaperSize()
-    {
+
+    public function actionPaperSize() {
         $searchModel = new TblPaperSizeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_paper_size', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### ประเภทกระดาษ ##### */
-    public function actionPaperType()
-    {
+
+    public function actionPaperType() {
         $searchModel = new TblPaperTypeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_paper_type', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### กระดาษ ##### */
-    public function actionPaper()
-    {
+
+    public function actionPaper() {
         $searchModel = new TblPaperSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->orderBy('paper_type_id asc,paper_gram asc');
 
         return $this->render('_paper', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### วิธีพับ ##### */
-    public function actionFold()
-    {
+
+    public function actionFold() {
         $searchModel = new TblFoldSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->orderBy('fold_id asc');
 
         return $this->render('_fold', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### สีฟอยล์ ##### */
-    public function actionFoilColor()
-    {
+
+    public function actionFoilColor() {
         $searchModel = new TblFoilColorSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_foil_color', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### วิธีเคลือบ ##### */
-    public function actionCoating()
-    {
+
+    public function actionCoating() {
         $searchModel = new TblCoatingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_coating', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### วิธีเคลือบ ##### */
-    public function actionDiecut()
-    {
+
+    public function actionDiecut() {
         $searchModel = new TblDiecutGroupSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_diecut', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### วิธีเคลือบ ##### */
-    public function actionUnit()
-    {
+
+    public function actionUnit() {
         $searchModel = new TblUnitSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_unit', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### วิธีเข้าเล่ม ##### */
-    public function actionBookBinding()
-    {
+
+    public function actionBookBinding() {
         $searchModel = new TblBookBindingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_book_binding', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### หน้าพิมพ์/หลังพิมพ์ ##### */
-    public function actionPrinting()
-    {
+
+    public function actionPrinting() {
         $searchModel = new TblColorPrintingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_printing', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### หมวดหมู่สินค้า ##### */
-    public function actionProductCategory()
-    {
+
+    public function actionProductCategory() {
         $searchModel = new TblProductCategorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_product_category', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### สินค้า ##### */
-    public function actionProduct()
-    {
+
+    public function actionProduct() {
         $searchModel = new TblProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->sort->defaultOrder = [
@@ -261,14 +264,26 @@ class SettingController extends \yii\web\Controller
         ];
 
         return $this->render('_product', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /* ###### รูปแบบ tag/ที่คั่นหนังสือ ##### */
+
+    public function actionPerforate() {
+        $searchModel = new TblPerforateSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('_perforate', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
     /* ###### ขนาดกระดาษ ##### */
-    public function actionCreateUnit()
-    {
+
+    public function actionCreateUnit() {
         $request = Yii::$app->request;
         $model = new TblUnit();
         if ($request->isAjax) {
@@ -298,8 +313,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdateUnit($id)
-    {
+    public function actionUpdateUnit($id) {
         $request = Yii::$app->request;
         $model = $this->findModelUnit($id);
         if ($request->isAjax) {
@@ -330,8 +344,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ขนาดกระดาษ ##### */
-    public function actionCreatePaperSize()
-    {
+
+    public function actionCreatePaperSize() {
         $request = Yii::$app->request;
         $model = new TblPaperSize();
         if ($request->isAjax) {
@@ -362,8 +376,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ขนาดกระดาษ ##### */
-    public function actionUpdatePaperSize($id)
-    {
+
+    public function actionUpdatePaperSize($id) {
         $request = Yii::$app->request;
         $model = $this->findModelPaperSize($id);
         if ($request->isAjax) {
@@ -394,8 +408,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ประเภทกระดาษ ##### */
-    public function actionCreatePaperType()
-    {
+
+    public function actionCreatePaperType() {
         $request = Yii::$app->request;
         $model = new TblPaperType();
         if ($request->isAjax) {
@@ -425,8 +439,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdatePaperType($id)
-    {
+    public function actionUpdatePaperType($id) {
         $request = Yii::$app->request;
         $model = $this->findModelPaperType($id);
         if ($request->isAjax) {
@@ -457,8 +470,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### กระดาษ ##### */
-    public function actionCreatePaper()
-    {
+
+    public function actionCreatePaper() {
         $request = Yii::$app->request;
         $model = new TblPaper();
         if ($request->isAjax) {
@@ -488,8 +501,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdatePaper($id)
-    {
+    public function actionUpdatePaper($id) {
         $request = Yii::$app->request;
         $model = $this->findModelPaper($id);
         if ($request->isAjax) {
@@ -520,8 +532,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### วิธีพับ ##### */
-    public function actionCreateFold()
-    {
+
+    public function actionCreateFold() {
         $request = Yii::$app->request;
         $model = new TblFold();
         if ($request->isAjax) {
@@ -551,8 +563,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdateFold($id)
-    {
+    public function actionUpdateFold($id) {
         $request = Yii::$app->request;
         $model = $this->findModelFold($id);
         if ($request->isAjax) {
@@ -583,8 +594,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### สีฟอยล์ ##### */
-    public function actionCreateFoilColor()
-    {
+
+    public function actionCreateFoilColor() {
         $request = Yii::$app->request;
         $model = new TblFoilColor();
         if ($request->isAjax) {
@@ -614,8 +625,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdateFoilColor($id)
-    {
+    public function actionUpdateFoilColor($id) {
         $request = Yii::$app->request;
         $model = $this->findModelFoilColor($id);
         if ($request->isAjax) {
@@ -646,8 +656,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### วิธีเคลือบ ##### */
-    public function actionCreateCoating()
-    {
+
+    public function actionCreateCoating() {
         $request = Yii::$app->request;
         $model = new TblCoating();
         if ($request->isAjax) {
@@ -677,8 +687,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdateCoating($id)
-    {
+    public function actionUpdateCoating($id) {
         $request = Yii::$app->request;
         $model = $this->findModelCoating($id);
         if ($request->isAjax) {
@@ -709,8 +718,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ไดคัท ##### */
-    public function actionCreateDiecut()
-    {
+
+    public function actionCreateDiecut() {
         $request = Yii::$app->request;
         $model = new TblDiecutGroup();
         $modelsDiecuts = [new TblDiecut()];
@@ -731,13 +740,13 @@ class SettingController extends \yii\web\Controller
                 DynamicModel::loadMultiple($modelsDiecuts, Yii::$app->request->post());
 
                 // ajax validation
-                /*if (Yii::$app->request->isAjax) {
-                    Yii::$app->response->format = Response::FORMAT_JSON;
-                    return ArrayHelper::merge(
-                        ActiveForm::validateMultiple($modelsDiecuts),
-                        ActiveForm::validate($model)
-                    );
-                }*/
+                /* if (Yii::$app->request->isAjax) {
+                  Yii::$app->response->format = Response::FORMAT_JSON;
+                  return ArrayHelper::merge(
+                  ActiveForm::validateMultiple($modelsDiecuts),
+                  ActiveForm::validate($model)
+                  );
+                  } */
 
                 // validate all models
                 $valid = $model->validate();
@@ -787,10 +796,9 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdateDiecut($id)
-    {
+    public function actionUpdateDiecut($id) {
         $request = Yii::$app->request;
-        $model = $this->findModelDiecutGroup($id);
+        $model = $this->findModelTblPerforateOption($id);
         $modelsDiecuts = $model->diecuts;
 
         if ($request->isAjax) {
@@ -862,8 +870,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### วิธีเข้าเล่ม ##### */
-    public function actionCreateBookBinding()
-    {
+
+    public function actionCreateBookBinding() {
         $request = Yii::$app->request;
         $model = new TblBookBinding();
         if ($request->isAjax) {
@@ -893,8 +901,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdateBookBinding($id)
-    {
+    public function actionUpdateBookBinding($id) {
         $request = Yii::$app->request;
         $model = $this->findModelBookBinding($id);
         if ($request->isAjax) {
@@ -925,8 +932,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### หน้าพิมพ์ / หลังพิมพ์ ##### */
-    public function actionCreatePrinting()
-    {
+
+    public function actionCreatePrinting() {
         $request = Yii::$app->request;
         $model = new TblColorPrinting();
         if ($request->isAjax) {
@@ -956,8 +963,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdatePrinting($id)
-    {
+    public function actionUpdatePrinting($id) {
         $request = Yii::$app->request;
         $model = $this->findModelColorPrinting($id);
         if ($request->isAjax) {
@@ -988,8 +994,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### หมวดหมู่สินค้า ##### */
-    public function actionCreateProductCategory()
-    {
+
+    public function actionCreateProductCategory() {
         $request = Yii::$app->request;
         $model = new TblProductCategory();
         if ($request->isAjax) {
@@ -1019,8 +1025,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionUpdateProductCategory($id)
-    {
+    public function actionUpdateProductCategory($id) {
         $request = Yii::$app->request;
         $model = $this->findModelProductCategory($id);
         if ($request->isAjax) {
@@ -1050,8 +1055,7 @@ class SettingController extends \yii\web\Controller
         }
     }
 
-    public function actionCreateProduct()
-    {
+    public function actionCreateProduct() {
         $request = Yii::$app->request;
         $model = new TblProduct();
         $modelOption = new TblQuotationDetail();
@@ -1102,8 +1106,7 @@ class SettingController extends \yii\web\Controller
                             'success' => false,
                             'data' => $model,
                             'validate' => ArrayHelper::merge(
-                                ActiveForm::validate($model),
-                                ActiveForm::validate($modelProductOption)
+                                    ActiveForm::validate($model), ActiveForm::validate($modelProductOption)
                             )
                         ];
                     }
@@ -1122,19 +1125,17 @@ class SettingController extends \yii\web\Controller
                 $transaction->rollBack();
                 throw $e;
             }
-
         } else {
             return $this->render('_form_product', [
-                'model' => $model,
-                'modelOption' => $modelOption,
-                'gridBuilder' => $gridBuilder,
-                'attributes' => $attributes
+                        'model' => $model,
+                        'modelOption' => $modelOption,
+                        'gridBuilder' => $gridBuilder,
+                        'attributes' => $attributes
             ]);
         }
     }
 
-    public function actionUpdateProduct($id)
-    {
+    public function actionUpdateProduct($id) {
         $request = Yii::$app->request;
         $model = $this->findModelProduct($id);
         $modelOption = new TblQuotationDetail();
@@ -1168,7 +1169,7 @@ class SettingController extends \yii\web\Controller
                         'two_page_option' => '',
                         'one_page_option' => ''
                     ]);
-                    if($modelProductOption->save()){
+                    if ($modelProductOption->save()) {
                         $transaction->commit();
                         return [
                             'success' => true,
@@ -1180,14 +1181,13 @@ class SettingController extends \yii\web\Controller
                                 'model' => $model
                             ]
                         ];
-                    }else{
+                    } else {
                         $transaction->rollBack();
                         return [
                             'success' => false,
                             'data' => $model,
                             'validate' => ArrayHelper::merge(
-                                ActiveForm::validate($model),
-                                ActiveForm::validate($modelProductOption)
+                                    ActiveForm::validate($model), ActiveForm::validate($modelProductOption)
                             )
                         ];
                     }
@@ -1206,20 +1206,19 @@ class SettingController extends \yii\web\Controller
                 $transaction->rollBack();
                 throw $e;
             }
-
         } else {
             return $this->render('_form_product', [
-                'model' => $model,
-                'modelOption' => $modelOption,
-                'gridBuilder' => $gridBuilder,
-                'attributes' => $attributes
+                        'model' => $model,
+                        'modelOption' => $modelOption,
+                        'gridBuilder' => $gridBuilder,
+                        'attributes' => $attributes
             ]);
         }
     }
 
     /* ###### ลบขนาดกระดาษ ##### */
-    public function actionDeletePaperSize($id)
-    {
+
+    public function actionDeletePaperSize($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelPaperSize($id);
         $model->delete();
@@ -1229,8 +1228,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบประเภทกระดาษ ##### */
-    public function actionDeletePaperType($id)
-    {
+
+    public function actionDeletePaperType($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelPaperType($id);
         $model->delete();
@@ -1240,8 +1239,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบกระดาษ ##### */
-    public function actionDeletePaper($id)
-    {
+
+    public function actionDeletePaper($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelPaper($id);
         $model->delete();
@@ -1251,8 +1250,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบวิธีพับ ##### */
-    public function actionDeleteFold($id)
-    {
+
+    public function actionDeleteFold($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelFold($id);
         $model->delete();
@@ -1262,8 +1261,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบสีฟอยล์ ##### */
-    public function actionDeleteFoilColor($id)
-    {
+
+    public function actionDeleteFoilColor($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelFoilColor($id);
         $model->delete();
@@ -1273,8 +1272,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบวิธีเคลือบ ##### */
-    public function actionDeleteCoating($id)
-    {
+
+    public function actionDeleteCoating($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelCoating($id);
         $model->delete();
@@ -1284,8 +1283,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ไดคัท ##### */
-    public function actionDeleteDiecut($id)
-    {
+
+    public function actionDeleteDiecut($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelDiecut($id);
         $model->delete();
@@ -1295,8 +1294,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ไดคัท ##### */
-    public function actionDeleteDiecutGroup($id)
-    {
+
+    public function actionDeleteDiecutGroup($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelDiecutGroup($id);
         $model->delete();
@@ -1306,8 +1305,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบหน่วย ##### */
-    public function actionDeleteUnit($id)
-    {
+
+    public function actionDeleteUnit($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelUnit($id);
         $model->delete();
@@ -1317,8 +1316,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบวิธีเข้าเล่ม ##### */
-    public function actionDeleteBookBinding($id)
-    {
+
+    public function actionDeleteBookBinding($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelBookBinding($id);
         $model->delete();
@@ -1328,8 +1327,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบขนาดกระดาษ ##### */
-    public function actionDeletePrinting($id)
-    {
+
+    public function actionDeletePrinting($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelColorPrinting($id);
         $model->delete();
@@ -1339,8 +1338,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบหมวดหมู่สินค้า ##### */
-    public function actionDeleteProductCategory($id)
-    {
+
+    public function actionDeleteProductCategory($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelProductCategory($id);
         $model->delete();
@@ -1350,8 +1349,8 @@ class SettingController extends \yii\web\Controller
     }
 
     /* ###### ลบขนาดกระดาษ ##### */
-    public function actionDeleteProduct($id)
-    {
+
+    public function actionDeleteProduct($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelProduct($id);
         $model->delete();
@@ -1361,22 +1360,197 @@ class SettingController extends \yii\web\Controller
         ];
     }
 
-    public function actionDiecutDetail()
-    {
+    public function actionDiecutDetail() {
         if (isset($_POST['expandRowKey'])) {
             $searchModel = new TblDiecutSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->where(['diecut_group_id' => $_POST['expandRowKey']]);
             return $this->renderPartial('_diecut-details', [
-                'dataProvider' => $dataProvider
+                        'dataProvider' => $dataProvider
             ]);
         } else {
             return '<div class="alert alert-danger">No data found</div>';
         }
     }
 
-    public static function isEmpty($data)
-    {
+    public static function isEmpty($data) {
         return !isset($data) || empty($data) || ($data === null) || ($data === '');
     }
+
+    /* ###### รูปแบบ tag/ที่คั่นหนังสือ ##### */
+
+    public function actionCreatePerforate() {
+        $request = Yii::$app->request;
+        $model = new TblPerforate();
+        $modelsPerforateOptions = [new TblPerforateOption()];
+
+        if ($request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($request->isGet) {
+                return [
+                    'title' => 'บันทึกรูปแบบ tag/ที่คั่นหนังสือ',
+                    'content' => $this->renderAjax('_form_perforate', [
+                        'model' => $model,
+                        'modelsPerforateOptions' => (empty($modelsPerforateOptions)) ? [new TblPerforateOption()] : $modelsPerforateOptions
+                    ]),
+                    'footer' => ''
+                ];
+            } elseif ($model->load(Yii::$app->request->post())) {
+                $modelsPerforateOptions = DynamicModel::createMultiple(TblPerforateOption::classname(), $modelsPerforateOptions, 'perforate_option_id');
+                DynamicModel::loadMultiple($modelsPerforateOptions, Yii::$app->request->post());
+                $valid = $model->validate();
+                $valid = DynamicModel::validateMultiple($modelsPerforateOptions) && $valid;
+                if ($valid) {
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    try {
+                        if ($flag = $model->save(false)) {
+                            foreach ($modelsPerforateOptions as $modelsPerforateOption) {
+                                $modelsPerforateOption->perforate_id = $model->perforate_id;
+                                if (!($flag = $modelsPerforateOption->save(false))) {
+                                    $transaction->rollBack();
+                                    break;
+                                }
+                            }
+                        }
+                        if ($flag) {
+                            $transaction->commit();
+                            return [
+                                'success' => true,
+                                'message' => 'บันทึกสำเร็จ!',
+                                'data' => $model
+                            ];
+                        }
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                    }
+                } else {
+                    return [
+                        'success' => false,
+                        'message' => $model->errors,
+                        'data' => $model,
+                        'validate' => ActiveForm::validateMultiple($modelsPerforateOptions)
+                    ];
+                }
+            } else {
+                return [
+                    'title' => 'บันทึกรูปแบบ tag/ที่คั่นหนังสือ',
+                    'content' => $this->renderAjax('_form_perforate', [
+                        'model' => $model,
+                        'modelsPerforateOptions' => (empty($modelsPerforateOptions)) ? [new TblPerforateOption()] : $modelsPerforateOptions
+                    ]),
+                    'footer' => '',
+                    'validate' => ActiveForm::validateMultiple($modelsPerforateOptions)
+                ];
+            }
+        }
+    }
+
+    public function actionUpdatePerforate($id) {
+        $request = Yii::$app->request;
+        $model = $this->findModelPerforate($id);
+        $modelsPerforateOptions = $model->perforateOptions;
+
+        if ($request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($request->isGet) {
+                return [
+                    'title' => 'บันทึกรูปแบบ tag/ที่คั่นหนังสือ',
+                    'content' => $this->renderAjax('_form_perforate', [
+                        'model' => $model,
+                        'modelsPerforateOptions' => (empty($modelsPerforateOptions)) ? [new TblPerforateOption()] : $modelsPerforateOptions
+                    ]),
+                    'footer' => ''
+                ];
+            } elseif ($model->load(Yii::$app->request->post())) {
+                $oldIDs = ArrayHelper::map($modelsPerforateOptions, 'perforate_option_id', 'perforate_option_id');
+                $modelsPerforateOptions = DynamicModel::createMultiple(TblPerforateOption::classname(), $modelsPerforateOptions, 'perforate_option_id');
+                DynamicModel::loadMultiple($modelsPerforateOptions, Yii::$app->request->post());
+                $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsPerforateOptions, 'perforate_option_id', 'perforate_option_id')));
+
+                // validate all models
+                $valid = $model->validate();
+                $valid = DynamicModel::validateMultiple($modelsPerforateOptions) && $valid;
+
+                if ($valid) {
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    try {
+                        if ($flag = $model->save(false)) {
+                            if (!empty($deletedIDs)) {
+                                TblPerforateOption::deleteAll(['perforate_option_id' => $deletedIDs]);
+                            }
+                            foreach ($modelsPerforateOptions as $modelsPerforateOption) {
+                                $modelsPerforateOption->perforate_id = $model->perforate_id;
+                                if (!($flag = $modelsPerforateOption->save(false))) {
+                                    $transaction->rollBack();
+                                    break;
+                                }
+                            }
+                        }
+                        if ($flag) {
+                            $transaction->commit();
+                            return [
+                                'success' => true,
+                                'message' => 'บันทึกสำเร็จ!',
+                                'data' => $model
+                            ];
+                        }
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                    }
+                } else {
+                    return [
+                        'success' => false,
+                        'message' => $valid,
+                        'data' => $model,
+                        'validate' => ActiveForm::validateMultiple($modelsPerforateOptions)
+                    ];
+                }
+            } else {
+                return [
+                    'title' => 'บันทึกรูปแบบ tag/ที่คั่นหนังสือ',
+                    'content' => $this->renderAjax('_form_perforate', [
+                        'model' => $model,
+                        'modelsPerforateOptions' => (empty($modelsPerforateOptions)) ? [new TblPerforateOption()] : $modelsPerforateOptions
+                    ]),
+                    'footer' => ''
+                ];
+            }
+        }
+    }
+
+    public function actionDeletePerforate($id) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $model = $this->findModelPerforate($id);
+        $model->delete();
+        return [
+            'success' => true,
+        ];
+    }
+    
+    public function actionDeletePerforateOption($id) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $model = $this->findModelPerforateOption($id);
+        $model->delete();
+        return [
+            'success' => true,
+        ];
+    }
+
+    public function actionPerforateDetail() {
+        if (isset($_POST['expandRowKey'])) {
+            $searchModel = TblPerforateOption::find()->where(['perforate_id' => $_POST['expandRowKey']]);
+            $dataProvider = new ActiveDataProvider([
+                'query' => $searchModel,
+                'pagination' => [
+                    'pageSize' => false,
+                ],
+            ]);
+            return $this->renderPartial('_perforate-details', [
+                        'dataProvider' => $dataProvider
+            ]);
+        } else {
+            return '<div class="alert alert-danger">No data found</div>';
+        }
+    }
+
 }
