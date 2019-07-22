@@ -1,45 +1,49 @@
 (function ($) {
     "use strict";
     var $q,
-        $formData = {},
-        $form = $("#form-quotation"),
-        $paperSize = $('#tblquotationdetail-paper_size_id'),
-        $paperSizeWidth = $('#tblquotationdetail-paper_size_width'),
-        $paperSizeHeight = $('#tblquotationdetail-paper_size_height'),
-        $paperSizeUnit = $('#tblquotationdetail-paper_size_unit'),
-        $opPaperSize = $('#op_paper_size_id'),
-        $customPaper = $('.custom-paper-size'),
-        $bookBinding = $('#tblquotationdetail-book_binding_id'),
-        $opBookBinding = $('#op_book_binding_id'),
-        $pageQty = $('#tblquotationdetail-page_qty'),
-        $opPageQty = $('#op_page_qty'),
-        $paperId = $('#tblquotationdetail-paper_id'),
-        $opPaper = $('#op_paper_id'),
-        $beforePrint = $('#tblquotationdetail-before_print'),
-        $opBeforePrint = $('#op_before_print'),
-        $afterPrint = $('#tblquotationdetail-after_print'),
-        $opAfterPrint = $('#op_after_print'),
-        $coatingId = $('#tblquotationdetail-coating_id'),
-        $coatingOption = $('input[name="TblQuotationDetail[coating_option]"]'),
-        $opCoating = $('#op_coating_id'),
-        $diecut = $('input[name="TblQuotationDetail[diecut]"]'),
-        $diecutId = $('#tblquotationdetail-diecut_id'),
-        $opDiecut = $('#op_diecut_id'),
-        $foldId = $('#tblquotationdetail-fold_id'),
-        $opFold = $('#op_fold_id'),
-        $foilSizeWidth = $('#tblquotationdetail-foil_size_width'),
-        $foilSizeHeight = $('#tblquotationdetail-foil_size_height'),
-        $foilSizeUnit = $('#tblquotationdetail-foil_size_unit'),
-        $foilColorId = $('#tblquotationdetail-foil_color_id'),
-        $opFoil = $('#op_foil_color_id'),
-        $embossSizeWidth = $('#tblquotationdetail-emboss_size_width'),
-        $emBossSizeHeight = $('#tblquotationdetail-emboss_size_height'),
-        $emBossSizeUnit = $('#tblquotationdetail-emboss_size_unit'),
-        $opEmbossing = $('#op_embossing'),
-        $landOrient = $('input[name="TblQuotationDetail[land_orient]"]'),
-        $opLandOrient = $('#op_land_orient'),
-        $productId = $('#tblquotationdetail-product_id'),
-        $nbsp = '&nbsp;';
+            $formData = {},
+            $form = $("#form-quotation"),
+            $paperSize = $('#tblquotationdetail-paper_size_id'),
+            $paperSizeWidth = $('#tblquotationdetail-paper_size_width'),
+            $paperSizeHeight = $('#tblquotationdetail-paper_size_height'),
+            $paperHeight = $('#tblquotationdetail-paper_height'),
+            $paperSizeUnit = $('#tblquotationdetail-paper_size_unit'),
+            $opPaperSize = $('#op_paper_size_id'),
+            $customPaper = $('.custom-paper-size'),
+            $bookBinding = $('#tblquotationdetail-book_binding_id'),
+            $opBookBinding = $('#op_book_binding_id'),
+            $pageQty = $('#tblquotationdetail-page_qty'),
+            $opPageQty = $('#op_page_qty'),
+            $paperId = $('#tblquotationdetail-paper_id'),
+            $opPaper = $('#op_paper_id'),
+            $beforePrint = $('#tblquotationdetail-before_print'),
+            $opBeforePrint = $('#op_before_print'),
+            $afterPrint = $('#tblquotationdetail-after_print'),
+            $opAfterPrint = $('#op_after_print'),
+            $coatingId = $('#tblquotationdetail-coating_id'),
+            $coatingOption = $('input[name="TblQuotationDetail[coating_option]"]'),
+            $opCoating = $('#op_coating_id'),
+            $diecut = $('input[name="TblQuotationDetail[diecut]"]'),
+            $diecutId = $('#tblquotationdetail-diecut_id'),
+            $opDiecut = $('#op_diecut_id'),
+            $foldId = $('#tblquotationdetail-fold_id'),
+            $opFold = $('#op_fold_id'),
+            $foilSizeWidth = $('#tblquotationdetail-foil_size_width'),
+            $foilSizeHeight = $('#tblquotationdetail-foil_size_height'),
+            $foilSizeUnit = $('#tblquotationdetail-foil_size_unit'),
+            $foilColorId = $('#tblquotationdetail-foil_color_id'),
+            $opFoil = $('#op_foil_color_id'),
+            $embossSizeWidth = $('#tblquotationdetail-emboss_size_width'),
+            $emBossSizeHeight = $('#tblquotationdetail-emboss_size_height'),
+            $emBossSizeUnit = $('#tblquotationdetail-emboss_size_unit'),
+            $opEmbossing = $('#op_embossing'),
+            $landOrient = $('input[name="TblQuotationDetail[land_orient]"]'),
+            $opLandOrient = $('#op_land_orient'),
+            $productId = $('#tblquotationdetail-product_id'),
+            $perforateId = $('#tblquotationdetail-perforate'),
+            $perforateOptionId = $('#tblquotationdetail-perforate_option_id'),
+            $perforateOption = $('#op_perforate_option'),
+            $nbsp = '&nbsp;';
     $q = {
         isEmpty: function (value, trim) {
             return value === null || value === undefined || value.length === 0 || (trim && $.trim(value) === '');
@@ -49,12 +53,12 @@
                 $.each($elm, function (index, value) {
                     $(this).val($value).change();
                 });
-            }
+        }
         },
         select2Options: function ($elementSelect2) {
             var options = {},
-                adapter = $elementSelect2.data().select2.dataAdapter,
-                self = this;
+                    adapter = $elementSelect2.data().select2.dataAdapter,
+                    self = this;
             $elementSelect2.children().each(function () {
                 if (!$(this).is('option') && !$(this).is('optgroup')) {
                     return true;
@@ -106,7 +110,17 @@
         var unitOptions = $q.select2Options($paperSizeUnit); // หน่วย
         if (!$q.isEmpty(unitOptions[$paperSizeUnit.val()])) {
             // กว้าง x ยาว หน่วย
-            $opPaperSize.html($(this).val() + 'x' + $paperSizeHeight.val() + $nbsp + unitOptions[$paperSizeUnit.val()]);
+            if (!$q.isEmpty($paperHeight.val())) {
+                $opPaperSize.html(
+                        $paperSizeWidth.val() +
+                        'x' + $paperSizeHeight.val() +
+                        'x' + $paperHeight.val() +
+                        $nbsp +
+                        unitOptions[$paperSizeUnit.val()]
+                        );
+            } else {
+                $opPaperSize.html($(this).val() + 'x' + $paperSizeHeight.val() + $nbsp + unitOptions[$paperSizeUnit.val()]);
+            }
         } else {
             // กว้าง x ยาว
             $opPaperSize.html($(this).val() + 'x' + $paperSizeHeight.val());
@@ -118,10 +132,43 @@
         var unitOptions = $q.select2Options($paperSizeUnit);
         if (!$q.isEmpty(unitOptions[$paperSizeUnit.val()])) {
             // กว้าง x ยาว หน่วย
-            $opPaperSize.html($paperSizeWidth.val() + 'x' + $(this).val() + $nbsp + unitOptions[$paperSizeUnit.val()]);
+            if (!$q.isEmpty($paperHeight.val())) {
+                $opPaperSize.html(
+                        $paperSizeWidth.val() +
+                        'x' + $paperSizeHeight.val() +
+                        'x' + $paperHeight.val() +
+                        $nbsp +
+                        unitOptions[$paperSizeUnit.val()]
+                        );
+            } else {
+                $opPaperSize.html($paperSizeWidth.val() + 'x' + $(this).val() + $nbsp + unitOptions[$paperSizeUnit.val()]);
+            }
+
         } else {
             // กว้าง x ยาว
             $opPaperSize.html($paperSizeWidth.val() + 'x' + $(this).val());
+        }
+    });
+
+    // สูง กำหนดเอง
+    $paperHeight.on('keyup change', function (e) {
+        var unitOptions = $q.select2Options($paperSizeUnit);
+        if (!$q.isEmpty(unitOptions[$paperSizeUnit.val()])) {
+            // กว้าง x ยาว หน่วย
+            $opPaperSize.html(
+                    $paperSizeWidth.val() +
+                    'x' + $paperSizeHeight.val() +
+                    'x' + $(this).val() +
+                    $nbsp +
+                    unitOptions[$paperSizeUnit.val()]
+                    );
+        } else {
+            // กว้าง x ยาว
+            $opPaperSize.html(
+                    $paperSizeWidth.val() +
+                    'x' + $paperSizeHeight.val() +
+                    'x' + $(this).val()
+                    );
         }
     });
 
@@ -129,7 +176,17 @@
     $paperSizeUnit.on('change', function (e) {
         var options = $q.select2Options($(this));
         if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
-            $opPaperSize.html($paperSizeWidth.val() + 'x' + $paperSizeHeight.val() + $nbsp + options[$(this).val()]);
+            if (!$q.isEmpty($paperHeight.val())) {
+                $opPaperSize.html(
+                        $paperSizeWidth.val() +
+                        'x' + $paperSizeHeight.val() +
+                        'x' + $paperHeight.val() +
+                        $nbsp +
+                        options[$paperSizeUnit.val()]
+                        );
+            } else {
+                $opPaperSize.html($paperSizeWidth.val() + 'x' + $paperSizeHeight.val() + $nbsp + options[$(this).val()]);
+            }
         } else {
             $opPaperSize.html($paperSizeWidth.val() + 'x' + $paperSizeHeight.val());
         }
@@ -164,7 +221,7 @@
         }
     });
 
-    //หน้าพิมพ์
+    //พิมพ์ 2 หน้า
     $beforePrint.on('change', function () {
         var options = $q.select2Options($(this));
         if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
@@ -172,6 +229,10 @@
         } else {
             $opBeforePrint.html('-');
         }
+        if (!$q.isEmpty($afterPrint.val())) {
+            $afterPrint.val(null).trigger('change');
+        }
+
     });
 
     //หลังพิมพ์
@@ -182,20 +243,28 @@
         } else {
             $opAfterPrint.html('-');
         }
+        if (!$q.isEmpty($beforePrint.val())) {
+            $beforePrint.val(null).trigger('change');
+        }
     });
 
     //เคลือบ
     $coatingId.on('change', function () {
         var options = $q.select2Options($(this));
         if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
-            if ($(this).val() === 'N'){
+            if ($(this).val() === 'N') {
                 $('.coating-option').hide();
                 $('#tblquotationdetail-coating_option-0').prop('checked', false);
                 $('#tblquotationdetail-coating_option-1').prop('checked', false);
-            }else{
+            } else {
                 $('.coating-option').show();
             }
-            $opCoating.html(options[$(this).val()]);
+            if ($('#tblquotationdetail-coating_option-0').is(':checked')) { //เคลือบด้านเดียว
+                $opCoating.html(options[$(this).val()] + ' ด้านเดียว');
+            } else if ($('#tblquotationdetail-coating_option-1').is(':checked')) { //เคลือบสองเดียว
+                $opCoating.html(options[$(this).val()] + ' สองด้าน');
+            }
+
         } else {
             $opCoating.html('-');
         }
@@ -212,23 +281,23 @@
         }
         if (!$q.isEmpty($coatingId.val()) && !$q.isEmpty(options[$coatingId.val()])) {
             $opCoating.html(options[$coatingId.val()] + ' (' + text + ')');
-        }else{
+        } else {
             $opCoating.html('(' + text + ')');
         }
         $form.trigger("change");
     });
 
     //ไดคัท
-    $diecut.on('change', function(){
+    $diecut.on('change', function () {
         var options = $q.select2Options($diecutId);
         if ($(this).val() === 'Curve' && $('#tblquotationdetail-diecut-2').is(':checked')) {
             $('.diecut-id').show();
             if (!$q.isEmpty($diecutId.val()) && !$q.isEmpty(options[$diecutId.val()])) {
                 $opDiecut.html('ไดคัทมุมมน ' + options[$diecutId.val()]);
-            }else{
+            } else {
                 $opDiecut.html('ไดคัทมุมมน');
             }
-        }else{
+        } else {
             $('.diecut-id').hide();
             $diecutId.val(null).trigger('change');
             if ($(this).val() === 'Default') {
@@ -244,8 +313,8 @@
         var options = $q.select2Options($(this));
         if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
             if ($('#tblquotationdetail-diecut-2').val() === 'Curve') {
-                $opDiecut.html('ไดคัทมุมมน ' +  options[$(this).val()]);
-            }else{
+                $opDiecut.html('ไดคัทมุมมน ' + options[$(this).val()]);
+            } else {
                 $opDiecut.html(options[$(this).val()]);
             }
         } else {
@@ -266,83 +335,83 @@
     // กว้าง ฟอยล์
     $foilSizeWidth.on('keyup change', function () {
         var unitOptions = $q.select2Options($foilSizeUnit),
-            colorOptions = $q.select2Options($foilColorId);
+                colorOptions = $q.select2Options($foilColorId);
         $opFoil.html(
-            $(this).val() + 'x' + $foilSizeHeight.val() +
-            $nbsp +
-            ($q.isEmpty(unitOptions[$foilSizeUnit.val()]) ? $nbsp : unitOptions[$foilSizeUnit.val()]) +
-            $nbsp +
-            ($q.isEmpty(colorOptions[$foilColorId.val()]) ? $nbsp : colorOptions[$foilColorId.val()])
-        );
+                $(this).val() + 'x' + $foilSizeHeight.val() +
+                $nbsp +
+                ($q.isEmpty(unitOptions[$foilSizeUnit.val()]) ? $nbsp : unitOptions[$foilSizeUnit.val()]) +
+                $nbsp +
+                ($q.isEmpty(colorOptions[$foilColorId.val()]) ? $nbsp : colorOptions[$foilColorId.val()])
+                );
     });
 
     // ยาว ฟอยล์
     $foilSizeHeight.on('keyup change', function () {
         var unitOptions = $q.select2Options($foilSizeUnit),
-            colorOptions = $q.select2Options($foilColorId);
+                colorOptions = $q.select2Options($foilColorId);
         $opFoil.html(
-            $foilSizeWidth.val() + 'x' + $(this).val() +
-            $nbsp +
-            ($q.isEmpty(unitOptions[$foilSizeUnit.val()]) ? $nbsp : unitOptions[$foilSizeUnit.val()]) +
-            $nbsp +
-            ($q.isEmpty(colorOptions[$foilColorId.val()]) ? $nbsp : colorOptions[$foilColorId.val()])
-        );
+                $foilSizeWidth.val() + 'x' + $(this).val() +
+                $nbsp +
+                ($q.isEmpty(unitOptions[$foilSizeUnit.val()]) ? $nbsp : unitOptions[$foilSizeUnit.val()]) +
+                $nbsp +
+                ($q.isEmpty(colorOptions[$foilColorId.val()]) ? $nbsp : colorOptions[$foilColorId.val()])
+                );
     });
 
     // หน่วย ฟอยล์
     $foilSizeUnit.on('change', function () {
         var unitOptions = $q.select2Options($(this)),
-            colorOptions = $q.select2Options($foilColorId);
+                colorOptions = $q.select2Options($foilColorId);
         $opFoil.html(
-            $foilSizeWidth.val() + 'x' + $foilSizeHeight.val() +
-            $nbsp +
-            ($q.isEmpty(unitOptions[$foilSizeUnit.val()]) ? $nbsp : unitOptions[$foilSizeUnit.val()]) +
-            $nbsp +
-            ($q.isEmpty(colorOptions[$foilColorId.val()]) ? $nbsp : colorOptions[$foilColorId.val()])
-        );
+                $foilSizeWidth.val() + 'x' + $foilSizeHeight.val() +
+                $nbsp +
+                ($q.isEmpty(unitOptions[$foilSizeUnit.val()]) ? $nbsp : unitOptions[$foilSizeUnit.val()]) +
+                $nbsp +
+                ($q.isEmpty(colorOptions[$foilColorId.val()]) ? $nbsp : colorOptions[$foilColorId.val()])
+                );
     });
 
     //สี ฟอยล์
     $foilColorId.on('change', function () {
         var colorOptions = $q.select2Options($(this)),
-            unitOptions = $q.select2Options($foilSizeUnit);
+                unitOptions = $q.select2Options($foilSizeUnit);
         $opFoil.html(
-            $foilSizeWidth.val() + 'x' + $foilSizeHeight.val() +
-            $nbsp +
-            ($q.isEmpty(unitOptions[$foilSizeUnit.val()]) ? $nbsp : unitOptions[$foilSizeUnit.val()]) +
-            $nbsp +
-            ($q.isEmpty(colorOptions[$foilColorId.val()]) ? $nbsp : colorOptions[$foilColorId.val()])
-        );
+                $foilSizeWidth.val() + 'x' + $foilSizeHeight.val() +
+                $nbsp +
+                ($q.isEmpty(unitOptions[$foilSizeUnit.val()]) ? $nbsp : unitOptions[$foilSizeUnit.val()]) +
+                $nbsp +
+                ($q.isEmpty(colorOptions[$foilColorId.val()]) ? $nbsp : colorOptions[$foilColorId.val()])
+                );
     });
 
     //กว้าง ปั๊มนูน
     $embossSizeWidth.on('keyup change', function () {
         var unitOptions = $q.select2Options($emBossSizeUnit);
         $opEmbossing.html(
-            $(this).val() + 'x' + $emBossSizeHeight.val() +
-            $nbsp +
-            ($q.isEmpty(unitOptions[$emBossSizeUnit.val()]) ? '' : unitOptions[$emBossSizeUnit.val()])
-        );
+                $(this).val() + 'x' + $emBossSizeHeight.val() +
+                $nbsp +
+                ($q.isEmpty(unitOptions[$emBossSizeUnit.val()]) ? '' : unitOptions[$emBossSizeUnit.val()])
+                );
     });
 
     // ยาว ปั๊มนูน
     $emBossSizeHeight.on('keyup change', function () {
         var unitOptions = $q.select2Options($emBossSizeUnit);
         $opEmbossing.html(
-            $embossSizeWidth.val() + 'x' + $(this).val() +
-            $nbsp +
-            ($q.isEmpty(unitOptions[$emBossSizeUnit.val()]) ? '' : unitOptions[$emBossSizeUnit.val()])
-        );
+                $embossSizeWidth.val() + 'x' + $(this).val() +
+                $nbsp +
+                ($q.isEmpty(unitOptions[$emBossSizeUnit.val()]) ? '' : unitOptions[$emBossSizeUnit.val()])
+                );
     });
 
     // หน่วย ปั๊มนูน
     $emBossSizeUnit.on('change', function () {
         var unitOptions = $q.select2Options($(this));
         $opEmbossing.html(
-            $embossSizeWidth.val() + 'x' + $emBossSizeHeight.val() +
-            $nbsp +
-            ($q.isEmpty(unitOptions[$emBossSizeUnit.val()]) ? '' : unitOptions[$emBossSizeUnit.val()])
-        );
+                $embossSizeWidth.val() + 'x' + $emBossSizeHeight.val() +
+                $nbsp +
+                ($q.isEmpty(unitOptions[$emBossSizeUnit.val()]) ? '' : unitOptions[$emBossSizeUnit.val()])
+                );
     });
 
     // แนวตั้ง แนวนอน
@@ -353,6 +422,40 @@
             $opLandOrient.html('แนวนอน');
         }
         $form.trigger("change");
+    });
+
+    //ตัด/เจาะ
+    $perforateId.on('change', function () {
+        var options = $q.select2Options($(this));
+        var options2 = $q.select2Options($perforateOptionId);
+        if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
+            if ($(this).val() === '0') {
+                $('.perforate-option').hide();
+                $perforateOptionId.val(null).trigger('change');
+                $perforateOption.html(options[$(this).val()]);
+            } else {
+                $('.perforate-option').show();
+                if (!$q.isEmpty(options2[$($perforateOptionId).val()])) {
+                    $perforateOption.html(options[$(this).val()] + ' ' + options2[$($perforateOptionId).val()]);
+                } else {
+                    $perforateOption.html(options[$(this).val()]);
+                }
+            }
+        } else {
+            $('.perforate-option').hide();
+            $perforateOptionId.val(null).trigger('change');
+            $perforateOption.html('-');
+        }
+    });
+    //มุมที่เจาะ*
+    $perforateOptionId.on('change', function () {
+        var options = $q.select2Options($(this));
+        var options2 = $q.select2Options($perforateId);
+        if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
+            $perforateOption.html(options2[$($perforateId).val()] + ' ' + options[$(this).val()]);
+        } else {
+            $perforateOption.html('-');
+        }
     });
 
     $form.on('change', function () {
@@ -380,11 +483,11 @@
                 if (!$q.isEmpty(dataObj[$pId])) {
                     productOps = dataObj[$pId];
                     var input = $form.find('input'),
-                        select2 = $form.find('select');
+                            select2 = $form.find('select');
                     $.each(input, function () {
                         if (!$q.isEmpty($(this).attr('id'))) {
                             var inputId = $(this).attr('id'),
-                                fieldName = inputId.replace('tblquotationdetail-', '');
+                                    fieldName = inputId.replace('tblquotationdetail-', '');
                             if (!$q.isEmpty(productOps[fieldName])) {
                                 $('#' + inputId).val(productOps[fieldName]).change();
                             }
@@ -428,7 +531,7 @@
                     $.each(select2, function () {
                         if (!$q.isEmpty($(this).attr('id'))) {
                             var inputId = $(this).attr('id'),
-                                fieldName = inputId.replace('tblquotationdetail-', '');
+                                    fieldName = inputId.replace('tblquotationdetail-', '');
                             if (!$q.isEmpty(productOps[fieldName])) {
                                 $('#' + inputId).val(productOps[fieldName]).trigger('change');
                             }

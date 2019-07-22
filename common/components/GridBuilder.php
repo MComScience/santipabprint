@@ -19,6 +19,7 @@ use common\modules\app\models\TblDiecut;
 use common\modules\app\models\TblFold;
 use common\modules\app\models\TblFoilColor;
 use common\modules\app\models\TblBookBinding;
+use common\modules\app\models\TblPerforateOption;
 
 class GridBuilder extends Component
 {
@@ -103,6 +104,17 @@ class GridBuilder extends Component
     {
         $provider = new ActiveDataProvider([
             'query' => TblBookBinding::find(),
+            'pagination' => [
+                'pageSize' => false,
+            ],
+        ]);
+        return $provider;
+    }
+    
+    public static function getDataPerforate($model)
+    {
+        $provider = new ActiveDataProvider([
+            'query' => TblPerforateOption::find(),
             'pagination' => [
                 'pageSize' => false,
             ],

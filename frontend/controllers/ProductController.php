@@ -39,22 +39,23 @@ use common\components\QueryBuilder;
 use common\modules\app\models\TblProductCategory;
 use common\modules\app\models\TblCatalogType;
 use common\modules\app\models\TblCatalog;
+use common\components\CalculateDigital;
+use common\components\CalculateOffset;
 
-class ProductController extends \yii\web\Controller
-{
+class ProductController extends \yii\web\Controller {
+
     use ModelTrait;
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
-            /*[
-                'class' => 'yii\filters\PageCache',
-                'only' => ['index'],
-                'duration' => 60,
-                'variations' => [
-                    \Yii::$app->language,
-                ],
-            ],*/
+            /* [
+              'class' => 'yii\filters\PageCache',
+              'only' => ['index'],
+              'duration' => 60,
+              'variations' => [
+              \Yii::$app->language,
+              ],
+              ], */
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['checkout'],
@@ -69,24 +70,23 @@ class ProductController extends \yii\web\Controller
         ];
     }
 
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $groups = [];
         $group_types = [];
         $modelGroups = TblProductGroup::find()->all();
         foreach ($modelGroups as $modelProductGroup) {
             $rows = (new \yii\db\Query())
-                ->select([
-                    'tbl_product_group_type.product_group_id',
-                    'tbl_product_type.product_type_id',
-                    'tbl_product_type.product_type_name',
-                    'tbl_product_type.product_img_path',
-                    'tbl_product_type.product_img_base_url'
-                ])
-                ->from('tbl_product_group_type')
-                ->innerJoin('tbl_product_type', 'tbl_product_type.product_type_id = tbl_product_group_type.product_type_id')
-                ->where(['tbl_product_group_type.product_group_id' => $modelProductGroup->product_group_id])
-                ->all();
+                    ->select([
+                        'tbl_product_group_type.product_group_id',
+                        'tbl_product_type.product_type_id',
+                        'tbl_product_type.product_type_name',
+                        'tbl_product_type.product_img_path',
+                        'tbl_product_type.product_img_base_url'
+                    ])
+                    ->from('tbl_product_group_type')
+                    ->innerJoin('tbl_product_type', 'tbl_product_type.product_type_id = tbl_product_group_type.product_type_id')
+                    ->where(['tbl_product_group_type.product_group_id' => $modelProductGroup->product_group_id])
+                    ->all();
             $groups[] = [
                 'group_name' => $modelProductGroup->product_group_name,
                 'group_id' => str_replace('.', '-', strtolower($modelProductGroup->product_group_id)),
@@ -115,38 +115,35 @@ class ProductController extends \yii\web\Controller
             ];
         }
         return $this->render('index', [
-            'groups' => $groups,
-            'product_type_all' => $product_type_all,
-            'group_types' => $group_types
+                    'groups' => $groups,
+                    'product_type_all' => $product_type_all,
+                    'group_types' => $group_types
         ]);
     }
 
-    public function actionProductSub($id)
-    {
+    public function actionProductSub($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $productType = $this->findModelProductType($id);
         $products = TblProduct::find()->where([
-            'product_type_id' => $id
-        ])->all();
+                    'product_type_id' => $id
+                ])->all();
         return $this->renderAjax('_template_modal', [
-            'products' => $products,
-            'productType' => $productType
+                    'products' => $products,
+                    'productType' => $productType
         ]);
     }
 
-    protected function getProductTypeIcon($model)
-    {
+    protected function getProductTypeIcon($model) {
         return !empty($model['product_img_path']) ?
-            Html::img(Url::base(true) . $model['product_img_base_url'] . str_replace('\\', '/', $model['product_img_path']), [
-                'class' => 'img-fluid img-responsive center-block'
-            ]) :
-            Html::img(Url::base(true) . '/images/No_Image_Available.png', [
-                'class' => 'img-fluid img-responsive center-block'
-            ]);
+                Html::img(Url::base(true) . $model['product_img_base_url'] . str_replace('\\', '/', $model['product_img_path']), [
+                    'class' => 'img-fluid img-responsive center-block'
+                ]) :
+                Html::img(Url::base(true) . '/images/No_Image_Available.png', [
+                    'class' => 'img-fluid img-responsive center-block'
+        ]);
     }
 
-    public function actionQuotation($product_id)
-    {
+    public function actionQuotation($product_id) {
         $session = Yii::$app->session;
         $modelProduct = $this->findModelProduct($product_id);
         $modelSetting = $this->findModelProductSetting($product_id);
@@ -164,17 +161,16 @@ class ProductController extends \yii\web\Controller
             }
         }
         return $this->render('quotation', [
-            'modelProduct' => $modelProduct,
-            'modelSetting' => $modelSetting,
-            'modelQuotation' => $modelQuotation,
-            'modelQuotationDetail' => $modelQuotationDetail,
-            'dataOptions' => $dataOptions,
-            'update' => $update
+                    'modelProduct' => $modelProduct,
+                    'modelSetting' => $modelSetting,
+                    'modelQuotation' => $modelQuotation,
+                    'modelQuotationDetail' => $modelQuotationDetail,
+                    'dataOptions' => $dataOptions,
+                    'update' => $update
         ]);
     }
 
-    protected function findModelProduct($id)
-    {
+    protected function findModelProduct($id) {
         if (($model = TblProduct::findOne($id)) !== null) {
             return $model;
         }
@@ -182,8 +178,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelProductType($id)
-    {
+    protected function findModelProductType($id) {
         if (($model = TblProductType::findOne($id)) !== null) {
             return $model;
         }
@@ -191,8 +186,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelProductSetting($id)
-    {
+    protected function findModelProductSetting($id) {
         if (($model = TblProductSetting::findOne($id)) !== null) {
             return $model;
         }
@@ -200,8 +194,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelPaperSize($id)
-    {
+    protected function findModelPaperSize($id) {
         if (($model = TblPaperSize::findOne($id)) !== null) {
             return $model;
         }
@@ -209,8 +202,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelPrintOption($id)
-    {
+    protected function findModelPrintOption($id) {
         if (($model = TblPrintOptions::findOne($id)) !== null) {
             return $model;
         }
@@ -218,8 +210,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelPaperType($id)
-    {
+    protected function findModelPaperType($id) {
         if (($model = TblPaperType::findOne($id)) !== null) {
             return $model;
         }
@@ -227,8 +218,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelCoatingOption($id)
-    {
+    protected function findModelCoatingOption($id) {
         if (($model = TblCoatingOptions::findOne($id)) !== null) {
             return $model;
         }
@@ -236,8 +226,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelDicutOption($id)
-    {
+    protected function findModelDicutOption($id) {
         if (($model = TblDicutOptions::findOne($id)) !== null) {
             return $model;
         }
@@ -245,8 +234,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelFoldOption($id)
-    {
+    protected function findModelFoldOption($id) {
         if (($model = TblFoldOptions::findOne($id)) !== null) {
             return $model;
         }
@@ -254,8 +242,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelFoilingOption($id)
-    {
+    protected function findModelFoilingOption($id) {
         if (($model = TblFoilingOptions::findOne($id)) !== null) {
             return $model;
         }
@@ -263,8 +250,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelUnit($id)
-    {
+    protected function findModelUnit($id) {
         if (($model = TblUnit::findOne($id)) !== null) {
             return $model;
         }
@@ -272,8 +258,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelPaper($id)
-    {
+    protected function findModelPaper($id) {
         if (($model = TblPaper::findOne($id)) !== null) {
             return $model;
         }
@@ -281,8 +266,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelCoating($id)
-    {
+    protected function findModelCoating($id) {
         if (($model = TblCoating::findOne($id)) !== null) {
             return $model;
         }
@@ -290,8 +274,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelCoatingPrice($id)
-    {
+    protected function findModelCoatingPrice($id) {
         if (($model = TblCoatingPrice::findOne($id)) !== null) {
             return $model;
         }
@@ -299,8 +282,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelFold($id)
-    {
+    protected function findModelFold($id) {
         if (($model = TblFold::findOne($id)) !== null) {
             return $model;
         }
@@ -308,8 +290,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelDiecut($id)
-    {
+    protected function findModelDiecut($id) {
         if (($model = TblDiecut::findOne($id)) !== null) {
             return $model;
         }
@@ -317,8 +298,7 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findModelDiecutGroup($id)
-    {
+    protected function findModelDiecutGroup($id) {
         if (($model = TblDiecutGroup::findOne($id)) !== null) {
             return $model;
         }
@@ -326,38 +306,37 @@ class ProductController extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function selectOptions($product_id)
-    {
+    protected function selectOptions($product_id) {
         $queryPrintOptions = TblPrintOptions::find()->where(['product_id' => $product_id])->asArray()->all();
-        $printOptions = [];//แบบการพิมพ์
-        $paperSizeOptions = [];//ขนาด
-        $paperTypeOptions = [];//ประเภทกระดาษ
+        $printOptions = []; //แบบการพิมพ์
+        $paperSizeOptions = []; //ขนาด
+        $paperTypeOptions = []; //ประเภทกระดาษ
         $coatingOptions = []; //เคลือบ
-        $dicutOptions = [];//ไดคัท
-        $foldOptions = [];//การพับ
-        $foilingOptions = [];//ฟอยล์
+        $dicutOptions = []; //ไดคัท
+        $foldOptions = []; //การพับ
+        $foilingOptions = []; //ฟอยล์
         foreach ($queryPrintOptions as $queryPrintOption) {
             $printOptions[] = [
                 'print_option_id' => $queryPrintOption['print_option_id'],
                 'print_option_name' => $queryPrintOption['print_option_name'] .
-                    '<p>' . Html::tag('span', $queryPrintOption['print_option_description'], [
-                        'class' => 'desc'
-                    ]) .
-                    '</p>'
+                '<p>' . Html::tag('span', $queryPrintOption['print_option_description'], [
+                    'class' => 'desc'
+                ]) .
+                '</p>'
             ];
         }
         //
         $paperSizes = (new \yii\db\Query())
-            ->select([
-                'tbl_paper_size.paper_size_id',
-                'tbl_paper_size.paper_size_name',
-                'tbl_paper_size.paper_size_description',
-                'tbl_paper_unit.paper_unit_name'
-            ])
-            ->from('tbl_paper_size')
-            ->leftJoin('tbl_paper_unit', 'tbl_paper_unit.paper_unit_id = tbl_paper_size.paper_unit_id')
-            ->where(['tbl_paper_size.product_id' => $product_id])
-            ->all();
+                ->select([
+                    'tbl_paper_size.paper_size_id',
+                    'tbl_paper_size.paper_size_name',
+                    'tbl_paper_size.paper_size_description',
+                    'tbl_paper_unit.paper_unit_name'
+                ])
+                ->from('tbl_paper_size')
+                ->leftJoin('tbl_paper_unit', 'tbl_paper_unit.paper_unit_id = tbl_paper_size.paper_unit_id')
+                ->where(['tbl_paper_size.product_id' => $product_id])
+                ->all();
         $paperSizeOptions[] = [
             'paper_size_id' => 'custom_size',
             'paper_size_name' => 'กำหนดขนาดเอง'
@@ -366,10 +345,10 @@ class ProductController extends \yii\web\Controller
             $paperSizeOptions[] = [
                 'paper_size_id' => $paperSize['paper_size_id'],
                 'paper_size_name' => $paperSize['paper_size_name'] . ' ' . $paperSize['paper_unit_name'] .
-                    '<p>' . Html::tag('span', $paperSize['paper_size_description'], [
-                        'class' => 'desc'
-                    ]) .
-                    '</p>'
+                '<p>' . Html::tag('span', $paperSize['paper_size_description'], [
+                    'class' => 'desc'
+                ]) .
+                '</p>'
             ];
         }
 
@@ -378,10 +357,10 @@ class ProductController extends \yii\web\Controller
             $paperTypeOptions[] = [
                 'paper_type_id' => $paperType['paper_type_id'],
                 'paper_type_name' => $paperType['paper_type_name'] .
-                    '<p>' . Html::tag('span', $paperType['paper_type_description'], [
-                        'class' => 'desc'
-                    ]) .
-                    '</p>'
+                '<p>' . Html::tag('span', $paperType['paper_type_description'], [
+                    'class' => 'desc'
+                ]) .
+                '</p>'
             ];
         }
 
@@ -390,10 +369,10 @@ class ProductController extends \yii\web\Controller
             $coatingOptions[] = [
                 'coating_option_id' => $coatingOption['coating_option_id'],
                 'coating_option_name' => $coatingOption['coating_option_name'] .
-                    '<p>' . Html::tag('span', $coatingOption['coating_option_description'], [
-                        'class' => 'desc'
-                    ]) .
-                    '</p>'
+                '<p>' . Html::tag('span', $coatingOption['coating_option_description'], [
+                    'class' => 'desc'
+                ]) .
+                '</p>'
             ];
         }
 
@@ -402,10 +381,10 @@ class ProductController extends \yii\web\Controller
             $dicutOptions[] = [
                 'dicut_option_id' => $dicutOption['dicut_option_id'],
                 'dicut_option_name' => $dicutOption['dicut_option_name'] .
-                    '<p>' . Html::tag('span', $dicutOption['dicut_option_description'], [
-                        'class' => 'desc'
-                    ]) .
-                    '</p>'
+                '<p>' . Html::tag('span', $dicutOption['dicut_option_description'], [
+                    'class' => 'desc'
+                ]) .
+                '</p>'
             ];
         }
 
@@ -414,10 +393,10 @@ class ProductController extends \yii\web\Controller
             $foldOptions[] = [
                 'fold_option_id' => $foldOption['fold_option_id'],
                 'fold_option_name' => $foldOption['fold_option_name'] .
-                    '<p>' . Html::tag('span', $foldOption['fold_option_description'], [
-                        'class' => 'desc'
-                    ]) .
-                    '</p>'
+                '<p>' . Html::tag('span', $foldOption['fold_option_description'], [
+                    'class' => 'desc'
+                ]) .
+                '</p>'
             ];
         }
 
@@ -426,10 +405,10 @@ class ProductController extends \yii\web\Controller
             $foilingOptions[] = [
                 'foiling_option_id' => $foilingOption['foiling_option_id'],
                 'foiling_option_name' => $foilingOption['foiling_option_name'] .
-                    '<p>' . Html::tag('span', $foilingOption['foiling_option_description'], [
-                        'class' => 'desc'
-                    ]) .
-                    '</p>'
+                '<p>' . Html::tag('span', $foilingOption['foiling_option_description'], [
+                    'class' => 'desc'
+                ]) .
+                '</p>'
             ];
         }
         return [
@@ -443,8 +422,7 @@ class ProductController extends \yii\web\Controller
         ];
     }
 
-    public function actionAddToCart()
-    {
+    public function actionAddToCart() {
         $request = Yii::$app->request;
         $session = Yii::$app->session;
         $modelQuotationDetail = new TblQuotationDetail();
@@ -509,10 +487,9 @@ class ProductController extends \yii\web\Controller
         }
     }
 
-    public function actionCart()
-    {
-        /*$response = Yii::$app->response;
-        $response->format = \yii\web\Response::FORMAT_JSON;*/
+    public function actionCart() {
+        /* $response = Yii::$app->response;
+          $response->format = \yii\web\Response::FORMAT_JSON; */
         $session = Yii::$app->session;
         $carts = [];
         $items = [];
@@ -593,12 +570,11 @@ class ProductController extends \yii\web\Controller
             }
         }
         return $this->render('cart', [
-            'carts' => $items
+                    'carts' => $items
         ]);
     }
 
-    public function actionDeleteCart($itemId)
-    {
+    public function actionDeleteCart($itemId) {
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
         $session = Yii::$app->session;
@@ -612,362 +588,412 @@ class ProductController extends \yii\web\Controller
         return 'Deleted!';
     }
 
-    public function actionCheckout()
-    {
-
+    public function actionCheckout() {
+        
     }
 
-    public function actionCalculatePrice()
-    {
+    public function actionCalculatePrice() {
         $request = Yii::$app->request;
-        if($request->isPost) {
+        if ($request->isPost) {
             $response = Yii::$app->response;
             $response->format = \yii\web\Response::FORMAT_JSON;
             $data = $request->post('TblQuotationDetail');
+            $qtys = [1000, 2000, 5000];
+            if (!empty($request->post('qty'))) {
+                $qtys = $request->post('qty');
+            }
             $result = [];
+            foreach ($qtys as $qty) {
+                $data['cust_quantity'] = $qty;
+                $digital = new CalculateDigital([
+                    'model' => $data
+                ]);
+                $digitalAttr = $digital->getAttributeValue();
+                $offset = new CalculateOffset([
+                    'model' => $data
+                ]);
+                $offsetAttr = $offset->getAttributeValue();
 
-            //กระดาษ
-            $modelPaper = $this->findModelPaper($data['paper_id']);
-
-            //ประเภทกระดาษ
-            $modelPaperType = $this->findModelPaperType($modelPaper['paper_type_id']);
-
-            //สติ๊กเกอร์ หรือไม่ใช่ สติ๊กเกอร์
-            $isSticker = $modelPaperType['paper_type_flag'] === 1; // 1 หรือ 0
-
-            // ขนาดกระดาษ เอาไว้คำนวณกรณีที่ไม่ใช่ sticker
-            $papers = [
-                ['paper_cut' => 4, 'print_area_width' => 12.5, 'print_area_length' => 18, 'paper_size' => 'S'],
-                ['paper_cut' => 5, 'print_area_width' => 13, 'print_area_length' => 18, 'paper_size' => 'L'],
-                ['paper_cut' => 8, 'print_area_width' => 15.5, 'print_area_length' => 10.75, 'paper_size' => 'L'],
-            ];
-
-            //ไดคัท
-            $isDiecut = !($data['diecut'] === 'N');
-            
-            $paper_cut_final = 0; //ตัด
-            $paper_size = ''; // ขนาด
-            $print_area_final_width = 0; //กว้าง
-            $print_area_final_length = 0; //ยาว
-            //ถ้าเป็น sticker จากข้อ 3
-            if($isSticker) {
-                $paper_cut_final = 4;
-                $paper_size = 'L';
-                //ไม่มีไดคัท
-                if(!$isDiecut){
-                    $print_area_final_width = 13; // นิ้ว
-                    $print_area_final_length = 19; // นิ้ว
+                $final_price_digital = ceil($digitalAttr['final_price_digital'] / 10) * 10;
+                $price_per_item_digital = Yii::$app->formatter->format($digitalAttr['price_per_item_digital'], ['decimal', 2]);
+                $final_price_offset = ceil($offsetAttr['final_price_offset'] / 10) * 10;
+                $price_per_item_offset = Yii::$app->formatter->format($offsetAttr['price_per_item_offset'], ['decimal', 2]);
+                $cust_quantity = $qty;
+                if ($final_price_digital > $final_price_offset) {
+                    $result[] = [
+                        'final_price' => number_format($final_price_offset, 2),
+                        'price_per_item' => number_format($price_per_item_offset, 2),
+                        'cust_quantity' => $cust_quantity,
+                        'price_of' => 'offset',
+                        'offsetAttr' => $offsetAttr,
+                        'digitalAttr' => $digitalAttr
+                    ];
                 } else {
-                    $print_area_final_width = 11.9; // นิ้ว
-                    $print_area_final_length = 16.5; // นิ้ว
+                    $result[] = [
+                        'final_price' => number_format($final_price_digital, 2),
+                        'price_per_item' => number_format($price_per_item_digital, 2),
+                        'cust_quantity' => $cust_quantity,
+                        'price_of' => 'digital',
+                        'offsetAttr' => $offsetAttr,
+                        'digitalAttr' => $digitalAttr
+                    ];
                 }
             }
 
-            //ถ้าเป็นขนาดกำหนดเอง
-            $size_width = 0;
-            $size_length = 0;
-            if($data['paper_size_id'] === 'custom') {
-                if($data['paper_size_unit'] == 2){
-                    $size_width = number_format($data['paper_size_width']*0.3937, 2);
-                    $size_length = number_format($data['paper_size_height']*0.3937, 2);
-                } else {
-                    $size_width = $data['paper_size_width'];//ความกว้างที่ลูกค้ากำหนด
-                    $size_length = $data['paper_size_height'];//ความยาวที่ลูกค้ากำหนด
-                }
-            } else {
-                $modelPaperSize = $this->findModelPaperSize($data['paper_size_id']);
-                if($modelPaperSize['paper_unit_id'] == 2){
-                    $size_width = number_format($modelPaperSize['paper_size_width']*0.3937, 2);
-                    $size_length = number_format($modelPaperSize['paper_size_height']*0.3937, 2);
-                } else {
-                    $size_width = $modelPaperSize['paper_size_width'];//ความกว้างในฐานข้อมูล
-                    $size_length = $modelPaperSize['paper_size_height'];//ความยาวในฐานข้อมูล
-                }
-            }
-
-            //ถ้ามีการพับครึ่ง
-            if($data['fold_id'] === 'FOLD-00003') {
-                $size_width = ($size_width * 2);
-                $size_length = ($size_length * 2);
-            }
-
-            //ขนาดที่ได้มาจากลูกค้าให้บวก 0.3 ซม. ทั้งสองด้าน
-            $size_width_cal = ($size_width + 0.3);
-            $size_length_cal = ($size_length + 0.3);
-
-            //หาจานวนชิ้นงาน ข้อ 5
-            $job_per_sheet = 0;
-            if(!$isSticker) {// is not Sticker
-                $dataJob = $this->calculateJobpersheet($isSticker, $papers, $size_width_cal, $size_length_cal);
-                $print_area_final_width = $dataJob['result']['print_area_width'];
-                $print_area_final_length  = $dataJob['result']['print_area_length'];
-                $paper_cut_final = $dataJob['result']['paper_cut'];
-                $paper_size = $dataJob['result']['paper_size'];
-                $job_per_sheet = number_format($dataJob['result']['job_per_sheet'], 2);
-            } else {// is sticker
-                $vertical_lay_width = ($print_area_final_width / $size_width_cal);
-                $vertical_lay_length = ($print_area_final_length / $size_length_cal);
-                $vertical_lay_total = ($vertical_lay_width * $vertical_lay_length);
-
-                $horizon_lay_width = ($print_area_final_width / $size_length_cal);
-                $horizon_lay_length = ($print_area_final_length / $size_width_cal);
-                $horizon_lay_total = ($horizon_lay_width * $horizon_lay_length);
-
-                if($vertical_lay_total > $horizon_lay_total) {
-                    $job_per_sheet = number_format($vertical_lay_total, 2);
-                } else {
-                    $job_per_sheet = number_format($horizon_lay_total, 2);
-                }
-            }
-
-            //คำนวณหาจำนวนแผ่นพิมพ์ ข้อ 6
-            $qty = [1000, 2000, 5000];
-            if(!empty($request->post('qty'))){
-                $qty = $request->post('qty');
-            }
-            foreach ($qty as $value) {
-                $cust_quantity = $value; // จานวนที่ลูกค้าต้องการพิมพ์
-                $print_sheet_total = ($cust_quantity / $job_per_sheet); //จำนวนแผ่นพิมพ์
-
-                //ถ้ามีการเคลือบ ข้อ 7
-                $isCoating = $data['coating_id'] !== 'N' && !empty($data['coating_id']);
-                $laminate_price = 0; // ค่าเคลือบต่อใบ default ราคา เป็น 0 กรณีไม่เคลือบ
-                if($isCoating) {
-                    $modelCoating = $this->findModelCoating($data['coating_id']);
-                    $print_sheet_total = ($print_sheet_total + 2); //ต้องมีการเผื่อกระดาษ
-                    $coatingPrices = TblCoatingPrice::find()->all(); //ราคาเคลือบ
-                    //หาขนาดพื้นที่ (ตร.นิ้ว) แล้วเอามาเปรียบเทียบ
-                    $sq = ($print_area_final_width * $print_area_final_length);// ขนาดของลูกค้า
-                    foreach ($coatingPrices as $key => $coatingPrice) {
-                        if($sq <= $coatingPrice['coating_sq_in']) {
-                            if($modelCoating['coating_id'] === 'C-00001'){ // PVC ด้าน
-                                $laminate_price = $coatingPrice['coating_matte_price'] * $print_sheet_total;
-                            }
-                            if($modelCoating['coating_id'] === 'C-00002'){ // PVC เงา
-                                $laminate_price = $coatingPrice['coating_varnish_price'] * $print_sheet_total;
-                            }
-                            if($modelCoating['coating_id'] === 'C-00003'){ // UV
-                                $laminate_price = $coatingPrice['coating_uv_price'] * $print_sheet_total;
-                            }
-                            break;
-                        }
-                    }
-                    //ถ้าเคลือบสองหน้า
-                    if($data['coating_option'] === 'two_page') {
-                        $laminate_price = ($laminate_price * 2);
-                    }
-                    // ตรวจสอบราคาขั้นต่ำ 200
-                    if($laminate_price < 200){
-                        $laminate_price = 200;
-                    }
-                }
-
-                //ตรวจสอบหน้าจอว่ามีการปั๊มฟอยล์หรือไม่ ข้อ 8
-                $isFoil = !empty($data['foil_size_width']) && !empty($data['foil_size_height']);
-                $foil_price = 0;
-                $block_foil_price = 0;//ค่าฟอยล์ต่อ ตรน.
-                $sqFoilSize = 0;
-                if($isFoil){//ปั๊มฟอยล์
-                    $sq_foil_price = 0; //ค่าฟอยล์ต่อ ตรน.
-                    if($data['foil_color_id'] === 'FOIL-00003' || $data['foil_color_id'] === 'FOIL-00005'){
-                        $sq_foil_price = 0.5;
-                    } elseif($data['foil_color_id'] === 'FOIL-00004') {
-                        $sq_foil_price = 2;
-                    }
-                    $foil_price = $sq_foil_price * $cust_quantity;
-                    if($foil_price < 300){
-                        $foil_price = 300;
-                    } else {
-                        if($data['foil_size_unit'] == 2){//ถ้าหน่วยเป็น ซม.
-                            $foil_size_width = number_format($data['foil_size_width']*0.3937, 2);
-                            $foil_size_height = number_format($data['foil_size_height']*0.3937, 2);
-                            $sqFoilSize = ($foil_size_width * $foil_size_height);//ขนาด ตรน จากหน้าจอ
-                        } else {
-                            $sqFoilSize = ($data['foil_size_width'] * $data['foil_size_height']);//ขนาด ตรน จากหน้าจอ
-                        }
-                        if($sqFoilSize >= 30){
-                            $foil_price = ($sqFoilSize * 18);
-                        } else {
-                            $tablePrices = TblEmbossPrice::find()->all();// ค่าบล็อกจากฐานข้อมูล
-                            //เปรียบเทียบ
-                            foreach ($tablePrices as $key => $tablePrice) {
-                                if($tablePrice['emboss_price_size'] >= $sqFoilSize) {//ถ้าขนาด ตรน จากหน้าจอ น้อยกว่า เท่ากับ ขนาด ตรน ในฐานข้อมูล
-                                    $block_foil_price = $tablePrice['emboss_price'];//ค่าบล็อกจะเท่ากับค่าบล็อกในฐานข้อมูล
-                                    break;
-                                }
-                            }
-                            $foil_price = $block_foil_price * $foil_price;
-                        }
-                    }
-                }
-
-                //ตรวจสอบหน้าจอว่ามีการปั๊มนูนหรือไม่ ข้อ 9
-                $isEmboss = !empty($data['emboss_size_width']) && !empty($data['emboss_size_height']);
-                $emboss_price = 0;
-                if($isEmboss) {
-                    $embossPrices = TblEmbossPrice::find()->all();// ค่าปั๊มนูนจากฐานข้อมูล
-                    if($data['emboss_size_unit'] == 2){//ถ้าหน่วยเป็น ซม.
-                        $emboss_size_width = number_format($data['emboss_size_width']*0.3937, 2);
-                        $emboss_size_height = number_format($data['emboss_size_height']*0.3937, 2);
-                        $sqEmbossSize = ($emboss_size_width * $emboss_size_height);//ขนาด ตรน จากหน้าจอ
-                    } else {
-                        $sqEmbossSize = ($data['emboss_size_width'] * $data['emboss_size_height']);//ขนาด ตรน จากหน้าจอ
-                    }
-                    //เปรียบเทียบ
-                    foreach ($embossPrices as $key => $embossPrice) {
-                        if($sqEmbossSize <= $embossPrice['emboss_price_size']) {
-                            $emboss_price = ($cust_quantity * 0.3); // จานวนที่ลูกค้าต้องการพิมพ์ * 0.3
-                            if($emboss_price < 300) {//ราคาขั้นต่ำ
-                                $emboss_price = 300;
-                            } else {
-                                $emboss_price = $embossPrice['emboss_price'] + $foil_price; // ค่าบล็อก บวก ค่าปั๊มฟอยล์
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                //ตรวจสอบจากหน้าจอว่ามีการพับครึ่ง หรือไม่ ข้อ 10
-                $price_block = 200;
-                $fold_price = 0;
-                if($data['fold_id'] === 'FOLD-00003') {//พับครึ่ง
-                    $modelFold = $this->findModelFold($data['fold_id']);
-                    if($modelPaper['paper_gram'] >= 200) {//ถ้าขนาดกระดาษ มากกว่าเท่ากับ 200 แกรม
-                        if($print_sheet_total <= 50){//ถ้าจำนวนแผ่นพิมพ์ น้อยกว่า เท่ากับ 50
-                            $fold_price = $print_sheet_total * 20;
-                        } else {//ถ้าจำนวนแผ่นพิมพ์ มากกว่า 50 ต้องใช้บล็อก
-                            $fold_price = $print_sheet_total * 0.3;
-                            //ตรวจสอบราคาขั้นต่ำ 200
-                            if($fold_price < 200) {
-                                $fold_price = 200;
-                            } else {
-                                $fold_price = $price_block + $fold_price;
-                            }
-                        }
-                    } else {//กระดาษบาง ตรวจสอบว่าพับกี่ตอน
-                        if($cust_quantity <= 500) { // จำนวนที่ลูกค้าต้องการพิมพ์ 
-                            $fold_price = $cust_quantity * 0.25 * $modelFold['fold_count']; //จำนวนที่ลูกค้าต้องการ + 0.25 + ตอนพับ
-                        } else {
-                            $fold_price = $cust_quantity * 1.25 * $modelFold['fold_count']; //จำนวนที่ลูกค้าต้องการ + 1.25 + ตอนพับ
-                            //ตรวจสอบราคาขั้นต่ำ 300
-                            if ($fold_price < 300) {
-                                $fold_price = 300;
-                            }
-                        }
-                    }
-                }
-
-                //ตรวจสอบจากหน้าจอว่าลูกค้าเลือกให้มีการไดคัทมุมมนหรือไม่ ข้อ 11
-                $roundcurve_price = 0;//ราคามุม
-                $dicut_price = 0; // ราคาไดคัท
-                $dicut_block_price = 0; //ราคาบล็อกไดคัท
-                if($data['diecut'] === 'Curve'){//ไดคัทมุมมน กี่มุม
-                    $modelDiecut = $this->findModelDiecut($data['diecut_id']);
-                    $modelDiecutGroup = $this->findModelDiecutGroup($modelDiecut['diecut_group_id']);
-
-                    if($cust_quantity <= 1000){//จำนวนน้อยกว่า 1000 แผ่น
-                        $roundcurve_price = $cust_quantity * 0.25 * $modelDiecutGroup['diecut_group_value'];
-                    } 
-                    /* if($isSticker && $print_sheet_total < 100) {//จำนวนน้อยกว่า 100 แผ่น และเป็นสติ๊กเกอร์
-                        if($job_per_sheet < 30){
-                            $dicut_price = $print_sheet_total * 10;
-                        } else {
-                            $dicut_price = $print_sheet_total * 20;
-                        }
-                    } else {// เป็นกระดาษ หรือเป็นสติกเกอร์ที่มากกว่า 100 แผ่น
-                        $print_sheet_total = $print_sheet_total + 5;
-                        $dicut_block_price = 800;
-                        $dicut_price = ($print_sheet_total * 3) * 0.3;
-                    }
-                    if($dicut_price < 300){
-                        $dicut_price = 300;
-                    } else {
-                        $dicut_price = $dicut_block_price + $dicut_price;
-                    } */
-                } elseif($data['diecut'] === 'Default') {//ไดคัทตามรูปแบบ ข้อ 12
-                    if ($isSticker && $print_sheet_total < 100) {//จานวนน้อยกว่า 100 แผ่น
-                        if ($job_per_sheet < 30) {
-                            $dicut_price = $print_sheet_total * 10;
-                        } else {
-                            $dicut_price = $print_sheet_total * 20;
-                        }
-                    } else {// เป็นกระดาษ หรือเป็นสติกเกอร์ที่มากกว่า 100 แผ่น
-                        $print_sheet_total = $print_sheet_total + 5;
-                        $dicut_block_price = 800;
-                        $dicut_price = ($print_sheet_total * 3) * 0.3;
-                    }
-                    // ตรวจสอบราคาขั้นต่ำ
-                    if($dicut_price < 300){
-                        $dicut_price = 300;
-                    } else {
-                        $dicut_price = $dicut_block_price + $dicut_price;
-                    }
-                }
-
-                //คำนวณค่าพิมพ์ ข้อ 13
-                //ถ้าพิมพ์หน้าเดียว หน้าแรกตรวจสอบว่าเป็น สี่สี หรือ สีเดียว (ไม่ใช่สีดา) หรือ สีเดียว (สีดา)
-                $printing_price = 0;
-                if($data['before_print'] === 'PT-00004' && !empty($data['before_print'])){//หน้าเดียว สีดำ
-                    $printing_price = ($print_sheet_total * 5);
-                } elseif($data['before_print'] !== 'PT-00004' && !empty($data['before_print'])) {
-                    $printing_price = ($print_sheet_total * 20);
-                }
-
-                //ถ้าพิมพ์สองหน้า ให้ทาเหมือนกัน โดยตรวจสอบหน้าที่สองว่าเป็น สี่สี หรือ สีเดียว (ไม่ใช่สีดา) หรือ สีเดียว (สีดา)
-                if($data['after_print'] === 'PT-00004' && !empty($data['after_print'])) {//สองหน้า สีดำ
-                    $printing_price = $printing_price + ($print_sheet_total * 5);
-                } elseif($data['after_print'] !== 'PT-00004' && !empty($data['after_print'])) {
-                    $printing_price = $printing_price + ($print_sheet_total * 20);
-                }
-
-                $paper_bigsheet = ($print_sheet_total / $paper_cut_final); //หาราคากระดาษโดยนาจานวนแผ่นพิมพ์ที่ได้
-                $paper_price = $paper_bigsheet * $modelPaper['paper_price']; //ราคากระดาษ
-
-                $final_price_digital = $paper_price + $printing_price + $laminate_price + $dicut_price + $roundcurve_price + $fold_price + $foil_price + $emboss_price;
-                $final_price = $final_price_digital + (($final_price_digital * 20) / 100);
-                $summary = ceil($final_price/10)*10;
-                $price_per_item = ($summary / $cust_quantity);
-               
-
-                $result[] = [
-                    'final_price_digital' => Yii::$app->formatter->format($final_price_digital,['decimal', 2]),
-                    'final_price' => Yii::$app->formatter->format($summary,['decimal', 2]),
-                    'old_final_price' => Yii::$app->formatter->format(ceil($final_price),['decimal', 2]),
-                    'price_per_item' =>  Yii::$app->formatter->format(ceil($price_per_item),['decimal', 2]),
-                    'isSticker' => $isSticker,
-                    'paper_cut_final' => $paper_cut_final,
-                    'paper_size' => $paper_size,
-                    'job_per_sheet' => Yii::$app->formatter->format($job_per_sheet,['decimal', 2]),
-                    'print_area_final_width' => $print_area_final_width,
-                    'print_area_final_length' => $print_area_final_length,
-                    'paper_cut_final' => $paper_cut_final,
-                    'paper_size' => $paper_size,
-                    'print_sheet_total' => $print_sheet_total,
-                    'laminate_price' => Yii::$app->formatter->format($laminate_price,['decimal', 2]),
-                    'foil_price' => Yii::$app->formatter->format($foil_price,['decimal', 2]),
-                    'emboss_price' => Yii::$app->formatter->format($emboss_price,['decimal', 2]),
-                    'fold_price' => Yii::$app->formatter->format($fold_price,['decimal', 2]),
-                    'dicut_price' => Yii::$app->formatter->format($dicut_price, ['decimal', 2]),
-                    'printing_price' => Yii::$app->formatter->format($printing_price, ['decimal', 2]),
-                    'paper_price' => Yii::$app->formatter->format($paper_price, ['decimal', 2]),
-                    'isDiecut' => $isDiecut,
-                    'isCoating' => $isCoating,
-                    'cust_quantity' => $cust_quantity,
-                    'size_width_cal' => $size_width_cal,
-                    'size_length_cal' => $size_length_cal,
-                    'size_width' => $size_width,
-                    'size_length' => $size_length,
-                    'block_foil_price' => $block_foil_price,
-                    'sqFoilSize' => $sqFoilSize,
-                    'isFoil' => $isFoil,
-                ];
-            }
             return $result;
         }
     }
 
-    private function calculateJobpersheet($isSticker, $papers, $size_width_cal, $size_length_cal)
-    {
+//    public function actionCalculatePrice()
+//    {
+//        $request = Yii::$app->request;
+//        if($request->isPost) {
+//            $response = Yii::$app->response;
+//            $response->format = \yii\web\Response::FORMAT_JSON;
+//            $data = $request->post('TblQuotationDetail');
+//            $result = [];
+//
+//            //กระดาษ
+//            $modelPaper = $this->findModelPaper($data['paper_id']);
+//
+//            //ประเภทกระดาษ
+//            $modelPaperType = $this->findModelPaperType($modelPaper['paper_type_id']);
+//
+//            //สติ๊กเกอร์ หรือไม่ใช่ สติ๊กเกอร์
+//            $isSticker = $modelPaperType['paper_type_flag'] === 1; // 1 หรือ 0
+//
+//            // ขนาดกระดาษ เอาไว้คำนวณกรณีที่ไม่ใช่ sticker
+//            $papers = [
+//                ['paper_cut' => 4, 'print_area_width' => 12.5, 'print_area_length' => 18, 'paper_size' => 'S'],
+//                ['paper_cut' => 5, 'print_area_width' => 13, 'print_area_length' => 18, 'paper_size' => 'L'],
+//                ['paper_cut' => 8, 'print_area_width' => 15.5, 'print_area_length' => 10.75, 'paper_size' => 'L'],
+//            ];
+//
+//            //ไดคัท
+//            $isDiecut = !($data['diecut'] === 'N');
+//            
+//            $paper_cut_final = 0; //ตัด
+//            $paper_size = ''; // ขนาด
+//            $print_area_final_width = 0; //กว้าง
+//            $print_area_final_length = 0; //ยาว
+//            //ถ้าเป็น sticker จากข้อ 3
+//            if($isSticker) {
+//                $paper_cut_final = 4;
+//                $paper_size = 'L';
+//                //ไม่มีไดคัท
+//                if(!$isDiecut){
+//                    $print_area_final_width = 13; // นิ้ว
+//                    $print_area_final_length = 19; // นิ้ว
+//                } else {
+//                    $print_area_final_width = 11.9; // นิ้ว
+//                    $print_area_final_length = 16.5; // นิ้ว
+//                }
+//            }
+//
+//            //ถ้าเป็นขนาดกำหนดเอง
+//            $size_width = 0;
+//            $size_length = 0;
+//            if($data['paper_size_id'] === 'custom') {
+//                if($data['paper_size_unit'] == 2){
+//                    $size_width = number_format($data['paper_size_width']*0.3937, 2);
+//                    $size_length = number_format($data['paper_size_height']*0.3937, 2);
+//                } else {
+//                    $size_width = $data['paper_size_width'];//ความกว้างที่ลูกค้ากำหนด
+//                    $size_length = $data['paper_size_height'];//ความยาวที่ลูกค้ากำหนด
+//                }
+//            } else {
+//                $modelPaperSize = $this->findModelPaperSize($data['paper_size_id']);
+//                if($modelPaperSize['paper_unit_id'] == 2){
+//                    $size_width = number_format($modelPaperSize['paper_size_width']*0.3937, 2);
+//                    $size_length = number_format($modelPaperSize['paper_size_height']*0.3937, 2);
+//                } else {
+//                    $size_width = $modelPaperSize['paper_size_width'];//ความกว้างในฐานข้อมูล
+//                    $size_length = $modelPaperSize['paper_size_height'];//ความยาวในฐานข้อมูล
+//                }
+//            }
+//
+//            //ถ้ามีการพับครึ่ง
+//            if($data['fold_id'] === 'FOLD-00003') {
+//                $size_width = ($size_width * 2);
+//                $size_length = ($size_length * 2);
+//            }
+//
+//            //ขนาดที่ได้มาจากลูกค้าให้บวก 0.3 ซม. ทั้งสองด้าน
+//            $size_width_cal = ($size_width + 0.3);
+//            $size_length_cal = ($size_length + 0.3);
+//
+//            //หาจานวนชิ้นงาน ข้อ 5
+//            $job_per_sheet = 0;
+//            if(!$isSticker) {// is not Sticker
+//                $dataJob = $this->calculateJobpersheet($isSticker, $papers, $size_width_cal, $size_length_cal);
+//                $print_area_final_width = $dataJob['result']['print_area_width'];
+//                $print_area_final_length  = $dataJob['result']['print_area_length'];
+//                $paper_cut_final = $dataJob['result']['paper_cut'];
+//                $paper_size = $dataJob['result']['paper_size'];
+//                $job_per_sheet = number_format($dataJob['result']['job_per_sheet'], 2);
+//            } else {// is sticker
+//                $vertical_lay_width = ($print_area_final_width / $size_width_cal);
+//                $vertical_lay_length = ($print_area_final_length / $size_length_cal);
+//                $vertical_lay_total = ($vertical_lay_width * $vertical_lay_length);
+//
+//                $horizon_lay_width = ($print_area_final_width / $size_length_cal);
+//                $horizon_lay_length = ($print_area_final_length / $size_width_cal);
+//                $horizon_lay_total = ($horizon_lay_width * $horizon_lay_length);
+//
+//                if($vertical_lay_total > $horizon_lay_total) {
+//                    $job_per_sheet = number_format($vertical_lay_total, 2);
+//                } else {
+//                    $job_per_sheet = number_format($horizon_lay_total, 2);
+//                }
+//            }
+//
+//            //คำนวณหาจำนวนแผ่นพิมพ์ ข้อ 6
+//            $qty = [1000, 2000, 5000];
+//            if(!empty($request->post('qty'))){
+//                $qty = $request->post('qty');
+//            }
+//            foreach ($qty as $value) {
+//                $cust_quantity = $value; // จานวนที่ลูกค้าต้องการพิมพ์
+//                $print_sheet_total = ($cust_quantity / $job_per_sheet); //จำนวนแผ่นพิมพ์
+//
+//                //ถ้ามีการเคลือบ ข้อ 7
+//                $isCoating = $data['coating_id'] !== 'N' && !empty($data['coating_id']);
+//                $laminate_price = 0; // ค่าเคลือบต่อใบ default ราคา เป็น 0 กรณีไม่เคลือบ
+//                if($isCoating) {
+//                    $modelCoating = $this->findModelCoating($data['coating_id']);
+//                    $print_sheet_total = ($print_sheet_total + 2); //ต้องมีการเผื่อกระดาษ
+//                    $coatingPrices = TblCoatingPrice::find()->all(); //ราคาเคลือบ
+//                    //หาขนาดพื้นที่ (ตร.นิ้ว) แล้วเอามาเปรียบเทียบ
+//                    $sq = ($print_area_final_width * $print_area_final_length);// ขนาดของลูกค้า
+//                    foreach ($coatingPrices as $key => $coatingPrice) {
+//                        if($sq <= $coatingPrice['coating_sq_in']) {
+//                            if($modelCoating['coating_id'] === 'C-00001'){ // PVC ด้าน
+//                                $laminate_price = $coatingPrice['coating_matte_price'] * $print_sheet_total;
+//                            }
+//                            if($modelCoating['coating_id'] === 'C-00002'){ // PVC เงา
+//                                $laminate_price = $coatingPrice['coating_varnish_price'] * $print_sheet_total;
+//                            }
+//                            if($modelCoating['coating_id'] === 'C-00003'){ // UV
+//                                $laminate_price = $coatingPrice['coating_uv_price'] * $print_sheet_total;
+//                            }
+//                            break;
+//                        }
+//                    }
+//                    //ถ้าเคลือบสองหน้า
+//                    if($data['coating_option'] === 'two_page') {
+//                        $laminate_price = ($laminate_price * 2);
+//                    }
+//                    // ตรวจสอบราคาขั้นต่ำ 300
+//                    if($laminate_price < 300){
+//                        $laminate_price = 300;
+//                    }
+//                }
+//
+//                //ตรวจสอบหน้าจอว่ามีการปั๊มฟอยล์หรือไม่ ข้อ 8
+//                $isFoil = !empty($data['foil_size_width']) && !empty($data['foil_size_height']);
+//                $foil_price = 0;
+//                $block_foil_price = 0;//ค่าฟอยล์ต่อ ตรน.
+//                $sqFoilSize = 0;
+//                if($isFoil){//ปั๊มฟอยล์
+//                    $sq_foil_price = 0; //ค่าฟอยล์ต่อ ตรน.
+//                    if($data['foil_color_id'] === 'FOIL-00003' || $data['foil_color_id'] === 'FOIL-00005'){
+//                        $sq_foil_price = 0.5;
+//                    } elseif($data['foil_color_id'] === 'FOIL-00004') {
+//                        $sq_foil_price = 2;
+//                    }
+//                    $foil_price = $sq_foil_price * $cust_quantity;
+//                    if($foil_price < 300){
+//                        $foil_price = 300;
+//                    } else {
+//                        if($data['foil_size_unit'] == 2){//ถ้าหน่วยเป็น ซม.
+//                            $foil_size_width = number_format($data['foil_size_width']*0.3937, 2);
+//                            $foil_size_height = number_format($data['foil_size_height']*0.3937, 2);
+//                            $sqFoilSize = ($foil_size_width * $foil_size_height);//ขนาด ตรน จากหน้าจอ
+//                        } else {
+//                            $sqFoilSize = ($data['foil_size_width'] * $data['foil_size_height']);//ขนาด ตรน จากหน้าจอ
+//                        }
+//                        if($sqFoilSize >= 30){
+//                            $block_foil_price = ($sqFoilSize * 18);
+//                        } else {
+//                            $tablePrices = TblEmbossPrice::find()->all();// ค่าบล็อกจากฐานข้อมูล
+//                            //เปรียบเทียบ
+//                            foreach ($tablePrices as $key => $tablePrice) {
+//                                if($sqFoilSize <= $tablePrice['emboss_price_size']) {//ถ้าขนาด ตรน จากหน้าจอ น้อยกว่า เท่ากับ ขนาด ตรน ในฐานข้อมูล
+//                                    $block_foil_price = $tablePrice['emboss_price'];//ค่าบล็อกจะเท่ากับค่าบล็อกในฐานข้อมูล
+//                                    break;
+//                                }
+//                            }
+//                            $foil_price = $block_foil_price * $foil_price;
+//                        }
+//                    }
+//                }
+//
+//                //ตรวจสอบหน้าจอว่ามีการปั๊มนูนหรือไม่ ข้อ 9
+//                $isEmboss = !empty($data['emboss_size_width']) && !empty($data['emboss_size_height']);
+//                $emboss_price = 0;
+//                if($isEmboss) {
+//                    $embossPrices = TblEmbossPrice::find()->all();// ค่าปั๊มนูนจากฐานข้อมูล
+//                    if($data['emboss_size_unit'] == 2){//ถ้าหน่วยเป็น ซม.
+//                        $emboss_size_width = number_format($data['emboss_size_width']*0.3937, 2);
+//                        $emboss_size_height = number_format($data['emboss_size_height']*0.3937, 2);
+//                        $sqEmbossSize = ($emboss_size_width * $emboss_size_height);//ขนาด ตรน จากหน้าจอ
+//                    } else {
+//                        $sqEmbossSize = ($data['emboss_size_width'] * $data['emboss_size_height']);//ขนาด ตรน จากหน้าจอ
+//                    }
+//                    //เปรียบเทียบ
+//                    foreach ($embossPrices as $key => $embossPrice) {
+//                        if($sqEmbossSize <= $embossPrice['emboss_price_size']) {
+//                            $emboss_price = ($cust_quantity * 0.3); // จานวนที่ลูกค้าต้องการพิมพ์ * 0.3
+//                            if($emboss_price < 300) {//ราคาขั้นต่ำ
+//                                $emboss_price = 300;
+//                            } else {
+//                                $emboss_price = $embossPrice['emboss_price'] + $foil_price; // ค่าบล็อก บวก ค่าปั๊มฟอยล์
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                //ตรวจสอบจากหน้าจอว่ามีการพับครึ่ง หรือไม่ ข้อ 10
+//                $price_block = 200;
+//                $fold_price = 0;
+//                if($data['fold_id'] === 'FOLD-00003') {//พับครึ่ง
+//                    $modelFold = $this->findModelFold($data['fold_id']);
+//                    if($modelPaper['paper_gram'] >= 200) {//ถ้าขนาดกระดาษ มากกว่าเท่ากับ 200 แกรม
+//                        if($print_sheet_total <= 50){//ถ้าจำนวนแผ่นพิมพ์ น้อยกว่า เท่ากับ 50
+//                            $fold_price = $print_sheet_total * 20;
+//                        } else {//ถ้าจำนวนแผ่นพิมพ์ มากกว่า 50 ต้องใช้บล็อก
+//                            $fold_price = $print_sheet_total * 0.3;
+//                            //ตรวจสอบราคาขั้นต่ำ 200
+//                            if($fold_price < 200) {
+//                                $fold_price = 200;
+//                            } else {
+//                                $fold_price = $price_block + $fold_price;
+//                            }
+//                        }
+//                    } else {//กระดาษบาง ตรวจสอบว่าพับกี่ตอน
+//                        if($cust_quantity <= 500) { // จำนวนที่ลูกค้าต้องการพิมพ์ 
+//                            $fold_price = $cust_quantity * 0.25 * $modelFold['fold_count']; //จำนวนที่ลูกค้าต้องการ + 0.25 + ตอนพับ
+//                        } else {
+//                            $fold_price = $cust_quantity * 1.25 * $modelFold['fold_count']; //จำนวนที่ลูกค้าต้องการ + 1.25 + ตอนพับ
+//                            //ตรวจสอบราคาขั้นต่ำ 300
+//                            if ($fold_price < 300) {
+//                                $fold_price = 300;
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                //ตรวจสอบจากหน้าจอว่าลูกค้าเลือกให้มีการไดคัทมุมมนหรือไม่ ข้อ 11
+//                $roundcurve_price = 0;//ราคามุม
+//                $dicut_price = 0; // ราคาไดคัท
+//                $dicut_block_price = 0; //ราคาบล็อกไดคัท
+//                if($data['diecut'] === 'Curve'){//ไดคัทมุมมน กี่มุม
+//                    $modelDiecut = $this->findModelDiecut($data['diecut_id']);
+//                    $modelDiecutGroup = $this->findModelDiecutGroup($modelDiecut['diecut_group_id']);
+//
+//                    if($cust_quantity <= 1000){//จำนวนน้อยกว่า 1000 แผ่น
+//                        $roundcurve_price = $cust_quantity * 0.25 * $modelDiecutGroup['diecut_group_value'];
+//                    } 
+//                    /* if($isSticker && $print_sheet_total < 100) {//จำนวนน้อยกว่า 100 แผ่น และเป็นสติ๊กเกอร์
+//                        if($job_per_sheet < 30){
+//                            $dicut_price = $print_sheet_total * 10;
+//                        } else {
+//                            $dicut_price = $print_sheet_total * 20;
+//                        }
+//                    } else {// เป็นกระดาษ หรือเป็นสติกเกอร์ที่มากกว่า 100 แผ่น
+//                        $print_sheet_total = $print_sheet_total + 5;
+//                        $dicut_block_price = 800;
+//                        $dicut_price = ($print_sheet_total * 3) * 0.3;
+//                    }
+//                    if($dicut_price < 300){
+//                        $dicut_price = 300;
+//                    } else {
+//                        $dicut_price = $dicut_block_price + $dicut_price;
+//                    } */
+//                } elseif($data['diecut'] === 'Default') {//ไดคัทตามรูปแบบ ข้อ 12
+//                    if ($isSticker && $print_sheet_total < 100) {//จานวนน้อยกว่า 100 แผ่น
+//                        if ($job_per_sheet < 30) {
+//                            $dicut_price = $print_sheet_total * 10;
+//                        } else {
+//                            $dicut_price = $print_sheet_total * 20;
+//                        }
+//                    } else {// เป็นกระดาษ หรือเป็นสติกเกอร์ที่มากกว่า 100 แผ่น
+//                        $print_sheet_total = $print_sheet_total + 5;
+//                        $dicut_block_price = 800;
+//                        $dicut_price = ($print_sheet_total * 3) * 0.3;
+//                    }
+//                    // ตรวจสอบราคาขั้นต่ำ
+//                    if($dicut_price < 300){
+//                        $dicut_price = 300;
+//                    } else {
+//                        $dicut_price = $dicut_block_price + $dicut_price;
+//                    }
+//                }
+//
+//                //คำนวณค่าพิมพ์ ข้อ 13
+//                //ถ้าพิมพ์หน้าเดียว หน้าแรกตรวจสอบว่าเป็น สี่สี หรือ สีเดียว (ไม่ใช่สีดา) หรือ สีเดียว (สีดา)
+//                $printing_price = 0;
+//                if($data['before_print'] === 'PT-00004' && !empty($data['before_print'])){//หน้าเดียว สีดำ
+//                    $printing_price = ($print_sheet_total * 5);
+//                } elseif($data['before_print'] !== 'PT-00004' && !empty($data['before_print'])) {
+//                    $printing_price = ($print_sheet_total * 20);
+//                }
+//
+//                //ถ้าพิมพ์สองหน้า ให้ทาเหมือนกัน โดยตรวจสอบหน้าที่สองว่าเป็น สี่สี หรือ สีเดียว (ไม่ใช่สีดา) หรือ สีเดียว (สีดา)
+//                if($data['after_print'] === 'PT-00004' && !empty($data['after_print'])) {//สองหน้า สีดำ
+//                    $printing_price = $printing_price + ($print_sheet_total * 5);
+//                } elseif($data['after_print'] !== 'PT-00004' && !empty($data['after_print'])) {
+//                    $printing_price = $printing_price + ($print_sheet_total * 20);
+//                }
+//
+//                $paper_bigsheet = ($print_sheet_total / $paper_cut_final); //หาราคากระดาษโดยนาจานวนแผ่นพิมพ์ที่ได้
+//                $paper_price = $paper_bigsheet * $modelPaper['paper_price']; //ราคากระดาษ
+//
+//                $final_price_digital = $paper_price + $printing_price + $laminate_price + $dicut_price + $roundcurve_price + $fold_price + $foil_price + $emboss_price;
+//                $final_price = $final_price_digital + (($final_price_digital * 20) / 100);
+//                $summary = ceil($final_price/10)*10;
+//                $price_per_item = ($summary / $cust_quantity);
+//               
+//
+//                $result[] = [
+//                    'final_price_digital' => Yii::$app->formatter->format($final_price_digital,['decimal', 2]),
+//                    'final_price' => Yii::$app->formatter->format($summary,['decimal', 2]),
+//                    'old_final_price' => Yii::$app->formatter->format(ceil($final_price),['decimal', 2]),
+//                    'price_per_item' =>  Yii::$app->formatter->format(ceil($price_per_item),['decimal', 2]),
+//                    'isSticker' => $isSticker,
+//                    'paper_cut_final' => $paper_cut_final,
+//                    'paper_size' => $paper_size,
+//                    'job_per_sheet' => Yii::$app->formatter->format($job_per_sheet,['decimal', 2]),
+//                    'print_area_final_width' => $print_area_final_width,
+//                    'print_area_final_length' => $print_area_final_length,
+//                    'paper_cut_final' => $paper_cut_final,
+//                    'paper_size' => $paper_size,
+//                    'print_sheet_total' => $print_sheet_total,
+//                    'laminate_price' => Yii::$app->formatter->format($laminate_price,['decimal', 2]),
+//                    'foil_price' => Yii::$app->formatter->format($foil_price,['decimal', 2]),
+//                    'emboss_price' => Yii::$app->formatter->format($emboss_price,['decimal', 2]),
+//                    'fold_price' => Yii::$app->formatter->format($fold_price,['decimal', 2]),
+//                    'dicut_price' => Yii::$app->formatter->format($dicut_price, ['decimal', 2]),
+//                    'printing_price' => Yii::$app->formatter->format($printing_price, ['decimal', 2]),
+//                    'paper_price' => Yii::$app->formatter->format($paper_price, ['decimal', 2]),
+//                    'isDiecut' => $isDiecut,
+//                    'isCoating' => $isCoating,
+//                    'cust_quantity' => $cust_quantity,
+//                    'size_width_cal' => $size_width_cal,
+//                    'size_length_cal' => $size_length_cal,
+//                    'size_width' => $size_width,
+//                    'size_length' => $size_length,
+//                    'block_foil_price' => $block_foil_price,
+//                    'sqFoilSize' => $sqFoilSize,
+//                    'isFoil' => $isFoil,
+//                ];
+//            }
+//            return $result;
+//        }
+//    }
+
+    private function calculateJobpersheet($isSticker, $papers, $size_width_cal, $size_length_cal) {
         //แนวตั้ง
         $vertical_lay_width = 0;
         $vertical_lay_length = 0;
@@ -994,27 +1020,27 @@ class ProductController extends \yii\web\Controller
             $horizon_lay_total = ($horizon_lay_width * $horizon_lay_length);
 
             //หาการวางงานที่ได้จานวนเยอะที่สุด
-            if($vertical_lay_total > $horizon_lay_total) {
+            if ($vertical_lay_total > $horizon_lay_total) {
                 $job_per_arr[] = ArrayHelper::merge($paper, ['job_per_sheet' => number_format($vertical_lay_total, 2)]);
                 $per_sheet_arr[] = number_format($vertical_lay_total, 2);
             } else {
-                $job_per_arr[] = ArrayHelper::merge($paper, ['job_per_sheet' => number_format($horizon_lay_total,2)]);
-                $per_sheet_arr[] = number_format($horizon_lay_total,2);
+                $job_per_arr[] = ArrayHelper::merge($paper, ['job_per_sheet' => number_format($horizon_lay_total, 2)]);
+                $per_sheet_arr[] = number_format($horizon_lay_total, 2);
             }
         }
         //หาค่าสูงสุดจากการคำนวณ
         $max_job_per_sheet = max($per_sheet_arr);
         $min_job_per_sheet = min($per_sheet_arr);
         //ถ้าได้ค่าเท่ากัน
-        if($max_job_per_sheet === $min_job_per_sheet){
+        if ($max_job_per_sheet === $min_job_per_sheet) {
             $job_per_sheet = $min_job_per_sheet;
         } else {//เอาค่าที่น้อยที่สุด
             $job_per_sheet = $max_job_per_sheet;
         }
 
         // เอาค่าที่ได้จากการคำนวณมาหาค่า
-        foreach($job_per_arr as $item) {
-            if($item['job_per_sheet'] === $job_per_sheet) {
+        foreach ($job_per_arr as $item) {
+            if ($item['job_per_sheet'] === $job_per_sheet) {
                 $result = $item;
                 break;
             }
@@ -1026,19 +1052,18 @@ class ProductController extends \yii\web\Controller
         ];
     }
 
-    public function actionAddToCatalog()
-    {
+    public function actionAddToCatalog() {
         $request = Yii::$app->request;
-        if($request->isAjax){
+        if ($request->isAjax) {
             $response = Yii::$app->response;
             $response->format = \yii\web\Response::FORMAT_JSON;
-            
+
             $model = new TblProductCatalog();
             $attributes = $request->post('TblQuotationDetail');
             TblProductCatalog::deleteAll(['product_id' => $attributes['product_id']]);
             unset($attributes['quotation_id']);
             $model->setAttributes($attributes);
-            if($model->save()){
+            if ($model->save()) {
                 return [
                     'isSuccess' => true,
                     'data' => $model,
@@ -1052,220 +1077,218 @@ class ProductController extends \yii\web\Controller
         }
     }
 
-    public function actionCatalogList()
-    {
+    public function actionCatalogList() {
         //หมวดหมู่
         $categorys = TblCatalogType::find()->all();
         /* //สินค้าทั้งหมด
-        $allProducts = \common\modules\app\models\TblProduct::find()->all();
-        $productGroups = [];
-        foreach ($categorys as $category) {
-            $productGroups[] = [
-                'product_category_id' => $category['product_category_id'],
-                'product_category_name' => $category['product_category_name'],
-                'items' => \common\modules\app\models\TblProduct::find()->where(['product_category_id' => $category['product_category_id']])->all()
-            ];
-        } */
+          $allProducts = \common\modules\app\models\TblProduct::find()->all();
+          $productGroups = [];
+          foreach ($categorys as $category) {
+          $productGroups[] = [
+          'product_category_id' => $category['product_category_id'],
+          'product_category_name' => $category['product_category_name'],
+          'items' => \common\modules\app\models\TblProduct::find()->where(['product_category_id' => $category['product_category_id']])->all()
+          ];
+          } */
         return $this->render('catalog-list', [
-            'categorys' => $categorys,
-            //'allProducts' => $allProducts,
-            //'productGroups' => $productGroups
+                    'categorys' => $categorys,
+                        //'allProducts' => $allProducts,
+                        //'productGroups' => $productGroups
         ]);
     }
 
-    public function actionCatalog($p)
-    {
+    public function actionCatalog($p) {
         $products = TblCatalog::find()->where(['catalog_type_id' => $p])->all();
         $catalogType = TblCatalogType::findOne($p);
-        if(!$catalogType){
+        if (!$catalogType) {
             return $this->render('empty-page');
         }
         /* $response = Yii::$app->response;
-        $response->format = \yii\web\Response::FORMAT_JSON; */
+          $response->format = \yii\web\Response::FORMAT_JSON; */
         /* $model = TblProductCatalog::findOne(['product_id' => $p]);
-        if(!$model){
-            return $this->render('empty-page');
-        } else {
-            $modelProduct = $this->findModelProduct($p);
-            $modelProductOption = $this->findModelProductOption($p);
-            $option =  $modelProduct->product_options ? Json::decode($modelProduct->product_options) : [];
-            $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
-            $details = [];
-            //ขนาด
-            if (!empty($model['paper_size_id'])) {
-                //ถ้าขนาดกำหนดเอง
-                if ($model['paper_size_id'] === 'custom') {
-                    $modelUnit = $this->findModelUnit($model['paper_size_unit']);
-                    $details[] = [
-                        'label' => $queryBuilder->getInputLabel($option, 'paper_size_id', $model),
-                        'info' =>  $model['paper_size_width'] . 'x' . $model['paper_size_height'] . '&nbsp' .$modelUnit['unit_name'],
-                    ];
-                } else {
-                    $modelPaperSize = $this->findModelPaperSize($model['paper_size_id']);
-                    $details[] = [
-                        'label' => $queryBuilder->getInputLabel($option, 'paper_size_id', $model),
-                        'info' =>  $modelPaperSize['paper_size_name'],
-                    ];
-                }
-                //เข้าเล่ม
-                if (!empty($model['book_binding_id'])) {
-                    if ($model['book_binding_id'] === 'N') {
-                        $details[] = [
-                            'label' => $queryBuilder->getInputLabel($option, 'book_binding_id', $model),
-                            'info' =>  'ไม่เข้าเล่ม',
-                        ];
-                    } else {
-                        $modelBookBinding = $this->findModelBookBinding($model['book_binding_id']);
-                        $details[] = [
-                            'label' => $queryBuilder->getInputLabel($option, 'book_binding_id', $model),
-                            'info' =>  $modelBookBinding['book_binding_name'],
-                        ];
-                    }
-                }
-                //จำนวน
-                if (!empty($model['page_qty'])) {
-                    $details[] = [
-                        'label' => $queryBuilder->getInputLabel($option, 'page_qty', $model),
-                        'info' =>  $model['page_qty'],
-                    ];
-                }
-                //กระดาษ
-                if (!empty($model['paper_id'])) {
-                    $modelPaper = $this->findModelPaper($model['paper_id']);
-                    $details[] = [
-                        'label' => $queryBuilder->getInputLabel($option, 'paper_id', $model),
-                        'info' =>  '(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] ,
-                    ];
-                }
-                //ด้านหน้าพิมพ์
-                if (!empty($model['before_print'])) {
-                    $modelBeforePrint = $this->findModelColorPrinting($model['before_print']);
-                    $details[] = [
-                        'label' => $queryBuilder->getInputLabel($option, 'before_print', $model),
-                        'info' =>  $modelBeforePrint['color_printing_name'] ,
-                    ];
-                }
-                //ด้านหลังพิมพ์
-                if (!empty($model['after_print'])) {
-                    $modelBeforePrint = $this->findModelColorPrinting($model['after_print']);
-                    $details[] = [
-                        'label' => $queryBuilder->getInputLabel($option, 'after_print', $model),
-                        'info' =>  $modelBeforePrint['color_printing_name'] ,
-                    ];
-                }
-                //เคลือบ
-                if (!empty($model['coating_id'])) {
-                    if ($model['coating_id'] === 'N') {
-                        $details[] = [
-                            'label' => $queryBuilder->getInputLabel($option, 'coating_id', $model),
-                            'info' =>  'ไม่เคลือบ',
-                        ];
-                    } else {
-                        $modelCoating = $this->findModelCoating($model['coating_id']);
-                        //ด้านเดียว
-                        if ($model['coating_option'] === 'one_page') {
-                            $details[] = [
-                                'label' => $queryBuilder->getInputLabel($option, 'coating_id', $model),
-                                'info' =>  $modelCoating['coating_name'] . ' (ด้านเดียว)',
-                            ];
-                        } elseif ($model['coating_option'] === 'two_page') {//สองด้าน
-                            $details[] = [
-                                'label' => $queryBuilder->getInputLabel($option, 'coating_id', $model),
-                                'info' =>  $modelCoating['coating_name'] . ' (สองด้าน)',
-                            ];
-                        } else {
-                            $details[] = [
-                                'label' => $queryBuilder->getInputLabel($option, 'coating_id', $model),
-                                'info' =>  $modelCoating['coating_name'],
-                            ];
-                        }
-                    }
-                }
-                //ไดคัท
-                if (!empty($model['diecut_id'])) {
-                    if ($model['diecut_id'] === 'N') {
-                        $details[] = [
-                            'label' => $queryBuilder->getInputLabel($option, 'diecut_id', $model),
-                            'info' =>  'ไม่ไดคัท',
-                        ];
-                    } elseif ($model['diecut_id'] === 'default') {
-                        $details[] = [
-                            'label' => $queryBuilder->getInputLabel($option, 'diecut_id', $model),
-                            'info' =>  'ตามรูปแบบ',
-                        ];
-                    } else {
-                        $modelDiecut = $this->findModelDiecut($model['diecut_id']);
-                        $details[] = [
-                            'label' => $queryBuilder->getInputLabel($option, 'diecut_id', $model),
-                            'info' =>  '(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'],
-                        ];
-                    }
-                }
-                //วิธีพับ
-                if (!empty($model['fold_id'])) {
-                    if ($model['fold_id'] === 'N') {
-                        $details[] = [
-                            'label' => $queryBuilder->getInputLabel($option, 'fold_id', $model),
-                            'info' =>  'ไม่พับ',
-                        ];
-                    } else {
-                        $modelFold = $this->findModelFold($model['fold_id']);
-                        $details[] = [
-                            'label' => $queryBuilder->getInputLabel($option, 'fold_id', $model),
-                            'info' =>  $modelFold['fold_name'],
-                        ];
-                    }
-                }
-                //ฟอยล์
-                if (!empty($model['foil_color_id'])) {
-                    $modelFoil = $this->findModelFoilColor($model['foil_color_id']);
-                    $modelFoilUnit = $this->findModelUnit($model['foil_size_unit']);
-                    $details[] = [
-                        'label' => $queryBuilder->getInputLabel($option, 'foil_color_id', $model),
-                        'info' => 'ขนาด: ' . '&nbsp;' . $model['foil_size_width'] . 'x' . $model['foil_size_height'] . $modelFoilUnit['unit_name'] . '&nbsp;' . $modelFoil['foil_color_name'] ,
-                    ];
-                }
-                //ปั๊มนูน
-                if (!empty($model['emboss_size_width']) || !empty($model['emboss_size_height']) || !empty($model['emboss_size_unit'])) {
-                    $modelEmBossUnit = $this->findModelUnit($model['emboss_size_unit']);
-                    $details[] = [
-                        'label' => 'ปั๊มนูน',
-                        'info' => $model['emboss_size_width'] . 'x' . $model['emboss_size_height'] . $modelEmBossUnit['unit_name'],
-                    ];
-                }
-                //แนวตัง/แนวนอน
-                if (!empty($model['land_orient'])) {
-                    $details[] = [
-                        'label' => 'แนวตั้ง/แนวนอน',
-                        'info' => ($model['land_orient'] === '1' ? 'แนวตั้ง' : 'แนวนอน'),
-                    ];
-                }
-            }
-            return $this->render('catalog',[
-                'modelProduct' => $modelProduct,
-                'modelProductOption' => $modelProductOption,
-                'option' => $option,
-                'queryBuilder' => $queryBuilder,
-                'details' => $details,
-                'model' => $model
-            ]);
-        }*/
-        return $this->render('catalog2',[
-            'products' => $products,
-            'catalogType' => $catalogType,
+          if(!$model){
+          return $this->render('empty-page');
+          } else {
+          $modelProduct = $this->findModelProduct($p);
+          $modelProductOption = $this->findModelProductOption($p);
+          $option =  $modelProduct->product_options ? Json::decode($modelProduct->product_options) : [];
+          $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
+          $details = [];
+          //ขนาด
+          if (!empty($model['paper_size_id'])) {
+          //ถ้าขนาดกำหนดเอง
+          if ($model['paper_size_id'] === 'custom') {
+          $modelUnit = $this->findModelUnit($model['paper_size_unit']);
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'paper_size_id', $model),
+          'info' =>  $model['paper_size_width'] . 'x' . $model['paper_size_height'] . '&nbsp' .$modelUnit['unit_name'],
+          ];
+          } else {
+          $modelPaperSize = $this->findModelPaperSize($model['paper_size_id']);
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'paper_size_id', $model),
+          'info' =>  $modelPaperSize['paper_size_name'],
+          ];
+          }
+          //เข้าเล่ม
+          if (!empty($model['book_binding_id'])) {
+          if ($model['book_binding_id'] === 'N') {
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'book_binding_id', $model),
+          'info' =>  'ไม่เข้าเล่ม',
+          ];
+          } else {
+          $modelBookBinding = $this->findModelBookBinding($model['book_binding_id']);
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'book_binding_id', $model),
+          'info' =>  $modelBookBinding['book_binding_name'],
+          ];
+          }
+          }
+          //จำนวน
+          if (!empty($model['page_qty'])) {
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'page_qty', $model),
+          'info' =>  $model['page_qty'],
+          ];
+          }
+          //กระดาษ
+          if (!empty($model['paper_id'])) {
+          $modelPaper = $this->findModelPaper($model['paper_id']);
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'paper_id', $model),
+          'info' =>  '(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] ,
+          ];
+          }
+          //ด้านหน้าพิมพ์
+          if (!empty($model['before_print'])) {
+          $modelBeforePrint = $this->findModelColorPrinting($model['before_print']);
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'before_print', $model),
+          'info' =>  $modelBeforePrint['color_printing_name'] ,
+          ];
+          }
+          //ด้านหลังพิมพ์
+          if (!empty($model['after_print'])) {
+          $modelBeforePrint = $this->findModelColorPrinting($model['after_print']);
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'after_print', $model),
+          'info' =>  $modelBeforePrint['color_printing_name'] ,
+          ];
+          }
+          //เคลือบ
+          if (!empty($model['coating_id'])) {
+          if ($model['coating_id'] === 'N') {
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'coating_id', $model),
+          'info' =>  'ไม่เคลือบ',
+          ];
+          } else {
+          $modelCoating = $this->findModelCoating($model['coating_id']);
+          //ด้านเดียว
+          if ($model['coating_option'] === 'one_page') {
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'coating_id', $model),
+          'info' =>  $modelCoating['coating_name'] . ' (ด้านเดียว)',
+          ];
+          } elseif ($model['coating_option'] === 'two_page') {//สองด้าน
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'coating_id', $model),
+          'info' =>  $modelCoating['coating_name'] . ' (สองด้าน)',
+          ];
+          } else {
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'coating_id', $model),
+          'info' =>  $modelCoating['coating_name'],
+          ];
+          }
+          }
+          }
+          //ไดคัท
+          if (!empty($model['diecut_id'])) {
+          if ($model['diecut_id'] === 'N') {
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'diecut_id', $model),
+          'info' =>  'ไม่ไดคัท',
+          ];
+          } elseif ($model['diecut_id'] === 'default') {
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'diecut_id', $model),
+          'info' =>  'ตามรูปแบบ',
+          ];
+          } else {
+          $modelDiecut = $this->findModelDiecut($model['diecut_id']);
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'diecut_id', $model),
+          'info' =>  '(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'],
+          ];
+          }
+          }
+          //วิธีพับ
+          if (!empty($model['fold_id'])) {
+          if ($model['fold_id'] === 'N') {
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'fold_id', $model),
+          'info' =>  'ไม่พับ',
+          ];
+          } else {
+          $modelFold = $this->findModelFold($model['fold_id']);
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'fold_id', $model),
+          'info' =>  $modelFold['fold_name'],
+          ];
+          }
+          }
+          //ฟอยล์
+          if (!empty($model['foil_color_id'])) {
+          $modelFoil = $this->findModelFoilColor($model['foil_color_id']);
+          $modelFoilUnit = $this->findModelUnit($model['foil_size_unit']);
+          $details[] = [
+          'label' => $queryBuilder->getInputLabel($option, 'foil_color_id', $model),
+          'info' => 'ขนาด: ' . '&nbsp;' . $model['foil_size_width'] . 'x' . $model['foil_size_height'] . $modelFoilUnit['unit_name'] . '&nbsp;' . $modelFoil['foil_color_name'] ,
+          ];
+          }
+          //ปั๊มนูน
+          if (!empty($model['emboss_size_width']) || !empty($model['emboss_size_height']) || !empty($model['emboss_size_unit'])) {
+          $modelEmBossUnit = $this->findModelUnit($model['emboss_size_unit']);
+          $details[] = [
+          'label' => 'ปั๊มนูน',
+          'info' => $model['emboss_size_width'] . 'x' . $model['emboss_size_height'] . $modelEmBossUnit['unit_name'],
+          ];
+          }
+          //แนวตัง/แนวนอน
+          if (!empty($model['land_orient'])) {
+          $details[] = [
+          'label' => 'แนวตั้ง/แนวนอน',
+          'info' => ($model['land_orient'] === '1' ? 'แนวตั้ง' : 'แนวนอน'),
+          ];
+          }
+          }
+          return $this->render('catalog',[
+          'modelProduct' => $modelProduct,
+          'modelProductOption' => $modelProductOption,
+          'option' => $option,
+          'queryBuilder' => $queryBuilder,
+          'details' => $details,
+          'model' => $model
+          ]);
+          } */
+        return $this->render('catalog2', [
+                    'products' => $products,
+                    'catalogType' => $catalogType,
         ]);
     }
 
-    public function actionCatalogDetail($id)
-    {
+    public function actionCatalogDetail($id) {
         $catalog = TblCatalog::findOne($id);
         $catalogType = TblCatalogType::findOne(['catalog_type_id' => $catalog['catalog_type_id']]);
-        if(!$catalog || !$catalogType){
+        if (!$catalog || !$catalogType) {
             return $this->render('empty-page');
         }
-        return $this->render('catalog-detail',[
-            'catalog' => $catalog,
-            'catalogType' => $catalogType
+        return $this->render('catalog-detail', [
+                    'catalog' => $catalog,
+                    'catalogType' => $catalogType
         ]);
     }
+
 }

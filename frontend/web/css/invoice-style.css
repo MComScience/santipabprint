@@ -138,6 +138,12 @@ header p {
 }
 
 header span,
+.logo{
+    display: block;
+    float: left;
+}
+
+header span,
 header img {
     display: block;
     float: right;
@@ -419,7 +425,7 @@ aside p {
 }
 
 /*.table-detail-description {
-	width: 240px;
+        width: 240px;
 }*/
 
 .table-detail-quantity {
@@ -559,7 +565,7 @@ aside p {
 }
 
 /*.payment-hdd {
-	margin: 20px 0px 0px 0px;
+        margin: 20px 0px 0px 0px;
 }*/
 
 .payment-footer {
@@ -904,3 +910,9 @@ aside p {
     display: inline !important;
 }
 
+@media print {
+    img#logo{
+        width: 90px !important;
+        display: none;
+    }
+}

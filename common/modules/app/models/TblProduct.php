@@ -98,7 +98,7 @@ class TblProduct extends \yii\db\ActiveRecord
         return [
             [['product_category_id', 'product_name'], 'required'],
             [['product_description','product_options'], 'string'],
-            [['created_by', 'updated_by'], 'integer'],
+            [['created_by', 'updated_by','package_type_id'], 'integer'],
             [['created_at', 'updated_at', 'icon', 'files'], 'safe'],
             [['product_id', 'product_category_id'], 'string', 'max' => 100],
             [['product_name', 'product_image_path', 'product_image_base_url'], 'string', 'max' => 255],
@@ -114,6 +114,7 @@ class TblProduct extends \yii\db\ActiveRecord
         return [
             'product_id' => Yii::t('app', 'รหัสสินค้า'),
             'product_category_id' => Yii::t('app', 'รหัสหมวดหมู่'),
+            'package_type_id' => Yii::t('app', 'รหัสประเภทสินค้า'),
             'product_name' => Yii::t('app', 'ชื่อสินค้า'),
             'product_description' => Yii::t('app', 'รายละเอียด'),
             'product_options' => Yii::t('app', 'ตัวเลือก'),
@@ -125,8 +126,13 @@ class TblProduct extends \yii\db\ActiveRecord
             'updated_at' => Yii::t('app', 'วันที่แก้ไข'),
         ];
     }
+   //ประเภทสินค้า
+     public function getPackageType()
+    {
+        return $this->hasOne(TblPackageType::className(), ['package_type_id' => 'package_type_id']);
+    }
 
-    //ประเภทสินค้า
+    //กลุ่มสินค้า
     public function getProductCategory()
     {
         return $this->hasOne(TblProductCategory::className(), ['product_category_id' => 'product_category_id']);

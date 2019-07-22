@@ -64,8 +64,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'tableOptions' => ['class' => 'small kv-table'],
             'columns' => [
-                ['class' => '\kartik\grid\SerialColumn'],
-                'unit_id',
+                [
+                    'class' => '\kartik\grid\SerialColumn',
+                    'width' => '10%'
+                ],
+              //  'unit_id',
                 'unit_name',
                 [
                     'class' => '\kartik\grid\ActionColumn',

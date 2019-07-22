@@ -50,7 +50,7 @@ class TblPerforateOption extends \yii\db\ActiveRecord
     
      public function getPerforate ()
     {
-        return $this->hasMany(TblPerforate::className(), ['perforate_id' => 'perforate_id']);
+        return $this->hasOne(TblPerforate::className(), ['perforate_id' => 'perforate_id']);
     }
     
 }

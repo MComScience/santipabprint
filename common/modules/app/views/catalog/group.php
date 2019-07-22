@@ -60,7 +60,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     'catalog_type_name',
-                    'created_by',
+                    [
+                        'attribute' => 'created_by',
+                       
+                    ],
+                 
                     //'created_at',
                     //'updated_by',
                     //'updated_at',

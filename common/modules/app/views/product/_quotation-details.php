@@ -5,7 +5,14 @@
  * Date: 22/1/2562
  * Time: 20:37
  */
+$embossing = $queryBuilder->isShowInput($option, 'emboss_size_width') && $queryBuilder->isShowInput($option, 'emboss_size_height') && $queryBuilder->isShowInput($option, 'emboss_size_unit');
+$foil =  $queryBuilder->isShowInput($option, 'foil_size_width') &&  $queryBuilder->isShowInput($option, 'foil_size_height') &&  $queryBuilder->isShowInput($option, 'foil_size_unit') &&  $queryBuilder->isShowInput($option, 'foil_color_id');
 $classes = [
+    [
+        'label' => 'รูปแบบ',
+        'class' => 'op_land_orient',
+        'visible' => $queryBuilder->isShowInput($option, 'land_orient')
+    ],
     [
         'label' => 'ขนาด',
         'class' => 'op_paper_size_id',
@@ -27,12 +34,12 @@ $classes = [
         'visible' => $queryBuilder->isShowInput($option, 'paper_id')
     ],
     [
-        'label' => 'ด้านหน้าพิมพ์',
+        'label' => 'พิมพ์สองหน้า',
         'class' => 'op_before_print',
         'visible' => $queryBuilder->isShowInput($option, 'before_print')
     ],
     [
-        'label' => 'ด้านหลังพิมพ์',
+        'label' => 'พิมพ์หน้าเดียว',
         'class' => 'op_after_print',
         'visible' => $queryBuilder->isShowInput($option, 'after_print')
     ],
@@ -44,7 +51,12 @@ $classes = [
     [
         'label' => 'ไดคัท',
         'class' => 'op_diecut_id',
-        'visible' => $queryBuilder->isShowInput($option, 'diecut_id')
+        'visible' => $queryBuilder->isShowInput($option, 'diecut')
+    ],
+    [
+        'label' => 'ตัด/เจาะมุม',
+        'class' => 'op_perforate_option',
+        'visible' => $queryBuilder->isShowInput($option, 'perforate')
     ],
     [
         'label' => 'วิธีพับ',
@@ -54,18 +66,15 @@ $classes = [
     [
         'label' => 'ฟอยล์',
         'class' => 'op_foil_color_id',
-        'visible' => $queryBuilder->isShowInput($option, 'foil_color_id')
+        'visible' => $foil
     ],
     [
         'label' => 'ปั๊มนูน',
         'class' => 'op_embossing',
-        'visible' => $queryBuilder->isShowInput($option, 'embossing')
+        'visible' => $embossing
     ],
-    [
-        'label' => 'แนวตั้ง/แนวนอน',
-        'class' => 'op_land_orient',
-        'visible' => $queryBuilder->isShowInput($option, 'land_orient')
-    ],
+ 
+   
 ];
 ?>
 <ul class="quotation-detail" style="font-size: 14px;padding: 0;">

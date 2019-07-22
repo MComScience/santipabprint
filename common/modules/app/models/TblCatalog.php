@@ -8,6 +8,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use trntv\filekit\behaviors\UploadBehavior;
 use yii\db\Expression;
+use dektrium\user\models\Profile;
 /**
  * This is the model class for table "tbl_catalog".
  *
@@ -18,19 +19,18 @@ use yii\db\Expression;
  * @property string $image_path ที่อยู่รูปภาพ
  * @property string $image_base_url ลิงค์ภาพ
  */
-class TblCatalog extends \yii\db\ActiveRecord
-{
+class TblCatalog extends \yii\db\ActiveRecord {
+
     public $image;
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'tbl_catalog';
     }
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'file' => [
                 'class' => UploadBehavior::className(),
@@ -44,8 +44,7 @@ class TblCatalog extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['catalog_name', 'catalog_detail', 'catalog_type_id'], 'required'],
             [['catalog_detail'], 'string'],
@@ -58,8 +57,7 @@ class TblCatalog extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'catalog_id' => Yii::t('app', 'Catalog ID'),
             'catalog_name' => Yii::t('app', 'ชื่อสินค้า'),
@@ -70,12 +68,16 @@ class TblCatalog extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getImageUrl()
-    {
-        if($this->image_path){
-            return Yii::getAlias('@web'.$this->image_base_url.$this->image_path);
+    public function getImageUrl() {
+        if ($this->image_path) {
+            return Yii::getAlias('@web' . $this->image_base_url . $this->image_path);
         } else {
             return Yii::getAlias('@web/images/No_Image_Available.png');
         }
+    }
+
+    public function getCatalogType() {
+// a comment has one customer
+        return $this->hasOne(TblCatalogType::className(), ['catalog_type_id' => 'catalog_type_id']);
     }
 }

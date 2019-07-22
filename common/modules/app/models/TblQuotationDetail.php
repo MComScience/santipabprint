@@ -26,7 +26,7 @@ use Yii;
  * @property int $foil_size_unit หน่วย(ฟอยล์)
  * @property int $emboss_size_width กว้าง(ปั๊มนูน)
  * @property int $emboss_size_height ยาว(ปั๊มนูน)
- * @property int $emboss_size_unit หน่วย(ปั๊มนุน)
+ * @property int $emboss_size_unit หน่วย(ปั๊มนูน)
  * @property int $land_orient แนวตั้ง/แนวนอน
  * @property string $book_binding_id วิธีเข้าเล่ม
  */
@@ -43,12 +43,12 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+     public function rules()
     {
         return [
-            [['paper_size_id', 'product_id', 'paper_id'], 'required'],
-            [['paper_size_width', 'paper_size_height','paper_size_length', 'foil_size_width', 'foil_size_height', 'emboss_size_width', 'emboss_size_height', 'cust_quantity', 'final_price'], 'number'],
-            [['paper_size_unit', 'page_qty', 'foil_size_unit', 'emboss_size_unit', 'land_orient'], 'integer'],
+            [['quotation_id', 'product_id'], 'required'],
+            [['paper_size_width', 'paper_size_height', 'paper_height', 'foil_size_width', 'foil_size_height', 'emboss_size_width', 'emboss_size_height', 'cust_quantity', 'final_price'], 'number'],
+            [['paper_size_unit', 'page_qty', 'perforate', 'perforate_option_id', 'foil_size_unit', 'emboss_size_unit', 'glue', 'land_orient'], 'integer'],
             [['quotation_id', 'product_id', 'paper_size_id', 'before_print', 'after_print', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id'], 'string', 'max' => 100],
             [['coating_option'], 'string', 'max' => 10],
             [['diecut'], 'string', 'max' => 50],
@@ -61,35 +61,37 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'quotation_detail_id' => Yii::t('app', 'รหัส'),
-            'quotation_id' => Yii::t('app', 'เลขที่ใบเสนอราคา'),
-            'product_id' => Yii::t('app', 'รหัสสินค้า'),
-            'paper_size_id' => Yii::t('app', 'ขนาด'),
-            'paper_size_width' => Yii::t('app', 'กว้าง(กำหนดเอง)'),
-            'paper_size_length' => Yii::t('app', 'ยาว(กำหนดเอง)'),
-            'paper_size_height' => Yii::t('app', 'สูง(กำหนดเอง)'),
-            'paper_size_unit' => Yii::t('app', 'หน่วย(กำหนดเอง)'),
-            'page_qty' => Yii::t('app', 'จำนวนหน้า/จำนวนแผ่น'),
-            'before_print' => Yii::t('app', 'ด้านหน้าพิมพ์'),
-            'after_print' => Yii::t('app', 'ด้านหลังพิมพ์'),
-            'paper_id' => Yii::t('app', 'กระดาษ'),
-            'coating_id' => Yii::t('app', 'เคลือบ'),
-            'coating_option' => Yii::t('app', 'เคลือบด้านเดียวหรือสองด้าน'),
-            'diecut' => Yii::t('app', 'ไม่ไดคัท, ไดคัทมุมมน, ไดคัทตามรูปแบบ'),
-            'diecut_id' => Yii::t('app', 'ไดคัทมุมมน'),
-            'fold_id' => Yii::t('app', 'วิธีพับ'),
-            'foil_size_width' => Yii::t('app', 'กว้าง(ฟอยล์)'),
-            'foil_size_height' => Yii::t('app', 'ยาว(ฟอยล์)'),
-            'foil_size_unit' => Yii::t('app', 'หน่วย(ฟอยล์)'),
-            'foil_color_id' => Yii::t('app', 'สีฟอยล์'),
-            'emboss_size_width' => Yii::t('app', 'กว้าง(ปั๊มนูน)'),
-            'emboss_size_height' => Yii::t('app', 'ยาว(ปั๊มนูน)'),
-            'emboss_size_unit' => Yii::t('app', 'หน่วย(ปั๊มนุน)'),
-            'land_orient' => Yii::t('app', 'แนวตั้ง/แนวนอน'),
-            'book_binding_id' => Yii::t('app', 'วิธีเข้าเล่ม'),
-            'final_price' => Yii::t('app', 'ราคา'),
-            'cust_quantity' => Yii::t('app', 'จำนวนที่ต้องการ')
-            
+            'quotation_detail_id' => 'รหัส',
+            'quotation_id' => 'เลขที่ใบเสนอราคา',
+            'product_id' => 'รหัสสินค้า',
+            'paper_size_id' => 'ขนาด',
+            'paper_size_width' => 'กว้าง(กำหนดเอง)',
+            'paper_size_height' => 'ยาว(กำหนดเอง)',
+            'paper_height' => 'สูง(กำหนดเอง)',
+            'paper_size_unit' => 'หน่วย(กำหนดเอง)',
+            'page_qty' => 'จำนวนหน้า/จำนวนแผ่น',
+            'before_print' => 'พิมพ์สองหน้า',
+            'after_print' => 'พิมพ์หน้าเดียว',
+            'paper_id' => 'กระดาษ',
+            'coating_id' => 'เคลือบ',
+            'coating_option' => 'เคลือบด้านเดียวหรือสองด้าน',
+            'diecut' => 'ไม่ไดคัท, ไดคัทมุมมน, ไดคัทตามรูปแบบ',
+            'diecut_id' => 'ตัวเลือก ไดคัทมุมมน',
+            'perforate' => 'ตัดเป็นตัว/เจาะมุม',
+            'perforate_option_id' => 'มุมที่เจาะ',
+            'fold_id' => 'วิธีพับ',
+            'foil_size_width' => 'กว้าง(ฟอยล์)',
+            'foil_size_height' => 'ยาว(ฟอยล์)',
+            'foil_size_unit' => 'หน่วย(ฟอยล์)',
+            'foil_color_id' => 'สีฟอยล์',
+            'emboss_size_width' => 'กว้าง(ปั๊มนูน)',
+            'emboss_size_height' => 'ยาว(ปั๊มนูน)',
+            'emboss_size_unit' => 'หน่วย(ปั๊มนูน)',
+            'glue' => 'ปะกาว',
+            'land_orient' => 'แนวตั้ง/แนวนอน',
+            'book_binding_id' => 'วิธีเข้าเล่ม',
+            'cust_quantity' => 'จำนวนที่ต้องการ',
+            'final_price' => 'ราคา',
         ];
     }
 

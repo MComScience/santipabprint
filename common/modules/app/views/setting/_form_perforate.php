@@ -43,7 +43,7 @@ DynamicFormWidget::begin([
     <div class="box-header">
         <i class="fa fa-file-text-o"></i>
         <h3 class="box-title">
-            รูปแบบ tag/ที่คั่น
+            มุมที่เจาะ
         </h3>
         <!-- tools box -->
         <div class="pull-right box-tools">

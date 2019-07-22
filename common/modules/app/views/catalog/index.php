@@ -12,7 +12,7 @@ SweetAlert2Asset::register($this);
 /* @var $searchModel common\modules\app\models\TblCatalogSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'ตัวอย่างผลิตภัณฑ์';
+$this->title = 'ตัวอย่าง ผลิตภัณฑ์';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?= \dominus77\sweetalert2\Alert::widget(['useSessionFlash' => true]) ?>
@@ -25,7 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-body">
         <div class="tbl-catalog-index">
 
-            <?= GridView::widget([
+            <?=
+            GridView::widget([
                 'id' => 'grid-product',
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
@@ -59,10 +60,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'tableOptions' => ['class' => 'small kv-table'],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'attribute' => 'catalog_type_id',
+                        'value' => function($model) {
+                            return $model->catalogType ? $model->catalogType->catalog_type_name : '-';
+                        },
+                        'group' => true
+                    ],
                     'catalog_name',
                     'catalog_detail:raw',
-                    'catalog_type_id',
-
                     [
                         'class' => '\kartik\grid\ActionColumn',
                         'noWrap' => true,
@@ -75,13 +81,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         'buttons' => [
                             'delete' => function ($url, $model, $key) {
                                 return Html::a(Icon::show('trash', ['framework' => Icon::BSG]), $url, [
-                                    'class' => 'btn btn-sm btn-danger',
-                                    'data-pjax' => '0',
-                                    'title' => Yii::t('yii', 'Delete'),
-                                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                    'data-method' => 'post',
-                                    'data-pjax-reload' => '#grid-product-pjax',
-                                    'data-toggle' => 'tooltip'
+                                            'class' => 'btn btn-sm btn-danger',
+                                            'data-pjax' => '0',
+                                            'title' => Yii::t('yii', 'Delete'),
+                                            'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                            'data-method' => 'post',
+                                            'data-pjax-reload' => '#grid-product-pjax',
+                                            'data-toggle' => 'tooltip'
                                 ]);
                             },
                         ],
@@ -95,14 +101,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ]
                 ],
-            ]); ?>
+            ]);
+            ?>
         </div>
     </div>
 </div>
 
 <?php
 $this->registerJsFile(
-    '@web/js/yii-confirm.js',
-    ['depends' => [\yii\web\JqueryAsset::className()]]
+        '@web/js/yii-confirm.js', ['depends' => [\yii\web\JqueryAsset::className()]]
 );
 ?>

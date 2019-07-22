@@ -1,14 +1,15 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Tanakorn
  * Date: 21/1/2562
  * Time: 9:28
  */
-
 use adminlte\helpers\Html;
 use adminlte\widgets\GridView;
 use kartik\icons\Icon;
+
 $productOption = $modelProduct->productOption;
 ?>
 <div class="tab-content">
@@ -17,7 +18,8 @@ $productOption = $modelProduct->productOption;
         <p>
             <span class="badge">ขนาดกระดาษ</span>
         </p>
-        <?= GridView::widget([
+        <?=
+        GridView::widget([
             'id' => 'grid-paper-size',
             'dataProvider' => $gridBuilder->getDataPaperSize($modelProduct),
             'tableOptions' => [
@@ -26,13 +28,13 @@ $productOption = $modelProduct->productOption;
             'striped' => false,
             'hover' => true,
             'layout' => '{items}',
-            /*'beforeHeader' => [
-                [
-                    'columns' => [
-                        ['content' => Icon::show('file-text-o').'ขนาดกระดาษ', 'options' => ['class' => 'default text-center', 'colspan' => 4]]
-                    ],
-                ]
-            ],*/
+            /* 'beforeHeader' => [
+              [
+              'columns' => [
+              ['content' => Icon::show('file-text-o').'ขนาดกระดาษ', 'options' => ['class' => 'default text-center', 'colspan' => 4]]
+              ],
+              ]
+              ], */
             'columns' => [
                 [
                     'class' => '\kartik\grid\SerialColumn',
@@ -53,14 +55,16 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS
                 ]
             ]
-        ]); ?>
+        ]);
+        ?>
     </div>
     <!-- /.tab-pane -->
     <div class="tab-pane" id="tab-before-print">
         <p>
             <span class="badge">หน้าพิมพ์</span>
         </p>
-        <?= GridView::widget([
+        <?=
+        GridView::widget([
             'id' => 'grid-before-print',
             'dataProvider' => $gridBuilder->getDataColorPrinting($modelProduct),
             'tableOptions' => [
@@ -87,14 +91,16 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS
                 ]
             ]
-        ]); ?>
+        ]);
+        ?>
     </div>
     <!-- /.tab-pane -->
     <div class="tab-pane" id="tab-after-print">
         <p>
             <span class="badge">หลังพิมพ์</span>
         </p>
-        <?= GridView::widget([
+        <?=
+        GridView::widget([
             'id' => 'grid-after-print',
             'dataProvider' => $gridBuilder->getDataColorPrinting($modelProduct),
             'tableOptions' => [
@@ -121,13 +127,15 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS
                 ]
             ]
-        ]); ?>
+        ]);
+        ?>
     </div>
     <div class="tab-pane" id="tab-paper">
         <p>
             <span class="badge">กระดาษ</span>
         </p>
-        <?= GridView::widget([
+        <?=
+        GridView::widget([
             'id' => 'grid-paper',
             'dataProvider' => $gridBuilder->getDataPaper($modelProduct),
             'tableOptions' => [
@@ -163,13 +171,15 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS,
                 ]
             ]
-        ]); ?>
+        ]);
+        ?>
     </div>
     <div class="tab-pane" id="tab-coating">
         <p>
             <span class="badge">เคลือบ</span>
         </p>
-        <?= GridView::widget([
+        <?=
+        GridView::widget([
             'id' => 'grid-coating',
             'dataProvider' => $gridBuilder->getDataCoating($modelProduct),
             'tableOptions' => [
@@ -195,13 +205,15 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS
                 ]
             ]
-        ]); ?>
+        ]);
+        ?>
     </div>
     <div class="tab-pane" id="tab-diecut">
         <p>
             <span class="badge">ไดคัท</span>
         </p>
-        <?= GridView::widget([
+        <?=
+        GridView::widget([
             'id' => 'grid-diecut',
             'dataProvider' => $gridBuilder->getDataDiecut($modelProduct),
             'tableOptions' => [
@@ -217,7 +229,7 @@ $productOption = $modelProduct->productOption;
                 [
                     'label' => 'รูปแบบ',
                     'attribute' => 'diecut_group_id',
-                    'value' => function($model, $key, $index){
+                    'value' => function($model, $key, $index) {
                         return $model->diecutGroup->diecut_group_name;
                     },
                     'group' => true,
@@ -235,13 +247,15 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS
                 ]
             ]
-        ]); ?>
+        ]);
+        ?>
     </div>
     <div class="tab-pane" id="tab-fold">
         <p>
             <span class="badge">วิธีพับ</span>
         </p>
-        <?= GridView::widget([
+        <?=
+        GridView::widget([
             'id' => 'grid-fold',
             'dataProvider' => $gridBuilder->getDataFold($modelProduct),
             'tableOptions' => [
@@ -267,13 +281,15 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS
                 ]
             ]
-        ]); ?>
+        ]);
+        ?>
     </div>
     <div class="tab-pane" id="tab-foil-color">
         <p>
             <span class="badge">สีฟอยล์</span>
         </p>
-        <?= GridView::widget([
+        <?=
+        GridView::widget([
             'id' => 'grid-foil-color',
             'dataProvider' => $gridBuilder->getDataFoilColor($modelProduct),
             'tableOptions' => [
@@ -299,13 +315,15 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS
                 ]
             ]
-        ]); ?>
+        ]);
+        ?>
     </div>
     <div class="tab-pane" id="tab-book-binding">
         <p>
             <span class="badge">วิธีเข้าเล่ม</span>
         </p>
-        <?= GridView::widget([
+        <?=
+        GridView::widget([
             'id' => 'grid-book-binding',
             'dataProvider' => $gridBuilder->getDataBookBinding($modelProduct),
             'tableOptions' => [
@@ -331,9 +349,10 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS
                 ]
             ]
-        ]); ?>
+        ]);
+        ?>
     </div>
-    <div class="tab-pane" id="tab-page-option1">
+<!--    <div class="tab-pane" id="tab-page-option1">
         <p>
             <span class="badge">พิมพ์หน้าหลัง</span>
         </p>
@@ -342,6 +361,49 @@ $productOption = $modelProduct->productOption;
         <p>
             <span class="badge">พิมพ์หน้าเดียว</span>
         </p>
+    </div>-->
+    <div class="tab-pane" id="tab-perforate">
+        <p>
+            <span class="badge">รูปแบบการเจาะมุม</span>
+        </p>
+        <?=
+        GridView::widget([
+            'id' => 'grid-perforate',
+            'dataProvider' => $gridBuilder->getDataPerforate($modelProduct),
+            'tableOptions' => [
+                'class' => 'small'
+            ],
+            'striped' => false,
+            'hover' => true,
+            'layout' => '{items}',
+            'columns' => [
+                [
+                    'class' => '\kartik\grid\SerialColumn'
+                ],
+                [
+                    'attribute' => 'perforate_id',
+                    'value' => function($model) {
+                        return $model->perforate ? $model->perforate->perforate_name : '';
+                    }
+                ],
+                [
+                    'attribute' => 'perforate_option_name',
+                ],
+                [
+                    'attribute' => 'perforate_option_description',
+                ],
+                [
+                    'class' => '\adminlte\widgets\CheckboxColumn',
+                    'content' => function ($model, $key, $index) use ($gridBuilder, $productOption, $modelProduct) {
+                        $checked = $modelProduct->isChecked($productOption, $key, 'perforate_option');
+                        return $gridBuilder->getCheckboxTemplate($key, $checked);
+                    },
+                    'header' => $gridBuilder->getCheckboxHeaderTemplate(),
+                    'rowSelectedClass' => GridView::TYPE_SUCCESS
+                ]
+            ]
+        ]);
+        ?>
     </div>
     <!-- /.tab-pane -->
 </div>

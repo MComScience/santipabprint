@@ -50,6 +50,8 @@ use common\modules\app\models\TblPerforate;
 use common\modules\app\models\TblPerforateOption;
 use common\modules\app\models\TblPerforateSearch;
 use yii\data\ActiveDataProvider;
+use common\modules\app\models\TblPackageType;
+use common\modules\app\models\search\TblPackageTypeSearch;
 
 class SettingController extends \yii\web\Controller {
 
@@ -269,13 +271,25 @@ class SettingController extends \yii\web\Controller {
         ]);
     }
 
-    /* ###### รูปแบบ tag/ที่คั่นหนังสือ ##### */
+    /* ###### เจาะมุม ##### */
 
     public function actionPerforate() {
         $searchModel = new TblPerforateSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('_perforate', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /* ######  ประเภทสินค้าบรรจุภัณฑ์ ##### */
+
+    public function actionPackageType() {
+        $searchModel = new TblPackageTypeSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('_package_type', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
         ]);
@@ -752,19 +766,18 @@ class SettingController extends \yii\web\Controller {
                 $valid = $model->validate();
                 $valid = DynamicModel::validateMultiple($modelsDiecuts) && $valid;
 
+
                 if ($valid) {
                     $transaction = \Yii::$app->db->beginTransaction();
                     try {
-                        if ($flag = $model->save(false)) {
+                        if ($model->save()) {
                             foreach ($modelsDiecuts as $modelsDiecut) {
                                 $modelsDiecut->diecut_group_id = $model->diecut_group_id;
-                                if (!($flag = $modelsDiecut->save(false))) {
+                                if (!$modelsDiecut->save()) {
                                     $transaction->rollBack();
                                     break;
                                 }
                             }
-                        }
-                        if ($flag) {
                             $transaction->commit();
                             return [
                                 'success' => true,
@@ -798,7 +811,7 @@ class SettingController extends \yii\web\Controller {
 
     public function actionUpdateDiecut($id) {
         $request = Yii::$app->request;
-        $model = $this->findModelTblPerforateOption($id);
+        $model = $this->findModelDiecutGroup($id);
         $modelsDiecuts = $model->diecuts;
 
         if ($request->isAjax) {
@@ -998,28 +1011,62 @@ class SettingController extends \yii\web\Controller {
     public function actionCreateProductCategory() {
         $request = Yii::$app->request;
         $model = new TblProductCategory();
+        $modelsPackageTypes = [new TblPackageType()];
+
         if ($request->isAjax) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
                     'title' => Icon::show('file-text-o') . 'บันทึกหมวดหมู่สินค้า',
                     'content' => $this->renderAjax('_form_product_category', [
                         'model' => $model,
+                        'modelsPackageTypes' => (empty($modelsPackageTypes)) ? [new TblPackageType()] : $modelsPackageTypes
                     ]),
                     'footer' => ''
                 ];
-            } elseif ($model->load($request->post()) && $model->save()) {
-                return [
-                    'success' => true,
-                    'message' => 'บันทึกสำเร็จ!',
-                    'data' => $model
-                ];
+            } elseif ($model->load(Yii::$app->request->post())) {
+                $modelsPackageTypes = DynamicModel::createMultiple(TblPackageType::classname(), $modelsPackageTypes, 'package_type_id');
+                DynamicModel::loadMultiple($modelsPackageTypes, Yii::$app->request->post());
+                $valid = $model->validate();
+                $valid = DynamicModel::validateMultiple($modelsPackageTypes) && $valid;
+                if ($valid) {
+                    $transaction = TblProductCategory::getDb()->beginTransaction();
+                    try {
+                        if ($model->save(false)) {
+                            foreach ($modelsPackageTypes as $modelsPackageType) {
+                                $modelsPackageType->product_category_id = $model->product_category_id;
+                                if (!$modelsPackageType->save(FALSE)) {
+                                    $transaction->rollBack();
+                                    break;
+                                }
+                            }
+                        }
+                        $transaction->commit();
+                        return [
+                            'success' => true,
+                            'message' => 'บันทึกสำเร็จ!',
+                            'data' => $model
+                        ];
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                    }
+                } else {
+                    return [
+                        'success' => false,
+                        'message' => $model->errors,
+                        'data' => $model,
+                        'validate' => ActiveForm::validateMultiple($modelsPackageTypes)
+                    ];
+                }
             } else {
                 return [
-                    'success' => false,
-                    'message' => $model->errors,
-                    'data' => $model,
-                    'validate' => ActiveForm::validate($model)
+                    'title' => Icon::show('file-text-o') . 'บันทึกหมวดหมู่สินค้า',
+                    'content' => $this->renderAjax('_form_product_category', [
+                        'model' => $model,
+                        'modelsPackageTypes' => (empty($modelsPackageTypes)) ? [new TblPackageType()] : $modelsPackageTypes
+                    ]),
+                    'footer' => '',
+                    'validate' => ActiveForm::validateMultiple($modelsPackageTypes)
                 ];
             }
         }
@@ -1028,28 +1075,71 @@ class SettingController extends \yii\web\Controller {
     public function actionUpdateProductCategory($id) {
         $request = Yii::$app->request;
         $model = $this->findModelProductCategory($id);
+        $modelsPackageTypes = TblPackageType::find()->where(['product_category_id' => $id])->all();
+
         if ($request->isAjax) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => Icon::show('file-text-o') . 'แก้ไขหมวดหมู่สินค้า',
+                    'title' => Icon::show('file-text-o') . 'บันทึกหมวดหมู่สินค้า',
                     'content' => $this->renderAjax('_form_product_category', [
                         'model' => $model,
+                        'modelsPackageTypes' => (empty($modelsPackageTypes)) ? [new TblPackageType()] : $modelsPackageTypes
                     ]),
                     'footer' => ''
                 ];
-            } elseif ($model->load($request->post()) && $model->save()) {
-                return [
-                    'success' => true,
-                    'message' => 'บันทึกสำเร็จ!',
-                    'data' => $model
-                ];
+            } elseif ($model->load(Yii::$app->request->post())) {
+                $oldIDs = ArrayHelper::map($modelsPackageTypes, 'package_type_id', 'package_type_id');
+                $modelsPackageTypes = DynamicModel::createMultiple(TblPackageType::classname(), $modelsPackageTypes, 'package_type_id');
+                DynamicModel::loadMultiple($modelsPackageTypes, Yii::$app->request->post());
+                $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsPackageTypes, 'package_type_id', 'package_type_id')));
+
+                // validate all models
+                $valid = $model->validate();
+                $valid = DynamicModel::validateMultiple($modelsPackageTypes) && $valid;
+                if ($valid) {
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    try {
+                        if ($flag = $model->save(false)) {
+                            if (!empty($deletedIDs)) {
+                                TblPackageType::deleteAll(['package_type_id' => $deletedIDs]);
+                            }
+                            foreach ($modelsPackageTypes as $modelsPackageType) {
+                                $modelsPackageType->product_category_id = $model->product_category_id;
+                                if (!($flag = $modelsPackageType->save(false))) {
+                                    $transaction->rollBack();
+                                    break;
+                                }
+                            }
+                        }
+                        if ($flag) {
+                            $transaction->commit();
+                            return [
+                                'success' => true,
+                                'message' => 'บันทึกสำเร็จ!',
+                                'data' => $model
+                            ];
+                        }
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                    }
+                } else {
+                    return [
+                        'success' => false,
+                        'message' => $model->errors,
+                        'data' => $model,
+                        'validate' => ActiveForm::validateMultiple($modelsPackageTypes)
+                    ];
+                }
             } else {
                 return [
-                    'success' => false,
-                    'message' => $model->errors,
-                    'data' => $model,
-                    'validate' => ActiveForm::validate($model)
+                    'title' => Icon::show('file-text-o') . 'บันทึกหมวดหมู่สินค้า',
+                    'content' => $this->renderAjax('_form_product_category', [
+                        'model' => $model,
+                        'modelsPackageTypes' => (empty($modelsPackageTypes)) ? [new TblPackageType()] : $modelsPackageTypes
+                    ]),
+                    'footer' => '',
+                    'validate' => ActiveForm::validateMultiple($modelsPackageTypes)
                 ];
             }
         }
@@ -1085,6 +1175,7 @@ class SettingController extends \yii\web\Controller {
                         'fold_option' => (isset($posted['foldKeys']) && is_array($posted['foldKeys']) && $options['fold_id']['value'] === '1') ? Json::encode($posted['foldKeys']) : null,
                         'foil_color_option' => (isset($posted['foilColorKeys']) && is_array($posted['foilColorKeys']) && $options['foil_color_id']['value'] === '1') ? Json::encode($posted['foilColorKeys']) : null,
                         'book_binding_option' => (isset($posted['bookBindingKeys']) && is_array($posted['bookBindingKeys']) && $options['book_binding_id']['value'] === '1') ? Json::encode($posted['bookBindingKeys']) : null,
+                        'perforate_option' => (isset($posted['perforateKeys']) && is_array($posted['perforateKeys'])) ? Json::encode($posted['perforateKeys']) : null,
                         'two_page_option' => '',
                         'one_page_option' => ''
                     ]);
@@ -1166,6 +1257,7 @@ class SettingController extends \yii\web\Controller {
                         'fold_option' => (isset($posted['foldKeys']) && is_array($posted['foldKeys']) && $options['fold_id']['value'] === '1') ? Json::encode($posted['foldKeys']) : null,
                         'foil_color_option' => (isset($posted['foilColorKeys']) && is_array($posted['foilColorKeys']) && $options['foil_color_id']['value'] === '1') ? Json::encode($posted['foilColorKeys']) : null,
                         'book_binding_option' => (isset($posted['bookBindingKeys']) && is_array($posted['bookBindingKeys']) && $options['book_binding_id']['value'] === '1') ? Json::encode($posted['bookBindingKeys']) : null,
+                        'perforate_option' => (isset($posted['perforateKeys']) && is_array($posted['perforateKeys'])) ? Json::encode($posted['perforateKeys']) : null,
                         'two_page_option' => '',
                         'one_page_option' => ''
                     ]);
@@ -1191,7 +1283,7 @@ class SettingController extends \yii\web\Controller {
                             )
                         ];
                     }
-                } else {
+                }else {
                     $transaction->rollBack();
                     return [
                         'success' => false,
@@ -1293,7 +1385,7 @@ class SettingController extends \yii\web\Controller {
         ];
     }
 
-    /* ###### ไดคัท ##### */
+    /* ###### ลบไดคัท ##### */
 
     public function actionDeleteDiecutGroup($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -1342,6 +1434,7 @@ class SettingController extends \yii\web\Controller {
     public function actionDeleteProductCategory($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelProductCategory($id);
+        TblPackageType::deleteAll(['product_category_id' => $id]);
         $model->delete();
         return [
             'success' => true,
@@ -1377,7 +1470,7 @@ class SettingController extends \yii\web\Controller {
         return !isset($data) || empty($data) || ($data === null) || ($data === '');
     }
 
-    /* ###### รูปแบบ tag/ที่คั่นหนังสือ ##### */
+    /* ###### รูปแบบการเจาะมุม ##### */
 
     public function actionCreatePerforate() {
         $request = Yii::$app->request;
@@ -1388,7 +1481,7 @@ class SettingController extends \yii\web\Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => 'บันทึกรูปแบบ tag/ที่คั่นหนังสือ',
+                    'title' => 'บันทึกรูปแบบการเจาะมุม',
                     'content' => $this->renderAjax('_form_perforate', [
                         'model' => $model,
                         'modelsPerforateOptions' => (empty($modelsPerforateOptions)) ? [new TblPerforateOption()] : $modelsPerforateOptions
@@ -1433,7 +1526,7 @@ class SettingController extends \yii\web\Controller {
                 }
             } else {
                 return [
-                    'title' => 'บันทึกรูปแบบ tag/ที่คั่นหนังสือ',
+                    'title' => 'บันทึกรูปแบบการเจาะมุม',
                     'content' => $this->renderAjax('_form_perforate', [
                         'model' => $model,
                         'modelsPerforateOptions' => (empty($modelsPerforateOptions)) ? [new TblPerforateOption()] : $modelsPerforateOptions
@@ -1454,7 +1547,7 @@ class SettingController extends \yii\web\Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => 'บันทึกรูปแบบ tag/ที่คั่นหนังสือ',
+                    'title' => 'แก้ไข บันทึกรูปแบบการเจาะมุม',
                     'content' => $this->renderAjax('_form_perforate', [
                         'model' => $model,
                         'modelsPerforateOptions' => (empty($modelsPerforateOptions)) ? [new TblPerforateOption()] : $modelsPerforateOptions
@@ -1507,7 +1600,7 @@ class SettingController extends \yii\web\Controller {
                 }
             } else {
                 return [
-                    'title' => 'บันทึกรูปแบบ tag/ที่คั่นหนังสือ',
+                    'title' => 'แก้ไข บันทึกรูปแบบการเจาะมุม',
                     'content' => $this->renderAjax('_form_perforate', [
                         'model' => $model,
                         'modelsPerforateOptions' => (empty($modelsPerforateOptions)) ? [new TblPerforateOption()] : $modelsPerforateOptions
@@ -1526,7 +1619,7 @@ class SettingController extends \yii\web\Controller {
             'success' => true,
         ];
     }
-    
+
     public function actionDeletePerforateOption($id) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModelPerforateOption($id);
@@ -1546,6 +1639,46 @@ class SettingController extends \yii\web\Controller {
                 ],
             ]);
             return $this->renderPartial('_perforate-details', [
+                        'dataProvider' => $dataProvider
+            ]);
+        } else {
+            return '<div class="alert alert-danger">No data found</div>';
+        }
+    }
+
+    public function actionSubProductCategory() {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $id = end($_POST['depdrop_parents']);
+            $list = TblPackageType::find()->andWhere(['product_category_id' => $id])->asArray()->all();
+            $selected = null;
+            if ($id != null && count($list) > 0) {
+                $selected = '';
+                foreach ($list as $i => $item) {
+                    $out[] = ['id' => $item['package_type_id'], 'name' => $item['package_type_name']];
+                    if ($i == 0) {
+                        $selected = $item['package_type_id'];
+                    }
+                }
+                // Shows how you can preselect a value
+                return ['output' => $out, 'selected' => $selected];
+            }
+        }
+        return ['output' => '', 'selected' => ''];
+    }
+
+    public function actionProductCategoryDetail() {
+        if (isset($_POST['expandRowKey'])) {
+
+            $searchModel = TblPackageType::find()->where(['product_category_id' => $_POST['expandRowKey']]);
+            $dataProvider = new ActiveDataProvider([
+                'query' => $searchModel,
+                'pagination' => [
+                    'pageSize' => false,
+                ],
+            ]);
+            return $this->renderPartial('_product_category_detail', [
                         'dataProvider' => $dataProvider
             ]);
         } else {

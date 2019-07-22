@@ -40,7 +40,7 @@ class TblUnitSearch extends TblUnit
      */
     public function search($params)
     {
-        $query = TblUnit::find();
+        $query = TblUnit::find()->orderBy('unit_id DESC');
 
         // add conditions that should always apply here
 

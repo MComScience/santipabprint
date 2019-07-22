@@ -19,14 +19,13 @@ use yii\helpers\Url;
 use yii\web\JsExpression;
 use kartik\mpdf\Pdf;
 
-class ProductController extends \yii\web\Controller
-{
+class ProductController extends \yii\web\Controller {
+
     use ModelTrait;
 
     public $layout = '@kidz/views/layouts/main';
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -43,20 +42,19 @@ class ProductController extends \yii\web\Controller
                     ],
                 ],
             ],
-            /* 'httpCache' => [
-                'class' => 'yii\filters\HttpCache',
-                'only' => ['index'],
-                'lastModified' => function ($action, $params) {
-                    return time();
-                },
-                //'sessionCacheLimiter' => 'public',
-                'cacheControlHeader' => 'public, max-age=3600',
-            ] */
+                /* 'httpCache' => [
+                  'class' => 'yii\filters\HttpCache',
+                  'only' => ['index'],
+                  'lastModified' => function ($action, $params) {
+                  return time();
+                  },
+                  //'sessionCacheLimiter' => 'public',
+                  'cacheControlHeader' => 'public, max-age=3600',
+                  ] */
         ];
     }
 
-    public function actionIndex()
-    {
+    public function actionIndex() {
         //หมวดหมู่
         $categorys = TblProductCategory::find()->all();
         //สินค้าทั้งหมด
@@ -70,14 +68,13 @@ class ProductController extends \yii\web\Controller
             ];
         }
         return $this->render('index', [
-            'categorys' => $categorys,
-            'allProducts' => $allProducts,
-            'productGroups' => $productGroups
+                    'categorys' => $categorys,
+                    'allProducts' => $allProducts,
+                    'productGroups' => $productGroups
         ]);
     }
 
-    public function actionQuotation($p, $slug = null)
-    {
+    public function actionQuotation($p, $slug = null) {
         $request = Yii::$app->request;
         $update = false;
         $modelProduct = $this->findModelProduct($p);
@@ -98,25 +95,24 @@ class ProductController extends \yii\web\Controller
                     'validate' => $validate
                 ];
             } else if ($modelQuotation->save()) {
-
+                
             }
         } else {
             $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
             //return Json::encode($validates);
             return $this->render('quotation', [
-                'option' => $option,
-                'modelProduct' => $modelProduct,
-                'modelQuotation' => $modelQuotation,
-                'model' => $model,
-                'queryBuilder' => $queryBuilder,
-                'update' => $update,
-                'validates' => $fetchOptions['validation']
+                        'option' => $option,
+                        'modelProduct' => $modelProduct,
+                        'modelQuotation' => $modelQuotation,
+                        'model' => $model,
+                        'queryBuilder' => $queryBuilder,
+                        'update' => $update,
+                        'validates' => $fetchOptions['validation']
             ]);
         }
     }
 
-    public function actionDownload($p)
-    {
+    public function actionDownload($p) {
         $request = Yii::$app->request;
         $model = new TblQuotation();
         $modelDetail = new TblQuotationDetail();
@@ -133,7 +129,7 @@ class ProductController extends \yii\web\Controller
                 ];
             } elseif ($model->load($request->post())) {
                 $modelDetail->setAttributes($request->post('TblQuotationDetail'));
-                $modelDetail->final_price = str_replace(',','',$request->post('final_price'));
+                $modelDetail->final_price = str_replace(',', '', $request->post('final_price'));
                 if ($model->save()) {
                     $modelDetail->quotation_id = $model['quotation_id'];
                     if ($modelDetail->save()) {
@@ -161,106 +157,136 @@ class ProductController extends \yii\web\Controller
         }
     }
 
-    public function actionQuo($q)
-    {
+    private function convertNumber($number) {
+        if (empty($number))
+            return '';
+
+        return (int) preg_replace("/.*\./", "", $number) > 0 ? number_format($number, 1) : number_format($number, 0);
+    }
+
+    public function actionQuo($q) {
         $model = $this->findModelQuotation($q);
         $modelItems = TblQuotationDetail::find()->where(['quotation_id' => $q])->all();
         $items = [];
         $summary = 0;
+        $nbsp = '&nbsp';
+        $nbsp2 = ': &nbsp;';
+        $x = 'x';
+        $newline = "\n";
         foreach ($modelItems as $item) {
             $modelProduct = $this->findModelProduct($item['product_id']);
             $option = $modelProduct->options;
             $modelProductOption = $this->findModelProductOption($item['product_id']);
             $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
-            $details = Html::tag('strong', $modelProduct['product_name']) . "\n";
+            $details = Html::tag('strong', $modelProduct['product_name']) . $newline;
             //ขนาด
             if (!empty($item['paper_size_id'])) {
                 if ($item['paper_size_id'] === 'custom') {
                     $modelUnit = $this->findModelUnit($item['paper_size_unit']);
-                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . ': &nbsp;' .
-                        $item['paper_size_width'] . 'x' . $item['paper_size_height'] . '&nbsp' .
-                        $modelUnit['unit_name'] . "\n";
+                    $paper_size_width = $this->convertNumber($item['paper_size_width']);
+                    $paper_size_height = $this->convertNumber($item['paper_size_height']);
+                    $paper_height = $this->convertNumber($item['paper_height']);
+                    if (empty($paper_height)) {
+                        $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
+                                $paper_size_width . $x . $paper_size_height . $nbsp .
+                                $modelUnit['unit_name'] . $newline;
+                    } else {
+                        $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
+                                $paper_size_width . $x . $paper_size_height . $x . $paper_height . $nbsp .
+                                $modelUnit['unit_name'] . $newline;
+                    }
                 } else {
                     $modelPaperSize = $this->findModelPaperSize($item['paper_size_id']);
-                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . ': &nbsp;' . $modelPaperSize['paper_size_name'] . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 . $modelPaperSize['paper_size_name'] . $newline;
                 }
             }
             //จำนวน
             if (!empty($item['page_qty'])) {
-                $details .= $queryBuilder->getInputLabel($option, 'page_qty', $item) . ': &nbsp;' . $item['page_qty'] . "\n";
+                $details .= $queryBuilder->getInputLabel($option, 'page_qty', $item) . $nbsp2 . $item['page_qty'] . $newline;
             }
-            //ด้านหน้าพิมพ์
-            if (!empty($item['before_print'])) {
-                $modelBeforePrint = $this->findModelColorPrinting($item['before_print']);
-                $details .= $queryBuilder->getInputLabel($option, 'before_print', $item). ': &nbsp;' . $modelBeforePrint['color_printing_name'] . "\n";
-            }
-            //ด้านหลังพิมพ์
-            if (!empty($item['after_print'])) {
-                $modelBeforePrint = $this->findModelColorPrinting($item['after_print']);
-                $details .= $queryBuilder->getInputLabel($option, 'after_print', $item). ': &nbsp;' . $modelBeforePrint['color_printing_name'] . "\n";
-            }
-            //กระดาษ
+                  //กระดาษ
             if (!empty($item['paper_id'])) {
                 $modelPaper = $this->findModelPaper($item['paper_id']);
-                $details .= $queryBuilder->getInputLabel($option, 'paper_id', $item). ': &nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . "\n";
+                $size = '&nbsp;(ขนาด ' . $this->convertNumber($modelPaper['paper_width']) . 'x' . $this->convertNumber($modelPaper['paper_length']) . ')';
+                $details .= $queryBuilder->getInputLabel($option, 'paper_id', $item) . ': &nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . '  ' . $modelPaper['paper_gram'] . ' แกรม ' . $size . $newline;
             }
+            //พิมพ์สองหน้า
+            if (!empty($item['before_print'])) {
+                $modelBeforePrint = $this->findModelColorPrinting($item['before_print']);
+                $details .= $queryBuilder->getInputLabel($option, 'before_print', $item) . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
+            }
+            //พิมพ์หน้าเดียว
+            if (!empty($item['after_print'])) {
+                $modelBeforePrint = $this->findModelColorPrinting($item['after_print']);
+                $details .= $queryBuilder->getInputLabel($option, 'after_print', $item) . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
+            }
+      
             //เคลือบ
-            if (!empty($item['coating_id'])) {
+            if (!empty($item['coating_id']) && $item['coating_id'] != 'N') {
                 if ($item['coating_id'] === 'N') {
-                    $details .= 'เคลือบ : ' . '&nbsp;' . 'ไม่เคลือบ' . "\n";
+                    $details .= 'เคลือบ : ' . $nbsp . 'ไม่เคลือบ' . $newline;
                 } else {
                     $modelCoating = $this->findModelCoating($item['coating_id']);
                     if ($item['coating_option'] === 'one_page') {
-                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . ': &nbsp;' . $modelCoating['coating_name'] . ' (ด้านเดียว)' . "\n";
+                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . ' (ด้านเดียว)' . $newline;
                     } elseif ($item['coating_option'] === 'two_page') {
-                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . ': &nbsp;' . $modelCoating['coating_name'] . ' (สองด้าน)' . "\n";
+                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . ' (สองด้าน)' . $newline;
                     } else {
-                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . ': &nbsp;' . $modelCoating['coating_name'] . "\n";
+                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . $newline;
                     }
                 }
             }
             //ไดคัท
-            if (!empty($item['diecut_id'])) {
+            if (!empty($item['diecut_id']) && $item['diecut'] != 'N') {
                 if ($item['diecut_id'] === 'N') {
-                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;' . 'ไม่ไดคัท' . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ไม่ไดคัท' . $newline;
                 } elseif ($item['diecut_id'] === 'default') {
-                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;' . 'ตามรูปแบบ' . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ตามรูปแบบ' . $newline;
                 } else {
                     $modelDiecut = $this->findModelDiecut($item['diecut_id']);
-                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . $newline;
                 }
             }
             //วิธีพับ
-            if (!empty($item['fold_id'])) {
+            if (!empty($item['fold_id']) && $item['fold_id'] != 'N') {
                 if ($item['fold_id'] === 'N') {
-                    $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . ': &nbsp;' . 'ไม่พับ' . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . $nbsp2 . 'ไม่พับ' . $newline;
                 } else {
                     $modelFold = $this->findModelFold($item['fold_id']);
-                    $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . ': &nbsp;' . $modelFold['fold_name'] . "\n";
+                    $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . $nbsp2 . $modelFold['fold_name'] . $newline;
                 }
             }
             //ฟอยล์
             if (!empty($item['foil_color_id'])) {
+                $foil_size_width = $this->convertNumber($item['foil_size_width']);
+                $foil_size_height = $this->convertNumber($item['foil_size_height']);
+
                 $modelFoil = $this->findModelFoilColor($item['foil_color_id']);
                 $modelFoilUnit = $this->findModelUnit($item['foil_size_unit']);
-                $details .= 'ฟอยล์ ขนาด: ' . '&nbsp;' . $item['foil_size_width'] . 'x' . $item['foil_size_height'] . $modelFoilUnit['unit_name'] . '&nbsp;' . $modelFoil['foil_color_name'] . "\n";
+
+                $details .= 'ฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $newline;
             }
             //ปั๊มนูน
-            if (!empty($item['emboss_size_width']) || !empty($item['emboss_size_height']) || !empty($item['emboss_size_unit'])) {
+            if (!empty($item['emboss_size_width']) && !empty($item['emboss_size_height']) && !empty($item['emboss_size_unit'])) {
+
+                $emboss_size_width = $this->convertNumber($item['emboss_size_width']);
+                $emboss_size_height = $this->convertNumber($item['emboss_size_height']);
+
                 $modelEmBossUnit = $this->findModelUnit($item['emboss_size_unit']);
-                $details .= 'ปั๊มนูน : ' . '&nbsp;' . $item['emboss_size_width'] . 'x' . $item['emboss_size_height'] . $modelEmBossUnit['unit_name'] . "\n";
+
+                $details .= 'ปั๊มนูน ขนาด: ' . $nbsp . $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . $newline;
             }
             //แนวตัง/แนวนอน
             if (!empty($item['land_orient'])) {
-                $details .= 'แนวตั้ง/แนวนอน : ' . '&nbsp;' . ($item['land_orient'] === '1' ? 'แนวตั้ง' : 'แนวนอน') . "\n";
+                $details .= 'แนวตั้ง/แนวนอน : ' . $nbsp . ($item['land_orient'] === '1' ? 'แนวตั้ง' : 'แนวนอน') . $newline;
             }
             //เข้าเล่ม
-            if (!empty($item['book_binding_id'])) {
+            if (!empty($item['book_binding_id']) && $item['book_binding_id'] != 'N') {
                 if ($item['book_binding_id'] === 'N') {
-                    $details .= 'เข้าเล่ม : ' . '&nbsp;' . 'ไม่เข้าเล่ม' . "\n";
+                    $details .= 'เข้าเล่ม : ' . $nbsp . 'ไม่เข้าเล่ม' . $newline;
                 } else {
                     $modelBookBinding = $this->findModelBookBinding($item['book_binding_id']);
-                    $details .= 'เข้าเล่ม : ' . '&nbsp;' . $modelBookBinding['book_binding_name'] . "\n";
+                    $details .= 'เข้าเล่ม : ' . $nbsp . $modelBookBinding['book_binding_name'] . $newline;
                 }
             }
             $items[] = [
@@ -271,23 +297,30 @@ class ProductController extends \yii\web\Controller
             ];
             $summary = $summary + $item['final_price'];
         }
-        return $this->renderAjax('invoice', [
-            'model' => $model,
-            'items' => $items,
-            'summary' => $summary
+        return $this->renderAjax('invoice1', [
+                    'model' => $model,
+                    'items' => $items,
+                    'summary' => $summary,
+                    'modelItems' => $modelItems
         ]);
+
+//        return $this->renderAjax('invoice1', [
+//            'model' => $model,
+//            'items' => $items,
+//            'summary' => $summary,
+//            'modelItems' => $modelItems
+//        ]);
     }
 
-    protected function fetchOptions($model, $option)
-    {
+    protected function fetchOptions($model, $option) {
         $attributes = $model->getAttributes();
         $validation = [];
         $requiredOps = [];
         $valueOps = [];
         $labelOps = [];
         foreach ($option as $key => $ops) {
-            $requiredOps[$key] = (int)$ops['required'];
-            $valueOps[$key] = (int)$ops['value'];
+            $requiredOps[$key] = (int) $ops['required'];
+            $valueOps[$key] = (int) $ops['value'];
             $labelOps[$key] = $ops['label'];
         }
         foreach ($attributes as $attribute => $value) {
@@ -317,8 +350,7 @@ class ProductController extends \yii\web\Controller
         ];
     }
 
-    protected function fetchValidate($model, $params, $fetchOptions)
-    {
+    protected function fetchValidate($model, $params, $fetchOptions) {
         $validate = ActiveForm::validate($model);
         $attributes = $model->getAttributes();
         $attrs = ['paper_size_width', 'paper_size_height', 'paper_size_unit'];
@@ -343,6 +375,13 @@ class ProductController extends \yii\web\Controller
             }
         }
         return $validate;
+    }
+
+    public function actionTest($id) {
+        $model = \frontend\modules\app\models\TblProductCategory::findOne(['product_category_id' => $id]);
+        return $this->render('_test_form', [
+                    'model' => $model,
+        ]);
     }
 
 }

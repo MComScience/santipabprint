@@ -257,6 +257,12 @@ CSS
                                         'linkOptions' => ['data-toggle' => 'tab'],
                                         'options' => ['class' => 'tab-page-option2']
                                     ],
+                                    [
+                                        'label' => 'ตัดเป็นตัว/เจาะมุม',
+                                        'url' => '#tab-perforate',
+                                        'linkOptions' => ['data-toggle' => 'tab'],
+                                        'options' => ['class' => 'tab-perforate_id']
+                                    ],
                                 ],
                             ],
                         ],

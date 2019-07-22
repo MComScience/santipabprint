@@ -40,12 +40,15 @@ class TblCatalogSearch extends TblCatalog
      */
     public function search($params)
     {
-        $query = TblCatalog::find();
+        $query = TblCatalog::find()->orderBy('catalog_id DESC');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+             'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
 
         $this->load($params);

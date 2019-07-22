@@ -16,7 +16,7 @@ class Html extends BaseHtml
     public static function btnCancelModal()
     {
         return static::button(Icon::show('close') . 'ยกเลิก', [
-            'class' => 'btn btn-default',
+            'class' => 'btn btn-danger',
             'data-dismiss' => 'modal',
             'data-toggle' => 'tooltip',
             'title' => 'ยกเลิก'

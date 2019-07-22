@@ -1006,8 +1006,8 @@ empty {
     .customerInfoHeader-last.is-active {
         display: block;
     }
-
-@charset "UTF-8";
+/*
+@charset "UTF-8";*/
 
 
 .is-invisible{

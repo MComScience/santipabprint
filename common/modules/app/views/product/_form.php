@@ -115,7 +115,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             </div>
             <div class="col-xs-6 col-sm-3 col-md-3 paper-size-height">
                 <?php
-                echo $form->field($model, 'paper_size_length')->textInput([
+                echo $form->field($model, 'paper_size_height')->textInput([
                     //'type' => 'number',
                     //'min' => 0,
                     'placeholder' => 'ยาว'
@@ -123,9 +123,9 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 ?>
             </div>
            
-            <div class="col-xs-6 col-sm-3 col-md-3 paper-size-height">
+            <div class="col-xs-6 col-sm-3 col-md-3 paper-size-height" style="display: <?= $queryBuilder->isShowInput($option, 'paper_height') ? '' : 'none'; ?>">
                 <?php
-                echo $form->field($model, 'paper_size_height')->textInput([
+                echo $form->field($model, 'paper_height')->textInput([
                     //'type' => 'number',
                     //'min' => 0,
                     'placeholder' => 'สูง'
@@ -136,7 +136,8 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             <div class="col-xs-6 col-sm-3 col-md-3 paper-size-unit">
                 <?php
                 echo $form->field($model, 'paper_size_unit')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(TblUnit::find()->asArray()->all(), 'unit_id', 'unit_name'),
+                   // 'data' => ArrayHelper::map(TblUnit::find()->asArray()->all(), 'unit_id', 'unit_name'),
+                    'data' => ArrayHelper::map(TblUnit::find()->where(['unit_id' => [2,3]])->asArray()->all(), 'unit_id', 'unit_name'),
                     'options' => ['placeholder' => 'เลือกหน่วย'],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -310,18 +311,59 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 echo $form->field($model, 'diecut_id')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getDiecutOption(),
                     'options' => ['placeholder' => 'เลือกไดคัท'],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'templateResult' => new JsExpression('format'),
-                        'templateSelection' => new JsExpression('format'),
-                        'escapeMarkup' => $escape,
-                    ],
+//                    'pluginOptions' => [
+//                        'allowClear' => true,
+//                        'templateResult' => new JsExpression('format'),
+//                        'templateSelection' => new JsExpression('format'),
+//                        'escapeMarkup' => $escape,
+//                    ],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
                 ])->label($queryBuilder->getInputLabel($option, 'diecut_id', $model));
                 ?>
             </div>
         </div>
+        
+        <!-- ตัดเป็นตัว/เจาะ -->
+        <span class="label label-option" style="display: <?= $queryBuilder->isShowInput($option, 'perforate') ? '' : 'none'; ?>" >
+            <?= Icon::show('angle-double-down') . 'ตัดเป็นตัว/เจาะ' . Icon::show('angle-double-down') ?>
+        </span>
+        <div class="row" style="display: <?= $queryBuilder->isShowInput($option, 'perforate') ? '' : 'none'; ?>">
+              <div class="col-xs-6 col-sm-6 col-md-6 coating-id">
+                    <?php
+                        echo $form->field($model, 'perforate')->widget(Select2::classname(), [
+                    'data' => [
+                        0 => 'ตัดเป็นตัวอย่างเดียว',
+                        1 => 'ตัดเป็นตัว + เจาะรูกลม'
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                    'options' => ['placeholder' => 'เลือก'],
+                    'theme' => Select2::THEME_BOOTSTRAP,
+                    'size' => Select2::MEDIUM,
+                ])->label(false);
+                ?>
+             </div>
+        </div>
+         <div class="row perforate-option" style="display: none">
+            <div class="col-xs-6 col-sm-6 col-md-6 perforate-option">
+                    <?php
+                    echo $form->field($model, 'perforate_option_id')->widget(Select2::classname(), [
+                        'data' => $queryBuilder->getPerforateOption(),
+                        'options' => ['placeholder' => 'เลือกมุมเจาะ'],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'templateResult' => new JsExpression('format'),
+                            'templateSelection' => new JsExpression('format'),
+                            'escapeMarkup' => $escape,
+                        ],
+                        'theme' => Select2::THEME_BOOTSTRAP,
+                        'size' => Select2::MEDIUM,
+                    ])->label($queryBuilder->getInputLabel($option, 'perforate_option_id', $model));
+                    ?>
+            </div>
+         </div>
         <!-- วิธีพับ -->
         <span class="label label-option"
               style="display: <?= $queryBuilder->isShowInput($option, 'fold_id') ? '' : 'none'; ?>">
@@ -373,7 +415,8 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             <div class="col-xs-6 col-sm-3 col-md-3 foil-size-unit">
                 <?php
                 echo $form->field($model, 'foil_size_unit')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(TblUnit::find()->asArray()->all(), 'unit_id', 'unit_name'),
+                    //'data' => ArrayHelper::map(TblUnit::find()->asArray()->all(), 'unit_id', 'unit_name'),
+                    'data' => ArrayHelper::map(TblUnit::find()->where(['unit_id' => [2,3]])->asArray()->all(), 'unit_id', 'unit_name'),
                     'options' => ['placeholder' => 'เลือกหน่วย'],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -428,17 +471,45 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             <div class="col-xs-6 col-sm-3 col-md-3 emboss-size-unit">
                 <?php
                 echo $form->field($model, 'emboss_size_unit')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(TblUnit::find()->asArray()->all(), 'unit_id', 'unit_name'),
+                  //  'data' => ArrayHelper::map(TblUnit::find()->asArray()->all(), 'unit_id', 'unit_name'),
+                    'data' => ArrayHelper::map(TblUnit::find()->where(['unit_id' => [2,3]])->asArray()->all(), 'unit_id', 'unit_name'),
                     'options' => ['placeholder' => 'เลือกหน่วย'],
                     'pluginOptions' => [
                         'allowClear' => true,
                     ],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
-                ])->label($queryBuilder->getInputLabel($option, 'emboss_size_unit', $model));
+                ])->label('หน่วย(ปั๊มนูน)');/*($queryBuilder->getInputLabel($option, 'emboss_size_unit', $model));*/
                 ?>
             </div>
         </div>
+        <!-- ปะกาว  -->
+            <!--------ปะกาวจะไม่แสดงข้อมูลหน้า web เนื่องจากมีการบังคับให้เลือก auto เลย จากหน้าตั้งค่าสินค้า ลูกค้าจะไม่สามารถเลือกเองได้---> 
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 glue"
+                 style="display: <?= $queryBuilder->isShowInput($option, 'glue') ? '' : 'none'; ?>">
+                <?php
+                $model->glue = $queryBuilder->isShowInput($option, 'glue') ? 1 : 0;
+                echo $form->field($model, 'glue')->radioList([
+                    0 => 'No',
+                    1 => 'Yes'
+                ], [
+                    'inline' => true,
+                    'item' => function ($index, $label, $name, $checked, $value) use ($model) {
+                        $radio = Html::beginTag('div', ['class' => 'radio inline-block hidden']) .
+                            Html::beginTag('label', ['class' => 'radio-inline']) .
+                            Html::radio($name, $checked, ['value' => $value, 'id' => Html::getInputId($model, 'glue').'-'.$index]) .
+                            Html::tag('span', Icon::show('circle', ['class' => 'cr-icon']), ['class' => 'cr']) .
+                            ucwords($label) .
+                            Html::endTag('label') .
+                            Html::endTag('div');
+                        return $radio;
+                    }
+                ])->label(false);
+                ?>
+            </div>
+        </div>
+        
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <?= Html::activeHiddenInput($model, 'quotation_id'); ?>

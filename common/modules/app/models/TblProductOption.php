@@ -37,7 +37,7 @@ class TblProductOption extends \yii\db\ActiveRecord
     {
         return [
             [['product_id'], 'required'],
-            [['paper_size_option', 'before_printing', 'after_printing', 'paper_option', 'coating_option', 'diecut_option', 'fold_option', 'foil_color_option', 'book_binding_option', 'two_page_option', 'one_page_option'], 'safe'],
+            [['paper_size_option', 'before_printing', 'after_printing', 'paper_option', 'coating_option', 'diecut_option', 'fold_option', 'foil_color_option', 'book_binding_option', 'two_page_option', 'one_page_option','perforate_option'], 'safe'],
             [['product_id'], 'string', 'max' => 100],
             [['product_id'], 'unique'],
         ];
@@ -61,6 +61,7 @@ class TblProductOption extends \yii\db\ActiveRecord
             'book_binding_option' => Yii::t('app', 'วิธีเข้าเล่ม'),
             'two_page_option' => Yii::t('app', 'พิมพ์หน้าหลัง'),
             'one_page_option' => Yii::t('app', 'พิมพ์หน้าเดียว'),
+            'perforate_option' => Yii::t('app', 'รูปแบบ tag/ที่คั่นหนังสือ'),
         ];
     }
 }

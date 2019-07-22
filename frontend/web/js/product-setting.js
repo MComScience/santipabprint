@@ -14,7 +14,8 @@
             dieCutKeys = $('#grid-diecut').yiiGridView('getSelectedRows'),
             foldKeys = $('#grid-fold').yiiGridView('getSelectedRows'),
             foilColorKeys = $('#grid-foil-color').yiiGridView('getSelectedRows'),
-            bookBindingKeys = $('#grid-book-binding').yiiGridView('getSelectedRows');
+            bookBindingKeys = $('#grid-book-binding').yiiGridView('getSelectedRows'),
+            perforateKeys = $('#grid-perforate').yiiGridView('getSelectedRows');
         //var data = \$form.serialize();
         var formData = {};
         $form.serializeArray().map(function (x) {
@@ -33,7 +34,8 @@
                 dieCutKeys: dieCutKeys,
                 foldKeys: foldKeys,
                 foilColorKeys: foilColorKeys,
-                bookBindingKeys: bookBindingKeys
+                bookBindingKeys: bookBindingKeys,
+                perforateKeys: perforateKeys
             }),
             success: function (response) {
                 // Implement successful

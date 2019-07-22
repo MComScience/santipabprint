@@ -87,11 +87,11 @@ SweetAlert2Asset::register($this);
 
             <div class="form-group text-right">
                 <div class="col-sm-12">
-                    <?= Html::a(Icon::show('close') . 'กลับ', ['index'], [
-                        'class' => 'btn btn-default',
+                    <?= Html::a(Icon::show('close') . 'ยกเลิก', ['index'], [
+                        'class' => 'btn btn-danger',
                     ]) ?>
                     <?= Html::submitButton(Icon::show('save') . 'บันทึก', [
-                        'class' => 'btn btn-primary'
+                        'class' => 'btn btn-success'
                     ]) ?>
                 </div>
             </div>

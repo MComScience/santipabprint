@@ -60,6 +60,7 @@ class TblQuotation extends \yii\db\ActiveRecord
             [['quotation_id'], 'string', 'max' => 100],
             [['quotation_customer_name', 'quotation_customer_address'], 'string', 'max' => 255],
             [['quotation_customer_tel'], 'string', 'max' => 10],
+            [['quotation_customer_fax'], 'string', 'max' => 20],
             [['quotation_customer_email'], 'string', 'max' => 50],
             ['quotation_customer_email', 'email'],
             [['quotation_id'], 'unique'],
@@ -79,6 +80,7 @@ class TblQuotation extends \yii\db\ActiveRecord
             'quotation_customer_tel' => Yii::t('app', 'เบอร์โทร'),
             'created_at' => Yii::t('app', 'วันที่บันทึก'),
             'updated_at' => Yii::t('app', 'วันที่แก้ไข'),
+            'quotation_customer_fax' => Yii::t('app', 'แฟกซ์')
         ];
     }
 }

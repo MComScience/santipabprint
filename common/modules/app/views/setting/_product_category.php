@@ -64,8 +64,38 @@ $this->params['breadcrumbs'][] = $this->title;
             'tableOptions' => ['class' => 'small kv-table'],
             'columns' => [
                 ['class' => '\kartik\grid\SerialColumn'],
-                'product_category_id',
-                'product_category_name',
+                [
+                    'class' => 'kartik\grid\ExpandRowColumn',
+                    'width' => '50px',
+                    'value' => function ($model, $key, $index, $column) {
+                        return GridView::ROW_COLLAPSED;
+                    },
+                    'detailUrl' => Url::to(['product-category-detail']),
+                    'headerOptions' => ['class' => 'kartik-sheet-style'],
+                    'expandOneOnly' => true
+                ],
+                [
+                    'attribute' => 'product_category_id',
+                    'label' => 'รหัส',
+                    'hAlign' => 'center',
+                    'vAlign' => 'middle',
+                    'headerOptions' => [
+                        'style' => 'text-align:center;',
+                    ],
+                    'format' => 'raw',
+                    'width' => '15%',
+                ],
+                [
+                    'attribute' => 'product_category_name',
+                    'label' => 'ชื่อหมวดหมู่',
+                    'hAlign' => 'center',
+                    'vAlign' => 'middle',
+                    'headerOptions' => [
+                        'style' => 'text-align:center;',
+                    ],
+                    'format' => 'raw',
+                    'width' => '15%',
+                ],
                 [
                     'class' => '\kartik\grid\ActionColumn',
                     'noWrap' => true,

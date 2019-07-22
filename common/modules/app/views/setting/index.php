@@ -14,6 +14,8 @@ use common\modules\app\models\TblBookBinding;
 use common\modules\app\models\TblColorPrinting;
 use common\modules\app\models\TblProductCategory;
 use common\modules\app\models\TblProduct;
+use common\modules\app\models\TblPerforate;
+use common\modules\app\models\TblPackageType;
 
 $options = [
     [
@@ -83,11 +85,24 @@ $options = [
         'count' => TblProductCategory::find()->count()
     ],
     [
+        'text' => 'เจาะมุม',
+        'url' => ['perforate'],
+        'action' => 'perforate',
+        'count' => TblPerforate::find()->count()
+    ],
+    [
         'text' => 'สินค้า',
         'url' => ['product'],
         'action' => 'product',
         'count' => TblProduct::find()->count()
     ],
+    //ใช้ร่วมกันกับหมวดหมู่
+//    [
+//        'text' => 'ประเภทสินค้า',
+//        'url' => ['package-type'],
+//        'action' => 'package-type',
+//        'count' => TblPackageType::find()->count()
+//    ],
 ];
 $action = Yii::$app->controller->action->id;
 ?>

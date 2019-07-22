@@ -13,7 +13,7 @@ use dominus77\sweetalert2\assets\SweetAlert2Asset;
 
 SweetAlert2Asset::register($this);
 
-$this->title = 'รูปแบบ tag/ที่คั่นหนังสือ';
+$this->title = 'รูปแบบการเจาะมุม';
 $this->params['breadcrumbs'][] = ['label' => 'ตั้งค่า', 'url' => ['/app/setting/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

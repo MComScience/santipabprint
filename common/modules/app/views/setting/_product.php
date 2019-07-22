@@ -71,7 +71,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'tableOptions' => ['class' => 'small kv-table'],
             'columns' => [
                 ['class' => '\kartik\grid\SerialColumn'],
-                'product_id',
+                [
+                  'attribute' => 'product_id'
+                ],
                 [
                     'attribute' => 'icon',
                     'value' => function($model){
@@ -87,7 +89,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'group' => true,
                 ],
-                'product_name',
+                [
+                    'attribute' => 'package_type_id',
+                    'value' => function($model, $key, $index){
+                        return !empty($model->packageType) ? $model->packageType->package_type_name : '';
+                    },
+                    'group' => false,
+                ],
+                [
+                    'attribute' => 'product_name',
+                ],
                 [
                     'class' => '\kartik\grid\ActionColumn',
                     'noWrap' => true,

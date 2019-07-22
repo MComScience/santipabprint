@@ -53,6 +53,16 @@ use kartik\icons\Icon;
         </div>
     </div>
     <div class="row">
+        <div class="col-sm-6">
+            <?= $form->field($model, 'quotation_customer_fax')->textInput([
+                'type' => 'fax',
+                'maxlength' => true,
+                'autocomplete' => 'off',
+                'placeholder' => $model->getAttributeLabel('quotation_customer_fax'),
+            ]) ?>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12 text-right">
             <?= Html::button(Icon::show('close') . 'ยกเลิก', ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) ?>
             <?= Html::submitButton(Icon::show('print') . 'ใบเสนอราคา', ['class' => 'btn btn-info', 'data-loading-text' => 'Loading...']) ?>
@@ -96,6 +106,7 @@ var \$formQuo = $('#form-quotation');
         url: \$form.attr('action'),
         type: \$form.attr('method'),
         data: $.extend(dataObj, dataQO, {final_price: final_price}),
+        dataType:'JSON',
         success: function (response) {
             // Implement successful
             \$btn.button('reset');
