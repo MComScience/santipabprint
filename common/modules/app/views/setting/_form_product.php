@@ -1,21 +1,24 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Tanakorn
  * Date: 20/1/2562
  * Time: 20:40
  */
-
 use kartik\form\ActiveForm;
 use adminlte\helpers\Html;
 use kartik\icons\Icon;
 use yii\web\JsExpression;
 use trntv\filekit\widget\Upload;
 use kartik\widgets\Select2;
+use kartik\depdrop\DepDrop;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Tabs;
 use common\modules\app\models\TblProductCategory;
+use common\modules\app\models\TblPackageType;
 use dominus77\sweetalert2\assets\SweetAlert2Asset;
+use yii\helpers\Url;
 
 SweetAlert2Asset::register($this);
 
@@ -62,38 +65,59 @@ CSS
     <div class="box-body">
         <div class="row">
             <div class="col-sm-5">
-                <?= $form->field($model, 'icon')->widget(Upload::classname(), [
+                <?=
+                $form->field($model, 'icon')->widget(Upload::classname(), [
                     'url' => ['upload-icon'],
                     'acceptFileTypes' => new JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
                     'id' => 'product-icon'
-                ]); ?>
+                ]);
+                ?>
             </div>
             <div class="col-sm-7">
-                <?= $form->field($model, 'files')->widget(Upload::className(), [
+                <?=
+                $form->field($model, 'files')->widget(Upload::className(), [
                     'url' => ['upload-file'],
                     'maxFileSize' => 100 * 1024 * 1024, // 10 MiB
                     'maxNumberOfFiles' => 20,
                     //'sortable' => true,
                     'acceptFileTypes' => new \yii\web\JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
                     'id' => 'files-uploads'
-                ])->hint('<span class="text-danger">**ขนาดไฟล์: ไม่เกิน 10MB/ไฟล์</span> ,ชนิดไฟล์: gif, jpeg, png')->label('ภาพตัวอย่างสินค้า'); ?>
+                ])->hint('<span class="text-danger">**ขนาดไฟล์: ไม่เกิน 10MB/ไฟล์</span> ,ชนิดไฟล์: gif, jpeg, png')->label('ภาพตัวอย่างสินค้า');
+                ?>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6 col-sm-12">
-                <?= $form->field($model, 'product_category_id')->widget(Select2::classname(), [
+                <?=
+                $form->field($model, 'product_category_id')->widget(Select2::classname(), [
                     'data' => ArrayHelper::map(TblProductCategory::find()->asArray()->all(), 'product_category_id', 'product_category_name'),
                     'options' => ['placeholder' => 'เลือกหมวดหมู่'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
                     'theme' => Select2::THEME_BOOTSTRAP,
-                ]); ?>
+                ]);
+                ?>
+                <?=
+                $form->field($model, 'package_type_id')->widget(DepDrop::classname(), [
+                    'data' => ArrayHelper::map(TblPackageType::find()->where(['product_category_id' => $model['product_category_id']])->asArray()->all(), 'package_type_id', 'package_type_name'),
+                    'pluginOptions' => [
+                        'depends' => ['tblproduct-product_category_id'],
+                        'placeholder' => 'Select...',
+                        'url' => Url::to(['/app/setting/sub-product-category'])
+                    ],
+                    'type' => DepDrop::TYPE_SELECT2,
+                    'options' => ['placeholder' => 'Select ...'],
+                    'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                ])->label('ประเภทสินค้า');
+                ?>
 
-                <?= $form->field($model, 'product_name')->textInput([
+                <?=
+                $form->field($model, 'product_name')->textInput([
                     'maxlength' => true,
                     'placeholder' => 'ชื่อสินค้า'
-                ]) ?>
+                ])
+                ?>
                 <p>
                     <span class="badge badge-primary">กำหนดตัวเลือก</span>
                 </p>
@@ -104,6 +128,7 @@ CSS
                         </em>
 
                     </small>
+                </p>
                 <ul class="list-unstyled">
                     <li>
                         <ul>
@@ -113,13 +138,15 @@ CSS
                         </ul>
                     </li>
                 </ul>
-                </p>
+         
                 <?php foreach ($attributes as $attr => $item): ?>
                     <div class="row">
                         <div class="col-md-4">
-                            <?php if ($attr === 'land_orient') {
+                            <?php
+                            if ($attr === 'land_orient') {
                                 echo Html::tag('p', Html::tag('code', 'สำหรับปฏิทิน'));
-                            } ?>
+                            }
+                            ?>
                             <div class="checkbox">
                                 <label for="<?= "options-$attr-value"; ?>">
                                     <?php
@@ -138,9 +165,11 @@ CSS
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <?php if (ArrayHelper::isIn($attr, ['land_orient'])) {
+                            <?php
+                            if (ArrayHelper::isIn($attr, ['land_orient'])) {
                                 echo '<br>';
-                            } ?>
+                            }
+                            ?>
                             <?php
                             echo Html::input('text', "Options[$attr][label]", $model->getOptionValue($attr, 'label', $modelOption->getAttributeLabel($attr)), [
                                 'class' => 'form-control'
@@ -148,9 +177,11 @@ CSS
                             ?>
                         </div>
                         <div class="col-md-4">
-                            <?php if (ArrayHelper::isIn($attr, ['land_orient'])) {
+                            <?php
+                            if (ArrayHelper::isIn($attr, ['land_orient'])) {
                                 echo '<br>';
-                            } ?>
+                            }
+                            ?>
                             <div class="checkbox">
                                 <label for="<?= "options-$attr-required"; ?>">
                                     <?php
@@ -159,7 +190,8 @@ CSS
                                     echo Html::checkbox("Options[$attr][required]", (empty($value) ? false : true), [
                                         'value' => empty($value) ? 1 : $value,
                                         'id' => "options-$attr-required"
-                                    ]) ?>
+                                    ])
+                                    ?>
                                     <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
                                     <?= $modelOption->getAttributeLabel('required') ?>
                                 </label>
@@ -172,11 +204,13 @@ CSS
                 <?php endforeach; ?>
             </div>
             <div class="col-sm-6 col-sm-12">
-                <?= $form->field($model, 'product_description')->widget(\yii\redactor\widgets\Redactor::className(), [
+                <?=
+                $form->field($model, 'product_description')->widget(\yii\redactor\widgets\Redactor::className(), [
                     'clientOptions' => [
                         'plugins' => ['clips', 'fontcolor', 'imagemanager']
                     ]
-                ]) ?>
+                ])
+                ?>
                 <p>
                     <span class="badge badge-primary">
                         ข้อมูลทั่วไป
@@ -245,20 +279,20 @@ CSS
                                         'linkOptions' => ['data-toggle' => 'tab'],
                                         'options' => ['class' => 'tab-book_binding_id']
                                     ],
-                                    [
-                                        'label' => 'พิมพ์หน้าหลัง',
-                                        'url' => '#tab-page-option1',
-                                        'linkOptions' => ['data-toggle' => 'tab'],
-                                        'options' => ['class' => 'tab-page-option1']
-                                    ],
-                                    [
-                                        'label' => 'พิมพ์หน้าเดียว',
-                                        'url' => '#tab-page-option2',
-                                        'linkOptions' => ['data-toggle' => 'tab'],
-                                        'options' => ['class' => 'tab-page-option2']
-                                    ],
-                                    [
-                                        'label' => 'ตัดเป็นตัว/เจาะมุม',
+//                                    [
+//                                        'label' => 'พิมพ์หน้าหลัง',
+//                                        'url' => '#tab-page-option1',
+//                                        'linkOptions' => ['data-toggle' => 'tab'],
+//                                        'options' => ['class' => 'tab-page-option1']
+//                                    ],
+//                                    [
+//                                        'label' => 'พิมพ์หน้าเดียว',
+//                                        'url' => '#tab-page-option2',
+//                                        'linkOptions' => ['data-toggle' => 'tab'],
+//                                        'options' => ['class' => 'tab-page-option2']
+//                                    ],
+                                        [
+                                        'label' => 'รูปแบบการเจาะมุม',
                                         'url' => '#tab-perforate',
                                         'linkOptions' => ['data-toggle' => 'tab'],
                                         'options' => ['class' => 'tab-perforate_id']
@@ -270,10 +304,12 @@ CSS
                         'encodeLabels' => false,
                     ]);
                     ?>
-                    <?= $this->render('_tab_content', [
+                    <?=
+                    $this->render('_tab_content', [
                         'modelProduct' => $model,
                         'gridBuilder' => $gridBuilder
-                    ]); ?>
+                    ]);
+                    ?>
                 </div>
             </div>
         </div>
@@ -290,12 +326,16 @@ CSS
     <div class="box-footer">
         <div class="row">
             <div class="col-sm-12 text-right">
-                <?= Html::a(Icon::show('close') . 'กลับ', ['product'], [
-                    'class' => 'btn btn-default',
-                ]) ?>
-                <?= Html::submitButton(Icon::show('save') . 'บันทึก', [
-                    'class' => 'btn btn-primary'
-                ]) ?>
+                <?=
+                Html::a(Icon::show('close') . 'ยกเลิก', ['product'], [
+                    'class' => 'btn btn-danger',
+                ])
+                ?>
+                <?=
+                Html::submitButton(Icon::show('save') . 'บันทึก', [
+                    'class' => 'btn btn-success'
+                ])
+                ?>
             </div>
         </div>
     </div>
@@ -304,7 +344,6 @@ CSS
 
 <?php
 $this->registerJsFile(
-    '@web/js/product-setting.js',
-    ['depends' => [\yii\web\JqueryAsset::className()]]
+        '@web/js/product-setting.js', ['depends' => [\yii\web\JqueryAsset::className()]]
 );
 ?>
