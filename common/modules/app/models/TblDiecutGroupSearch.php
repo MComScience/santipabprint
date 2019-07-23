@@ -39,7 +39,7 @@ class TblDiecutGroupSearch extends TblDiecutGroup
      */
     public function search($params)
     {
-        $query = TblDiecutGroup::find();
+        $query = TblDiecutGroup::find()->orderBy('diecut_group_id DESC');
 
         // add conditions that should always apply here
 
