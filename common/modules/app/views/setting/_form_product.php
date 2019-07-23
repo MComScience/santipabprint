@@ -63,29 +63,37 @@ CSS
     </div>
     <!-- /.box-header -->
     <div class="box-body">
-        <div class="row">
-            <div class="col-sm-5">
-                <?=
-                $form->field($model, 'icon')->widget(Upload::classname(), [
-                    'url' => ['upload-icon'],
-                    'acceptFileTypes' => new JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
-                    'id' => 'product-icon'
-                ]);
-                ?>
-            </div>
-            <div class="col-sm-7">
-                <?=
-                $form->field($model, 'files')->widget(Upload::className(), [
-                    'url' => ['upload-file'],
-                    'maxFileSize' => 100 * 1024 * 1024, // 10 MiB
-                    'maxNumberOfFiles' => 20,
-                    //'sortable' => true,
-                    'acceptFileTypes' => new \yii\web\JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
-                    'id' => 'files-uploads'
-                ])->hint('<span class="text-danger">**ขนาดไฟล์: ไม่เกิน 10MB/ไฟล์</span> ,ชนิดไฟล์: gif, jpeg, png')->label('ภาพตัวอย่างสินค้า');
-                ?>
-            </div>
-        </div>
+        
+        <div class="col-sm-4 col-sm-offset-4">
+            <?=
+            $form->field($model, 'icon')->widget(Upload::classname(), [
+                'url' => ['upload-icon'],
+                'maxFileSize' => 100 * 1024 * 1024, // 10 MiB
+                'maxNumberOfFiles' => 20,
+                'acceptFileTypes' => new JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
+                'id' => 'product-icon'
+            ])->hint('<span class="text-danger">**ขนาดไฟล์: ไม่เกิน 10MB/ไฟล์</span> ,ชนิดไฟล์: gif, jpeg, png')->label('ภาพตัวอย่างสินค้า');
+            ?>
+        </div> 
+        <?php /*
+          <div class="row">
+
+          <div class="col-sm-7">
+          <?=
+          $form->field($model, 'files')->widget(Upload::className(), [
+          'url' => ['upload-file'],
+          'maxFileSize' => 100 * 1024 * 1024, // 10 MiB
+          'maxNumberOfFiles' => 20,
+          //'sortable' => true,
+          'acceptFileTypes' => new \yii\web\JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
+          'id' => 'files-uploads'
+          ])->hint('<span class="text-danger">**ขนาดไฟล์: ไม่เกิน 10MB/ไฟล์</span> ,ชนิดไฟล์: gif, jpeg, png')->label('ภาพตัวอย่างสินค้า');
+          ?>
+          </div>
+
+
+          </div>
+         */ ?>
         <div class="row">
             <div class="col-sm-6 col-sm-12">
                 <?=
@@ -138,7 +146,7 @@ CSS
                         </ul>
                     </li>
                 </ul>
-         
+
                 <?php foreach ($attributes as $attr => $item): ?>
                     <div class="row">
                         <div class="col-md-4">
@@ -291,7 +299,7 @@ CSS
 //                                        'linkOptions' => ['data-toggle' => 'tab'],
 //                                        'options' => ['class' => 'tab-page-option2']
 //                                    ],
-                                        [
+                                    [
                                         'label' => 'รูปแบบการเจาะมุม',
                                         'url' => '#tab-perforate',
                                         'linkOptions' => ['data-toggle' => 'tab'],

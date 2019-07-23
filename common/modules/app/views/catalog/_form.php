@@ -35,7 +35,7 @@ SweetAlert2Asset::register($this);
                     'url' => ['upload-icon'],
                     'acceptFileTypes' => new JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
                     'id' => 'image-preview'
-                ])->label('ภาพสินค้า'); 
+                ])->hint('<span class="text-danger">**ขนาดไฟล์: ไม่เกิน 10MB/ไฟล์</span> ,ชนิดไฟล์: gif, jpeg, png')->label('ภาพสินค้า'); 
                 ?>
             </div>
 
