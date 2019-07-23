@@ -45,7 +45,7 @@ class TblPaperSize extends \yii\db\ActiveRecord
         return [
             [['paper_size_name'], 'required'],
             [['paper_unit_id'], 'integer'],
-            [['paper_size_width','paper_size_length', 'paper_size_height'], 'number'],
+            [['paper_size_width','paper_size_height'], 'number'],
             [['paper_size_id'], 'string', 'max' => 100],
             [['paper_size_name', 'paper_size_description'], 'string', 'max' => 255],
             [['paper_size_id'], 'unique'],
@@ -62,8 +62,7 @@ class TblPaperSize extends \yii\db\ActiveRecord
             'paper_size_name' => Yii::t('app', 'ชื่อขนาด'),
             'paper_size_description' => Yii::t('app', 'รายละเอียด'),
             'paper_size_width' => Yii::t('app', 'ความกว้าง'),
-            'paper_size_length' => Yii::t('app', 'ความยาว'),
-            'paper_size_height' => Yii::t('app', 'ความสูง'),
+            'paper_size_height' => Yii::t('app', 'ความยาว'),
             'paper_unit_id' => Yii::t('app', 'หน่วย'),
         ];
     }
