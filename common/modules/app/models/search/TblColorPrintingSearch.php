@@ -39,7 +39,7 @@ class TblColorPrintingSearch extends TblColorPrinting
      */
     public function search($params)
     {
-        $query = TblColorPrinting::find();
+        $query = TblColorPrinting::find()->orderBy('color_printing_id DESC');
 
         // add conditions that should always apply here
 

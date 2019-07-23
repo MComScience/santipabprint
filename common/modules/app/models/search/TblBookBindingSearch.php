@@ -39,7 +39,7 @@ class TblBookBindingSearch extends TblBookBinding
      */
     public function search($params)
     {
-        $query = TblBookBinding::find();
+        $query = TblBookBinding::find()->orderBy('book_binding_id DESC');
 
         // add conditions that should always apply here
 
