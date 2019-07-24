@@ -40,7 +40,7 @@ class TblPaperSizeSearch extends TblPaperSize
      */
     public function search($params)
     {
-        $query = TblPaperSize::find();
+        $query = TblPaperSize::find()->orderBy('paper_size_id DESC');
 
         // add conditions that should always apply here
 
