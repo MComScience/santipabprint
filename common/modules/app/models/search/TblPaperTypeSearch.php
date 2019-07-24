@@ -39,7 +39,7 @@ class TblPaperTypeSearch extends TblPaperType
      */
     public function search($params)
     {
-        $query = TblPaperType::find()->orderBy('catalog_id DESC');
+        $query = TblPaperType::find()->orderBy('paper_type_id DESC');
 
         // add conditions that should always apply here
 
