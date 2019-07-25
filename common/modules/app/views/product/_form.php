@@ -397,7 +397,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     //'type' => 'number',
                     //'min' => 0,
                     'placeholder' => 'กว้าง'
-                ])->label($queryBuilder->getInputLabel($option, 'foil_size_width', $model));
+                ])->label('กว้าง');
                 ?>
             </div>
             <div class="col-xs-6 col-sm-3 col-md-3 foil-size-height">
@@ -406,7 +406,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     //'type' => 'number',
                     //'min' => 0,
                     'placeholder' => 'ยาว'
-                ])->label($queryBuilder->getInputLabel($option, 'foil_size_height', $model));
+                ])->label('ยาว');
                 ?>
             </div>
             <div class="col-xs-6 col-sm-3 col-md-3 foil-size-unit">
@@ -420,7 +420,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     ],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
-                ])->label($queryBuilder->getInputLabel($option, 'foil_size_unit', $model));
+                ])->label('หน่วย');
                 ?>
             </div>
             <div class="col-xs-6 col-sm-3 col-md-3 foil-color-id">
@@ -453,7 +453,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     //'type' => 'number',
                     //'min' => 0,
                     'placeholder' => 'กว้าง'
-                ])->label($queryBuilder->getInputLabel($option, 'emboss_size_width', $model));
+                ])->label('กว้าง');
                 ?>
             </div>
             <div class="col-xs-6 col-sm-3 col-md-3 emboss-size-height">
@@ -462,7 +462,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     //'type' => 'number',
                     //'min' => 0,
                     'placeholder' => 'ยาว'
-                ])->label($queryBuilder->getInputLabel($option, 'emboss_size_height', $model));
+                ])->label('ยาว');
                 ?>
             </div>
             <div class="col-xs-6 col-sm-3 col-md-3 emboss-size-unit">
@@ -476,7 +476,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     ],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
-                ])->label($queryBuilder->getInputLabel($option, 'emboss_size_unit', $model));/*($queryBuilder->getInputLabel($option, 'emboss_size_unit', $model));*/
+                ])->label('หน่วย');/*($queryBuilder->getInputLabel($option, 'emboss_size_unit', $model));*/
                 ?>
             </div>
         </div>
