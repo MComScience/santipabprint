@@ -81,6 +81,12 @@ return [
                     'clientSecret' => 'a5b6a3136ae0eb30009c3612dcfbb578',
                     'returnUrl' => 'https://santipab.info/user/security/auth?authclient=line'
                 ],
+                'doh' => [
+                    'class' => 'common\components\DohClient',
+                    'clientId' => '107ab872a61892ac6e7c1a3c80e89ceac52d894c',
+                    'clientSecret' => '467841be3a3805a5a13a4aaad53ac22247e97744',
+                    'returnUrl' => 'http://santipab.local/user/security/auth?authclient=doh'
+                ],
             ],
         ],
         'slugUrl' => [
@@ -95,7 +101,7 @@ return [
             'class' => 'trntv\glide\components\Glide',
             'sourcePath' => '@webroot',
             'cachePath' => '@runtime/glide',
-            'signKey' => '4XBqD5icTH/ST9HVgOSfhr+kssBGFi5GE3RI84n/DE6WqfB/rd/twPdLxo+yAnv6BJ92OqCxr7sjhqzw9rIiXg==' // "false" if you do not want to use HTTP signatures
+            'signKey' => false//'4XBqD5icTH/ST9HVgOSfhr+kssBGFi5GE3RI84n/DE6WqfB/rd/twPdLxo+yAnv6BJ92OqCxr7sjhqzw9rIiXg==' // "false" if you do not want to use HTTP signatures
         ],
     ],
     'as access' => [
