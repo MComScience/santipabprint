@@ -1171,7 +1171,7 @@ class SettingController extends \yii\web\Controller
                 $valid = $model->validate();
                 $valid = DynamicModel::validateMultiple($modelsPackageTypes) && $valid;
                 if ($valid) {
-                    $transaction = TblProductCategory::getDb()->beginTransaction();
+                    $transaction = \Yii::$app->db->beginTransaction();
                     try {
                         if ($model->save(false)) {
                             foreach ($modelsPackageTypes as $modelsPackageType) {
