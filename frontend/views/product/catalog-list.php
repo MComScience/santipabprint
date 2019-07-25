@@ -21,9 +21,9 @@ foreach ($css as $css_path) {
         ],
     ]);
 }
-$i = 0;
+/* $i = 0;
 $x = 0;
-$count = count($categorys);
+$count = count($categorys); */
 
 $this->registerCss(<<<CSS
 .lds-dual-ring {

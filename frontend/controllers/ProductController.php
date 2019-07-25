@@ -1079,7 +1079,7 @@ class ProductController extends \yii\web\Controller {
 
     public function actionCatalogList() {
         //หมวดหมู่
-        $categorys = TblProductCategory::find()->all();
+        //$categorys = TblProductCategory::find()->all();
         /* //สินค้าทั้งหมด
           $allProducts = \common\modules\app\models\TblProduct::find()->all();
           $productGroups = [];
@@ -1091,7 +1091,7 @@ class ProductController extends \yii\web\Controller {
           ];
           } */
         return $this->render('catalog-list', [
-                    'categorys' => $categorys,
+                    //'categorys' => $categorys,
                         //'allProducts' => $allProducts,
                         //'productGroups' => $productGroups
         ]);
