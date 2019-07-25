@@ -57,7 +57,8 @@ class ProductController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        $catagorys = TblProductCategory::find()->all();
+        return $this->render('index', []);
+        /* $catagorys = TblProductCategory::find()->all();
         $itemCatagorys = [];
         foreach ($catagorys as $key => $catagory) {
             $itemCatagorys[] = [
@@ -68,7 +69,7 @@ class ProductController extends \yii\web\Controller
         }
         return $this->render('index', [
             'catagorys' => $itemCatagorys
-        ]);
+        ]); */
         /* //หมวดหมู่
     $categorys = TblProductCategory::find()->all();
     //สินค้าทั้งหมด

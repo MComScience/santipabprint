@@ -115,7 +115,8 @@ return [
             'webhook/*',
             'product/*',
             'app/product/*',
-            'glide/*'
+            'glide/*',
+            'app/api/*'
         ]
     ],
     'params' => $params,
