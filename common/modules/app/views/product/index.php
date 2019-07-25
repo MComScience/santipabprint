@@ -132,7 +132,7 @@ $this->registerJsFile(
 
 $this->registerJs(<<<JS
 $(window).on("load", function (e) {
-    $('#loading').hide()
+    // $('#loading').hide()
     $('#app').removeClass('hidden')
 })
 JS

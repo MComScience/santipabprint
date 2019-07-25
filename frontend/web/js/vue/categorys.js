@@ -61,8 +61,10 @@ new Vue({
         .then(response => {
           // handle success
           this.categorys = response.data;
+          $("#loading").hide();
         })
         .catch(error => {
+          $("#loading").hide();
           // handle error
           Swal.fire({
             type: "error",
