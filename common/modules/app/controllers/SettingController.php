@@ -1176,7 +1176,7 @@ class SettingController extends \yii\web\Controller
                         if ($flag = $model->save(false)) {
                             foreach ($modelsPackageTypes as $modelsPackageType) {
                                 $modelsPackageType->product_category_id = $model->product_category_id;
-                                if (!$modelsPackageType->save(false)) {
+                                if (!($flag = $modelsPackageType->save(false))) {
                                     $transaction->rollBack();
                                     break;
                                     return [
