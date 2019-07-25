@@ -121,112 +121,70 @@
   // กว้าง กำหนดเอง
   $paperSizeWidth.on("keyup change", function(e) {
     var unitOptions = $q.select2Options($paperSizeUnit); // หน่วย
-    if (!$q.isEmpty(unitOptions[$paperSizeUnit.val()])) {
-      // กว้าง x ยาว หน่วย
-      if (!$q.isEmpty($paperSizeHeight.val())) {
-        $opPaperSize.html(
-          $paperSizeWidth.val() +
-            "x" +
-            $paperSizeLenght.val() +
-            "x" +
-            $paperSizeHeight.val() +
-            $nbsp +
-            unitOptions[$paperSizeUnit.val()]
-        );
-      } else {
-        $opPaperSize.html(
-          $(this).val() +
-            "x" +
-            $paperSizeLenght.val() +
-            $nbsp +
-            unitOptions[$paperSizeUnit.val()]
-        );
-      }
-    } else {
-      // กว้าง x ยาว
-      $opPaperSize.html($(this).val() + "x" + $paperSizeLenght.val());
-    }
+    $opPaperSize.html(
+      ($q.isEmpty($paperSizeWidth.val()) ? $nbsp : $paperSizeWidth.val()) +
+        "x" +
+        ($q.isEmpty($paperSizeLenght.val()) ? $nbsp : $paperSizeLenght.val()) +
+        "x" +
+        ($q.isEmpty($paperSizeHeight.val()) ? $nbsp : $paperSizeHeight.val()) +
+        $nbsp +
+        ($q.isEmpty(unitOptions[$paperSizeUnit.val()])
+          ? $nbsp
+          : unitOptions[$paperSizeUnit.val()])
+    );
   });
 
   // ยาว กำหนดเอง
   $paperSizeLenght.on("keyup change", function(e) {
     var unitOptions = $q.select2Options($paperSizeUnit);
-    if (!$q.isEmpty(unitOptions[$paperSizeUnit.val()])) {
-      // กว้าง x ยาว หน่วย
-      if (!$q.isEmpty($paperSizeHeight.val())) {
-        $opPaperSize.html(
-          $paperSizeWidth.val() +
-            "x" +
-            $paperSizeLenght.val() +
-            "x" +
-            $paperSizeHeight.val() +
-            $nbsp +
-            unitOptions[$paperSizeUnit.val()]
-        );
-      } else {
-        $opPaperSize.html(
-          $paperSizeWidth.val() +
-            "x" +
-            $(this).val() +
-            $nbsp +
-            unitOptions[$paperSizeUnit.val()]
-        );
-      }
-    } else {
-      // กว้าง x ยาว
-      $opPaperSize.html($paperSizeWidth.val() + "x" + $(this).val());
-    }
+    $opPaperSize.html(
+      ($q.isEmpty($paperSizeWidth.val()) ? $nbsp : $paperSizeWidth.val()) +
+        "x" +
+        ($q.isEmpty($paperSizeLenght.val()) ? $nbsp : $paperSizeLenght.val()) +
+        "x" +
+        ($q.isEmpty($paperSizeHeight.val()) ? $nbsp : $paperSizeHeight.val()) +
+        $nbsp +
+        ($q.isEmpty(unitOptions[$paperSizeUnit.val()])
+          ? $nbsp
+          : unitOptions[$paperSizeUnit.val()])
+    );
   });
 
   // สูง กำหนดเอง
   $paperSizeHeight.on("keyup change", function(e) {
     var unitOptions = $q.select2Options($paperSizeUnit);
-    if (!$q.isEmpty(unitOptions[$paperSizeUnit.val()])) {
-      // กว้าง x ยาว หน่วย
-      $opPaperSize.html(
-        $paperSizeWidth.val() +
-          "x" +
-          $paperSizeLenght.val() +
-          "x" +
-          $(this).val() +
-          $nbsp +
-          unitOptions[$paperSizeUnit.val()]
-      );
-    } else {
-      // กว้าง x ยาว
-      $opPaperSize.html(
-        $paperSizeWidth.val() +
-          "x" +
-          $paperSizeLenght.val() +
-          "x" +
-          $(this).val()
-      );
-    }
+    $opPaperSize.html(
+      ($q.isEmpty($paperSizeWidth.val()) ? $nbsp : $paperSizeWidth.val()) +
+        "x" +
+        ($q.isEmpty($paperSizeLenght.val()) ? $nbsp : $paperSizeLenght.val()) +
+        "x" +
+        ($q.isEmpty($paperSizeHeight.val()) ? $nbsp : $paperSizeHeight.val()) +
+        $nbsp +
+        ($q.isEmpty(unitOptions[$paperSizeUnit.val()])
+          ? $nbsp
+          : unitOptions[$paperSizeUnit.val()])
+    );
   });
 
   // หน่วย กำหนดเอง
   $paperSizeUnit.on("change", function(e) {
     var options = $q.select2Options($(this));
     if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
-      if (!$q.isEmpty($paperSizeHeight.val())) {
-        $opPaperSize.html(
-          $paperSizeWidth.val() +
-            "x" +
-            $paperSizeLenght.val() +
-            "x" +
-            $paperSizeHeight.val() +
-            $nbsp +
-            options[$paperSizeUnit.val()]
-        );
-      } else {
-        $opPaperSize.html(
-          $paperSizeWidth.val() +
-            "x" +
-            $paperSizeLenght.val() +
-            $nbsp +
-            options[$(this).val()]
-        );
-      }
+      $opPaperSize.html(
+        ($q.isEmpty($paperSizeWidth.val()) ? $nbsp : $paperSizeWidth.val()) +
+          "x" +
+          ($q.isEmpty($paperSizeLenght.val())
+            ? $nbsp
+            : $paperSizeLenght.val()) +
+          "x" +
+          ($q.isEmpty($paperSizeHeight.val())
+            ? $nbsp
+            : $paperSizeHeight.val()) +
+          $nbsp +
+          ($q.isEmpty(unitOptions[$paperSizeUnit.val()])
+            ? $nbsp
+            : unitOptions[$paperSizeUnit.val()])
+      );
     } else {
       $opPaperSize.html($paperSizeWidth.val() + "x" + $paperSizeLenght.val());
     }
