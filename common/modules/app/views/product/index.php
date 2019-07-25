@@ -50,6 +50,17 @@ $this->registerCss(<<<CSS
     align-items: center;
     justify-content: center;
 }
+.col {
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+  width: 16.66666667%;
+  max-width: 100% !important;
+  min-width: 140px !important;
+  height: 100% !important;
+  margin: 0px !important;
+}
 CSS
 );
 SweetAlert2Asset::register($this);
@@ -78,35 +89,6 @@ SweetAlert2Asset::register($this);
                         </div>
                         <div id="app">
                           <vm-categorys :categorys="categorys" />
-                          <div class="row row-product">
-                            <!-- <div v-for="(category, key) in categorys" :key="key" class="col">
-                              <div 
-                                class="media open-collapse" 
-                                data-toggle="collapse__35" 
-                                role="button" 
-                                aria-expanded="true" 
-                                aria-controls="collapse__35">
-                                  <a 
-                                    class="product-link product-cate-sub" 
-                                    :href="'/app/product/category?id=' + category.product_category_id" 
-                                    :data-block-id="'block_coll_' + category.product_category_id" 
-                                    :data-point-id="'point-active-' + category.product_category_id">
-                                      <span class="icon">&nbsp;</span>
-                                      <div class="product-sub">
-                                        <img 
-                                        class="img-fluid img-responsive center-block" 
-                                        :src="category.image_url" 
-                                        alt="">
-                                      </div>
-                                      <div class="media-body">
-                                        <p class="product-sub-name">
-                                          {{ category.product_category_name }}
-                                        </p>
-                                      </div>
-                                  </a>
-                              </div>
-                            </div> -->
-                          </div>
                         </div>
                     </div>
                 </div>
