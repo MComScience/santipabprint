@@ -181,9 +181,9 @@
             ? $nbsp
             : $paperSizeHeight.val()) +
           $nbsp +
-          ($q.isEmpty(unitOptions[$paperSizeUnit.val()])
+          ($q.isEmpty(options[$paperSizeUnit.val()])
             ? $nbsp
-            : unitOptions[$paperSizeUnit.val()])
+            : options[$paperSizeUnit.val()])
       );
     } else {
       $opPaperSize.html($paperSizeWidth.val() + "x" + $paperSizeLenght.val());
