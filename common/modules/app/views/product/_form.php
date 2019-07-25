@@ -311,9 +311,9 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 echo $form->field($model, 'diecut_id')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getDiecutOption(),
                     'options' => ['placeholder' => 'เลือกไดคัท'],
-                   'pluginOptions' => [
-                       'allowClear' => true
-                   ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
                 ])->label($queryBuilder->getInputLabel($option, 'diecut_id', $model));
@@ -440,12 +440,34 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 ?>
             </div>
         </div>
+        <div class="row foil-option" style="display: <?= $queryBuilder->isShowInput($option, 'foli_print') ? '' : 'none'; ?>">
+            <div class="col-xs-12 col-sm-12 col-md-12 foil-size-width">
+                <?php
+                echo $form->field($model, 'foli_print')->radioList([
+                    'two_page' => 'ทั้งหน้า/หลัง',
+                    'one_page' => 'หน้าเดียว'
+                ], [
+                    'inline' => true,
+                    'item' => function ($index, $label, $name, $checked, $value) use ($model) {
+                        $radio = Html::beginTag('div', ['class' => 'radio inline-block']) .
+                            Html::beginTag('label', ['class' => 'radio-inline']) .
+                            Html::radio($name, $checked, ['value' => $value, 'id' => Html::getInputId($model, 'foli_print').'-'.$index]) .
+                            Html::tag('span', Icon::show('circle', ['class' => 'cr-icon']), ['class' => 'cr']) .
+                            ucwords($label) .
+                            Html::endTag('label') .
+                            Html::endTag('div');
+                        return $radio;
+                    }
+                ])->label('ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว?');
+                ?>
+            </div>
+        </div>
         <!-- ปั๊มนูน -->
         <span class="label label-option"
               style="display: <?= $queryBuilder->isShowInput($option, 'emboss_size_width') ? '' : 'none'; ?>">
             <?= Icon::show('angle-double-down') . ' ปั๊มนูน ' . Icon::show('angle-double-down') ?>
         </span>
-        <div class="row foil-option"
+        <div class="row emboss-option"
              style="display: <?= $queryBuilder->isShowInput($option, 'emboss_size_width') ? '' : 'none'; ?>">
             <div class="col-xs-6 col-sm-3 col-md-3 emboss-size-width">
                 <?php
@@ -477,6 +499,29 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
                 ])->label('หน่วย');/*($queryBuilder->getInputLabel($option, 'emboss_size_unit', $model));*/
+                ?>
+            </div>
+        </div>
+        <div class="row emboss-option"
+             style="display: <?= $queryBuilder->isShowInput($option, 'emboss_print') ? '' : 'none'; ?>">
+             <div class="col-xs-12 col-sm-12 col-md-12 foil-size-width">
+                <?php
+                echo $form->field($model, 'emboss_print')->radioList([
+                    'two_page' => 'ทั้งหน้า/หลัง',
+                    'one_page' => 'หน้าเดียว'
+                ], [
+                    'inline' => true,
+                    'item' => function ($index, $label, $name, $checked, $value) use ($model) {
+                        $radio = Html::beginTag('div', ['class' => 'radio inline-block']) .
+                            Html::beginTag('label', ['class' => 'radio-inline']) .
+                            Html::radio($name, $checked, ['value' => $value, 'id' => Html::getInputId($model, 'emboss_print').'-'.$index]) .
+                            Html::tag('span', Icon::show('circle', ['class' => 'cr-icon']), ['class' => 'cr']) .
+                            ucwords($label) .
+                            Html::endTag('label') .
+                            Html::endTag('div');
+                        return $radio;
+                    }
+                ])->label('ปั๊มนูนทั้งหน้า/หลัง หรือหน้าเดียว?');
                 ?>
             </div>
         </div>

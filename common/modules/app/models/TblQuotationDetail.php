@@ -51,7 +51,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             [['paper_size_unit', 'page_qty', 'perforate', 'perforate_option_id', 'foil_size_unit', 'emboss_size_unit', 'glue', 'land_orient'], 'integer'],
             [['quotation_id', 'product_id', 'paper_size_id', 'print_one_page', 'print_two_page', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id'], 'string', 'max' => 100],
             [['coating_option'], 'string', 'max' => 10],
-            [['diecut'], 'string', 'max' => 50],
+            [['diecut', 'foli_print', 'emboss_print'], 'string', 'max' => 50],
         ];
     }
     /**
@@ -83,9 +83,11 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'foil_size_height' => 'ยาว(ฟอยล์)',
             'foil_size_unit' => 'หน่วย(ฟอยล์)',
             'foil_color_id' => 'สีฟอยล์',
+            'foli_print' => 'ปั๊มฟอยล์ทั้งหน้า/หลังหรือหน้าเดียว',
             'emboss_size_width' => 'กว้าง(ปั๊มนูน)',
             'emboss_size_height' => 'ยาว(ปั๊มนูน)',
             'emboss_size_unit' => 'หน่วย(ปั๊มนุน)',
+            'emboss_print' => 'ปั๊มนูนทั้งหน้า/หลังหรือหน้าเดียว',
             'glue' => 'ปะกาว',
             'land_orient' => 'แนวตั้ง/แนวนอน',
             'book_binding_id' => 'วิธีเข้าเล่ม',
