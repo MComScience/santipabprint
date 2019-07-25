@@ -10,7 +10,7 @@ const vmCategorys = Vue.component("vm-categorys", {
   },
   template: `
     <div class="row row-product">
-      <div v-for="(category, key) in categorys" :key="key" class="col-sm-6 col-xs-6 col-md-2 col-lg-2">
+      <div v-for="(category, key) in categorys" :key="key" class="col">
         <div 
           class="media open-collapse" 
           data-toggle="collapse__35" 
