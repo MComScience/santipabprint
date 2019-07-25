@@ -44,6 +44,9 @@ $productOption = $modelProduct->productOption;
                 ],
                 [
                     'attribute' => 'paper_unit_id',
+                    'value' => function($model) {
+                        return $model->unit ? $model->unit->unit_name : '';
+                    }
                 ],
                 [
                     'class' => '\adminlte\widgets\CheckboxColumn',
