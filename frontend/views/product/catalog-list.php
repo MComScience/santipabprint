@@ -66,6 +66,11 @@ $this->registerCss(<<<CSS
   height: 100% !important;
   margin: 0px !important;
 }
+@media (max-width: 768px) {
+  .col {
+    width: 50%;
+  }
+}
 CSS
 );
 SweetAlert2Asset::register($this);
