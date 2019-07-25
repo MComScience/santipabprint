@@ -1173,7 +1173,7 @@ class SettingController extends \yii\web\Controller
                 if ($valid) {
                     $transaction = \Yii::$app->db->beginTransaction();
                     try {
-                        if ($model->save(false)) {
+                        if ($flag = $model->save(false)) {
                             foreach ($modelsPackageTypes as $modelsPackageType) {
                                 $modelsPackageType->product_category_id = $model->product_category_id;
                                 if (!$modelsPackageType->save(false)) {
@@ -1182,12 +1182,21 @@ class SettingController extends \yii\web\Controller
                                 }
                             }
                         }
-                        $transaction->commit();
-                        return [
-                            'success' => true,
-                            'message' => 'บันทึกสำเร็จ!',
-                            'data' => $model,
-                        ];
+                        if ($flag) {
+                            $transaction->commit();
+                            return [
+                                'success' => true,
+                                'message' => 'บันทึกสำเร็จ!',
+                                'data' => $model,
+                            ];
+                        } else {
+                            return [
+                                'success' => false,
+                                'message' => $model->errors,
+                                'data' => $model,
+                                'validate' => ActiveForm::validateMultiple($modelsPackageTypes),
+                            ];
+                        }
                     } catch (\Exception $e) {
                         $transaction->rollBack();
                     }
