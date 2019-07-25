@@ -476,7 +476,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     ],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
-                ])->label('หน่วย(ปั๊มนูน)');/*($queryBuilder->getInputLabel($option, 'emboss_size_unit', $model));*/
+                ])->label($queryBuilder->getInputLabel($option, 'emboss_size_unit', $model));/*($queryBuilder->getInputLabel($option, 'emboss_size_unit', $model));*/
                 ?>
             </div>
         </div>
