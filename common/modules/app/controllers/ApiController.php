@@ -47,7 +47,7 @@ class ApiController extends \yii\web\Controller
             $itemCatagorys[] = [
                 'product_category_id' => $catagory['product_category_id'],
                 'product_category_name' => $catagory['product_category_name'],
-                'image_url' => Url::base(true) . $catagory->getImageUrl(),
+                'image_url' => $catagory->getImageUrl(),
             ];
         }
         return $itemCatagorys;
