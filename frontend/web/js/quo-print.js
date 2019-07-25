@@ -5,8 +5,8 @@
     $form = $("#form-quotation"),
     $paperSize = $("#tblquotationdetail-paper_size_id"),
     $paperSizeWidth = $("#tblquotationdetail-paper_size_width"),
+    $paperSizeLenght = $("#tblquotationdetail-paper_size_lenght"),
     $paperSizeHeight = $("#tblquotationdetail-paper_size_height"),
-    $paperHeight = $("#tblquotationdetail-paper_height"),
     $paperSizeUnit = $("#tblquotationdetail-paper_size_unit"),
     $opPaperSize = $("#op_paper_size_id"),
     $customPaper = $(".custom-paper-size"),
@@ -107,13 +107,13 @@
       } else {
         //ขนาดมาตรฐาน
         $customPaper.hide();
-        $q.setInputValue([$paperSizeWidth, $paperSizeHeight]);
+        $q.setInputValue([$paperSizeWidth, $paperSizeLenght]);
         $paperSizeUnit.val(null).trigger("change");
         $opPaperSize.html(options[$(this).val()]);
       }
     } else {
       $customPaper.hide();
-      $q.setInputValue([$paperSizeWidth, $paperSizeHeight]);
+      $q.setInputValue([$paperSizeWidth, $paperSizeLenght]);
       $paperSizeUnit.val(null).trigger("change");
     }
   });
@@ -123,13 +123,13 @@
     var unitOptions = $q.select2Options($paperSizeUnit); // หน่วย
     if (!$q.isEmpty(unitOptions[$paperSizeUnit.val()])) {
       // กว้าง x ยาว หน่วย
-      if (!$q.isEmpty($paperHeight.val())) {
+      if (!$q.isEmpty($paperSizeHeight.val())) {
         $opPaperSize.html(
           $paperSizeWidth.val() +
             "x" +
-            $paperSizeHeight.val() +
+            $paperSizeLenght.val() +
             "x" +
-            $paperHeight.val() +
+            $paperSizeHeight.val() +
             $nbsp +
             unitOptions[$paperSizeUnit.val()]
         );
@@ -137,29 +137,29 @@
         $opPaperSize.html(
           $(this).val() +
             "x" +
-            $paperSizeHeight.val() +
+            $paperSizeLenght.val() +
             $nbsp +
             unitOptions[$paperSizeUnit.val()]
         );
       }
     } else {
       // กว้าง x ยาว
-      $opPaperSize.html($(this).val() + "x" + $paperSizeHeight.val());
+      $opPaperSize.html($(this).val() + "x" + $paperSizeLenght.val());
     }
   });
 
   // ยาว กำหนดเอง
-  $paperSizeHeight.on("keyup change", function(e) {
+  $paperSizeLenght.on("keyup change", function(e) {
     var unitOptions = $q.select2Options($paperSizeUnit);
     if (!$q.isEmpty(unitOptions[$paperSizeUnit.val()])) {
       // กว้าง x ยาว หน่วย
-      if (!$q.isEmpty($paperHeight.val())) {
+      if (!$q.isEmpty($paperSizeHeight.val())) {
         $opPaperSize.html(
           $paperSizeWidth.val() +
             "x" +
-            $paperSizeHeight.val() +
+            $paperSizeLenght.val() +
             "x" +
-            $paperHeight.val() +
+            $paperSizeHeight.val() +
             $nbsp +
             unitOptions[$paperSizeUnit.val()]
         );
@@ -179,14 +179,14 @@
   });
 
   // สูง กำหนดเอง
-  $paperHeight.on("keyup change", function(e) {
+  $paperSizeHeight.on("keyup change", function(e) {
     var unitOptions = $q.select2Options($paperSizeUnit);
     if (!$q.isEmpty(unitOptions[$paperSizeUnit.val()])) {
       // กว้าง x ยาว หน่วย
       $opPaperSize.html(
         $paperSizeWidth.val() +
           "x" +
-          $paperSizeHeight.val() +
+          $paperSizeLenght.val() +
           "x" +
           $(this).val() +
           $nbsp +
@@ -197,7 +197,7 @@
       $opPaperSize.html(
         $paperSizeWidth.val() +
           "x" +
-          $paperSizeHeight.val() +
+          $paperSizeLenght.val() +
           "x" +
           $(this).val()
       );
@@ -208,13 +208,13 @@
   $paperSizeUnit.on("change", function(e) {
     var options = $q.select2Options($(this));
     if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
-      if (!$q.isEmpty($paperHeight.val())) {
+      if (!$q.isEmpty($paperSizeHeight.val())) {
         $opPaperSize.html(
           $paperSizeWidth.val() +
             "x" +
-            $paperSizeHeight.val() +
+            $paperSizeLenght.val() +
             "x" +
-            $paperHeight.val() +
+            $paperSizeHeight.val() +
             $nbsp +
             options[$paperSizeUnit.val()]
         );
@@ -222,13 +222,13 @@
         $opPaperSize.html(
           $paperSizeWidth.val() +
             "x" +
-            $paperSizeHeight.val() +
+            $paperSizeLenght.val() +
             $nbsp +
             options[$(this).val()]
         );
       }
     } else {
-      $opPaperSize.html($paperSizeWidth.val() + "x" + $paperSizeHeight.val());
+      $opPaperSize.html($paperSizeWidth.val() + "x" + $paperSizeLenght.val());
     }
   });
 
