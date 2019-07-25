@@ -81,12 +81,12 @@ return [
                     'clientSecret' => 'a5b6a3136ae0eb30009c3612dcfbb578',
                     'returnUrl' => 'https://santipab.info/user/security/auth?authclient=line'
                 ],
-                'doh' => [
+                /* 'doh' => [
                     'class' => 'common\components\DohClient',
                     'clientId' => '107ab872a61892ac6e7c1a3c80e89ceac52d894c',
                     'clientSecret' => '467841be3a3805a5a13a4aaad53ac22247e97744',
                     'returnUrl' => 'http://santipab.local/user/security/auth?authclient=doh'
-                ],
+                ], */
             ],
         ],
         'slugUrl' => [
