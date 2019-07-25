@@ -48,9 +48,9 @@ class TblCatalog extends \yii\db\ActiveRecord {
         return [
             [['catalog_name', 'catalog_detail', 'product_category_id'], 'required'],
             [['catalog_detail'], 'string'],
+            [['product_category_id'], 'integer'],
             [['image'], 'safe'],
             [['catalog_name', 'image_path', 'image_base_url'], 'string', 'max' => 255],
-            [['product_category_id'], 'string', 'max' => 100],
         ];
     }
 
