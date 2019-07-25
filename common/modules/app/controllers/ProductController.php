@@ -63,7 +63,7 @@ class ProductController extends \yii\web\Controller
             $itemCatagorys[] = [
                 'product_category_id' => $catagory['product_category_id'],
                 'product_category_name' => $catagory['product_category_name'],
-                'image_url' => Url::base(true) . Url::to(['/site/glide', 'path' => $catagory->getImageUrl(), 'w' => '112', 'h' => '112']),
+                'image_url' => Url::base(true) . $catagory->getImageUrl(),
             ];
         }
         return $this->render('index', [
