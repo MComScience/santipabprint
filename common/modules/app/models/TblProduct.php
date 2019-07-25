@@ -210,8 +210,8 @@ class TblProduct extends \yii\db\ActiveRecord
     {
         $options = [
             'diecut' => 'tab-diecut',
-            'before_print' => 'tab-before-print',
-            'after_print' => 'tab-after-print',
+            'before_print' => 'tab-print-one-page',
+            'after_print' => 'tab-print-two-page',
             'coating' => 'tab-coating',
             'fold' => 'tab-fold',
             'foil' => 'tab-foil-color',

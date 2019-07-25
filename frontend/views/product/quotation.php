@@ -105,7 +105,7 @@ $checkboxTemplate = '{input}
                             Html::img(Yii::getAlias('@web/images/document.png'), [
                                 'width' => '50px',
                                 'class' => 'img-responsive center-block'
-                            ]) . '<p class="text-center">กำหนดหมวดหมู่งานพิมพ์</p>'
+                            ]) . '<p class="text-center">กำหนดรายละเอียด</p>'
                             ?>
                         </div>
                     </div>

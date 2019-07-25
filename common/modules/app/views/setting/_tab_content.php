@@ -59,13 +59,13 @@ $productOption = $modelProduct->productOption;
         ?>
     </div>
     <!-- /.tab-pane -->
-    <div class="tab-pane" id="tab-before-print">
+    <div class="tab-pane" id="tab-print-one-page">
         <p>
-            <span class="badge">หน้าพิมพ์</span>
+            <span class="badge">พิมพ์หน้าเดียว</span>
         </p>
         <?=
         GridView::widget([
-            'id' => 'grid-before-print',
+            'id' => 'grid-print-one-page',
             'dataProvider' => $gridBuilder->getDataColorPrinting($modelProduct),
             'tableOptions' => [
                 'class' => 'small'
@@ -78,13 +78,13 @@ $productOption = $modelProduct->productOption;
                     'class' => '\kartik\grid\SerialColumn'
                 ],
                 [
-                    'label' => 'หน้าพิมพ์',
+                    'label' => 'สี',
                     'attribute' => 'color_printing_name',
                 ],
                 [
                     'class' => '\adminlte\widgets\CheckboxColumn',
                     'content' => function ($model, $key, $index) use ($gridBuilder, $productOption, $modelProduct) {
-                        $checked = $modelProduct->isChecked($productOption, $key, 'before_printing');
+                        $checked = $modelProduct->isChecked($productOption, $key, 'print_one_page');
                         return $gridBuilder->getCheckboxTemplate($key, $checked);
                     },
                     'header' => $gridBuilder->getCheckboxHeaderTemplate(),
@@ -95,13 +95,13 @@ $productOption = $modelProduct->productOption;
         ?>
     </div>
     <!-- /.tab-pane -->
-    <div class="tab-pane" id="tab-after-print">
+    <div class="tab-pane" id="tab-print-two-page">
         <p>
-            <span class="badge">หลังพิมพ์</span>
+            <span class="badge">พิมพ์สองหน้า</span>
         </p>
         <?=
         GridView::widget([
-            'id' => 'grid-after-print',
+            'id' => 'grid-print-two-page',
             'dataProvider' => $gridBuilder->getDataColorPrinting($modelProduct),
             'tableOptions' => [
                 'class' => 'small'
@@ -114,13 +114,13 @@ $productOption = $modelProduct->productOption;
                     'class' => '\kartik\grid\SerialColumn'
                 ],
                 [
-                    'label' => 'หลังพิมพ์',
+                    'label' => 'สี',
                     'attribute' => 'color_printing_name',
                 ],
                 [
                     'class' => '\adminlte\widgets\CheckboxColumn',
                     'content' => function ($model, $key, $index) use ($gridBuilder, $productOption, $modelProduct) {
-                        $checked = $modelProduct->isChecked($productOption, $key, 'after_printing');
+                        $checked = $modelProduct->isChecked($productOption, $key, 'print_two_page');
                         return $gridBuilder->getCheckboxTemplate($key, $checked);
                     },
                     'header' => $gridBuilder->getCheckboxHeaderTemplate(),
@@ -154,11 +154,12 @@ $productOption = $modelProduct->productOption;
                         return !empty($model->paperType) ? $model->paperType->paper_type_name : '';
                     },
                     'group' => true,
+                    'header' => 'ประเภทกระดาษ'
                 ],
                 [
                     'attribute' => 'paper_name',
                     'value' => function ($model, $key, $index) {
-                        return $model->paperName;
+                        return $model->paper_name;
                     },
                 ],
                 [

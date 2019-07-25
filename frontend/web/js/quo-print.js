@@ -16,10 +16,10 @@
             $opPageQty = $('#op_page_qty'),
             $paperId = $('#tblquotationdetail-paper_id'),
             $opPaper = $('#op_paper_id'),
-            $beforePrint = $('#tblquotationdetail-before_print'),
-            $opBeforePrint = $('#op_before_print'),
-            $afterPrint = $('#tblquotationdetail-after_print'),
-            $opAfterPrint = $('#op_after_print'),
+            $printOnePage = $('#tblquotationdetail-print_one_page'),
+            $opPrintOnePage = $('#op_print_one_page'),
+            $printTwoPage = $('#tblquotationdetail-print_two_page'),
+            $opPrintTwoPage = $('#op_print_two_page'),
             $coatingId = $('#tblquotationdetail-coating_id'),
             $coatingOption = $('input[name="TblQuotationDetail[coating_option]"]'),
             $opCoating = $('#op_coating_id'),
@@ -221,30 +221,30 @@
         }
     });
 
-    //พิมพ์ 2 หน้า
-    $beforePrint.on('change', function () {
+    //พิมพ์ 1 หน้า
+    $printOnePage.on('change', function () {
         var options = $q.select2Options($(this));
         if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
-            $opBeforePrint.html(options[$(this).val()]);
+            $opPrintOnePage.html(options[$(this).val()]);
         } else {
-            $opBeforePrint.html('-');
+            $opPrintOnePage.html('-');
         }
-        if (!$q.isEmpty($afterPrint.val())) {
-            $afterPrint.val(null).trigger('change');
+        if (!$q.isEmpty($printTwoPage.val())) {
+            $printTwoPage.val(null).trigger('change');
         }
 
     });
 
-    //หลังพิมพ์
-    $afterPrint.on('change', function () {
+    //พิมพ์ 2 หน้า
+    $printTwoPage.on('change', function () {
         var options = $q.select2Options($(this));
         if (!$q.isEmpty($(this).val()) && !$q.isEmpty(options[$(this).val()])) {
-            $opAfterPrint.html(options[$(this).val()]);
+            $opPrintTwoPage.html(options[$(this).val()]);
         } else {
-            $opAfterPrint.html('-');
+            $opPrintTwoPage.html('-');
         }
-        if (!$q.isEmpty($beforePrint.val())) {
-            $beforePrint.val(null).trigger('change');
+        if (!$q.isEmpty($printOnePage.val())) {
+            $printOnePage.val(null).trigger('change');
         }
     });
 

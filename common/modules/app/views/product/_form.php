@@ -115,7 +115,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             </div>
             <div class="col-xs-6 col-sm-3 col-md-3 paper-size-height">
                 <?php
-                echo $form->field($model, 'paper_size_height')->textInput([
+                echo $form->field($model, 'paper_size_lenght')->textInput([
                     //'type' => 'number',
                     //'min' => 0,
                     'placeholder' => 'ยาว'
@@ -123,9 +123,9 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 ?>
             </div>
            
-            <div class="col-xs-6 col-sm-3 col-md-3 paper-size-height" style="display: <?= $queryBuilder->isShowInput($option, 'paper_height') ? '' : 'none'; ?>">
+            <div class="col-xs-6 col-sm-3 col-md-3 paper-size-height" style="display: <?= $queryBuilder->isShowInput($option, 'paper_size_height') ? '' : 'none'; ?>">
                 <?php
-                echo $form->field($model, 'paper_height')->textInput([
+                echo $form->field($model, 'paper_size_height')->textInput([
                     //'type' => 'number',
                     //'min' => 0,
                     'placeholder' => 'สูง'
@@ -200,12 +200,12 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
             </div>
         </div>
 
-        <!-- หน้าพิมพ์ / หลังพิมพ์ -->
+        <!-- พิมพ์หน้าเดียว -->
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 before-print"
-                 style="display: <?= $queryBuilder->isShowInput($option, 'before_print') ? '' : 'none'; ?>">
+                 style="display: <?= $queryBuilder->isShowInput($option, 'print_one_page') ? '' : 'none'; ?>">
                 <?php
-                echo $form->field($model, 'before_print')->widget(Select2::classname(), [
+                echo $form->field($model, 'print_one_page')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getBeforePrintOption(),
                     'options' => ['placeholder' => 'เลือกตัวเลือก'],
                     'pluginOptions' => [
@@ -216,13 +216,13 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     ],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
-                ])->label($queryBuilder->getInputLabel($option, 'before_print', $model));
+                ])->label($queryBuilder->getInputLabel($option, 'print_one_page', $model));
                 ?>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 after-print"
-                 style="display: <?= $queryBuilder->isShowInput($option, 'after_print') ? '' : 'none'; ?>">
+                 style="display: <?= $queryBuilder->isShowInput($option, 'print_two_page') ? '' : 'none'; ?>">
                 <?php
-                echo $form->field($model, 'after_print')->widget(Select2::classname(), [
+                echo $form->field($model, 'print_two_page')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getAfterPrintOption(),
                     'options' => ['placeholder' => 'เลือกตัวเลือก'],
                     'pluginOptions' => [
@@ -233,7 +233,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     ],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
-                ])->label($queryBuilder->getInputLabel($option, 'after_print', $model));
+                ])->label($queryBuilder->getInputLabel($option, 'print_two_page', $model));
                 ?>
             </div>
         </div>
@@ -311,12 +311,9 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 echo $form->field($model, 'diecut_id')->widget(Select2::classname(), [
                     'data' => $queryBuilder->getDiecutOption(),
                     'options' => ['placeholder' => 'เลือกไดคัท'],
-//                    'pluginOptions' => [
-//                        'allowClear' => true,
-//                        'templateResult' => new JsExpression('format'),
-//                        'templateSelection' => new JsExpression('format'),
-//                        'escapeMarkup' => $escape,
-//                    ],
+                   'pluginOptions' => [
+                       'allowClear' => true
+                   ],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'size' => Select2::MEDIUM,
                 ])->label($queryBuilder->getInputLabel($option, 'diecut_id', $model));

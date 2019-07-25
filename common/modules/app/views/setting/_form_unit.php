@@ -43,6 +43,9 @@ $('#form-unit').formBeforeSubmit({
     modal: {id: '#ajaxCrudModal'}
 });
 $('#ajaxCrudModal .modal-footer').hide();
+$("#grid-unit-pjax").on("pjax:success", function() {
+    $.pjax.reload({container: "#pjax-menu"});
+});
 JS
 );
 ?>

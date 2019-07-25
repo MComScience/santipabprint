@@ -4,28 +4,29 @@ namespace common\modules\app\controllers;
 
 use adminlte\helpers\Html;
 use common\components\QueryBuilder;
+use common\modules\app\models\TblProductCategory;
+use common\modules\app\models\TblProduct;
 use common\modules\app\models\TblQuotation;
 use common\modules\app\models\TblQuotationDetail;
+use common\modules\app\traits\ModelTrait;
 use kartik\form\ActiveForm;
 use kartik\icons\Icon;
 use Yii;
-use common\modules\app\models\TblProduct;
-use common\modules\app\models\TblProductCategory;
-use common\modules\app\traits\ModelTrait;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-use kartik\mpdf\Pdf;
 
-class ProductController extends \yii\web\Controller {
+class ProductController extends \yii\web\Controller
+{
 
     use ModelTrait;
 
     public $layout = '@kidz/views/layouts/main';
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -42,39 +43,73 @@ class ProductController extends \yii\web\Controller {
                     ],
                 ],
             ],
-                /* 'httpCache' => [
-                  'class' => 'yii\filters\HttpCache',
-                  'only' => ['index'],
-                  'lastModified' => function ($action, $params) {
-                  return time();
-                  },
-                  //'sessionCacheLimiter' => 'public',
-                  'cacheControlHeader' => 'public, max-age=3600',
-                  ] */
+            /* 'httpCache' => [
+        'class' => 'yii\filters\HttpCache',
+        'only' => ['index'],
+        'lastModified' => function ($action, $params) {
+        return time();
+        },
+        //'sessionCacheLimiter' => 'public',
+        'cacheControlHeader' => 'public, max-age=3600',
+        ] */
         ];
     }
 
-    public function actionIndex() {
-        //หมวดหมู่
-        $categorys = TblProductCategory::find()->all();
-        //สินค้าทั้งหมด
-        $allProducts = TblProduct::find()->all();
-        $productGroups = [];
-        foreach ($categorys as $category) {
-            $productGroups[] = [
-                'product_category_id' => $category['product_category_id'],
-                'product_category_name' => $category['product_category_name'],
-                'items' => TblProduct::find()->where(['product_category_id' => $category['product_category_id']])->all()
+    public function actionIndex()
+    {
+        $catagorys = TblProductCategory::find()->all();
+        $itemCatagorys = [];
+        foreach ($catagorys as $key => $catagory) {
+            $itemCatagorys[] = [
+                'product_category_id' => $catagory['product_category_id'],
+                'product_category_name' => $catagory['product_category_name'],
+                'image_url' => Url::base(true) . Url::to(['/site/glide', 'path' => $catagory->getImageUrl(), 'w' => '112', 'h' => '112']),
             ];
         }
         return $this->render('index', [
-                    'categorys' => $categorys,
-                    'allProducts' => $allProducts,
-                    'productGroups' => $productGroups
+            'catagorys' => $itemCatagorys
+        ]);
+        /* //หมวดหมู่
+    $categorys = TblProductCategory::find()->all();
+    //สินค้าทั้งหมด
+    $allProducts = TblProduct::find()->all();
+    $productGroups = [];
+    foreach ($categorys as $category) {
+    $productGroups[] = [
+    'product_category_id' => $category['product_category_id'],
+    'product_category_name' => $category['product_category_name'],
+    'items' => TblProduct::find()->where(['product_category_id' => $category['product_category_id']])->all()
+    ];
+    }
+    return $this->render('index', [
+    'categorys' => $categorys,
+    'allProducts' => $allProducts,
+    'productGroups' => $productGroups
+    ]); */
+    }
+
+    public function actionCategory($id)
+    {
+        $catagory = TblProductCategory::findOne($id);
+        $itemProducts = [];
+        if($catagory) {
+            $products = TblProduct::find()->where(['product_category_id' => $id])->orderBy('package_type_id ASC')->all();
+            foreach ($products as $key => $product) {
+                $itemProducts[] = [
+                    'product_id' => $product['product_id'],
+                    'product_name' => $product['product_name'],
+                    'image_url' =>  Url::base(true) . $product->getImageUrl(),
+                ];
+            }
+        }
+        return $this->render('category', [
+            'products' => $itemProducts,
+            'catagory' => $catagory
         ]);
     }
 
-    public function actionQuotation($p, $slug = null) {
+    public function actionQuotation($p, $slug = null)
+    {
         $request = Yii::$app->request;
         $update = false;
         $modelProduct = $this->findModelProduct($p);
@@ -92,27 +127,28 @@ class ProductController extends \yii\web\Controller {
             if ($validate) {
                 return [
                     'success' => false,
-                    'validate' => $validate
+                    'validate' => $validate,
                 ];
             } else if ($modelQuotation->save()) {
-                
+
             }
         } else {
             $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
             //return Json::encode($validates);
             return $this->render('quotation', [
-                        'option' => $option,
-                        'modelProduct' => $modelProduct,
-                        'modelQuotation' => $modelQuotation,
-                        'model' => $model,
-                        'queryBuilder' => $queryBuilder,
-                        'update' => $update,
-                        'validates' => $fetchOptions['validation']
+                'option' => $option,
+                'modelProduct' => $modelProduct,
+                'modelQuotation' => $modelQuotation,
+                'model' => $model,
+                'queryBuilder' => $queryBuilder,
+                'update' => $update,
+                'validates' => $fetchOptions['validation'],
             ]);
         }
     }
 
-    public function actionDownload($p) {
+    public function actionDownload($p)
+    {
         $request = Yii::$app->request;
         $model = new TblQuotation();
         $modelDetail = new TblQuotationDetail();
@@ -125,7 +161,7 @@ class ProductController extends \yii\web\Controller {
                     'content' => $this->renderAjax('_form_download', [
                         'model' => $model,
                     ]),
-                    'footer' => ''
+                    'footer' => '',
                 ];
             } elseif ($model->load($request->post())) {
                 $modelDetail->setAttributes($request->post('TblQuotationDetail'));
@@ -143,28 +179,31 @@ class ProductController extends \yii\web\Controller {
                         return [
                             'success' => false,
                             'message' => 'error',
-                            'validate' => ArrayHelper::merge(ActiveForm::validate($model), ActiveForm::validate($modelDetail))
+                            'validate' => ArrayHelper::merge(ActiveForm::validate($model), ActiveForm::validate($modelDetail)),
                         ];
                     }
                 } else {
                     return [
                         'success' => false,
                         'message' => 'error',
-                        'validate' => ArrayHelper::merge(ActiveForm::validate($model), ActiveForm::validate($modelDetail))
+                        'validate' => ArrayHelper::merge(ActiveForm::validate($model), ActiveForm::validate($modelDetail)),
                     ];
                 }
             }
         }
     }
 
-    private function convertNumber($number) {
-        if (empty($number))
+    private function convertNumber($number)
+    {
+        if (empty($number)) {
             return '';
+        }
 
         return (int) preg_replace("/.*\./", "", $number) > 0 ? number_format($number, 1) : number_format($number, 0);
     }
 
-    public function actionQuo($q) {
+    public function actionQuo($q)
+    {
         $model = $this->findModelQuotation($q);
         $modelItems = TblQuotationDetail::find()->where(['quotation_id' => $q])->all();
         $items = [];
@@ -188,12 +227,12 @@ class ProductController extends \yii\web\Controller {
                     $paper_height = $this->convertNumber($item['paper_height']);
                     if (empty($paper_height)) {
                         $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
-                                $paper_size_width . $x . $paper_size_height . $nbsp .
-                                $modelUnit['unit_name'] . $newline;
+                            $paper_size_width . $x . $paper_size_height . $nbsp .
+                            $modelUnit['unit_name'] . $newline;
                     } else {
                         $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
-                                $paper_size_width . $x . $paper_size_height . $x . $paper_height . $nbsp .
-                                $modelUnit['unit_name'] . $newline;
+                            $paper_size_width . $x . $paper_size_height . $x . $paper_height . $nbsp .
+                            $modelUnit['unit_name'] . $newline;
                     }
                 } else {
                     $modelPaperSize = $this->findModelPaperSize($item['paper_size_id']);
@@ -204,7 +243,7 @@ class ProductController extends \yii\web\Controller {
             if (!empty($item['page_qty'])) {
                 $details .= $queryBuilder->getInputLabel($option, 'page_qty', $item) . $nbsp2 . $item['page_qty'] . $newline;
             }
-                  //กระดาษ
+            //กระดาษ
             if (!empty($item['paper_id'])) {
                 $modelPaper = $this->findModelPaper($item['paper_id']);
                 $size = '&nbsp;(ขนาด ' . $this->convertNumber($modelPaper['paper_width']) . 'x' . $this->convertNumber($modelPaper['paper_length']) . ')';
@@ -220,7 +259,7 @@ class ProductController extends \yii\web\Controller {
                 $modelBeforePrint = $this->findModelColorPrinting($item['after_print']);
                 $details .= $queryBuilder->getInputLabel($option, 'after_print', $item) . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
             }
-      
+
             //เคลือบ
             if (!empty($item['coating_id']) && $item['coating_id'] != 'N') {
                 if ($item['coating_id'] === 'N') {
@@ -293,26 +332,27 @@ class ProductController extends \yii\web\Controller {
                 'product_id' => $item['product_id'],
                 'data' => $item,
                 'product_name' => $modelProduct['product_name'],
-                'details' => str_replace('<span class="text-danger">*</span>', '', $details)
+                'details' => str_replace('<span class="text-danger">*</span>', '', $details),
             ];
             $summary = $summary + $item['final_price'];
         }
         return $this->renderAjax('invoice1', [
-                    'model' => $model,
-                    'items' => $items,
-                    'summary' => $summary,
-                    'modelItems' => $modelItems
+            'model' => $model,
+            'items' => $items,
+            'summary' => $summary,
+            'modelItems' => $modelItems,
         ]);
 
 //        return $this->renderAjax('invoice1', [
-//            'model' => $model,
-//            'items' => $items,
-//            'summary' => $summary,
-//            'modelItems' => $modelItems
-//        ]);
+        //            'model' => $model,
+        //            'items' => $items,
+        //            'summary' => $summary,
+        //            'modelItems' => $modelItems
+        //        ]);
     }
 
-    protected function fetchOptions($model, $option) {
+    protected function fetchOptions($model, $option)
+    {
         $attributes = $model->getAttributes();
         $validation = [];
         $requiredOps = [];
@@ -337,7 +377,7 @@ class ProductController extends \yii\web\Controller {
                     'error' => '.help-block',
                     'validate' => new JsExpression('function (attribute, value, messages, deferred, $form) {
                         yii.validation.required(value, messages, {message: ' . Json::encode($message) . '});
-                    }')
+                    }'),
                 ];
             }
         }
@@ -346,11 +386,12 @@ class ProductController extends \yii\web\Controller {
             'requiredOps' => $requiredOps,
             'labelOps' => $labelOps,
             'valueOps' => $valueOps,
-            'attributes' => $attributes
+            'attributes' => $attributes,
         ];
     }
 
-    protected function fetchValidate($model, $params, $fetchOptions) {
+    protected function fetchValidate($model, $params, $fetchOptions)
+    {
         $validate = ActiveForm::validate($model);
         $attributes = $model->getAttributes();
         $attrs = ['paper_size_width', 'paper_size_height', 'paper_size_unit'];
@@ -377,10 +418,11 @@ class ProductController extends \yii\web\Controller {
         return $validate;
     }
 
-    public function actionTest($id) {
+    public function actionTest($id)
+    {
         $model = \frontend\modules\app\models\TblProductCategory::findOne(['product_category_id' => $id]);
         return $this->render('_test_form', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 

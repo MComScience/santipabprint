@@ -30,7 +30,7 @@ $count = count($products);
             <h2 class="wow">
                 <span class="shape shape-left bg-color-4"></span>
                 <span>
-                    <?= $catalogType['catalog_type_name'] ?>
+                    <?= $catalogType['product_category_name'] ?>
                 </span>
                 <span class="shape shape-right bg-color-4"></span>
             </h2>
@@ -38,7 +38,7 @@ $count = count($products);
                 <li>
                     <?= Html::a(Icon::show('th') . 'ตัวอย่างผลิตภัณฑ์', ['/product/catalog-list']); ?>
                 </li>
-                <li class="active"><?= $catalogType['catalog_type_name'] ?></li>
+                <li class="active"><?= $catalogType['product_category_name'] ?></li>
             </ol>
         </div>
         <!-- end title -->

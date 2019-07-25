@@ -138,7 +138,7 @@ CSS
                         Html::img(Yii::getAlias('@web/images/document.png'), [
                             'width' => '50px',
                             'class' => 'img-responsive center-block'
-                        ]) . Html::tag('p', 'กำหนดหมวดหมู่งานพิมพ์', ['class' => 'text-center'])
+                        ]) . Html::tag('p', 'กำหนดรายละเอียด', ['class' => 'text-center'])
                         ?>
                     </div>
                 </div>

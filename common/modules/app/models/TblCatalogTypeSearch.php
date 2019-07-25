@@ -17,7 +17,7 @@ class TblCatalogTypeSearch extends TblCatalogType
     public function rules()
     {
         return [
-            [['catalog_type_id', 'created_by', 'updated_by'], 'integer'],
+            [['product_category_id', 'created_by', 'updated_by'], 'integer'],
             [['catalog_type_name', 'image_path', 'image_base_url', 'created_at', 'updated_at'], 'safe'],
         ];
     }
@@ -58,7 +58,7 @@ class TblCatalogTypeSearch extends TblCatalogType
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'catalog_type_id' => $this->catalog_type_id,
+            'product_category_id' => $this->product_category_id,
             'created_by' => $this->created_by,
             'created_at' => $this->created_at,
             'updated_by' => $this->updated_by,

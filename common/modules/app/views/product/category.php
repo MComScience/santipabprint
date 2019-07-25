@@ -1,6 +1,7 @@
 <?php
 use adminlte\helpers\Html;
-use common\widgets\ProductCatagoryView;
+use common\widgets\ProductView;
+use kartik\icons\Icon;
 
 $this->title = 'ประเมินราคา';
 
@@ -28,10 +29,16 @@ foreach ($css as $css_path) {
             <h2 class="wow">
                 <span class="shape shape-left bg-color-4"></span>
                 <span>
-                    <?= Html::encode('เลือกหมวดหมู่') ?>
+                    <?= Html::encode('เลือกสินค้า') ?>
                 </span>
                 <span class="shape shape-right bg-color-4"></span>
             </h2>
+            <ol class="breadcrumb">
+                <li>
+                    <?= Html::a(Icon::show('th').'เลือกหมวดหมู่',['/app/product/index']); ?>
+                </li>
+                <li class="active"><?= $catagory['product_category_name'] ?></li>
+            </ol>
         </div>
         <!-- Product List -->
         <div class="product-grid container-fluid">
@@ -39,7 +46,7 @@ foreach ($css as $css_path) {
                 <div class="line line-dashed"></div>
                 <div class="tab-content product-grid-tab" id="pills-tabContent">
                     <div class="tab-pane fade active in" id="pills-all" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <?= ProductCatagoryView::widget(['catagorys' => $catagorys]) ?>
+                        <?= ProductView::widget(['products' => $products]) ?>
                     </div>
                 </div>
             </div>

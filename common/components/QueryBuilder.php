@@ -64,7 +64,7 @@ class QueryBuilder extends Component {
             $children = [];
             foreach ($papers as $paper) {
                 if ($paper['paper_type_id'] === $paperType['paper_type_id']) {
-                    $children[$paper['paper_id']] = $paper->paperName;
+                    $children[$paper['paper_id']] = $paper->paper_name;
                 }
             }
             if ($children) {
@@ -77,7 +77,7 @@ class QueryBuilder extends Component {
     //ด้านหน้าพิมพ์
     public function getBeforePrintOption() {
         $option = $this->modelOption;
-        $condition = static::decodeOption($option['before_printing']);
+        $condition = static::decodeOption($option['print_one_page']);
         $query = TblColorPrinting::find()->where(['color_printing_id' => $condition])->asArray()->all();
         $options = $this->renderOption($query, 'color_printing_id', 'color_printing_name', 'color_printing_descriotion');
         return $options;
@@ -86,7 +86,7 @@ class QueryBuilder extends Component {
     //ด้านหลังพิมพ์
     public function getAfterPrintOption() {
         $option = $this->modelOption;
-        $condition = static::decodeOption($option['after_printing']);
+        $condition = static::decodeOption($option['print_two_page']);
         $query = TblColorPrinting::find()->where(['color_printing_id' => $condition])->asArray()->all();
         $options = $this->renderOption($query, 'color_printing_id', 'color_printing_name', 'color_printing_descriotion');
         return $options;

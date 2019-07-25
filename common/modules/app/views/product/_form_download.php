@@ -111,6 +111,7 @@ var \$formQuo = $('#form-quotation');
             // Implement successful
             \$btn.button('reset');
             if (response.success) {
+                localStorage.removeItem('formOptions');
                 $('#ajaxCrudModal').modal('hide');
                 window.location.href = response.url;
             } else {

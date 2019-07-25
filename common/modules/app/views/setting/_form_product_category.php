@@ -4,6 +4,8 @@
 use adminlte\helpers\Html;
 use kartik\form\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
+use trntv\filekit\widget\Upload;
+use yii\web\JsExpression;
 ?>
 
 <?php $form = ActiveForm::begin(['type' => ActiveForm::TYPE_VERTICAL, 'id' => 'form-product-category']); ?>
@@ -12,6 +14,16 @@ use wbraganca\dynamicform\DynamicFormWidget;
         <?= Html::activeHiddenInput($model, 'product_category_id') ?>
     </div>
 </div>
+<div>
+    <div class="col-sm-4 col-sm-offset-4">
+        <?= $form->field($model, 'icon')->widget(Upload::classname(), [
+            'url' => ['upload-icon'],
+            'acceptFileTypes' => new JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
+            'id' => 'group-icon'
+        ])->label('ภาพตัวอย่างสินค้า'); ?>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-sm-6">
         <?=
@@ -121,6 +133,9 @@ $('#form-product-category').formBeforeSubmit({
 });
 $('#ajaxCrudModal .modal-footer').hide();
 autosize($('textarea'));
+$("#grid-product-category-pjax").on("pjax:success", function() {
+    $.pjax.reload({container: "#pjax-menu"});
+});
 JS
 );
 ?>

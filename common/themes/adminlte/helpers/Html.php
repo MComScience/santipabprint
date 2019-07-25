@@ -54,4 +54,12 @@ class Html extends BaseHtml
     {
         return static::tag('span', '*', ['style' => 'color: red;']);
     }
+
+    public static function convertNumber($number) {
+        if (empty($number))
+            return '';
+
+        return (int) preg_replace("/.*\./", "", $number) > 0 ? number_format($number, 1) : number_format($number, 0);
+    }
+
 }

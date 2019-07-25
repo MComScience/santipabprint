@@ -85,6 +85,9 @@ $('#form-paper-size').formBeforeSubmit({
 });
 $('#ajaxCrudModal .modal-footer').hide();
 autosize($('textarea'));
+$("#grid-paper-size-pjax").on("pjax:success", function() {
+    $.pjax.reload({container: "#pjax-menu"});
+});
 JS
 );
 ?>

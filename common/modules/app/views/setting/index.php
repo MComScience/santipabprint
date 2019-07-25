@@ -1,6 +1,7 @@
 <?php
 /* @var $this yii\web\View */
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 use adminlte\helpers\Html;
 use common\modules\app\models\TblUnit;
 use common\modules\app\models\TblPaperSize;
@@ -73,7 +74,7 @@ $options = [
         'count' => TblBookBinding::find()->count()
     ],
     [
-        'text' => 'หน้าพิมพ์/หลังพิมพ์',
+        'text' => 'พิมพ์หน้าเดียว/พิมพ์สองหน้า',
         'url' => ['printing'],
         'action' => 'printing',
         'count' => TblColorPrinting::find()->count()
@@ -111,10 +112,11 @@ $action = Yii::$app->controller->action->id;
         color: inherit !important;
     }
 </style>
+<?php Pjax::begin(['id' => 'pjax-menu']); ?>
 <div class="row">
     <?php foreach ($options as $option): ?>
         <div class="col-md-3 col-sm-6 col-xs-12">
-            <a href="<?= Url::to($option['url']); ?>" class="color-inherit">
+            <a href="<?= Url::to($option['url']); ?>" class="color-inherit" data-pjax="0">
                 <div class="info-box">
                 <span class="info-box-icon <?= ($action !== $option['action']) ? 'bg-aqua' : 'bg-green' ?>">
                     <i class="fa fa-file-text-o"></i>
@@ -131,3 +133,13 @@ $action = Yii::$app->controller->action->id;
         </div><!-- /.col -->
     <?php endforeach; ?>
 </div>
+<?php Pjax::end(); ?>
+
+<?php
+$this->registerJs(<<<JS
+if($('.box-primary').length) {
+    $('html, body').animate({ scrollTop: $('.box-primary').offset().top }, 1500);
+}
+JS
+);
+?>

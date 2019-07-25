@@ -46,25 +46,26 @@ class TblCatalog extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['catalog_name', 'catalog_detail', 'catalog_type_id'], 'required'],
+            [['catalog_name', 'catalog_detail', 'product_category_id'], 'required'],
             [['catalog_detail'], 'string'],
-            [['catalog_type_id'], 'integer'],
             [['image'], 'safe'],
             [['catalog_name', 'image_path', 'image_base_url'], 'string', 'max' => 255],
+            [['product_category_id'], 'string', 'max' => 100],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
-            'catalog_id' => Yii::t('app', 'Catalog ID'),
-            'catalog_name' => Yii::t('app', 'ชื่อสินค้า'),
-            'catalog_detail' => Yii::t('app', 'รายละเอียด'),
-            'catalog_type_id' => Yii::t('app', 'หมวดหมู่'),
-            'image_path' => Yii::t('app', 'ที่อยู่รูปภาพ'),
-            'image_base_url' => Yii::t('app', 'ลิงค์ภาพ'),
+            'catalog_id' => 'Catalog ID',
+            'catalog_name' => 'ชื่อสินค้า',
+            'catalog_detail' => 'รายละเอียด',
+            'product_category_id' => 'หมวดหมู่',
+            'image_path' => 'ที่อยู่รูปภาพ',
+            'image_base_url' => 'ลิงค์ภาพ',
         ];
     }
 
@@ -76,8 +77,8 @@ class TblCatalog extends \yii\db\ActiveRecord {
         }
     }
 
-    public function getCatalogType() {
+    public function getProductCategory() {
 // a comment has one customer
-        return $this->hasOne(TblCatalogType::className(), ['catalog_type_id' => 'catalog_type_id']);
+        return $this->hasOne(TblProductCategory::className(), ['product_category_id' => 'product_category_id']);
     }
 }

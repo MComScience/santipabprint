@@ -19,6 +19,7 @@ use adminlte\helpers\Html;
                 ])->label($model->getAttributeLabel('paper_type_name').Html::starRequired()); ?>
             </div>
         </div>
+        <?php /*
         <div class="row">
             <div class="col-sm-12">
                 <?= $form->field($model, 'paper_type_flag')->radioList($model->getFlagOptions(),[
@@ -26,6 +27,7 @@ use adminlte\helpers\Html;
                 ]); ?>
             </div>
         </div>
+        */?>
     </div><!-- /.box-body -->
     <div class="box-footer">
         <div class="row">
@@ -51,6 +53,9 @@ $('#form-paper-type').formBeforeSubmit({
     modal: {id: '#ajaxCrudModal'}
 });
 $('#ajaxCrudModal .modal-footer').hide();
+$("#grid-paper-type-pjax").on("pjax:success", function() {
+    $.pjax.reload({container: "#pjax-menu"});
+});
 JS
 );
 ?>

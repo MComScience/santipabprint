@@ -70,6 +70,9 @@ $('#form-foil-color').formBeforeSubmit({
 });
 $('#ajaxCrudModal .modal-footer').hide();
 autosize($('textarea'));
+$("#grid-foil-color-pjax").on("pjax:success", function() {
+    $.pjax.reload({container: "#pjax-menu"});
+});
 JS
 );
 ?>

@@ -24,27 +24,27 @@ $classes = [
         'visible' => $queryBuilder->isShowInput($option, 'book_binding_id')
     ],
     [
-        'label' => 'จำนวนหน้า/แผ่น',
+        'label' => $queryBuilder->getInputLabel($option, 'page_qty', $model),
         'class' => 'op_page_qty',
         'visible' => $queryBuilder->isShowInput($option, 'page_qty')
     ],
     [
-        'label' => 'กระดาษ',
+        'label' => $queryBuilder->getInputLabel($option, 'paper_id', $model),
         'class' => 'op_paper_id',
         'visible' => $queryBuilder->isShowInput($option, 'paper_id')
     ],
     [
-        'label' => 'พิมพ์สองหน้า',
-        'class' => 'op_before_print',
-        'visible' => $queryBuilder->isShowInput($option, 'before_print')
+        'label' => $queryBuilder->getInputLabel($option, 'print_one_page', $model),
+        'class' => 'op_print_one_page',
+        'visible' => $queryBuilder->isShowInput($option, 'print_one_page')
     ],
     [
-        'label' => 'พิมพ์หน้าเดียว',
-        'class' => 'op_after_print',
-        'visible' => $queryBuilder->isShowInput($option, 'after_print')
+        'label' => $queryBuilder->getInputLabel($option, 'print_two_page', $model),
+        'class' => 'op_print_two_page',
+        'visible' => $queryBuilder->isShowInput($option, 'print_two_page')
     ],
     [
-        'label' => 'เคลือบ',
+        'label' => $queryBuilder->getInputLabel($option, 'coating_id', $model),
         'class' => 'op_coating_id',
         'visible' => $queryBuilder->isShowInput($option, 'coating_id')
     ],
@@ -54,12 +54,12 @@ $classes = [
         'visible' => $queryBuilder->isShowInput($option, 'diecut')
     ],
     [
-        'label' => 'ตัด/เจาะมุม',
+        'label' => $queryBuilder->getInputLabel($option, 'perforate', $model),
         'class' => 'op_perforate_option',
         'visible' => $queryBuilder->isShowInput($option, 'perforate')
     ],
     [
-        'label' => 'วิธีพับ',
+        'label' => $queryBuilder->getInputLabel($option, 'fold_id', $model),
         'class' => 'op_fold_id',
         'visible' => $queryBuilder->isShowInput($option, 'fold_id')
     ],

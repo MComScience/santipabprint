@@ -1079,7 +1079,7 @@ class ProductController extends \yii\web\Controller {
 
     public function actionCatalogList() {
         //หมวดหมู่
-        $categorys = TblCatalogType::find()->all();
+        $categorys = TblProductCategory::find()->all();
         /* //สินค้าทั้งหมด
           $allProducts = \common\modules\app\models\TblProduct::find()->all();
           $productGroups = [];
@@ -1098,8 +1098,8 @@ class ProductController extends \yii\web\Controller {
     }
 
     public function actionCatalog($p) {
-        $products = TblCatalog::find()->where(['catalog_type_id' => $p])->all();
-        $catalogType = TblCatalogType::findOne($p);
+        $products = TblCatalog::find()->where(['product_category_id' => $p])->all();
+        $catalogType = TblProductCategory::findOne($p);
         if (!$catalogType) {
             return $this->render('empty-page');
         }
@@ -1281,7 +1281,7 @@ class ProductController extends \yii\web\Controller {
 
     public function actionCatalogDetail($id) {
         $catalog = TblCatalog::findOne($id);
-        $catalogType = TblCatalogType::findOne(['catalog_type_id' => $catalog['catalog_type_id']]);
+        $catalogType = TblProductCategory::findOne(['product_category_id' => $catalog['product_category_id']]);
         if (!$catalog || !$catalogType) {
             return $this->render('empty-page');
         }

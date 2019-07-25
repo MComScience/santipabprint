@@ -100,7 +100,7 @@ CSS
                         'allowClear' => true
                     ],
                     'theme' => Select2::THEME_BOOTSTRAP,
-                ]);
+                ])->label('หมวดหมู่');
                 ?>
                 <?=
                 $form->field($model, 'package_type_id')->widget(DepDrop::classname(), [
@@ -238,14 +238,14 @@ CSS
                                 'headerOptions' => ['class' => 'tab-paper-size']
                             ],
                             [
-                                'label' => 'หน้าพิมพ์',
-                                'options' => ['id' => 'tab-before-print'],
-                                'headerOptions' => ['class' => 'tab-before_print']
+                                'label' => 'พิมพ์หน้าเดียว',
+                                'options' => ['id' => 'tab-print-one-page'],
+                                'headerOptions' => ['class' => 'tab-print_one_page']
                             ],
                             [
-                                'label' => 'หลังพิมพ์',
-                                'options' => ['id' => 'tab-after-print'],
-                                'headerOptions' => ['class' => 'tab-after_print']
+                                'label' => 'พิมพ์สองหน้า',
+                                'options' => ['id' => 'tab-print-two-page'],
+                                'headerOptions' => ['class' => 'tab-print_two_page']
                             ],
                             [
                                 'label' => 'กระดาษ',

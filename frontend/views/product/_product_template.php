@@ -13,7 +13,7 @@ $className = '';
     <div class="media open-collapse" data-toggle="collapse__35" role="button"
          aria-expanded="true" aria-controls="collapse__35">
         <a class="product-link product-cate-sub"
-           href="<?= Url::to(['/product/catalog', 'p' => $category['catalog_type_id']]) ?>"
+           href="<?= Url::to(['/product/catalog', 'p' => $category['product_category_id']]) ?>"
            data-block-id="block_coll_<?= $className ?>"
            data-point-id="point-active-<?= $className ?>">
             <span class="icon"></span>
@@ -22,7 +22,7 @@ $className = '';
             </div>
             <div class="media-body">
                 <p class="product-sub-name">
-                    <?= $category['catalog_type_name'] ?>
+                    <?= $category['product_category_name'] ?>
                 </p>
             </div>
         </a>

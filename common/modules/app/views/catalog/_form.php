@@ -4,7 +4,7 @@ use kartik\form\ActiveForm;
 use adminlte\helpers\Html;
 use kartik\widgets\Select2;
 use yii\helpers\ArrayHelper;
-use common\modules\app\models\TblCatalogType;
+use common\modules\app\models\TblProductCategory;
 use trntv\filekit\widget\Upload;
 use yii\web\JsExpression;
 use froala\froalaeditor\FroalaEditorWidget;
@@ -41,8 +41,8 @@ SweetAlert2Asset::register($this);
 
             <div class="row">
                 <div class="col-sm-6 col-sm-12">
-                    <?= $form->field($model, 'catalog_type_id')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(TblCatalogType::find()->asArray()->all(), 'catalog_type_id', 'catalog_type_name'),
+                    <?= $form->field($model, 'product_category_id')->widget(Select2::classname(), [
+                        'data' => ArrayHelper::map(TblProductCategory::find()->asArray()->all(), 'product_category_id', 'product_category_name'),
                         'options' => ['placeholder' => 'เลือกหมวดหมู่'],
                         'pluginOptions' => [
                             'allowClear' => true

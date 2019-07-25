@@ -57,6 +57,9 @@ $('#form-printing').formBeforeSubmit({
 });
 $('#ajaxCrudModal .modal-footer').hide();
 autosize($('textarea'));
+$("#grid-printing-pjax").on("pjax:success", function() {
+    $.pjax.reload({container: "#pjax-menu"});
+});
 JS
 );
 ?>

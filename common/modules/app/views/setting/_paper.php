@@ -61,9 +61,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     '{export}',
                     '{toggleData}'
                 ],
-                'tableOptions' => ['class' => 'small kv-table'],
+                'tableOptions' => ['class' => 'small kv-table', 'id' => 'tbl-paper'],
                 'columns' => [
                     ['class' => '\kartik\grid\SerialColumn'],
+                    [
+                        'class' => 'kartik\grid\ExpandRowColumn',
+                        'width' => '50px',
+                        'value' => function ($model, $key, $index, $column) {
+                            return GridView::ROW_COLLAPSED;
+                        },
+                        'detailUrl'=>Url::to(['/app/setting/paper-details']),
+                        'headerOptions' => ['class' => 'kartik-sheet-style'],
+                        'expandOneOnly' => true
+                    ],
                     'paper_id',
                     [
                         'label' => 'ประเภท',
@@ -75,19 +85,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     [
                         'attribute' => 'paper_name',
-                        'value' => function ($model, $key, $index) {
+                        /* 'value' => function ($model, $key, $index) {
                             return $model->paperName;
-                        },
+                        }, */
                     ],
                     [
                         'attribute' => 'paper_gram',
                         'hAlign' => 'center'
                     ],
-                    [
+                    /* [
                         'attribute' => 'paper_price',
                         'format' => ['decimal', 2],
                         'hAlign' => 'right'
-                    ],
+                    ], */
                     'paper_description:text',
                     [
                         'class' => '\kartik\grid\ActionColumn',

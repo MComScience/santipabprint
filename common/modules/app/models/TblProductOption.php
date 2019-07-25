@@ -9,8 +9,8 @@ use Yii;
  *
  * @property string $product_id รหัสสินค้า
  * @property string $paper_size_option ขนาดกระดาษ
- * @property string $before_printing ด้านหน้าพิมพ์
- * @property string $after_printing ด้านหลังพิมพ์
+ * @property string $print_one_page พิมพ์หน้าเดียว
+ * @property string $print_two_page พิมพ์สองหน้า
  * @property string $paper_option กระดาษ
  * @property string $coating_option เคลือบ
  * @property string $diecut_option ไดคัท
@@ -19,6 +19,7 @@ use Yii;
  * @property string $book_binding_option วิธีเข้าเล่ม
  * @property string $two_page_option พิมพ์หน้าหลัง
  * @property string $one_page_option พิมพ์หน้าเดียว
+ * @property string $perforate_option รูปแบบ tag/ที่คั่นหนังสือ
  */
 class TblProductOption extends \yii\db\ActiveRecord
 {
@@ -37,7 +38,7 @@ class TblProductOption extends \yii\db\ActiveRecord
     {
         return [
             [['product_id'], 'required'],
-            [['paper_size_option', 'before_printing', 'after_printing', 'paper_option', 'coating_option', 'diecut_option', 'fold_option', 'foil_color_option', 'book_binding_option', 'two_page_option', 'one_page_option','perforate_option'], 'safe'],
+            [['paper_size_option', 'print_one_page', 'print_two_page', 'paper_option', 'coating_option', 'diecut_option', 'fold_option', 'foil_color_option', 'book_binding_option', 'two_page_option', 'one_page_option', 'perforate_option'], 'string'],
             [['product_id'], 'string', 'max' => 100],
             [['product_id'], 'unique'],
         ];
@@ -49,19 +50,28 @@ class TblProductOption extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'product_id' => Yii::t('app', 'รหัสสินค้า'),
-            'paper_size_option' => Yii::t('app', 'ขนาดกระดาษ'),
-            'before_printing' => Yii::t('app', 'ด้านหน้าพิมพ์'),
-            'after_printing' => Yii::t('app', 'ด้านหลังพิมพ์'),
-            'paper_option' => Yii::t('app', 'กระดาษ'),
-            'coating_option' => Yii::t('app', 'เคลือบ'),
-            'diecut_option' => Yii::t('app', 'ไดคัท'),
-            'fold_option' => Yii::t('app', 'วิธีพับ'),
-            'foil_color_option' => Yii::t('app', 'สีฟอยล์'),
-            'book_binding_option' => Yii::t('app', 'วิธีเข้าเล่ม'),
-            'two_page_option' => Yii::t('app', 'พิมพ์หน้าหลัง'),
-            'one_page_option' => Yii::t('app', 'พิมพ์หน้าเดียว'),
-            'perforate_option' => Yii::t('app', 'รูปแบบ tag/ที่คั่นหนังสือ'),
+            'product_id' => 'รหัสสินค้า',
+            'paper_size_option' => 'ขนาดกระดาษ',
+            'print_one_page' => 'พิมพ์หน้าเดียว',
+            'print_two_page' => 'พิมพ์สองหน้า',
+            'paper_option' => 'กระดาษ',
+            'coating_option' => 'เคลือบ',
+            'diecut_option' => 'ไดคัท',
+            'fold_option' => 'วิธีพับ',
+            'foil_color_option' => 'สีฟอยล์',
+            'book_binding_option' => 'วิธีเข้าเล่ม',
+            'two_page_option' => 'พิมพ์หน้าหลัง',
+            'one_page_option' => 'พิมพ์หน้าเดียว',
+            'perforate_option' => 'รูปแบบ tag/ที่คั่นหนังสือ',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return TblProductOptionQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new TblProductOptionQuery(get_called_class());
     }
 }

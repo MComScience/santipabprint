@@ -33,7 +33,7 @@ foreach ($styles as $style) {
                     <?= Html::a(Icon::show('th').'ตัวอย่างผลิตภัณฑ์',['/product/catalog-list']); ?>
                 </li>
                 <li>
-                    <?= Html::a($catalogType['catalog_type_name'],['/product/catalog', 'p' => $catalogType['catalog_type_id']]); ?>
+                    <?= Html::a($catalogType['product_category_name'],['/product/catalog', 'p' => $catalogType['product_category_id']]); ?>
                 </li>
                 <li class="active"><?= $catalog['catalog_name'] ?></li>
             </ol>
@@ -95,7 +95,7 @@ foreach ($styles as $style) {
             <div class="col-xs-12 col-md-2"></div>
             <div class="col-xs-12 col-md-4">
                <p>
-               <?= Html::a('<i class="fa fa-angle-left"></i> ย้อนกลับ', ['/product/catalog', 'p' => $catalog['catalog_type_id']], [
+               <?= Html::a('<i class="fa fa-angle-left"></i> ย้อนกลับ', ['/product/catalog', 'p' => $catalog['product_category_id']], [
                     'class' => 'btn btn-info btn-block',
                 ]); ?>
                </p>

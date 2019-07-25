@@ -61,9 +61,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     [
-                        'attribute' => 'catalog_type_id',
+                        'attribute' => 'product_category_id',
                         'value' => function($model) {
-                            return $model->catalogType ? $model->catalogType->catalog_type_name : '-';
+                            return $model->productCategory ? $model->productCategory->product_category_name : '-';
                         },
                         'group' => true
                     ],

@@ -17,7 +17,7 @@ class TblCatalogSearch extends TblCatalog
     public function rules()
     {
         return [
-            [['catalog_id', 'catalog_type_id'], 'integer'],
+            [['catalog_id', 'product_category_id'], 'integer'],
             [['catalog_name', 'catalog_detail', 'image_path', 'image_base_url'], 'safe'],
         ];
     }
@@ -62,7 +62,7 @@ class TblCatalogSearch extends TblCatalog
         // grid filtering conditions
         $query->andFilterWhere([
             'catalog_id' => $this->catalog_id,
-            'catalog_type_id' => $this->catalog_type_id,
+            'product_category_id' => $this->product_category_id,
         ]);
 
         $query->andFilterWhere(['like', 'catalog_name', $this->catalog_name])

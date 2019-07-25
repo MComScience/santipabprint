@@ -88,7 +88,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'product_category_name',
                     'label' => 'ชื่อหมวดหมู่',
-                    'hAlign' => 'center',
                     'vAlign' => 'middle',
                     'headerOptions' => [
                         'style' => 'text-align:center;',

@@ -15,8 +15,8 @@ use Yii;
  * @property int $paper_size_height ยาว(กำหนดเอง)
  * @property int $paper_size_unit หน่วย(กำหนดเอง)
  * @property int $page_qty จำนวนหน้า/จำนวนแผ่น
- * @property string $before_print ด้านหน้าพิมพ์
- * @property string $after_print ด้านหลังพิมพ์
+ * @property string $print_one_page ด้านหน้าพิมพ์
+ * @property string $print_two_page ด้านหลังพิมพ์
  * @property string $paper_id กระดาษ
  * @property string $coating_id เคลือบ
  * @property string $diecut_id ไดคัท
@@ -43,18 +43,17 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-     public function rules()
+    public function rules()
     {
         return [
             [['quotation_id', 'product_id'], 'required'],
-            [['paper_size_width', 'paper_size_height', 'paper_height', 'foil_size_width', 'foil_size_height', 'emboss_size_width', 'emboss_size_height', 'cust_quantity', 'final_price'], 'number'],
+            [['paper_size_width', 'paper_size_lenght', 'paper_size_height', 'foil_size_width', 'foil_size_height', 'emboss_size_width', 'emboss_size_height', 'cust_quantity', 'final_price'], 'number'],
             [['paper_size_unit', 'page_qty', 'perforate', 'perforate_option_id', 'foil_size_unit', 'emboss_size_unit', 'glue', 'land_orient'], 'integer'],
-            [['quotation_id', 'product_id', 'paper_size_id', 'before_print', 'after_print', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id'], 'string', 'max' => 100],
+            [['quotation_id', 'product_id', 'paper_size_id', 'print_one_page', 'print_two_page', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id'], 'string', 'max' => 100],
             [['coating_option'], 'string', 'max' => 10],
             [['diecut'], 'string', 'max' => 50],
         ];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -66,18 +65,18 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'product_id' => 'รหัสสินค้า',
             'paper_size_id' => 'ขนาด',
             'paper_size_width' => 'กว้าง(กำหนดเอง)',
-            'paper_size_height' => 'ยาว(กำหนดเอง)',
-            'paper_height' => 'สูง(กำหนดเอง)',
+            'paper_size_lenght' => 'ยาว(กำหนดเอง)',
+            'paper_size_height' => 'สูง(กำหนดเอง)',
             'paper_size_unit' => 'หน่วย(กำหนดเอง)',
             'page_qty' => 'จำนวนหน้า/จำนวนแผ่น',
-            'before_print' => 'พิมพ์สองหน้า',
-            'after_print' => 'พิมพ์หน้าเดียว',
+            'print_one_page' => 'พิมพ์หน้าเดียว',
+            'print_two_page' => 'พิมพ์สองหน้า',
             'paper_id' => 'กระดาษ',
             'coating_id' => 'เคลือบ',
             'coating_option' => 'เคลือบด้านเดียวหรือสองด้าน',
             'diecut' => 'ไม่ไดคัท, ไดคัทมุมมน, ไดคัทตามรูปแบบ',
-            'diecut_id' => 'ตัวเลือก ไดคัทมุมมน',
-            'perforate' => 'ตัดเป็นตัว/เจาะมุม',
+            'diecut_id' => 'ไดคัทมุมมน',
+            'perforate' => 'ตัดเป็นตัว+เจาะมุม,ตัดเป็นตัว',
             'perforate_option_id' => 'มุมที่เจาะ',
             'fold_id' => 'วิธีพับ',
             'foil_size_width' => 'กว้าง(ฟอยล์)',
@@ -86,7 +85,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'foil_color_id' => 'สีฟอยล์',
             'emboss_size_width' => 'กว้าง(ปั๊มนูน)',
             'emboss_size_height' => 'ยาว(ปั๊มนูน)',
-            'emboss_size_unit' => 'หน่วย(ปั๊มนูน)',
+            'emboss_size_unit' => 'หน่วย(ปั๊มนุน)',
             'glue' => 'ปะกาว',
             'land_orient' => 'แนวตั้ง/แนวนอน',
             'book_binding_id' => 'วิธีเข้าเล่ม',
@@ -122,13 +121,13 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
     //หน้าพิมพ์
     public function getBeforePrinting()
     {
-        return $this->hasOne(TblColorPrinting::className(), ['color_printing_id' => 'before_print']);
+        return $this->hasOne(TblColorPrinting::className(), ['color_printing_id' => 'print_one_page']);
     }
 
     //หลังพิมพ์
     public function getAfterPrinting()
     {
-        return $this->hasOne(TblColorPrinting::className(), ['color_printing_id' => 'after_print']);
+        return $this->hasOne(TblColorPrinting::className(), ['color_printing_id' => 'print_two_page']);
     }
 
     //กระดาษ

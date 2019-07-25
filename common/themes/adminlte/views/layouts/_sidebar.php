@@ -33,7 +33,7 @@ use adminlte\widgets\Menu;
                         'icon' => 'circle-o',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'หมวดหมู่', 'icon' => 'circle-o', 'url' => ['/app/catalog/group']],
+                            ['label' => 'หมวดหมู่', 'icon' => 'circle-o', 'url' => ['/app/setting/product-category']],
                             ['label' => 'สินค้าตัวอย่าง', 'icon' => 'circle-o', 'url' => ['/app/catalog/index']],
                         ],
                     ],
