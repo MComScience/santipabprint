@@ -27,8 +27,8 @@ class TblPackageType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['product_category_id'], 'integer'],
             [['package_type_name'], 'required'],
-            [['product_category_id'], 'string', 'max' => 100],
             [['package_type_name'], 'string', 'max' => 255],
         ];
     }
