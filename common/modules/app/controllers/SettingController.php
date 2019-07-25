@@ -1179,12 +1179,6 @@ class SettingController extends \yii\web\Controller
                                 if (!($flag = $modelsPackageType->save(false))) {
                                     $transaction->rollBack();
                                     break;
-                                    return [
-                                        'success' => false,
-                                        'message' => $model->errors,
-                                        'data' => $model,
-                                        'validate' => ActiveForm::validateMultiple($modelsPackageTypes),
-                                    ]; 
                                 }
                             }
                         }

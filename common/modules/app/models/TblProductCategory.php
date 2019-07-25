@@ -24,13 +24,13 @@ class TblProductCategory extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            [
+            /* [
                 'class' => 'mdm\autonumber\Behavior',
                 'attribute' => 'product_category_id', // required
                 'value' => 'PC-'.'?' ,
                 'group' => $this->product_category_id,
                 'digit' => 5
-            ],
+            ], */
             'file' => [
                 'class' => UploadBehavior::className(),
                 'attribute' => 'icon',
