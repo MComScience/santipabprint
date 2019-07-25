@@ -47,9 +47,7 @@ class TblProductCategory extends \yii\db\ActiveRecord
     {
         return [
             [['product_category_name'], 'required'],
-            [['product_category_id'], 'string', 'max' => 100],
             [['product_category_name', 'image_path', 'image_base_url'], 'string', 'max' => 255],
-            [['product_category_id'], 'unique'],
             [['icon'], 'safe'],
         ];
     }
