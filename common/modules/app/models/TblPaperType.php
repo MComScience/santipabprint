@@ -39,7 +39,7 @@ class TblPaperType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['paper_type_name', 'paper_type_flag'], 'required'],
+            [['paper_type_name'], 'required'],
             [['paper_type_flag'], 'integer'],
             [['paper_type_id'], 'string', 'max' => 100],
             [['paper_type_name'], 'string', 'max' => 255],
