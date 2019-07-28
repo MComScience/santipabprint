@@ -1244,7 +1244,7 @@ const vm = new Vue({
       );
     },
     onDownloadQO() {
-      if (this.priceSelected) {
+      if (this.priceSelected && this.priceList.length) {
         Swal.fire({
           type: "warning",
           title: "รอสักครู่...",
