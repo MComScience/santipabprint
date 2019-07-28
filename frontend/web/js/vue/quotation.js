@@ -1237,6 +1237,7 @@ const vm = new Vue({
       ) {
         this.priceSelected = null;
       }
+      this.priceSelected = null;
 
       this.priceList = this.priceList.filter(
         p => p.cust_quantity !== item.cust_quantity
