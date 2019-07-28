@@ -296,13 +296,16 @@ class ProductController extends \yii\web\Controller
                 }
             }
             // ตัด
-            if($item['perforate'] == 0){
-                $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัวอย่างเดียว' . $newline;
+            if($queryBuilder->isShowInput($option, 'perforate')) {
+                if($item['perforate'] == 0){
+                    $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัวอย่างเดียว' . $newline;
+                }
+                if($item['perforate'] == 1){
+                    $perforate = TblPerforate::findOne($item['perforate']);
+                    $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัว + เจาะรูกลม' . $nbsp . $perforate['perforate_name'] . $newline;
+                }
             }
-            if($item['perforate'] == 1){
-                $perforate = TblPerforate::findOne($item['perforate']);
-                $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัว + เจาะรูกลม' . $nbsp . $perforate['perforate_name'] . $newline;
-            }
+            
             //วิธีพับ
             if (!empty($item['fold_id']) && $item['fold_id'] != 'N') {
                 if ($item['fold_id'] === 'N') {
