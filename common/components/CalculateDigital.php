@@ -108,34 +108,34 @@ class CalculateDigital extends Component
             }
             //ขนาดสินค้า รับค่าจากหน้าจอ มีหน่วยเป็นนิ้ว
             if ($this->model['paper_size_unit'] == 3) {
-                $messages .= "-:รับขนาดมาเป็นนิ้ว {$this->model['paper_size_width']} x {$this->model['paper_size_height']} นิ้ว\n";
+                $messages .= "-:รับขนาดมาเป็นนิ้ว {$this->model['paper_size_width']} x {$this->model['paper_size_lenght']} นิ้ว\n";
 
                 if ($is_box) {
                     $paperWidth = CalculetFnc::convertInToCm($this->model['paper_size_width']); //กว้าง
-                    $paperLenght = CalculetFnc::convertInToCm($this->model['paper_size_height']); // ยาว
-                    $paperHight = CalculetFnc::convertInToCm($this->model['paper_height']); // สูง
+                    $paperLenght = CalculetFnc::convertInToCm($this->model['paper_size_lenght']); // ยาว
+                    $paperHight = CalculetFnc::convertInToCm($this->model['paper_size_height']); // สูง
 
                     $this->paperWidth = (($paperWidth * 2) + ($paperLenght * 2)) + 0.635; //ความกว้าง = (กว้าง * 2 (2ด้าน))+(ความยาว * 2 (2ด้าน)) + 0.635 เผื่ดติดกาว(แปลงจาก0.25นิ้ว)
                     $this->paperLenght = $paperHight + ($paperWidth * 2) + 1.27; //ความยาว = ความสูง + (ความกว้าง*2) + 1.27 ส่วนพับ(แปลงจาก 0.5 นิ้ว)
                 } else {
                     $this->paperWidth = CalculetFnc::convertInToCm($this->model['paper_size_width']);
-                    $this->paperLenght = CalculetFnc::convertInToCm($this->model['paper_size_height']);
+                    $this->paperLenght = CalculetFnc::convertInToCm($this->model['paper_size_lenght']);
                 }
                 //
                 $messages .= "-:แปลงขนาดจากนิ้วเป็นเซนติเมตร ได้ขนาด {$this->paperWidth} x {$this->paperLenght}";
             } else {
-                $messages .= "-:รับขนาดมา {$this->model['paper_size_width']} x {$this->model['paper_size_height']} เซนติเมตร\n";
+                $messages .= "-:รับขนาดมา {$this->model['paper_size_width']} x {$this->model['paper_size_lenght']} เซนติเมตร\n";
 
                 if ($is_box) {
                     $paperWidth = $this->model['paper_size_width']; //กว้าง
-                    $paperLenght = $this->model['paper_size_height']; // ยาว
-                    $paperHight = $this->model['paper_height']; // สูง
+                    $paperLenght = $this->model['paper_size_lenght']; // ยาว
+                    $paperHight = $this->model['paper_size_height']; // สูง
 
                     $this->paperWidth = (($paperWidth * 2) + ($paperLenght * 2)) + 0.635;
                     $this->paperLenght = $paperHight + ($paperWidth * 2) + 1.27;
                 } else {
                     $this->paperWidth = $this->model['paper_size_width'];
-                    $this->paperLenght = $this->model['paper_size_height'];
+                    $this->paperLenght = $this->model['paper_size_lenght'];
                 }
             }
             if ($this->model['fold_id'] === 'FOLD-00001') { //เช็คว่าถ้ามีการพับครึ่ง
