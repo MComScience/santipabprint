@@ -537,8 +537,6 @@ CSS
                                               id="perforate"
                                               :options="perforateOpts" 
                                               v-model="formAttributes.perforate"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('perforate')"
                                               name="perforate"
                                               @change="onChangePerforate">
                                                 <option disabled value="">เลือกรายการ...</option>
