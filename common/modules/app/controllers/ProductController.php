@@ -270,7 +270,7 @@ class ProductController extends \yii\web\Controller
             // }
 
             //เคลือบ
-            if (!empty($item['coating_id']) && $item['coating_id'] != 'N') {
+            if (!empty($item['coating_id']) && $queryBuilder->isShowInput($option, 'coating_id')) {
                 if ($item['coating_id'] === 'N') {
                     $details .= 'เคลือบ : ' . $nbsp . 'ไม่เคลือบ' . $newline;
                 } else {
@@ -285,7 +285,7 @@ class ProductController extends \yii\web\Controller
                 }
             }
             //ไดคัท
-            if (!empty($item['diecut_id']) && $item['diecut'] != 'N') {
+            if (!empty($item['diecut_id']) && $queryBuilder->isShowInput($option, 'diecut')) {
                 if ($item['diecut_id'] === 'N') {
                     $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ไม่ไดคัท' . $newline;
                 } elseif ($item['diecut_id'] === 'default') {
