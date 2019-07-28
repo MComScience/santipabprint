@@ -597,8 +597,8 @@ class ProductController extends \yii\web\Controller {
         if ($request->isPost) {
             $response = Yii::$app->response;
             $response->format = \yii\web\Response::FORMAT_JSON;
-            $data = $request->post('TblQuotationDetail');
-            $qtys = [1000, 2000, 5000];
+            $data = $request->post();
+            $qtys = [];
             if (!empty($request->post('qty'))) {
                 $qtys = $request->post('qty');
             }

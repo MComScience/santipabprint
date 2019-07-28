@@ -46,12 +46,12 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quotation_id', 'product_id'], 'required'],
+            [['quotation_id', 'product_id', 'paper_detail_id'], 'required'],
             [['paper_size_width', 'paper_size_lenght', 'paper_size_height', 'foil_size_width', 'foil_size_height', 'emboss_size_width', 'emboss_size_height', 'cust_quantity', 'final_price'], 'number'],
-            [['paper_size_unit', 'page_qty', 'perforate', 'perforate_option_id', 'foil_size_unit', 'emboss_size_unit', 'glue', 'land_orient'], 'integer'],
+            [['paper_size_unit', 'page_qty', 'paper_detail_id', 'perforate', 'perforate_option_id', 'foil_size_unit', 'emboss_size_unit', 'glue', 'land_orient'], 'integer'],
             [['quotation_id', 'product_id', 'paper_size_id', 'print_one_page', 'print_two_page', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id'], 'string', 'max' => 100],
+            [['print_option', 'print_color', 'diecut', 'foli_print', 'emboss_print'], 'string', 'max' => 50],
             [['coating_option'], 'string', 'max' => 10],
-            [['diecut', 'foli_print', 'emboss_print'], 'string', 'max' => 50],
         ];
     }
     /**
@@ -71,7 +71,10 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'page_qty' => 'จำนวนหน้า/จำนวนแผ่น',
             'print_one_page' => 'พิมพ์หน้าเดียว',
             'print_two_page' => 'พิมพ์สองหน้า',
+            'print_option' => 'พิมพ์สองหน้าหรือหน้าเดียว',
+            'print_color' => 'สีที่พิมพ์',
             'paper_id' => 'กระดาษ',
+            'paper_detail_id' => 'ขนาดกระดาษ',
             'coating_id' => 'เคลือบ',
             'coating_option' => 'เคลือบด้านเดียวหรือสองด้าน',
             'diecut' => 'ไม่ไดคัท, ไดคัทมุมมน, ไดคัทตามรูปแบบ',
@@ -95,6 +98,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'final_price' => 'ราคา',
         ];
     }
+
 
     //ใบเสนอราคา
     public function getQuotation()

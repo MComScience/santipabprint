@@ -55,7 +55,7 @@ class TblQuotation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quotation_customer_name', 'quotation_customer_address', 'quotation_customer_tel'], 'required'],
+            [['quotation_customer_name', 'quotation_customer_address', 'quotation_customer_tel', 'quotation_customer_email'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
             [['quotation_id'], 'string', 'max' => 100],
             [['quotation_customer_name', 'quotation_customer_address'], 'string', 'max' => 255],

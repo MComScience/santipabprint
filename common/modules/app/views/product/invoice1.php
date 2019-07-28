@@ -81,6 +81,7 @@ $stylecontent = 'style="font-size: 16pt; text-align: center;border-bottom: 0.5px
     @media print {
         img#logo{
             width: 100% !important;
+            display: block;
         }
         .row-logo{
             width: 20%;

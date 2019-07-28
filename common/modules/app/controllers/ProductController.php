@@ -8,6 +8,8 @@ use common\modules\app\models\TblProductCategory;
 use common\modules\app\models\TblProduct;
 use common\modules\app\models\TblQuotation;
 use common\modules\app\models\TblQuotationDetail;
+use common\modules\app\models\TblPaperDetail;
+use common\modules\app\models\TblPerforate;
 use common\modules\app\traits\ModelTrait;
 use kartik\form\ActiveForm;
 use kartik\icons\Icon;
@@ -111,7 +113,11 @@ class ProductController extends \yii\web\Controller
 
     public function actionQuotation($p, $slug = null)
     {
-        $request = Yii::$app->request;
+        $modelProduct = $this->findModelProduct($p);
+        return $this->render('quotation-vue', [
+            'modelProduct' => $modelProduct
+        ]);
+        /* $request = Yii::$app->request;
         $update = false;
         $modelProduct = $this->findModelProduct($p);
         $modelProductOption = $this->findModelProductOption($p);
@@ -136,7 +142,7 @@ class ProductController extends \yii\web\Controller
         } else {
             $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
             //return Json::encode($validates);
-            return $this->render('quotation', [
+            return $this->render('quotation-vue', [
                 'option' => $option,
                 'modelProduct' => $modelProduct,
                 'modelQuotation' => $modelQuotation,
@@ -145,7 +151,7 @@ class ProductController extends \yii\web\Controller
                 'update' => $update,
                 'validates' => $fetchOptions['validation'],
             ]);
-        }
+        } */
     }
 
     public function actionDownload($p)
@@ -153,43 +159,43 @@ class ProductController extends \yii\web\Controller
         $request = Yii::$app->request;
         $model = new TblQuotation();
         $modelDetail = new TblQuotationDetail();
-        if ($request->isAjax) {
-            $response = Yii::$app->response;
-            $response->format = \yii\web\Response::FORMAT_JSON;
-            if ($request->isGet) {
-                return [
-                    'title' => Icon::show('download') . 'ดาวน์โหลดใบเสนอราคา',
-                    'content' => $this->renderAjax('_form_download', [
-                        'model' => $model,
-                    ]),
-                    'footer' => '',
-                ];
-            } elseif ($model->load($request->post())) {
-                $modelDetail->setAttributes($request->post('TblQuotationDetail'));
-                $modelDetail->final_price = str_replace(',', '', $request->post('final_price'));
-                if ($model->save()) {
-                    $modelDetail->quotation_id = $model['quotation_id'];
-                    if ($modelDetail->save()) {
-                        return [
-                            'success' => true,
-                            'message' => 'Success',
-                            'url' => Url::to(['quo', 'q' => $model['quotation_id']]),
-                        ];
-                    } else {
-                        $model->delete();
-                        return [
-                            'success' => false,
-                            'message' => 'error',
-                            'validate' => ArrayHelper::merge(ActiveForm::validate($model), ActiveForm::validate($modelDetail)),
-                        ];
-                    }
+        $modelDetail->product_id = $p;
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        if ($request->isGet) {
+            return [
+                'title' => Icon::show('download') . 'ดาวน์โหลดใบเสนอราคา',
+                'content' => $this->renderAjax('_form_download', [
+                    'model' => $model,
+                    'modelDetail' => $modelDetail
+                ]),
+                'footer' => '',
+            ];
+        } elseif ($model->load($request->post())) {
+            $modelDetail->setAttributes($request->post());
+            $modelDetail->final_price = str_replace(',', '', $request->post('final_price'));
+            if ($model->save()) {
+                $modelDetail->quotation_id = $model['quotation_id'];
+                if ($modelDetail->save()) {
+                    return [
+                        'success' => true,
+                        'message' => 'Success',
+                        'url' => Url::to(['quo', 'q' => $model['quotation_id']]),
+                    ];
                 } else {
+                    $model->delete();
                     return [
                         'success' => false,
                         'message' => 'error',
                         'validate' => ArrayHelper::merge(ActiveForm::validate($model), ActiveForm::validate($modelDetail)),
                     ];
                 }
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'error',
+                    'validate' => ArrayHelper::merge(ActiveForm::validate($model), ActiveForm::validate($modelDetail)),
+                ];
             }
         }
     }
@@ -247,19 +253,21 @@ class ProductController extends \yii\web\Controller
             //กระดาษ
             if (!empty($item['paper_id'])) {
                 $modelPaper = $this->findModelPaper($item['paper_id']);
-                $size = '&nbsp;(ขนาด ' . $this->convertNumber($modelPaper['paper_width']) . 'x' . $this->convertNumber($modelPaper['paper_length']) . ')';
-                $details .= $queryBuilder->getInputLabel($option, 'paper_id', $item) . ': &nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . '  ' . $modelPaper['paper_gram'] . ' แกรม ' . $size . $newline;
+                $paperDetail = TblPaperDetail::findOne($item['paper_detail_id']);
+                $size = '&nbsp;(ขนาด ' . $this->convertNumber($paperDetail['paper_width']) . 'x' . $this->convertNumber($paperDetail['paper_length']) . ')';
+                $details .= $queryBuilder->getInputLabel($option, 'paper_id', $item) . ': &nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . $size . $newline;
             }
             //พิมพ์สองหน้า
-            if (!empty($item['before_print'])) {
-                $modelBeforePrint = $this->findModelColorPrinting($item['before_print']);
-                $details .= $queryBuilder->getInputLabel($option, 'before_print', $item) . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
+            if (!empty($item['print_option'])) {
+                $print_text = $item['print_option'] == 'one_page' ? 'พิมพ์หน้าเดียว' : 'พิมพ์สองหน้า';
+                $modelBeforePrint = $this->findModelColorPrinting($item['print_color']);
+                $details .= $print_text . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
             }
             //พิมพ์หน้าเดียว
-            if (!empty($item['after_print'])) {
-                $modelBeforePrint = $this->findModelColorPrinting($item['after_print']);
-                $details .= $queryBuilder->getInputLabel($option, 'after_print', $item) . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
-            }
+            // if (!empty($item['after_print'])) {
+            //     $modelBeforePrint = $this->findModelColorPrinting($item['after_print']);
+            //     $details .= $queryBuilder->getInputLabel($option, 'after_print', $item) . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
+            // }
 
             //เคลือบ
             if (!empty($item['coating_id']) && $item['coating_id'] != 'N') {
@@ -287,6 +295,14 @@ class ProductController extends \yii\web\Controller
                     $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . $newline;
                 }
             }
+            // ตัด
+            if($item['perforate'] == 0){
+                $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัวอย่างเดียว' . $newline;
+            }
+            if($item['perforate'] == 1){
+                $perforate = TblPerforate::findOne($item['perforate']);
+                $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัว + เจาะรูกลม' . $nbsp . $perforate['perforate_name'] . $newline;
+            }
             //วิธีพับ
             if (!empty($item['fold_id']) && $item['fold_id'] != 'N') {
                 if ($item['fold_id'] === 'N') {
@@ -304,7 +320,15 @@ class ProductController extends \yii\web\Controller
                 $modelFoil = $this->findModelFoilColor($item['foil_color_id']);
                 $modelFoilUnit = $this->findModelUnit($item['foil_size_unit']);
 
-                $details .= 'ฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $newline;
+                $foli_print = '';
+                if($item['foli_print'] == 'two_page'){
+                    $foli_print = 'ปั๊มฟอยล์ทั้งหน้า/หลัง';
+                }
+                if($item['foli_print'] == 'one_page'){
+                    $foli_print = 'ปั๊มฟอยล์หน้าเดียว';
+                }
+
+                $details .= 'ฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $nbsp . $foli_print . $newline;
             }
             //ปั๊มนูน
             if (!empty($item['emboss_size_width']) && !empty($item['emboss_size_height']) && !empty($item['emboss_size_unit'])) {
@@ -314,7 +338,15 @@ class ProductController extends \yii\web\Controller
 
                 $modelEmBossUnit = $this->findModelUnit($item['emboss_size_unit']);
 
-                $details .= 'ปั๊มนูน ขนาด: ' . $nbsp . $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . $newline;
+                $emboss_print = '';
+                if($item['emboss_print'] == 'two_page'){
+                    $emboss_print = 'ปั๊มนูนทั้งหน้า/หลัง';
+                }
+                if($item['emboss_print'] == 'one_page'){
+                    $emboss_print = 'ปั๊มนูนหน้าเดียว';
+                }
+
+                $details .= 'ปั๊มนูน ขนาด: ' . $nbsp . $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . $nbsp . $emboss_print . $newline;
             }
             //แนวตัง/แนวนอน
             if (!empty($item['land_orient'])) {
@@ -329,6 +361,13 @@ class ProductController extends \yii\web\Controller
                     $details .= 'เข้าเล่ม : ' . $nbsp . $modelBookBinding['book_binding_name'] . $newline;
                 }
             }
+
+            if(!empty($item['glue'])){
+                if($item['glue'] == 1){
+                    $details .= 'ปะกาว';
+                }
+            }
+
             $items[] = [
                 'product_id' => $item['product_id'],
                 'data' => $item,

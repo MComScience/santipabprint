@@ -73,14 +73,14 @@ use kartik\icons\Icon;
 <?php
 $this->registerJs(<<<JS
 $('#ajaxCrudModal .modal-footer').hide();
-if($('.list-group').find('a.list-group-item.active').length === 0){
-    Swal({
-        type: 'warning',
-        title: 'Oops!',
-        text: 'กรุณาเลือกจำนวนที่ต้องการพิมพ์',
-    });
-    $('#ajaxCrudModal').modal('hide');
-}
+// if($('.list-group').find('a.list-group-item.active').length === 0){
+//     Swal({
+//         type: 'warning',
+//         title: 'Oops!',
+//         text: 'กรุณาเลือกจำนวนที่ต้องการพิมพ์',
+//     });
+//     $('#ajaxCrudModal').modal('hide');
+// }
 var \$form = $('#form-download');
 var \$formQuo = $('#form-quotation');
 \$form.on('beforeSubmit', function() {
@@ -94,24 +94,28 @@ var \$formQuo = $('#form-quotation');
     \$form.serializeArray().map(function (x) {
         dataObj[x.name] = x.value;
     });
-    \$formQuo.serializeArray().map(function (x) {
+    /* \$formQuo.serializeArray().map(function (x) {
         if(x.name === 'TblQuotationDetail[cust_quantity]'){
             dataQO[x.name] = qty;
         } else {
             dataQO[x.name] = x.value;
         }
-    });
+    }); */
+    if (localStorage.getItem("formData")) {
+        const formData = JSON.parse(localStorage.getItem("formData"));
+        dataQO = formData['{$modelDetail->product_id}'];
+    }
     var \$btn = $('#form-download button[type="submit"]').button('loading');
     $.ajax({
         url: \$form.attr('action'),
         type: \$form.attr('method'),
-        data: $.extend(dataObj, dataQO, {final_price: final_price}),
+        data: $.extend(dataObj, dataQO),
         dataType:'JSON',
         success: function (response) {
             // Implement successful
             \$btn.button('reset');
             if (response.success) {
-                localStorage.removeItem('formOptions');
+                localStorage.removeItem('formData');
                 $('#ajaxCrudModal').modal('hide');
                 window.location.href = response.url;
             } else {

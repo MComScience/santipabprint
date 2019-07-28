@@ -1304,7 +1304,7 @@ class SettingController extends \yii\web\Controller
         $gridBuilder = new GridBuilder();
         $modelProductOption = new TblProductOption();
         $attributes = $modelOption->getAttributes();
-        $attrRemoves = ['quotation_detail_id', 'quotation_id', 'product_id', 'final_price', 'cust_quantity'];
+        $attrRemoves = ['quotation_detail_id', 'quotation_id', 'product_id', 'final_price', 'cust_quantity', 'paper_detail_id'];
         foreach ($attrRemoves as $attr) {
             ArrayHelper::remove($attributes, $attr);
         }
@@ -1386,7 +1386,7 @@ class SettingController extends \yii\web\Controller
         $gridBuilder = new GridBuilder();
         $modelProductOption = $this->findModelProductOption($id);
         $attributes = $modelOption->getAttributes();
-        $attrRemoves = ['quotation_detail_id', 'quotation_id', 'product_id', 'final_price', 'cust_quantity'];
+        $attrRemoves = ['quotation_detail_id', 'quotation_id', 'product_id', 'final_price', 'cust_quantity', 'paper_detail_id'];
         foreach ($attrRemoves as $attr) {
             ArrayHelper::remove($attributes, $attr);
         }
