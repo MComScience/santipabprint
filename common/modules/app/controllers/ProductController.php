@@ -230,15 +230,15 @@ class ProductController extends \yii\web\Controller
                 if ($item['paper_size_id'] === 'custom') {
                     $modelUnit = $this->findModelUnit($item['paper_size_unit']);
                     $paper_size_width = $this->convertNumber($item['paper_size_width']);
-                    $paper_size_height = $this->convertNumber($item['paper_size_lenght']);
+                    $paper_size_lenght = $this->convertNumber($item['paper_size_lenght']);
                     $paper_size_height = $this->convertNumber($item['paper_size_height']);
                     if (empty($paper_size_height)) {
                         $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
-                            $paper_size_width . $x . $paper_size_height . $nbsp .
+                            $paper_size_width . $x . $paper_size_lenght . $nbsp .
                             $modelUnit['unit_name'] . $newline;
                     } else {
                         $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
-                            $paper_size_width . $x . $paper_size_height . $x . $paper_size_height . $nbsp .
+                            $paper_size_width . $x . $paper_size_lenght . $x . $paper_size_height . $nbsp .
                             $modelUnit['unit_name'] . $newline;
                     }
                 } else {
