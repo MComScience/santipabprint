@@ -48,7 +48,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
         return [
             [['quotation_id', 'product_id', 'paper_detail_id'], 'required'],
             [['paper_size_width', 'paper_size_lenght', 'paper_size_height', 'foil_size_width', 'foil_size_height', 'emboss_size_width', 'emboss_size_height', 'cust_quantity', 'final_price'], 'number'],
-            [['paper_size_unit', 'page_qty', 'paper_detail_id', 'perforate', 'perforate_option_id', 'foil_size_unit', 'emboss_size_unit', 'glue', 'land_orient'], 'integer'],
+            [['paper_size_unit', 'page_qty', 'paper_detail_id', 'perforate', 'perforate_option_id', 'foil_size_unit', 'emboss_size_unit', 'glue', 'land_orient','bill_detail_qty'], 'integer'],
             [['quotation_id', 'product_id', 'paper_size_id', 'print_one_page', 'print_two_page', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id'], 'string', 'max' => 100],
             [['print_option', 'print_color', 'diecut', 'foli_print', 'emboss_print'], 'string', 'max' => 50],
             [['coating_option'], 'string', 'max' => 10],
@@ -89,13 +89,14 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'foli_print' => 'ปั๊มฟอยล์ทั้งหน้า/หลังหรือหน้าเดียว',
             'emboss_size_width' => 'กว้าง(ปั๊มนูน)',
             'emboss_size_height' => 'ยาว(ปั๊มนูน)',
-            'emboss_size_unit' => 'หน่วย(ปั๊มนุน)',
+            'emboss_size_unit' => 'หน่วย(ปั๊มนูน)',
             'emboss_print' => 'ปั๊มนูนทั้งหน้า/หลังหรือหน้าเดียว',
             'glue' => 'ปะกาว',
             'land_orient' => 'แนวตั้ง/แนวนอน',
             'book_binding_id' => 'วิธีเข้าเล่ม',
             'cust_quantity' => 'จำนวนที่ต้องการ',
             'final_price' => 'ราคา',
+            'bill_detail_qty' => 'จำนวนแผ่นต่อชุด ',
         ];
     }
 

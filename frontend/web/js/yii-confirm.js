@@ -5,7 +5,8 @@ isEmpty = function (v) {
     "use strict";
     yii.confirm = function (message, ok, cancel) {
         var pjaxId = $(this).data('pjax-reload'),
-            url = $(this).attr('href');
+            url = $(this).attr('href'),
+            msg = $(this).attr('complete-msg');
         Swal({
             title: message + '?',
             text: '',
@@ -41,7 +42,7 @@ isEmpty = function (v) {
         }).then((result) => {
             if (result.value) {
                 Swal(
-                    'Deleted!',
+                    msg ? msg : 'Deleted!',
                     '',
                     'success'
                 );

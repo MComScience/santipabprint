@@ -17,6 +17,7 @@ use common\modules\app\models\TblProductCategory;
 use common\modules\app\models\TblProduct;
 use common\modules\app\models\TblPerforate;
 use common\modules\app\models\TblPackageType;
+use common\modules\app\models\TblBillPrice;
 
 $options = [
     [
@@ -96,6 +97,12 @@ $options = [
         'url' => ['product'],
         'action' => 'product',
         'count' => TblProduct::find()->count()
+    ],
+    [
+        'text' => 'ตั้งค่าราคา บิล/ใบเสร็จ/ใบส่งของ',
+        'url' => ['bill-price'],
+        'action' => 'bill-price',
+        'count' => TblBillPrice::find()->count()
     ],
     //ใช้ร่วมกันกับหมวดหมู่
 //    [
