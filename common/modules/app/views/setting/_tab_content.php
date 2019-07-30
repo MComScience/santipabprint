@@ -62,9 +62,9 @@ $productOption = $modelProduct->productOption;
         ?>
     </div>
     <!-- /.tab-pane -->
-    <div class="tab-pane" id="tab-print-one-page">
+    <div class="tab-pane" id="tab-print_color">
         <p>
-            <span class="badge">พิมพ์หน้าเดียว</span>
+            <span class="badge">สีที่พิมพ์</span>
         </p>
         <?=
         GridView::widget([
@@ -102,7 +102,7 @@ $productOption = $modelProduct->productOption;
         <p>
             <span class="badge">พิมพ์สองหน้า</span>
         </p>
-        <?=
+        <?php/*
         GridView::widget([
             'id' => 'grid-print-two-page',
             'dataProvider' => $gridBuilder->getDataColorPrinting($modelProduct),
@@ -130,7 +130,7 @@ $productOption = $modelProduct->productOption;
                     'rowSelectedClass' => GridView::TYPE_SUCCESS
                 ]
             ]
-        ]);
+        ]);*/
         ?>
     </div>
     <div class="tab-pane" id="tab-paper">

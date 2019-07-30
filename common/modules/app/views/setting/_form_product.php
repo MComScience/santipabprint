@@ -238,15 +238,15 @@ CSS
                                 'headerOptions' => ['class' => 'tab-paper-size']
                             ],
                             [
-                                'label' => 'พิมพ์หน้าเดียว',
-                                'options' => ['id' => 'tab-print-one-page'],
-                                'headerOptions' => ['class' => 'tab-print_one_page']
+                                'label' => 'สีที่พิมพ์',
+                                'options' => ['id' => 'tab-print_color'],
+                                'headerOptions' => ['class' => 'tab-print_color']
                             ],
-                            [
-                                'label' => 'พิมพ์สองหน้า',
-                                'options' => ['id' => 'tab-print-two-page'],
-                                'headerOptions' => ['class' => 'tab-print_two_page']
-                            ],
+//                            [
+//                                'label' => 'พิมพ์สองหน้า',
+//                                'options' => ['id' => 'tab-print-two-page'],
+//                                'headerOptions' => ['class' => 'tab-print_two_page']
+//                            ],
                             [
                                 'label' => 'กระดาษ',
                                 'options' => ['id' => 'tab-paper'],
