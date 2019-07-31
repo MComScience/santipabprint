@@ -257,6 +257,11 @@ class ProductController extends \yii\web\Controller
                 $size = '&nbsp;(ขนาด ' . $this->convertNumber($paperDetail['paper_width']) . 'x' . $this->convertNumber($paperDetail['paper_length']) . ')';
                 $details .= $queryBuilder->getInputLabel($option, 'paper_id', $item) . ': &nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . $size . $newline;
             }
+            // จำนวนแผ่นต่อชุด
+            if (!empty($item['bill_detail_qty'])) {
+                $billPrice = $this->findModelBillPrice($item['bill_detail_qty']);
+                $details .= 'จำนวนแผ่นต่อชุด:' . $nbsp2 . $billPrice['bill_floor'] . $newline;
+            }
             //พิมพ์สองหน้า
             if (!empty($item['print_option'])) {
                 $print_text = $item['print_option'] == 'one_page' ? 'พิมพ์หน้าเดียว' : 'พิมพ์สองหน้า';

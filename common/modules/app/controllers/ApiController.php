@@ -6,6 +6,8 @@ use common\components\QueryBuilder;
 use common\modules\app\models\TblProductCategory;
 use common\modules\app\models\TblQuotationDetail;
 use common\modules\app\models\TblUnit;
+use common\modules\app\models\TblBillPrice;
+use common\modules\app\models\TblBillPriceDetail;
 use common\modules\app\traits\ModelTrait;
 use Yii;
 use yii\filters\AccessControl;
@@ -33,7 +35,7 @@ class ApiController extends \yii\web\Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['product-category-list', 'quotation', 'calculate-price'],
+                        'actions' => ['product-category-list', 'quotation', 'calculate-price', 'bill-floor-options'],
                         'roles' => ['?', '@'],
                     ],
                 ],
@@ -127,20 +129,40 @@ class ApiController extends \yii\web\Controller
         $request = Yii::$app->request;
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
-        $qtys = [];
+        $qtys = [
+            500,
+            1000,
+            2000
+        ];
         $priceList = [];
+        $data = $request->post();
+        $product = $this->findModelProduct($data['product_id']);
+        // บิล/ใบเสร็จ/ใบส่งของ
+        if($product['product_category_id'] == 19){
+            $billPriceDetails = TblBillPriceDetail::findAll([
+                'bill_price_id' => $data['bill_detail_qty']
+            ]);
+            foreach ($billPriceDetails as $key => $billPriceDetail) {
+                $priceList[] = [
+                    'cust_quantity' => $billPriceDetail['bill_detail_qty'],
+                    'price_per_item' => $billPriceDetail['bill_detail_price'],
+                    'final_price' => number_format($billPriceDetail['bill_detail_price'] * $billPriceDetail['bill_detail_qty'], 2),
+                    'paper' => [
+                        'paper_detail' => [
+                            'paper_detail_id' => ''
+                        ]
+                    ]
+                ];
+            }
+            return [
+                'price_list' => $priceList,
+            ];
+        }
+
         if (!empty($request->post('qty'))) {
             $qtys = \explode(',', $request->post('qty'));
         }
-        foreach ($qtys as $key => $qty) {
-            $priceList[] = [
-                'cust_quantity' => $qty,
-                'price_per_item' => 0.2,
-                'final_price' => $qty * 0.2,
-            ];
-        }
-        $priceList = [];
-        $data = $request->post();
+        
         foreach ($qtys as $qty) {
             $data['cust_quantity'] = $qty;
             $digital = new CalculateDigital([
@@ -182,5 +204,24 @@ class ApiController extends \yii\web\Controller
         return [
             'price_list' => $priceList,
         ];
+    }
+
+    public function actionBillFloorOptions($paper_size_id, $paper_id){
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $rows = (new \yii\db\Query())
+            ->select([
+                'tbl_bill_price.bill_price_id',
+                'tbl_bill_price.paper_size_id',
+                'CONCAT(tbl_bill_price.bill_floor,\'  แผ่น \') as bill_floor',
+                'tbl_bill_price.paper_id'
+            ])
+            ->from('tbl_bill_price')
+            ->where([
+                'paper_size_id' => $paper_size_id,
+                'paper_id' => $paper_id,
+            ])
+            ->all();
+        return ArrayHelper::map($rows, 'bill_price_id','bill_floor');
     }
 }

@@ -370,6 +370,15 @@ const vm = new Vue({
       placeholder: "เลือกขนาด",
       language: "th"
     },
+    // จำนวนแผ่นต่อชุด
+    billQtyOpts: {
+      data: [],
+      allowClear: true,
+      theme: "bootstrap",
+      width: "100%",
+      placeholder: "เลือกจำนวนแผ่นต่อชุด",
+      language: "th"
+    },
     // หน่วยขนาด
     pageSizeUnitOpts: {
       data: [],
@@ -562,6 +571,7 @@ const vm = new Vue({
       print_color: "",
       quotation_id: "",
       cust_quantity: "",
+      bill_detail_qty: "",
       product_id: p
     },
     landOrientOptions: [
@@ -818,6 +828,11 @@ const vm = new Vue({
           : this.getTextValue(diecut_id);
       return this.getTextValue(diecut) + " " + dicutTxt;
     },
+    billDetail: function() {
+      const bill_detail_qty = this.findDataOption(this.billQtyOpts.data, "id", "bill_detail_qty");
+      
+      return this.getTextValue(bill_detail_qty);
+    },
     paper_size_width: function() {
       if (!this.formAttributes.paper_size_width) return "";
       return this.formAttributes.paper_size_width;
@@ -945,6 +960,8 @@ const vm = new Vue({
             );
           }
 
+          this.fetchDataBillFloorOptions()
+
           $("#loading, #loading2").hide();
         })
         .catch(error => {
@@ -960,6 +977,36 @@ const vm = new Vue({
             timer: 4000
           });
         });
+    },
+    // จำนวนแผ่นต่อชุด
+    fetchDataBillFloorOptions: function() {
+      let formAttributes = this.formAttributes
+      if(this.isvisibleInput('bill_detail_qty')){
+        axios
+        .get(`/app/api/bill-floor-options?paper_size_id=${formAttributes.paper_size_id}&paper_id=${formAttributes.paper_id}`)
+        .then(response => {
+          // handle success
+          this.billQtyOpts = updateObject(this.billQtyOpts, {
+            data: this.mapDataOptions(response.data)
+          });
+          this.formAttributes['bill_detail_qty'] = formAttributes.bill_detail_qty
+          // $('#bill_detail_qty')
+          //   .val(null)
+          //   .trigger("change");
+        })
+        .catch(error => {
+          // handle error
+          Swal.fire({
+            type: "error",
+            title: "Oops...",
+            text: error.response
+              ? error.response.statusText || "เกิดข้อผิดพลาด"
+              : "เกิดข้อผิดพลาด",
+            showConfirmButton: false,
+            timer: 4000
+          });
+        });
+      }
     },
     onSubmit: function() {
       console.log("onSubmit");
@@ -989,6 +1036,10 @@ const vm = new Vue({
         this.$validator.reset();
       }
       this.storeData();
+      // จำนวนแผ่นต่อชุด
+      if(this.isvisibleInput('bill_detail_qty')){
+        this.fetchDataBillFloorOptions()
+      }
     },
     onChangePrintOption: function(e) {
       console.log(e.target.value);
@@ -1061,6 +1112,13 @@ const vm = new Vue({
       console.log(e.target.value);
     },
     onChangePaperId: function(e) {
+      console.log(e.target.value);
+      // จำนวนแผ่นต่อชุด
+      if(this.isvisibleInput('bill_detail_qty')){
+        this.fetchDataBillFloorOptions()
+      }
+    },
+    onChangeBillQty: function(e) {
       console.log(e.target.value);
     },
     mapDataOptions: function(options) {
@@ -1152,9 +1210,14 @@ const vm = new Vue({
           //     Swal.showLoading();
           //   }
           // });
+          this.onBackStep(2)
           this.calculatePrice();
         }
       });
+    },
+    onBackStep: function(step) {
+      this.step = step
+      this.priceSelected = null;
     },
     calculatePrice(cust_quantity = null) {
       this.loadingQty = true;
@@ -1295,7 +1358,9 @@ const vm = new Vue({
     }
   },
   watch: {
-    formAttributes: function(val, oldVal) {},
+    formAttributes: function(val, oldVal) {
+      console.log(val)
+    },
     step: function(value) {
       if (value === 1) {
         $("#preview-detail")

@@ -382,6 +382,24 @@ CSS
                                             {{ errors.first('paper_id') }}
                                           </div>
                                         </v-col>
+                                        <v-col v-if="isvisibleInput('bill_detail_qty')" xs="6" sm="6" md="6">
+                                          <div v-bind:class="['form-group', errors.first('bill_detail_qty') ? 'has-error' : 'has-success']">
+                                            <label class="control-label has-star">
+                                              {{ inputLabel('bill_detail_qty') }}
+                                            </label>
+                                            <v-select2
+                                              id="bill_detail_qty"
+                                              :options="billQtyOpts" 
+                                              v-model="formAttributes.bill_detail_qty"
+                                              name="bill_detail_qty"
+                                              @change="onChangeBillQty">
+                                                <option disabled value="">เลือก</option>
+                                            </v-select2>
+                                          </div>
+                                          <div class="help-block text-danger">
+                                            {{ errors.first('bill_detail_qty') }}
+                                          </div>
+                                        </v-col>
                                       </v-row>
 
                                       <!-- พิมพ์สองหน้าหรือหน้าเดียว -->
@@ -907,6 +925,13 @@ CSS
                                   {{ paperDetail }}
                                 </span>
                               </li>
+                              <!-- จำนวนชั้นกระดาษ -->
+                              <li v-show="isvisibleInput('bill_detail_qty')">
+                                <span>{{ inputLabel('bill_detail_qty', 'จำนวนชั้นกระดาษ') }}:</span>
+                                <span class="op_bill_detail_qty float-right" id="op_bill_detail_qty">
+                                  {{ billDetail }}
+                                </span>
+                              </li>
                               <!-- พิมพ์หน้าเดียว/พิมพ์สองหน้า -->
                               <li v-show="isvisibleInput('print_option')">
                                 <span>พิมพ์:</span>
@@ -1035,7 +1060,7 @@ CSS
                   </div>
               </div>
               <div v-if="step === 2" class="row list-group-price">
-                <div class="col-xs-4">
+                <div v-show="!isvisibleInput('bill_detail_qty')" class="col-xs-4">
                   <div class="form-group highlight-addon field-tblquotationdetail-cust_quantity has-success">
                     <label class="control-label has-star" for="tblquotationdetail-cust_quantity">เพิ่มจำนวนอื่นๆ</label>
                     <input type="tel" 
@@ -1049,7 +1074,7 @@ CSS
                     <div class="help-block"></div>
                   </div>
                 </div>
-                <div class="col-xs-4">
+                <div v-show="!isvisibleInput('bill_detail_qty')" class="col-xs-4">
                   <p style="margin-top: 25px;">
                     <button v-bind:class="[loadingQty ? 'btn btn-primary btn-sm disabled' : 'btn btn-primary btn-sm']" @click="onAddQty"><i class="fa fa-plus"></i></button>
                   </p>
@@ -1061,7 +1086,7 @@ CSS
               <div v-if="step === 2" class="row list-group-price">
                 <div class="col-xs-6">
                   <p>
-                    <a class="btn btn-info btn-lg btn-block" href="javascript:void(0);" @click="step = 1"><i class="fa fa-angle-left"></i> ขั้นตอนก่อนหน้า</a>
+                    <a class="btn btn-info btn-lg btn-block" href="javascript:void(0);" @click="onBackStep(1)"><i class="fa fa-angle-left"></i> ขั้นตอนก่อนหน้า</a>
                   </p>
                 </div>
                 <div class="col-xs-6">
