@@ -284,7 +284,11 @@ class CalculateOffset extends Component {
                         }
                     }
                     if ($paper) {
-                        $paper['price'] = (($model['cust_quantity'] / $paper['job_per_sheet']) / $paper['paper_cut']) * $paperDetail['paper_price'];
+                        $paper['price'] = 0;
+                        if($model['cust_quantity'] != 0 && $paper['job_per_sheet'] != 0 && $paper['paper_cut']  != 0){
+                            $paper['price'] = (($model['cust_quantity'] / $paper['job_per_sheet']) / $paper['paper_cut']) * $paperDetail['paper_price'];
+                        }
+                        
                         $cal_paper_sizes[] = $paper;
                     }
                 } else {
@@ -297,21 +301,26 @@ class CalculateOffset extends Component {
                         }
                     }
                     if ($paper) {
-                        $paper['price'] = (($model['cust_quantity'] / $paper['job_per_sheet']) / $paper['paper_cut']) * $paperDetail['paper_price'];
+                        $paper['price'] = 0;
+                        if($model['cust_quantity'] != 0 && $paper['job_per_sheet'] != 0 && $paper['paper_cut']  != 0){
+                            $paper['price'] = (($model['cust_quantity'] / $paper['job_per_sheet']) / $paper['paper_cut']) * $paperDetail['paper_price'];
+                        }
+                        
                         $cal_paper_sizes[] = $paper;
                     }
                 }
             }
         }
 
-        $paper_prices = ArrayHelper::getColumn($cal_paper_sizes, 'price');
-        $min_price = min($paper_prices);
-
         $paper = null;
-        foreach ($cal_paper_sizes as $key => $cal_paper_size) {
-            if ($cal_paper_size['price'] == $min_price) {
-                $paper = $cal_paper_size;
-                break;
+        if($cal_paper_sizes) {
+            $paper_prices = ArrayHelper::getColumn($cal_paper_sizes, 'price');
+            $min_price = min($paper_prices);
+            foreach ($cal_paper_sizes as $key => $cal_paper_size) {
+                if ($cal_paper_size['price'] == $min_price) {
+                    $paper = $cal_paper_size;
+                    break;
+                }
             }
         }
 
@@ -329,8 +338,10 @@ class CalculateOffset extends Component {
             $this->paper_detail = $paper['paper_detail'];
             $this->paper = $paper;
         }
-
-        $this->print_sheet_total = $model['cust_quantity'] / $this->job_per_sheet;
+        
+        if($this->job_per_sheet != 0 && $model['cust_quantity'] != 0){
+            $this->print_sheet_total = $model['cust_quantity'] / $this->job_per_sheet;
+        }
 
         $this->cal_print_sheet_total = $this->print_sheet_total;
 
