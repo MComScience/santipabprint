@@ -699,7 +699,9 @@ class CalculateOffset extends Component {
     public $final_paper_price = 0;  // ราคากระดาษ
 
     public function findPaperBigsheet() {
-        $this->paper_bigsheet = $this->print_sheet_total / $this->paper_cut; //จำนวนแผ่นพิมพ์ที่บวกเผื่อ / (ขนาดกระดาษที่ตัด) 
+        if($this->print_sheet_total != 0 && $this->paper_cut != 0 ){
+             $this->paper_bigsheet = $this->print_sheet_total / $this->paper_cut; //จำนวนแผ่นพิมพ์ที่บวกเผื่อ / (ขนาดกระดาษที่ตัด) 
+        }
         $this->final_paper_price = $this->paper_bigsheet * $this->paper_detail['paper_price']; //หาราคากระดาษ จำนวนกระดาษแผ่นใหญ่ * ราคากระดาษจากฐานข้อมูล
     }
 
