@@ -989,10 +989,14 @@ const vm = new Vue({
           this.billQtyOpts = updateObject(this.billQtyOpts, {
             data: this.mapDataOptions(response.data)
           });
-          this.formAttributes['bill_detail_qty'] = formAttributes.bill_detail_qty
-          // $('#bill_detail_qty')
-          //   .val(null)
-          //   .trigger("change");
+          this.$nextTick(function() {
+            this.formAttributes['bill_detail_qty'] = null
+          });
+          setTimeout(() => {
+            $('#bill_detail_qty')
+            .val(null)
+            .trigger("change");
+          }, 500)
         })
         .catch(error => {
           // handle error
