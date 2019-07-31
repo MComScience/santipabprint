@@ -152,20 +152,22 @@ class CalculateDigital extends Component
 
             //หาขนาดกระดาษจากฐานข้อมูล
             $paper = TblPaperSize::findOne($this->model['paper_size_id']);
+            
+            if($paper){
+                $messages .= "-:ขนาดกระดาษ " . Json::encode($paper);
+                if ($paper['paper_unit_id'] == 3) { //ขนาดเป็น นิ้ว
+                    $messages .= "-:ขนาดเป็นนิ้ว {$paper->paper_size_width} x {$paper->paper_size_height} นิ้ว\n";
 
-            $messages .= "-:ขนาดกระดาษ " . Json::encode($paper);
-            if ($paper['paper_unit_id'] == 3) { //ขนาดเป็น นิ้ว
-                $messages .= "-:ขนาดเป็นนิ้ว {$paper->paper_size_width} x {$paper->paper_size_height} นิ้ว\n";
+                    $this->paperWidth = CalculetFnc::convertInToCm($paper['paper_size_width']);
+                    $this->paperLenght = CalculetFnc::convertInToCm($paper['paper_size_height']);
 
-                $this->paperWidth = CalculetFnc::convertInToCm($paper['paper_size_width']);
-                $this->paperLenght = CalculetFnc::convertInToCm($paper['paper_size_height']);
+                    $messages .= "-:แปลงขนาดจากนิ้วเป็นเซนติเมตร จาก {$paper->paper_size_width} x {$paper->paper_size_height} นิ้ว ได้ขนาด {$this->paperWidth} x {$this->paperLenght} เซนติเมตร";
+                } else {
+                    $messages .= "-:ขนาดไม่ใช่นิ้ว {$paper->paper_size_width} x {$paper->paper_size_height} นิ้ว\n";
 
-                $messages .= "-:แปลงขนาดจากนิ้วเป็นเซนติเมตร จาก {$paper->paper_size_width} x {$paper->paper_size_height} นิ้ว ได้ขนาด {$this->paperWidth} x {$this->paperLenght} เซนติเมตร";
-            } else {
-                $messages .= "-:ขนาดไม่ใช่นิ้ว {$paper->paper_size_width} x {$paper->paper_size_height} นิ้ว\n";
-
-                $this->paperWidth = $paper['paper_size_width'];
-                $this->paperLenght = $paper['paper_size_height'];
+                    $this->paperWidth = $paper['paper_size_width'];
+                    $this->paperLenght = $paper['paper_size_height'];
+                }
             }
 
             $sizes = CalculetFnc::calculateWidthLength($this->model['fold_id'], $this->model['paper_size_id'], $this->paperWidth, $this->paperLenght);
