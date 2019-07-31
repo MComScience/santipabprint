@@ -199,9 +199,7 @@ CSS
                                             <v-land-orient 
                                               :land-orient-options="landOrientOptions"
                                               @change="onChangeLandOrient"
-                                              v-validate="'required'"
                                               name="land_orient"
-                                              :data-vv-as="inputLabel('land_orient')"
                                               v-model="formAttributes.land_orient" /> 
                                           </div>
                                           <div class="help-block text-danger">
@@ -221,8 +219,6 @@ CSS
                                               id="paper_size_id"
                                               :options="paperSizeIdOpts" 
                                               v-model="formAttributes.paper_size_id"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('paper_size_id')"
                                               name="paper_size_id"
                                               @change="onChangePaperSizeId">
                                                 <option disabled value="">เลือกขนาด</option>
@@ -325,8 +321,6 @@ CSS
                                               id="book_binding_id"
                                               :options="BookBindingOpts" 
                                               v-model="formAttributes.book_binding_id"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('book_binding_id')"
                                               name="book_binding_id"
                                               @change="onChangeBookBinding">
                                                 <option disabled value="">เลือกรายการ...</option>
@@ -351,8 +345,7 @@ CSS
                                               placeholder="ระบุจำนวน"
                                               class="form-control"
                                               v-model="formAttributes.page_qty"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('page_qty')" />
+                                              />
                                           </div>
                                           <div class="help-block text-danger">
                                             {{ errors.first('page_qty') }}
@@ -371,8 +364,6 @@ CSS
                                               id="paper_id"
                                               :options="paperIdOpts" 
                                               v-model="formAttributes.paper_id"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('paper_id')"
                                               name="paper_id"
                                               @change="onChangePaperId">
                                                 <option disabled value="">เลือกกระดาษ</option>
@@ -413,8 +404,6 @@ CSS
                                               id="print_option"
                                               :options="printOptionOpts" 
                                               v-model="formAttributes.print_option"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('print_option')"
                                               name="print_option"
                                               @change="onChangePrintOption">
                                                 <option disabled value="">เลือกตัวเลือก</option>
@@ -434,8 +423,6 @@ CSS
                                               id="print_color"
                                               :options="printColorOpts" 
                                               v-model="formAttributes.print_color"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('print_color')"
                                               name="print_color"
                                               @change="onChangePrintColor">
                                                 <option disabled value="">เลือกสีที่พิมพ์</option>
@@ -458,8 +445,6 @@ CSS
                                               id="coating_id"
                                               :options="coatingIdOpts" 
                                               v-model="formAttributes.coating_id"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('coating_id')"
                                               name="coating_id"
                                               @change="onChangeCoatingId">
                                                 <option disabled value="">เลือกรายการ...</option>
@@ -503,8 +488,6 @@ CSS
                                               :options="dicutOptions"
                                               @change="onChangeDidut"
                                               name="diecut"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('diecut')"
                                               v-model="formAttributes.diecut" /> 
                                           </div>
                                           <div class="help-block text-danger">
@@ -524,8 +507,6 @@ CSS
                                               id="diecut_id"
                                               :options="dicutIdOpts" 
                                               v-model="formAttributes.diecut_id"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('diecut_id')"
                                               name="diecut_id"
                                               @change="onChangeDidutId">
                                                 <option disabled value="">เลือกรายการ...</option>
@@ -604,8 +585,6 @@ CSS
                                               id="fold_id"
                                               :options="foldIdOpts" 
                                               v-model="formAttributes.fold_id"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('fold_id')"
                                               name="fold_id"
                                               @change="onChangeFoldId">
                                             </v-select2>
@@ -640,9 +619,7 @@ CSS
                                               name="foil_size_width"
                                               placeholder="กว้าง"
                                               class="form-control"
-                                              v-model="formAttributes.foil_size_width"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('foil_size_width')" />
+                                              v-model="formAttributes.foil_size_width"/>
                                           </div>
                                           <div class="help-block text-danger">
                                             {{ errors.first('foil_size_width') }}
@@ -659,9 +636,7 @@ CSS
                                               name="foil_size_height"
                                               placeholder="ยาว"
                                               class="form-control"
-                                              v-model="formAttributes.foil_size_height"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('foil_size_height')" />
+                                              v-model="formAttributes.foil_size_height" />
                                           </div>
                                           <div class="help-block text-danger">
                                             {{ errors.first('foil_size_height') }}
@@ -677,8 +652,6 @@ CSS
                                                 id="foil_size_unit"
                                                 :options="foilSizeUnitOpts" 
                                                 v-model="formAttributes.foil_size_unit"
-                                                v-validate="'required'"
-                                                :data-vv-as="inputLabel('foil_size_unit')"
                                                 name="foil_size_unit"
                                                 @change="onChangeFoilSizeUnit">
                                                   <option disabled value="">เลือกรายการ...</option>
@@ -698,8 +671,6 @@ CSS
                                                 id="foil_color_id"
                                                 :options="foilColorIdOpts" 
                                                 v-model="formAttributes.foil_color_id"
-                                                v-validate="'required'"
-                                                :data-vv-as="inputLabel('foil_color_id')"
                                                 name="foil_color_id"
                                                 @change="onChangeFoilColorId">
                                                   <option disabled value="">เลือกรายการ...</option>
@@ -721,9 +692,7 @@ CSS
                                             <v-foli-print 
                                               :options="foliPrintOptions"
                                               @change="onChangeFoliPrint"
-                                              v-validate="'required'"
                                               name="foli_print"
-                                              :data-vv-as="inputLabel('foli_print')"
                                               v-model="formAttributes.foli_print" /> 
                                           </div>
                                           <div class="help-block text-danger">
@@ -759,9 +728,7 @@ CSS
                                               name="emboss_size_width"
                                               placeholder="กว้าง"
                                               class="form-control"
-                                              v-model="formAttributes.emboss_size_width"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('emboss_size_width')" />
+                                              v-model="formAttributes.emboss_size_width" />
                                           </div>
                                           <div class="help-block text-danger">
                                             {{ errors.first('emboss_size_width') }}
@@ -778,9 +745,7 @@ CSS
                                               name="emboss_size_height"
                                               placeholder="ยาว"
                                               class="form-control"
-                                              v-model="formAttributes.emboss_size_height"
-                                              v-validate="'required'"
-                                              :data-vv-as="inputLabel('emboss_size_height')" />
+                                              v-model="formAttributes.emboss_size_height" />
                                           </div>
                                           <div class="help-block text-danger">
                                             {{ errors.first('emboss_size_height') }}
@@ -796,8 +761,6 @@ CSS
                                                 id="emboss_size_unit"
                                                 :options="embossSizeUnitOpts" 
                                                 v-model="formAttributes.emboss_size_unit"
-                                                v-validate="'required'"
-                                                :data-vv-as="inputLabel('emboss_size_unit')"
                                                 name="emboss_size_unit"
                                                 @change="onChangeEmbossSizeUnit">
                                                   <option disabled value="">เลือกรายการ...</option>
@@ -819,9 +782,7 @@ CSS
                                             <v-emboss-print 
                                               :options="embossPrintOptions"
                                               @change="onChangeEmbossPrint"
-                                              v-validate="'required'"
                                               name="emboss_print"
-                                              :data-vv-as="inputLabel('emboss_print')"
                                               v-model="formAttributes.emboss_print" /> 
                                           </div>
                                           <div class="help-block text-danger">
@@ -840,9 +801,7 @@ CSS
                                             <v-glue 
                                               :options="glueOptions"
                                               @change="onChangeGlue"
-                                              v-validate="'required'"
                                               name="glue"
-                                              :data-vv-as="inputLabel('glue')"
                                               v-model="formAttributes.glue" /> 
                                           </div>
                                           <div class="help-block text-danger">
