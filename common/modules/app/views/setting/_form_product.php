@@ -296,10 +296,10 @@ CSS
 //                                        'options' => ['class' => 'tab-page-option2']
 //                                    ],
                                     [
-                                        'label' => 'รูปแบบการเจาะมุม',
+                                        'label' => 'มุมที่เจาะ',
                                         'url' => '#tab-perforate',
                                         'linkOptions' => ['data-toggle' => 'tab'],
-                                        'options' => ['class' => 'tab-perforate_id']
+                                        'options' => ['class' => 'tab-perforate_option_id']
                                     ],
                                 ],
                             ],
