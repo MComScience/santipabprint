@@ -606,8 +606,7 @@ CSS
                                       <v-row v-if="
                                         isvisibleInput('foil_size_width') || 
                                         isvisibleInput('foil_size_height') || 
-                                        isvisibleInput('foil_size_unit') || 
-                                        isvisibleInput('foil_color_id')" >
+                                        isvisibleInput('foil_size_unit')" >
                                         <!-- กว้าง -->
                                         <v-col xs="6" sm="3" md="3">
                                           <div v-bind:class="['form-group', errors.first('foil_size_width') ? 'has-error' : 'has-success']">
@@ -661,7 +660,14 @@ CSS
                                               {{ errors.first('foil_size_unit') }}
                                             </div>
                                         </v-col>
-                                        <!-- สีฟอยล์ -->
+                                       
+                                      </v-row>
+
+                                      <!-- สีฟอยล์ และ ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
+                                      <v-row v-if="
+                                             isvisibleInput('foil_color_id')||
+                                             isvisibleInput('foli_print')" >
+                                         <!-- สีฟอยล์ -->
                                         <v-col xs="6" sm="3" md="3">
                                           <div v-bind:class="['form-group', errors.first('foil_color_id') ? 'has-error' : 'has-success']">
                                               <label class="control-label has-star">
@@ -680,10 +686,7 @@ CSS
                                               {{ errors.first('foil_color_id') }}
                                             </div>
                                         </v-col>
-                                      </v-row>
-
-                                      <!-- ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
-                                      <v-row v-if="isvisibleInput('foli_print')" >
+                                         <!-- ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('foli_print') ? 'has-error' : 'has-success']">
                                             <label class="control-label has-star">
