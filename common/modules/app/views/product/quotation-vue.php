@@ -207,14 +207,20 @@ CSS
                                           </div>
                                         </v-col>
                                       </v-row>
-
                                       <!-- ขนาด -->
-                                      <v-row v-if="isvisibleInput('paper_size_id')" >
+                                      <span v-if="isvisibleInput('foil_size_width')" class="label label-option">
+                                        <i class="fa fa-angle-double-down"></i>
+                                        ขนาด 
+                                        <i class="fa fa-angle-double-down"></i>
+                                      </span>
+                                      <!-- ขนาด -->
+                                      <v-row v-if="" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('paper_size_id') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+                                    <!--        <label class="control-label has-star">
                                               {{ inputLabel('paper_size_id') }}
                                             </label>
+                                    -->
                                             <v-select2
                                               id="paper_size_id"
                                               :options="paperSizeIdOpts" 
@@ -352,14 +358,22 @@ CSS
                                           </div>
                                         </v-col>
                                       </v-row>
-
+                                      
+                                      <!-- กระดาษ -->
+                                      <span v-if="isvisibleInput('paper_id')" class="label label-option">
+                                        <i class="fa fa-angle-double-down"></i>
+                                        กระดาษ 
+                                        <i class="fa fa-angle-double-down"></i>
+                                      </span>
+                                      
                                       <!-- กระดาษ -->
                                       <v-row v-if="isvisibleInput('paper_id')" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('paper_id') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+                                    <!--        <label class="control-label has-star">
                                               {{ inputLabel('paper_id') }}
                                             </label>
+                                    -->
                                             <v-select2
                                               id="paper_id"
                                               :options="paperIdOpts" 
@@ -434,13 +448,20 @@ CSS
                                         </v-col>
                                       </v-row>
 
+                                    <!-- เคลือบ -->
+                                      <span v-if="isvisibleInput('coating_id')" class="label label-option">
+                                        <i class="fa fa-angle-double-down"></i>
+                                        เคลือบ 
+                                        <i class="fa fa-angle-double-down"></i>
+                                      </span>
                                       <!-- เคลือบ -->
                                       <v-row v-if="isvisibleInput('coating_id')" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('coating_id') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+                                    <!--        <label class="control-label has-star">
                                               {{ inputLabel('coating_id') }}
                                             </label>
+                                    -->
                                             <v-select2
                                               id="coating_id"
                                               :options="coatingIdOpts" 

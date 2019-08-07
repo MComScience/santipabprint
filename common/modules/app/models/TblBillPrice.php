@@ -41,9 +41,9 @@ class TblBillPrice extends \yii\db\ActiveRecord
     {
         return [
             'bill_price_id' => 'รหัส',
-            'paper_size_id' => 'รหัสประเภทกระดาษ',
+            'paper_size_id' => 'ไซส์กระดาษ',
             'bill_floor' => 'จำนวนชั้น',
-            'paper_id' => 'กระดาษ',
+            'paper_id' => 'ประเภทกระดาษ',
         ];
     }
     

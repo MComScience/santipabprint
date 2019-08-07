@@ -366,9 +366,10 @@ $productOption = $modelProduct->productOption;
             <span class="badge">พิมพ์หน้าเดียว</span>
         </p>
     </div>-->
+
     <div class="tab-pane" id="tab-perforate">
         <p>
-            <span class="badge">รูปแบบการเจาะมุม</span>
+            <span class="badge">มุมที่เจาะ</span>
         </p>
         <?=
         GridView::widget([

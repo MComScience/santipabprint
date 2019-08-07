@@ -1068,7 +1068,7 @@ class SettingController extends \yii\web\Controller {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => Icon::show('file-text-o') . 'บันทึกหน้าพิมพ์/หลังพิมพ์',
+                    'title' => Icon::show('file-text-o') . 'บันทึก พิมพ์สองหน้า/พิมพ์หน้าเดียว',
                     'content' => $this->renderAjax('_form_printing', [
                         'model' => $model,
                     ]),
@@ -1098,7 +1098,7 @@ class SettingController extends \yii\web\Controller {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => Icon::show('file-text-o') . 'แก้ไขหน้าพิมพ์/หลังพิมพ์',
+                    'title' => Icon::show('file-text-o') . 'แก้ไข พิมพ์สองหน้า/พิมพ์หน้าเดียว',
                     'content' => $this->renderAjax('_form_printing', [
                         'model' => $model,
                     ]),
@@ -1373,7 +1373,7 @@ class SettingController extends \yii\web\Controller {
                     $modelProductOption->setAttributes([
                         'product_id' => $model->product_id,
                         'paper_size_option' => (isset($posted['paperSizeKeys']) && is_array($posted['paperSizeKeys'])) ? Json::encode($posted['paperSizeKeys']) : null,
-                        'print_one_page' => (isset($posted['printOnePageKeys']) && is_array($posted['printOnePageKeys']) && $options['print_color']['value'] === '1') ? Json::encode($posted['printOnePageKeys']) : null,
+                        //'print_one_page' => (isset($posted['printOnePageKeys']) && is_array($posted['printOnePageKeys']) && $options['print_color']['value'] === '1') ? Json::encode($posted['printOnePageKeys']) : null,
                         //'print_two_page' => (isset($posted['printTwoPageKeys']) && is_array($posted['printTwoPageKeys']) && $options['print_two_page']['value'] === '1') ? Json::encode($posted['printTwoPageKeys']) : null,
                         'paper_option' => isset($posted['paperKeys']) && is_array($posted['paperKeys']) ? Json::encode($posted['paperKeys']) : null,
                         'coating_option' => (isset($posted['coatingKeys']) && is_array($posted['coatingKeys']) && $options['coating_id']['value'] === '1') ? Json::encode($posted['coatingKeys']) : null,

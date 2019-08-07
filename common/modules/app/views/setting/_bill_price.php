@@ -76,19 +76,29 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'kartik-sheet-style'],
                     'expandOneOnly' => true
                 ],
-                'bill_price_id',
+                [
+                    'attribute' => 'bill_price_id',
+                    'hAlign' => 'center'    
+                ],            
                 [
                     'attribute' => 'paper_size_id',
                     'value' => function($model) {
                         return $model->paperSize ? $model->paperSize->paper_size_name : '';
-                    }
+                    },
+                    'hAlign' => 'center'        
+                  
                 ],
-                'bill_floor',
+                [
+                   'attribute' => 'bill_floor',
+                   'hAlign' => 'center',
+                ],            
                 [
                     'attribute' => 'paper_id',
                     'value' => function($model) {
                         return $model->paper ? $model->paper->paper_name : '';
-                    }
+                    },
+                    'hAlign' => 'left',
+                    'format' => 'raw',
                 ],
                 [
                     'class' => '\kartik\grid\ActionColumn',

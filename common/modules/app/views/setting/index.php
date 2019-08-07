@@ -75,7 +75,7 @@ $options = [
         'count' => TblBookBinding::find()->count()
     ],
     [
-        'text' => 'พิมพ์หน้าเดียว/พิมพ์สองหน้า',
+        'text' => 'พิมพ์สองหน้า/พิมพ์หน้าเดียว',
         'url' => ['printing'],
         'action' => 'printing',
         'count' => TblColorPrinting::find()->count()

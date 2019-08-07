@@ -22,7 +22,7 @@ use yii\helpers\Url;
                 'beforeHeader' => [
                     [
                         'columns' => [
-                            ['content' => 'รายละเอียดราคา', 'options' => ['class' => 'success text-center', 'colspan' => 4]]
+                            ['content' => 'รายละเอียด', 'options' => ['class' => 'success text-center', 'colspan' => 4]]
                         ]
                     ]
                 ],

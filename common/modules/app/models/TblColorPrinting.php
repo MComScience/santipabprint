@@ -54,7 +54,7 @@ class TblColorPrinting extends \yii\db\ActiveRecord
     {
         return [
             'color_printing_id' => Yii::t('app', 'รหัส'),
-            'color_printing_name' => Yii::t('app', 'หน้าพิมพ์/หลังพิมพ์'),
+            'color_printing_name' => Yii::t('app', 'สีที่พิมพ์'),
             'color_printing_descriotion' => Yii::t('app', 'รายละเอียด'),
         ];
     }

@@ -13,7 +13,7 @@ use dominus77\sweetalert2\assets\SweetAlert2Asset;
 
 SweetAlert2Asset::register($this);
 
-$this->title = 'หน้าพิมพ์/หลังพิมพ์';
+$this->title = 'พิมพ์สองหน้า/พิมพ์หน้าเดียว';
 $this->params['breadcrumbs'][] = ['label' => 'ตั้งค่า', 'url' => ['/app/setting/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -64,9 +64,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 'tableOptions' => ['class' => 'small kv-table'],
                 'columns' => [
                     ['class' => '\kartik\grid\SerialColumn'],
-                    'color_printing_id',
-                    'color_printing_name',
-                    'color_printing_descriotion',
+                    [
+                        'attribute' => 'color_printing_id',
+                        'header' => 'รหัส',
+                        'headerOptions' => [
+                            'style' => 'text-align:center;',
+                        ]
+                    ],
+                    [
+                        'attribute' => 'color_printing_name',
+                        'header' => 'สีที่พิมพ์',
+                        'headerOptions' => [
+                            'style' => 'text-align:center;',
+                        ]
+                    ],
+                    [
+                        'attribute' => 'color_printing_descriotion',
+                        'header' => 'รายละเอียด',
+                        'headerOptions' => [
+                            'style' => 'text-align:center;',
+                        ]
+                    ],
                     [
                         'class' => '\kartik\grid\ActionColumn',
                         'noWrap' => true,
