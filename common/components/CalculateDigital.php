@@ -361,7 +361,7 @@ class CalculateDigital extends Component
     public function findCoating()
     {
 
-        if ($this->model['coating_id'] != 'N') { //ถ้ามีเคลือบ
+        if (!empty($this->model['coating_id']) && $this->model['coating_id'] != 'N') { //ถ้ามีเคลือบ
             $coating_prices = TblCoatingPrice::find()->all(); //ราคาเคลือบ
             $this->print_sheet_total = $this->print_sheet_total + 2; //จำนวนแผ่นพิมพ์ + เผื่อกระดาษ
             $sq = $this->paper_size;
@@ -456,7 +456,7 @@ class CalculateDigital extends Component
     public function findFlod()
     {
         $details = $this->flod_detail;
-        if ($this->model['fold_id'] !== 'N') {
+        if (!empty($this->model['fold_id']) && $this->model['fold_id'] !== 'N') {
             if ($this->paper_type['paper_gram'] >= 200) {
                 if ($this->cal_print_sheet_total <= 50) {
                     $this->fold_price = $this->cal_print_sheet_total * 20; //จำนวนที่คำนวนได้ * 20
@@ -512,7 +512,7 @@ class CalculateDigital extends Component
 
     public function findDicutPrice()
     {
-        if ($this->model['diecut'] != 'N') {
+        if (!empty($this->model['diecut']) && $this->model['diecut'] != 'N') {
             if ($this->model['diecut'] == 'Curve') { // ไดคัทมุมม
                 $diecut_curve = (new \yii\db\Query())
                     ->select(['tbl_diecut.*', 'tbl_diecut_group.*'])

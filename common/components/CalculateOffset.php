@@ -485,7 +485,7 @@ class CalculateOffset extends Component {
 
     public function findCoating() {
 
-        if ($this->model['coating_id'] != 'N') { //ถ้ามีเคลือบ
+        if (!empty($this->model['coating_id']) && $this->model['coating_id'] != 'N') { //ถ้ามีเคลือบ
             $coating_prices = TblCoatingPrice::find()->all(); //ราคาเคลือบ
             $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 20); //จำนวนแผ่นพิมพ์ + เผื่อกระดาษ
             $sq = $this->paper_size;
@@ -578,7 +578,7 @@ class CalculateOffset extends Component {
     public $block_dicut_price = 0;  //ราคาบล๊อกไดคัท
 
     public function findDicutPrice() {
-        if ($this->model['diecut'] != 'N') {
+        if (!empty($this->model['diecut']) && $this->model['diecut'] != 'N') {
             $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 20); //จำนวนแผ่นพิมพ์ + เผื่อกระดาษ
 
             if ($this->model['diecut'] == 'Default') { //ไดคัทตามรูปแบบ
@@ -619,7 +619,7 @@ class CalculateOffset extends Component {
 
     public function findFlod() {
         $details = $this->flod_detail;
-        if ($this->model['fold_id'] !== 'N') {
+        if (!empty($this->model['fold_id']) && $this->model['fold_id'] !== 'N') {
             if ($this->paper_type['paper_gram'] >= 200) {
                 if ($this->cal_print_sheet_total <= 50) {
                     $this->fold_price = $this->cal_print_sheet_total * 20;
