@@ -207,8 +207,9 @@ CSS
                                           </div>
                                         </v-col>
                                       </v-row>
+                                      
                                       <!-- ขนาด -->
-                                      <span v-if="isvisibleInput('foil_size_width')" class="label label-option">
+                                      <span v-if="isvisibleInput('paper_size_id')" class="label label-option">
                                         <i class="fa fa-angle-double-down"></i>
                                         ขนาด 
                                         <i class="fa fa-angle-double-down"></i>
@@ -387,7 +388,7 @@ CSS
                                             {{ errors.first('paper_id') }}
                                           </div>
                                         </v-col>
-                                        <v-col v-if="isvisibleInput('bill_detail_qty')" xs="6" sm="6" md="6">
+<!--                                        <v-col v-if="isvisibleInput('bill_detail_qty')" xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('bill_detail_qty') ? 'has-error' : 'has-success']">
                                             <label class="control-label has-star">
                                               {{ inputLabel('bill_detail_qty') }}
@@ -404,8 +405,36 @@ CSS
                                           <div class="help-block text-danger">
                                             {{ errors.first('bill_detail_qty') }}
                                           </div>
-                                        </v-col>
+                                        </v-col>-->
                                       </v-row>
+                                      
+                                        <!--จำนวนแผ่นต่อชุด-->
+                                      <span v-if="isvisibleInput('bill_detail_qty')" class="label label-option">
+                                        <i class="fa fa-angle-double-down"></i>
+                                        จำนวนแผ่นต่อชุด 
+                                        <i class="fa fa-angle-double-down"></i>
+                                      </span>
+                                      
+                                        <v-row v-if="isvisibleInput('bill_detail_qty')" >
+                                            <v-col v-if="isvisibleInput('bill_detail_qty')" xs="6" sm="6" md="6">
+                                              <div v-bind:class="['form-group', errors.first('bill_detail_qty') ? 'has-error' : 'has-success']">
+<!--                                                <label class="control-label has-star">
+                                                  {{ inputLabel('bill_detail_qty') }}
+                                                </label>-->
+                                                <v-select2
+                                                  id="bill_detail_qty"
+                                                  :options="billQtyOpts" 
+                                                  v-model="formAttributes.bill_detail_qty"
+                                                  name="bill_detail_qty"
+                                                  @change="onChangeBillQty">
+                                                    <option disabled value="">เลือก</option>
+                                                </v-select2>
+                                              </div>
+                                              <div class="help-block text-danger">
+                                                {{ errors.first('bill_detail_qty') }}
+                                              </div>
+                                            </v-col>
+                                          </v-row>
 
                                       <!-- พิมพ์สองหน้าหรือหน้าเดียว -->
                                       <v-row v-if="isvisibleInput('print_option')" >
