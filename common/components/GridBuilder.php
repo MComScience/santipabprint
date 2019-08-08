@@ -48,7 +48,7 @@ class GridBuilder extends Component
     public static function getDataPaper($model)
     {
         $provider = new ActiveDataProvider([
-            'query' => TblPaper::find(),
+            'query' => TblPaper::find()->orderBy('paper_type_id asc,paper_gram asc'),
             'pagination' => [
                 'pageSize' => false,
             ],

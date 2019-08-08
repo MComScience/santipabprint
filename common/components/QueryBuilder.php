@@ -56,7 +56,8 @@ class QueryBuilder extends Component {
     public function getPaperOption() {
         $option = $this->modelOption;
         $condition = static::decodeOption($option['paper_option']);
-        $papers = TblPaper::find()->where(['paper_id' => $condition])->all();
+       // $papers = TblPaper::find()->where(['paper_id' => $condition])->all();
+        $papers = TblPaper::find()->where(['paper_id' => $condition])->orderBy('paper_type_id asc,paper_gram asc')->all();
         $paperTypes = TblPaperType::find()->where(['paper_type_id' => ArrayHelper::getColumn($papers, 'paper_type_id')])->all();
         $options = [];
         foreach ($paperTypes as $paperType) {
