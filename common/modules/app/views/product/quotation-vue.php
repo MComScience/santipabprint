@@ -1104,7 +1104,7 @@ CSS
               <div v-if="step === 2" class="row list-group-price">
                 <div class="col-xs-6">
                   <p>
-                    <a class="btn btn-info btn-lg btn-block" href="javascript:void(0);" @click="onBackStep(1)"><i class="fa fa-angle-left"></i> ขั้นตอนก่อนหน้า</a>
+                    <a class="btn btn-info btn-lg btn-block" href="javascript:void(0);" @click="onBackStep(1)"><i class="fa fa-angle-double-left"></i> ขั้นตอนก่อนหน้า</a>
                   </p>
                 </div>
                 <div class="col-xs-6">
