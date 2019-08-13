@@ -1013,7 +1013,13 @@ CSS
                     </div>
                     <!-- ขั้นตอนถัดไป -->
                     <p>
-                      <button v-on:click="nextStepOne" class="btn btn-info btn-lg btn-block">ขั้นตอนถัดไป <i class="fa fa-angle-right"></i></button>
+                      <button v-on:click="nextStepOne" class="btn btn-info btn-lg btn-block">
+                          ขั้นตอนถัดไป 
+                          <i class="fa fa-angle-double-right"></i>
+                      </button>
+                    </p>
+                    <p>
+                         <?= Html::a('<i class="fa fa-angle-double-left"></i>' . ' กลับหน้าหลัก', ['/app/product/index'], ['class' => 'btn btn-info btn-lg btn-block']) ?>
                     </p>
                 </div>
             </div>
