@@ -1056,8 +1056,8 @@ CSS
                             <i class="fa fa-check-circle-o fa-2x"></i>
                           </div>
                           <div class="list-item-content">
-                            <h3>{{ item.cust_quantity }} ชิ้น</h3>
-                            <p>{{ item.price_per_item }} THB ต่อชิ้น</p>
+                            <h3>{{ item.cust_quantity }} {{ item.unit }}</h3>
+                            <p>{{ item.price_per_item }} THB ต่อ{{ item.unit }}</p>
                           </div>
                           <div class="list-price-content">
                             <h4>{{ item.final_price }} THB</h4>

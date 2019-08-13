@@ -16,12 +16,11 @@ use yii\helpers\ArrayHelper;
 use common\components\CalculateDigital;
 use common\components\CalculateOffset;
 
-class ApiController extends \yii\web\Controller
-{
+class ApiController extends \yii\web\Controller {
+
     use ModelTrait;
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -43,13 +42,11 @@ class ApiController extends \yii\web\Controller
         ];
     }
 
-    public function actionIndex()
-    {
+    public function actionIndex() {
         return $this->render('index');
     }
 
-    public function actionProductCategoryList()
-    {
+    public function actionProductCategoryList() {
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
         $catagorys = TblProductCategory::find()->all();
@@ -64,8 +61,7 @@ class ApiController extends \yii\web\Controller
         return $itemCatagorys;
     }
 
-    public function actionQuotation($p)
-    {
+    public function actionQuotation($p) {
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
         $product = $this->findModelProduct($p);
@@ -124,8 +120,7 @@ class ApiController extends \yii\web\Controller
         ];
     }
 
-    public function actionCalculatePrice()
-    {
+    public function actionCalculatePrice() {
         $request = Yii::$app->request;
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
@@ -137,10 +132,12 @@ class ApiController extends \yii\web\Controller
         $priceList = [];
         $data = $request->post();
         $product = $this->findModelProduct($data['product_id']);
+        $unit = 'ชิ้น';
         // บิล/ใบเสร็จ/ใบส่งของ
-        if($product['product_category_id'] == 19){
+        if ($product['product_category_id'] == 19) {
+            $unit = 'เล่ม';
             $billPriceDetails = TblBillPriceDetail::findAll([
-                'bill_price_id' => $data['bill_detail_qty']
+                        'bill_price_id' => $data['bill_detail_qty']
             ]);
             foreach ($billPriceDetails as $key => $billPriceDetail) {
                 $priceList[] = [
@@ -151,7 +148,8 @@ class ApiController extends \yii\web\Controller
                         'paper_detail' => [
                             'paper_detail_id' => ''
                         ]
-                    ]
+                    ],
+                    'unit' => $unit
                 ];
             }
             return [
@@ -162,7 +160,9 @@ class ApiController extends \yii\web\Controller
         if (!empty($request->post('qty'))) {
             $qtys = \explode(',', $request->post('qty'));
         }
-        
+
+
+
         foreach ($qtys as $qty) {
             $data['cust_quantity'] = $qty;
             $digital = new CalculateDigital([
@@ -187,7 +187,8 @@ class ApiController extends \yii\web\Controller
                     'price_of' => 'offset',
                     'offsetAttr' => $offsetAttr,
                     'digitalAttr' => $digitalAttr,
-                    'paper' => $offsetAttr['paper']
+                    'paper' => $offsetAttr['paper'],
+                    'unit' => $unit
                 ];
             } else {
                 $priceList[] = [
@@ -197,7 +198,8 @@ class ApiController extends \yii\web\Controller
                     'price_of' => 'digital',
                     'offsetAttr' => $offsetAttr,
                     'digitalAttr' => $digitalAttr,
-                    'paper' => $digitalAttr['paper']
+                    'paper' => $digitalAttr['paper'],
+                    'unit' => $unit
                 ];
             }
         }
@@ -206,22 +208,23 @@ class ApiController extends \yii\web\Controller
         ];
     }
 
-    public function actionBillFloorOptions($paper_size_id, $paper_id){
+    public function actionBillFloorOptions($paper_size_id, $paper_id) {
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
         $rows = (new \yii\db\Query())
-            ->select([
-                'tbl_bill_price.bill_price_id',
-                'tbl_bill_price.paper_size_id',
-                'CONCAT(tbl_bill_price.bill_floor,\'  แผ่น \') as bill_floor',
-                'tbl_bill_price.paper_id'
-            ])
-            ->from('tbl_bill_price')
-            ->where([
-                'paper_size_id' => $paper_size_id,
-                'paper_id' => $paper_id,
-            ])
-            ->all();
-        return ArrayHelper::map($rows, 'bill_price_id','bill_floor');
+                ->select([
+                    'tbl_bill_price.bill_price_id',
+                    'tbl_bill_price.paper_size_id',
+                    'CONCAT(tbl_bill_price.bill_floor,\'  แผ่น \') as bill_floor',
+                    'tbl_bill_price.paper_id'
+                ])
+                ->from('tbl_bill_price')
+                ->where([
+                    'paper_size_id' => $paper_size_id,
+                    'paper_id' => $paper_id,
+                ])
+                ->all();
+        return ArrayHelper::map($rows, 'bill_price_id', 'bill_floor');
     }
+
 }
