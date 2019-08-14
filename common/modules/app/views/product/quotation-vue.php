@@ -193,8 +193,13 @@ CSS
                                       <v-row v-if="isvisibleInput('land_orient')" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('land_orient') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+<!--                                            <label class="control-label has-star">
                                               {{ inputLabel('land_orient') }}
+                                            </label>-->
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                    แนวตั้ง/แนวนอน
+                                                <i class="fa fa-angle-double-down"></i>
                                             </label>
                                             <v-land-orient 
                                               :land-orient-options="landOrientOptions"
@@ -321,8 +326,13 @@ CSS
                                       <v-row v-if="isvisibleInput('book_binding_id')" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('book_binding_id') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+<!--                                            <label class="control-label has-star">
                                               {{ inputLabel('book_binding_id') }}
+                                            </label>-->
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                  เข้าเล่ม
+                                                <i class="fa fa-angle-double-down"></i>
                                             </label>
                                             <v-select2
                                               id="book_binding_id"
@@ -343,8 +353,13 @@ CSS
                                       <v-row v-if="isvisibleInput('page_qty')" >
                                         <v-col xs="6" sm="3" md="3">
                                           <div v-bind:class="['form-group', errors.first('page_qty') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+<!--                                            <label class="control-label has-star">
                                               {{ inputLabel('page_qty') }}
+                                            </label>-->
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                  จำนวนหน้า
+                                                <i class="fa fa-angle-double-down"></i>
                                             </label>
                                             <input 
                                               id="page_qty"
@@ -436,12 +451,15 @@ CSS
                                             </v-col>
                                           </v-row>
 
-                                      <!-- พิมพ์สองหน้าหรือหน้าเดียว -->
+                                      <!-- พิมพ์สองหน้า/หน้าเดียว -->
                                       <v-row v-if="isvisibleInput('print_option')" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('print_option') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
-                                              {{ inputLabel('print_option') }}
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                 พิมพ์สองหน้า/หน้าเดียว 
+                                                <i class="fa fa-angle-double-down"></i>
+<!--                                              {{ inputLabel('print_option') }}-->
                                             </label>
                                             <v-select2
                                               id="print_option"
@@ -456,11 +474,16 @@ CSS
                                             {{ errors.first('print_option') }}
                                           </div>
                                         </v-col>
+                                       
                                         <!-- สีที่พิมพ์ -->
+                                        
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('print_color') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
-                                              {{ inputLabel('print_color') }}
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                    สีที่พิมพ์   
+                                                <i class="fa fa-angle-double-down"></i>
+<!--                                              {{ inputLabel('print_color') }}-->
                                             </label>
                                             <v-select2
                                               id="print_color"
@@ -475,22 +498,19 @@ CSS
                                             {{ errors.first('print_color') }}
                                           </div>
                                         </v-col>
+                                        
                                       </v-row>
 
-                                    <!-- เคลือบ -->
-                                      <span v-if="isvisibleInput('coating_id')" class="label label-option">
-                                        <i class="fa fa-angle-double-down"></i>
-                                        เคลือบ 
-                                        <i class="fa fa-angle-double-down"></i>
-                                      </span>
                                       <!-- เคลือบ -->
                                       <v-row v-if="isvisibleInput('coating_id')" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('coating_id') ? 'has-error' : 'has-success']">
-                                    <!--        <label class="control-label has-star">
-                                              {{ inputLabel('coating_id') }}
-                                            </label>
-                                    -->
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                    เคลือบ 
+                                                <i class="fa fa-angle-double-down"></i>
+ <!--                                              {{ inputLabel('coating_id') }}-->
+                                             </label>
                                             <v-select2
                                               id="coating_id"
                                               :options="coatingIdOpts" 
@@ -506,8 +526,11 @@ CSS
                                         </v-col>
                                         <v-col v-show="formAttributes.coating_id && formAttributes.coating_id !== 'N'" xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('coating_option') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
-                                              {{ inputLabel('coating_option') }}
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                   เคลือบ ด้านเดียว/สองด้าน
+                                                <i class="fa fa-angle-double-down"></i>
+<!--                                              {{ inputLabel('coating_option') }}-->
                                             </label>
                                             <v-coating-option 
                                               :options="coatingOptionOptions"
@@ -550,9 +573,14 @@ CSS
                                       <v-row v-if="isvisibleInput('diecut') && formAttributes.diecut === 'Curve'" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('diecut_id') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+<!--                                            <label class="control-label has-star">
                                               {{ inputLabel('diecut_id') }}
-                                            </label>
+                                            </label>-->
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                    ไดคัทมุมมน
+                                                <i class="fa fa-angle-double-down"></i>
+                                             </label>
                                             <v-select2
                                               id="diecut_id"
                                               :options="dicutIdOpts" 
@@ -720,9 +748,14 @@ CSS
                                          <!-- สีฟอยล์ -->
                                         <v-col xs="6" sm="3" md="3">
                                           <div v-bind:class="['form-group', errors.first('foil_color_id') ? 'has-error' : 'has-success']">
-                                              <label class="control-label has-star">
+<!--                                              <label class="control-label has-star">
                                                 {{ inputLabel('foil_color_id') }}
-                                              </label>
+                                              </label>-->
+                                                <label class="label label-option">
+                                                    <i class="fa fa-angle-double-down"></i>
+                                                        สีฟอยล์
+                                                    <i class="fa fa-angle-double-down"></i>
+                                                </label>
                                               <v-select2
                                                 id="foil_color_id"
                                                 :options="foilColorIdOpts" 
@@ -739,9 +772,14 @@ CSS
                                          <!-- ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('foli_print') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+<!--                                            <label class="control-label has-star">
                                               {{ inputLabel('foli_print') }}
-                                            </label>
+                                            </label>-->
+                                                <label class="label label-option">
+                                                    <i class="fa fa-angle-double-down"></i>
+                                                        ปั๊มฟอยล์ หน้า-หลัง/หน้าเดียว
+                                                    <i class="fa fa-angle-double-down"></i>
+                                                </label>
                                             <v-foli-print 
                                               :options="foliPrintOptions"
                                               @change="onChangeFoliPrint"
@@ -829,9 +867,14 @@ CSS
                                       <v-row v-if="isvisibleInput('emboss_print')" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('emboss_print') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+<!--                                            <label class="control-label has-star">
                                               {{ inputLabel('emboss_print') }}
-                                            </label>
+                                            </label>-->
+                                                <label class="label label-option">
+                                                    <i class="fa fa-angle-double-down"></i>
+                                                     ปั๊มนูน หน้า-หลัง/หน้าเดียว   
+                                                    <i class="fa fa-angle-double-down"></i>
+                                                </label>
                                             <v-emboss-print 
                                               :options="embossPrintOptions"
                                               @change="onChangeEmbossPrint"
@@ -848,9 +891,14 @@ CSS
                                       <v-row v-if="isvisibleInput('glue')" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('glue') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
+<!--                                            <label class="control-label has-star">
                                               {{ inputLabel('glue') }}
-                                            </label>
+                                            </label>-->
+                                             <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                    ปะกาว
+                                                <i class="fa fa-angle-double-down"></i>
+                                             </label>
                                             <v-glue 
                                               :options="glueOptions"
                                               @change="onChangeGlue"
