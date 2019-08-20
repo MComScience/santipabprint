@@ -242,9 +242,11 @@ CSS
                                       </v-row>
 
                                       <span v-if="isvisibleInput('paper_size_id') && formAttributes.paper_size_id === 'custom'" class="label label-option custom-paper-size">
-                                        <i class="fa fa-angle-double-down"></i>
-                                          กำหนดขนาดเอง
-                                        <i class="fa fa-angle-double-down"></i>
+                                          <label class="control-label has-star">
+                                               กำหนดขนาดเอง 
+                                          </label>
+                                        
+                                       
                                       </span>
 
                                       <!-- ขนาดกำหนดเอง -->
@@ -347,7 +349,7 @@ CSS
                                           </div>
                                         </v-col>
                                       </v-row>
-
+                                      <p></p>
                                       <!-- จำนวนหน้า -->
                                       <v-row v-if="isvisibleInput('page_qty')" >
                                         <v-col xs="6" sm="3" md="3">
@@ -373,7 +375,7 @@ CSS
                                           </div>
                                         </v-col>
                                       </v-row>
-                                      
+                                      <p></p>
                                       <!-- กระดาษ -->
                                       <span v-if="isvisibleInput('paper_id')" class="label label-option">
                                         <i class="fa fa-angle-double-down"></i>
@@ -449,7 +451,7 @@ CSS
                                               </div>
                                             </v-col>
                                           </v-row>
-
+                                        <p></p>
                                       <!-- พิมพ์สองหน้า/หน้าเดียว -->
                                       <v-row v-if="isvisibleInput('print_option')" >
                                         <v-col xs="6" sm="6" md="6">
@@ -473,9 +475,7 @@ CSS
                                             {{ errors.first('print_option') }}
                                           </div>
                                         </v-col>
-                                       
                                         <!-- สีที่พิมพ์ -->
-                                        
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('print_color') ? 'has-error' : 'has-success']">
                                             <label class="label label-option">
@@ -497,9 +497,8 @@ CSS
                                             {{ errors.first('print_color') }}
                                           </div>
                                         </v-col>
-                                        
                                       </v-row>
-
+                                      <p></p>
                                       <!-- เคลือบ -->
                                       <v-row v-if="isvisibleInput('coating_id')" >
                                         <v-col xs="6" sm="6" md="6">
@@ -541,6 +540,7 @@ CSS
                                             {{ errors.first('coating_option') }}
                                           </div>
                                         </v-col>
+                                          <p></p>
                                       </v-row>
 
                                       <!-- ไดคัท -->
@@ -725,6 +725,7 @@ CSS
                                                     {{ errors.first('foil_size_width') }}
                                                   </div>
                                                 </v-col>
+                                                <p></p>
                                                 <!-- ยาว -->
                                                 <v-col xs="6" sm="3" md="3">
                                                   <div v-bind:class="['form-group', errors.first('foil_size_height') ? 'has-error' : 'has-success']">
@@ -742,6 +743,7 @@ CSS
                                                     {{ errors.first('foil_size_height') }}
                                                   </div>
                                                 </v-col>
+                                                <p></p>
                                                 <!-- หน่วย -->
                                                 <v-col xs="6" sm="3" md="3">
                                                   <div v-bind:class="['form-group', errors.first('foil_size_unit') ? 'has-error' : 'has-success']">
@@ -762,7 +764,7 @@ CSS
                                                     </div>
                                                 </v-col>
                                               </v-row>
-                                             
+                                             <p></p>
                                             <!-- สีฟอยล์ และ ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
                                             <v-row v-if="
                                                    isvisibleInput('foil_color_id')||
@@ -773,10 +775,8 @@ CSS
       <!--                                              <label class="control-label has-star">
                                                       {{ inputLabel('foil_color_id') }}
                                                     </label>-->
-                                                      <label class="label label-option">
-                                                          <i class="fa fa-angle-double-down"></i>
+                                                      <label class="control-label has-star">
                                                               สีฟอยล์
-                                                          <i class="fa fa-angle-double-down"></i>
                                                       </label>
                                                     <v-select2
                                                       id="foil_color_id"
@@ -797,10 +797,8 @@ CSS
       <!--                                            <label class="control-label has-star">
                                                     {{ inputLabel('foli_print') }}
                                                   </label>-->
-                                                      <label class="label label-option">
-                                                          <i class="fa fa-angle-double-down"></i>
+                                                      <label class="control-label has-star">
                                                               ปั๊มฟอยล์ หน้า-หลัง/หน้าเดียว
-                                                          <i class="fa fa-angle-double-down"></i>
                                                       </label>
                                                   <v-foli-print 
                                                     :options="foliPrintOptions"
