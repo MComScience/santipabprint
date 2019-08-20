@@ -328,6 +328,72 @@ Vue.component("v-glue", {
   `
 });
 
+Vue.component("v-foil-status", {
+  props: ["options", "value"],
+  $_veeValidate: {
+    value() {
+      return this.$el.value;
+    }
+  },
+  data() {
+    return {
+      checked: ""
+    };
+  },
+  mounted: function() {
+    this.checked = this.value;
+  },
+  template: `
+  <div id="tblquotationdetail-foil-status" role="radiogroup" aria-invalid="false">
+    <div v-for="(option, key) in options" :key="key" class="radio inline-block">
+      <label class="radio-inline">
+        <input type="radio" 
+          :id="'tblquotationdetail-foil-status-' + key" 
+          name="TblQuotationDetail[foil-status]" 
+          :value="option.value"
+          v-model="checked"
+          v-on:input="$emit('input', $event.target.value)"
+          v-on:change="$emit('change', $event)">
+        <span class="cr"><i class="cr-icon fa fa-circle"></i></span> {{ option.text }}
+      </label>
+    </div>
+  </div>
+  `
+});
+
+Vue.component("v-emboss-status", {
+  props: ["options", "value"],
+  $_veeValidate: {
+    value() {
+      return this.$el.value;
+    }
+  },
+  data() {
+    return {
+      checked: ""
+    };
+  },
+  mounted: function() {
+    this.checked = this.value;
+  },
+  template: `
+  <div id="tblquotationdetail-emboss-status" role="radiogroup" aria-invalid="false">
+    <div v-for="(option, key) in options" :key="key" class="radio inline-block">
+      <label class="radio-inline">
+        <input type="radio" 
+          :id="'tblquotationdetail-emboss-status-' + key" 
+          name="TblQuotationDetail[emboss-status]" 
+          :value="option.value"
+          v-model="checked"
+          v-on:input="$emit('input', $event.target.value)"
+          v-on:change="$emit('change', $event)">
+        <span class="cr"><i class="cr-icon fa fa-circle"></i></span> {{ option.text }}
+      </label>
+    </div>
+  </div>
+  `
+});
+
 function format(state) {
   if (!state.id) return state.text; // optgroup
   return state.text;
@@ -536,6 +602,34 @@ const vm = new Vue({
       placeholder: "เลือกมุมเจาะ",
       language: "th"
     },
+    // สถานะปั๊มฟอยล์
+    foilStatusOpts: {
+      data: [],
+      placeholder: "เลือกรายการ ...",
+      allowClear: true,
+      templateResult: format,
+      templateSelection: format,
+      escapeMarkup: function(m) {
+        return m;
+      },
+      theme: "bootstrap",
+      width: "100%",
+      language: "th"
+    },
+    // สถานะปั๊มนูน
+    embossStatusOpts: {
+      data: [],
+      placeholder: "เลือกรายการ ...",
+      allowClear: true,
+      templateResult: format,
+      templateSelection: format,
+      escapeMarkup: function(m) {
+        return m;
+      },
+      theme: "bootstrap",
+      width: "100%",
+      language: "th"
+    },
     formOptions: null,
     formAttributes: {
       "_csrf-frontend": yiiLib ? yiiLib.getCsrfToken() : null,
@@ -572,7 +666,10 @@ const vm = new Vue({
       quotation_id: "",
       cust_quantity: "",
       bill_detail_qty: "",
-      product_id: p
+      product_id: p,
+      foil_status:"",
+      emboss_status:""
+      
     },
     landOrientOptions: [
       {
@@ -638,7 +735,27 @@ const vm = new Vue({
         text: "Yes"
       }
     ],
-    priceList: []
+    priceList: [],
+    foilStatusOptions: [
+      {
+        value: "N",
+        text: "ไม่ปั๊มฟอยล์"
+      },
+     {
+        value: "Y",
+        text: "ปั๊มฟอยล์"
+      }
+    ],
+    embossStatusOptions: [
+      {
+        value: "N",
+        text: "ไม่ปั๊มนูน"
+      },
+     {
+        value: "Y",
+        text: "ปั๊มนูน"
+      }
+    ]
   },
   created() {
     $(".loading, .product-detail").removeClass("hidden");
@@ -736,6 +853,7 @@ const vm = new Vue({
       return this.getTextValue(fold);
     },
     foilDetail: function() {
+        if(!this.showFoilInput) return 'ไม่ปั๊มฟอยล์';
       let foil_size_width = this.getFormValue("foil_size_width");
       let foil_size_height = this.getFormValue("foil_size_height");
       const uint = this.findDataOption(
@@ -769,6 +887,7 @@ const vm = new Vue({
       return `${foil_size_width}${foil_size_height} ${unitTxt} ${colorTxt} ${foli_print_txt}`;
     },
     embossDetail: function() {
+        if(!this.showEmbossInput) return 'ไม่ปั๊มนูน';
       let emboss_size_width = this.getFormValue("emboss_size_width");
       let emboss_size_height = this.getFormValue("emboss_size_height");
       const uint = this.findDataOption(
@@ -855,7 +974,13 @@ const vm = new Vue({
     page_qty: function() {
       if (!this.formAttributes.page_qty) return "-";
       return this.formAttributes.page_qty;
-    }
+    },
+    showFoilInput: function() {
+        return this.formAttributes.foil_status === 'Y';
+    },
+    showEmbossInput: function() {
+        return this.formAttributes.emboss_status === 'Y';
+    },
   },
   mounted() {
     this.fetchDataOptions();
@@ -936,6 +1061,14 @@ const vm = new Vue({
           // มุมที่เจาะ
           this.perforateOptionOpts = updateObject(this.perforateOptionOpts, {
             data: this.mapDataOptions(dataOptions.perforateOptionOptions)
+          });
+          // ปํ๊มฟอยล์หรือไม่
+          this.foilStatusOpts = updateObject(this.foilStatusOpts, {
+            data: this.mapDataOptions(dataOptions.foilStatusOpts)
+          });
+          // ปํ๊มนูนหรือไม่
+          this.embossStatusOpts = updateObject(this.embossStatusOpts, {
+            data: this.mapDataOptions(dataOptions.embossStatusOpts)
           });
 
           this.product = response.data.product;
@@ -1124,6 +1257,31 @@ const vm = new Vue({
     },
     onChangeBillQty: function(e) {
       console.log(e.target.value);
+    },
+    onChangeFoilStatus: function(e) {
+        this.formAttributes.foil_status = e.target.value;
+        if (e.target.value === "Y") {
+            this.showFoilInput = true;
+        } else {
+            this.formAttributes.foil_color_id = null;
+            this.formAttributes.foil_size_height = '';
+            this.formAttributes.foil_size_unit = null;
+            this.formAttributes.foil_size_width = '';
+            this.formAttributes.foli_print = '';
+            this.showFoilInput = false;
+        }
+    },
+    onChangeEmbossStatus: function(e) {
+        this.formAttributes.emboss_status = e.target.value;
+        if (e.target.value === "Y") {
+            this.showEmbossInput = true;
+        } else {
+            this.formAttributes.emboss_size_height = '';
+            this.formAttributes.emboss_size_unit = null;
+            this.formAttributes.emboss_size_width = '';
+            this.formAttributes.emboss_print = '';
+            this.showEmbossInput = false;
+        }
     },
     mapDataOptions: function(options) {
       let dataOptions = [];

@@ -214,19 +214,18 @@ CSS
                                       </v-row>
                                       
                                       <!-- ขนาด -->
-                                      <span v-if="isvisibleInput('paper_size_id')" class="label label-option">
-                                        <i class="fa fa-angle-double-down"></i>
-                                        ขนาด 
-                                        <i class="fa fa-angle-double-down"></i>
-                                      </span>
-                                      <!-- ขนาด -->
-                                      <v-row v-if="" >
+                                      <v-row v-if="isvisibleInput('paper_size_id')" >
                                         <v-col xs="6" sm="6" md="6">
                                           <div v-bind:class="['form-group', errors.first('paper_size_id') ? 'has-error' : 'has-success']">
-                                    <!--        <label class="control-label has-star">
+<!--                                           <label class="control-label has-star">
                                               {{ inputLabel('paper_size_id') }}
-                                            </label>
-                                    -->
+                                            </label>-->
+                                                <label class="label label-option">
+                                                    <i class="fa fa-angle-double-down"></i>
+                                                        ขนาด 
+                                                    <i class="fa fa-angle-double-down"></i>
+                                                </label>
+                                    
                                             <v-select2
                                               id="paper_size_id"
                                               :options="paperSizeIdOpts" 
@@ -672,221 +671,267 @@ CSS
                                           </div>
                                         </v-col>
                                       </v-row>
-
-                                      <!-- ฟอยล์ -->
-                                      <span v-if="isvisibleInput('foil_size_width')" class="label label-option">
-                                        <i class="fa fa-angle-double-down"></i>
-                                        ฟอยล์ 
-                                        <i class="fa fa-angle-double-down"></i>
-                                      </span>
-
-                                      <!-- ฟอยล์ -->
-                                      <v-row v-if="
-                                        isvisibleInput('foil_size_width') || 
-                                        isvisibleInput('foil_size_height') || 
-                                        isvisibleInput('foil_size_unit')" >
-                                        <!-- กว้าง -->
-                                        <v-col xs="6" sm="3" md="3">
-                                          <div v-bind:class="['form-group', errors.first('foil_size_width') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
-                                              {{ inputLabel('foil_size_width') }}
+                                      
+                                      <hr>
+                                      
+                                  <!-- แก้ไขform ปั๊มafoil !-->
+                                      <v-row v-if="isvisibleInput('foil_status')">
+                                        <v-col xs="12" sm="12" md="12">
+                                          <div v-bind:class="['form-group', errors.first('foil_status') ? 'has-error' : 'has-success']">
+                                             <label class="label label-option">
+                                               <i class="fa fa-angle-double-down"></i>  
+                                               ปั๊มฟอยล์
+                                                <i class="fa fa-angle-double-down"></i>
                                             </label>
-                                            <input 
-                                              id="foil_size_width"
-                                              name="foil_size_width"
-                                              placeholder="กว้าง"
-                                              class="form-control"
-                                              v-model="formAttributes.foil_size_width"/>
+                                            <v-foil-status 
+                                              :options="foilStatusOptions"
+                                              @change="onChangeFoilStatus"
+                                              name="foil_status"
+                                              v-model="formAttributes.foil_status" /> 
                                           </div>
                                           <div class="help-block text-danger">
-                                            {{ errors.first('foil_size_width') }}
-                                          </div>
-                                        </v-col>
-                                        <!-- ยาว -->
-                                        <v-col xs="6" sm="3" md="3">
-                                          <div v-bind:class="['form-group', errors.first('foil_size_height') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
-                                              {{ inputLabel('foil_size_height') }}
-                                            </label>
-                                            <input 
-                                              id="foil_size_height"
-                                              name="foil_size_height"
-                                              placeholder="ยาว"
-                                              class="form-control"
-                                              v-model="formAttributes.foil_size_height" />
-                                          </div>
-                                          <div class="help-block text-danger">
-                                            {{ errors.first('foil_size_height') }}
-                                          </div>
-                                        </v-col>
-                                        <!-- หน่วย -->
-                                        <v-col xs="6" sm="3" md="3">
-                                          <div v-bind:class="['form-group', errors.first('foil_size_unit') ? 'has-error' : 'has-success']">
-                                              <label class="control-label has-star">
-                                                {{ inputLabel('foil_size_unit') }}
-                                              </label>
-                                              <v-select2
-                                                id="foil_size_unit"
-                                                :options="foilSizeUnitOpts" 
-                                                v-model="formAttributes.foil_size_unit"
-                                                name="foil_size_unit"
-                                                @change="onChangeFoilSizeUnit">
-                                                  <option disabled value="">เลือกรายการ...</option>
-                                              </v-select2>
-                                            </div>
-                                            <div class="help-block text-danger">
-                                              {{ errors.first('foil_size_unit') }}
-                                            </div>
-                                        </v-col>
-                                       
-                                      </v-row>
-
-                                      <!-- สีฟอยล์ และ ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
-                                      <v-row v-if="
-                                             isvisibleInput('foil_color_id')||
-                                             isvisibleInput('foli_print')" >
-                                         <!-- สีฟอยล์ -->
-                                        <v-col xs="6" sm="3" md="3">
-                                          <div v-bind:class="['form-group', errors.first('foil_color_id') ? 'has-error' : 'has-success']">
-<!--                                              <label class="control-label has-star">
-                                                {{ inputLabel('foil_color_id') }}
-                                              </label>-->
-                                                <label class="label label-option">
-                                                    <i class="fa fa-angle-double-down"></i>
-                                                        สีฟอยล์
-                                                    <i class="fa fa-angle-double-down"></i>
-                                                </label>
-                                              <v-select2
-                                                id="foil_color_id"
-                                                :options="foilColorIdOpts" 
-                                                v-model="formAttributes.foil_color_id"
-                                                name="foil_color_id"
-                                                @change="onChangeFoilColorId">
-                                                  <option disabled value="">เลือกรายการ...</option>
-                                              </v-select2>
-                                            </div>
-                                            <div class="help-block text-danger">
-                                              {{ errors.first('foil_color_id') }}
-                                            </div>
-                                        </v-col>
-                                         <!-- ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
-                                        <v-col xs="6" sm="6" md="6">
-                                          <div v-bind:class="['form-group', errors.first('foli_print') ? 'has-error' : 'has-success']">
-<!--                                            <label class="control-label has-star">
-                                              {{ inputLabel('foli_print') }}
-                                            </label>-->
-                                                <label class="label label-option">
-                                                    <i class="fa fa-angle-double-down"></i>
-                                                        ปั๊มฟอยล์ หน้า-หลัง/หน้าเดียว
-                                                    <i class="fa fa-angle-double-down"></i>
-                                                </label>
-                                            <v-foli-print 
-                                              :options="foliPrintOptions"
-                                              @change="onChangeFoliPrint"
-                                              name="foli_print"
-                                              v-model="formAttributes.foli_print" /> 
-                                          </div>
-                                          <div class="help-block text-danger">
-                                            {{ errors.first('foli_print') }}
+                                            {{ errors.first('foil_status') }}
                                           </div>
                                         </v-col>
                                       </v-row>
-
-                                      <!-- ปั๊มนูน -->
-                                      <span v-if="
-                                        isvisibleInput('emboss_size_width') ||
-                                        isvisibleInput('emboss_size_height') ||
-                                        isvisibleInput('emboss_size_unit')" 
-                                        class="label label-option">
-                                        <i class="fa fa-angle-double-down"></i>
-                                          ปั๊มนูน
-                                        <i class="fa fa-angle-double-down"></i>
-                                      </span>
-
-                                      <!-- ปั๊มนูน -->
-                                      <v-row v-if="
-                                        isvisibleInput('emboss_size_width') ||
-                                        isvisibleInput('emboss_size_height') ||
-                                        isvisibleInput('emboss_size_unit')" >
-                                        <!-- กว้าง -->
-                                        <v-col xs="6" sm="3" md="3">
-                                          <div v-bind:class="['form-group', errors.first('emboss_size_width') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
-                                              {{ inputLabel('emboss_size_width') }}
+                                  
+                                    <!-- ความกว้าง/ความยาว/หน่วย,สีฟอยล์/ปั๊มฟอยล์ หน้า-หลัง/หน้าเดียว  -->
+                                      <v-row v-if="isvisibleInput('foil_status') && showFoilInput" >
+                                          <v-col xs="12" sm="12" md="12">
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                    รายละเอียดปั๊มฟอยล์
+                                                <i class="fa fa-angle-double-down"></i>
+                                             </label>
+                                             <!-- ความกว้าง/ความยาว/หน่วย -->
+                                            <v-row v-if="
+                                                isvisibleInput('foil_size_width') || 
+                                                isvisibleInput('foil_size_height') || 
+                                                isvisibleInput('foil_size_unit')" >
+                                                <!-- กว้าง -->
+                                                <v-col xs="6" sm="3" md="3">
+                                                  <div v-bind:class="['form-group', errors.first('foil_size_width') ? 'has-error' : 'has-success']">
+                                                    <label class="control-label has-star">
+                                                      {{ inputLabel('foil_size_width') }}
+                                                    </label>
+                                                    <input 
+                                                      id="foil_size_width"
+                                                      name="foil_size_width"
+                                                      placeholder="กว้าง"
+                                                      class="form-control"
+                                                      v-model="formAttributes.foil_size_width"/>
+                                                  </div>
+                                                  <div class="help-block text-danger">
+                                                    {{ errors.first('foil_size_width') }}
+                                                  </div>
+                                                </v-col>
+                                                <!-- ยาว -->
+                                                <v-col xs="6" sm="3" md="3">
+                                                  <div v-bind:class="['form-group', errors.first('foil_size_height') ? 'has-error' : 'has-success']">
+                                                    <label class="control-label has-star">
+                                                      {{ inputLabel('foil_size_height') }}
+                                                    </label>
+                                                    <input 
+                                                      id="foil_size_height"
+                                                      name="foil_size_height"
+                                                      placeholder="ยาว"
+                                                      class="form-control"
+                                                      v-model="formAttributes.foil_size_height" />
+                                                  </div>
+                                                  <div class="help-block text-danger">
+                                                    {{ errors.first('foil_size_height') }}
+                                                  </div>
+                                                </v-col>
+                                                <!-- หน่วย -->
+                                                <v-col xs="6" sm="3" md="3">
+                                                  <div v-bind:class="['form-group', errors.first('foil_size_unit') ? 'has-error' : 'has-success']">
+                                                      <label class="control-label has-star">
+                                                        {{ inputLabel('foil_size_unit') }}
+                                                      </label>
+                                                      <v-select2
+                                                        id="foil_size_unit"
+                                                        :options="foilSizeUnitOpts" 
+                                                        v-model="formAttributes.foil_size_unit"
+                                                        name="foil_size_unit"
+                                                        @change="onChangeFoilSizeUnit">
+                                                          <option disabled value="">เลือกรายการ...</option>
+                                                      </v-select2>
+                                                    </div>
+                                                    <div class="help-block text-danger">
+                                                      {{ errors.first('foil_size_unit') }}
+                                                    </div>
+                                                </v-col>
+                                              </v-row>
+                                             
+                                            <!-- สีฟอยล์ และ ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
+                                            <v-row v-if="
+                                                   isvisibleInput('foil_color_id')||
+                                                   isvisibleInput('foli_print')" >
+                                               <!-- สีฟอยล์ -->
+                                              <v-col xs="6" sm="3" md="3">
+                                                <div v-bind:class="['form-group', errors.first('foil_color_id') ? 'has-error' : 'has-success']">
+      <!--                                              <label class="control-label has-star">
+                                                      {{ inputLabel('foil_color_id') }}
+                                                    </label>-->
+                                                      <label class="label label-option">
+                                                          <i class="fa fa-angle-double-down"></i>
+                                                              สีฟอยล์
+                                                          <i class="fa fa-angle-double-down"></i>
+                                                      </label>
+                                                    <v-select2
+                                                      id="foil_color_id"
+                                                      :options="foilColorIdOpts" 
+                                                      v-model="formAttributes.foil_color_id"
+                                                      name="foil_color_id"
+                                                      @change="onChangeFoilColorId">
+                                                        <option disabled value="">เลือกรายการ...</option>
+                                                    </v-select2>
+                                                  </div>
+                                                  <div class="help-block text-danger">
+                                                    {{ errors.first('foil_color_id') }}
+                                                  </div>
+                                              </v-col>
+                                               <!-- ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
+                                              <v-col xs="6" sm="6" md="6">
+                                                <div v-bind:class="['form-group', errors.first('foli_print') ? 'has-error' : 'has-success']">
+      <!--                                            <label class="control-label has-star">
+                                                    {{ inputLabel('foli_print') }}
+                                                  </label>-->
+                                                      <label class="label label-option">
+                                                          <i class="fa fa-angle-double-down"></i>
+                                                              ปั๊มฟอยล์ หน้า-หลัง/หน้าเดียว
+                                                          <i class="fa fa-angle-double-down"></i>
+                                                      </label>
+                                                  <v-foli-print 
+                                                    :options="foliPrintOptions"
+                                                    @change="onChangeFoliPrint"
+                                                    name="foli_print"
+                                                    v-model="formAttributes.foli_print" /> 
+                                                </div>
+                                                <div class="help-block text-danger">
+                                                  {{ errors.first('foli_print') }}
+                                                </div>
+                                              </v-col>
+                                            </v-row>
+                                            </v-col>
+                                           </v-row>   
+                                      <!--สิ้นสุด-->   
+                                      
+                                      <hr>
+                                      
+                                      <!--แก้ไข form ปั๊มนูน -->
+                                       <v-row v-if="isvisibleInput('emboss_status')">
+                                         <v-col xs="12" sm="12" md="12">
+                                          <div v-bind:class="['form-group', errors.first('emboss_status') ? 'has-error' : 'has-success']">
+                                             <label class="label label-option">
+                                               <i class="fa fa-angle-double-down"></i>  
+                                                 ปั๊มนูน
+                                                <i class="fa fa-angle-double-down"></i>
                                             </label>
-                                            <input 
-                                              id="emboss_size_width"
-                                              name="emboss_size_width"
-                                              placeholder="กว้าง"
-                                              class="form-control"
-                                              v-model="formAttributes.emboss_size_width" />
+                                            <v-emboss-status 
+                                              :options="embossStatusOptions"
+                                              @change="onChangeEmbossStatus"
+                                              name="emboss_status"
+                                              v-model="formAttributes.emboss_status" /> 
                                           </div>
                                           <div class="help-block text-danger">
-                                            {{ errors.first('emboss_size_width') }}
+                                            {{ errors.first('emboss_status') }}
                                           </div>
-                                        </v-col>
-                                        <!-- ยาว -->
-                                        <v-col xs="6" sm="3" md="3">
-                                          <div v-bind:class="['form-group', errors.first('emboss_size_height') ? 'has-error' : 'has-success']">
-                                            <label class="control-label has-star">
-                                              {{ inputLabel('emboss_size_height') }}
-                                            </label>
-                                            <input 
-                                              id="emboss_size_height"
-                                              name="emboss_size_height"
-                                              placeholder="ยาว"
-                                              class="form-control"
-                                              v-model="formAttributes.emboss_size_height" />
-                                          </div>
-                                          <div class="help-block text-danger">
-                                            {{ errors.first('emboss_size_height') }}
-                                          </div>
-                                        </v-col>
-                                        <!-- หน่วย -->
-                                        <v-col xs="6" sm="3" md="3">
-                                          <div v-bind:class="['form-group', errors.first('emboss_size_unit') ? 'has-error' : 'has-success']">
-                                              <label class="control-label has-star">
-                                                {{ inputLabel('emboss_size_unit') }}
-                                              </label>
-                                              <v-select2
-                                                id="emboss_size_unit"
-                                                :options="embossSizeUnitOpts" 
-                                                v-model="formAttributes.emboss_size_unit"
-                                                name="emboss_size_unit"
-                                                @change="onChangeEmbossSizeUnit">
-                                                  <option disabled value="">เลือกรายการ...</option>
-                                              </v-select2>
-                                            </div>
-                                            <div class="help-block text-danger">
-                                              {{ errors.first('emboss_size_unit') }}
-                                            </div>
-                                        </v-col>
-                                      </v-row>
+                                         </v-col>
+                                        </v-row>
+                                      
+                                        <v-row v-if="isvisibleInput('emboss_status') && showEmbossInput" >
+                                          <v-col xs="12" sm="12" md="12">
+                                            <label class="label label-option">
+                                                <i class="fa fa-angle-double-down"></i>
+                                                    รายละเอียดปั๊มนูน
+                                                <i class="fa fa-angle-double-down"></i>
+                                             </label>
+                                             <!-- ความกว้าง/ความยาว/หน่วย -->
+                                             <v-row v-if="
+                                                isvisibleInput('emboss_size_width') ||
+                                                isvisibleInput('emboss_size_height') ||
+                                                isvisibleInput('emboss_size_unit')" >
+                                                <!-- กว้าง -->
+                                                <v-col xs="6" sm="3" md="3">
+                                                  <div v-bind:class="['form-group', errors.first('emboss_size_width') ? 'has-error' : 'has-success']">
+                                                    <label class="control-label has-star">
+                                                      {{ inputLabel('emboss_size_width') }}
+                                                    </label>
+                                                    <input 
+                                                      id="emboss_size_width"
+                                                      name="emboss_size_width"
+                                                      placeholder="กว้าง"
+                                                      class="form-control"
+                                                      v-model="formAttributes.emboss_size_width" />
+                                                  </div>
+                                                  <div class="help-block text-danger">
+                                                    {{ errors.first('emboss_size_width') }}
+                                                  </div>
+                                                </v-col>
+                                                <!-- ยาว -->
+                                                <v-col xs="6" sm="3" md="3">
+                                                  <div v-bind:class="['form-group', errors.first('emboss_size_height') ? 'has-error' : 'has-success']">
+                                                    <label class="control-label has-star">
+                                                      {{ inputLabel('emboss_size_height') }}
+                                                    </label>
+                                                    <input 
+                                                      id="emboss_size_height"
+                                                      name="emboss_size_height"
+                                                      placeholder="ยาว"
+                                                      class="form-control"
+                                                      v-model="formAttributes.emboss_size_height" />
+                                                  </div>
+                                                  <div class="help-block text-danger">
+                                                    {{ errors.first('emboss_size_height') }}
+                                                  </div>
+                                                </v-col>
+                                                <!-- หน่วย -->
+                                                <v-col xs="6" sm="3" md="3">
+                                                  <div v-bind:class="['form-group', errors.first('emboss_size_unit') ? 'has-error' : 'has-success']">
+                                                      <label class="control-label has-star">
+                                                        {{ inputLabel('emboss_size_unit') }}
+                                                      </label>
+                                                      <v-select2
+                                                        id="emboss_size_unit"
+                                                        :options="embossSizeUnitOpts" 
+                                                        v-model="formAttributes.emboss_size_unit"
+                                                        name="emboss_size_unit"
+                                                        @change="onChangeEmbossSizeUnit">
+                                                          <option disabled value="">เลือกรายการ...</option>
+                                                      </v-select2>
+                                                    </div>
+                                                    <div class="help-block text-danger">
+                                                      {{ errors.first('emboss_size_unit') }}
+                                                    </div>
+                                                </v-col>
+                                              </v-row>
 
-                                      <!-- ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
-                                      <v-row v-if="isvisibleInput('emboss_print')" >
-                                        <v-col xs="6" sm="6" md="6">
-                                          <div v-bind:class="['form-group', errors.first('emboss_print') ? 'has-error' : 'has-success']">
-<!--                                            <label class="control-label has-star">
-                                              {{ inputLabel('emboss_print') }}
-                                            </label>-->
-                                                <label class="label label-option">
-                                                    <i class="fa fa-angle-double-down"></i>
-                                                     ปั๊มนูน หน้า-หลัง/หน้าเดียว   
-                                                    <i class="fa fa-angle-double-down"></i>
-                                                </label>
-                                            <v-emboss-print 
-                                              :options="embossPrintOptions"
-                                              @change="onChangeEmbossPrint"
-                                              name="emboss_print"
-                                              v-model="formAttributes.emboss_print" /> 
-                                          </div>
-                                          <div class="help-block text-danger">
-                                            {{ errors.first('emboss_print') }}
-                                          </div>
-                                        </v-col>
-                                      </v-row>
-
+                                              <!-- ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
+                                              <v-row v-if="isvisibleInput('emboss_print')" >
+                                                <v-col xs="6" sm="6" md="6">
+                                                  <div v-bind:class="['form-group', errors.first('emboss_print') ? 'has-error' : 'has-success']">
+        <!--                                            <label class="control-label has-star">
+                                                      {{ inputLabel('emboss_print') }}
+                                                    </label>-->
+                                                        <label class="label label-option">
+                                                            <i class="fa fa-angle-double-down"></i>
+                                                             ปั๊มนูน หน้า-หลัง/หน้าเดียว   
+                                                            <i class="fa fa-angle-double-down"></i>
+                                                        </label>
+                                                    <v-emboss-print 
+                                                      :options="embossPrintOptions"
+                                                      @change="onChangeEmbossPrint"
+                                                      name="emboss_print"
+                                                      v-model="formAttributes.emboss_print" /> 
+                                                  </div>
+                                                  <div class="help-block text-danger">
+                                                    {{ errors.first('emboss_print') }}
+                                                  </div>
+                                                </v-col>
+                                              </v-row>
+                                          </v-col>
+                                        </v-row>
                                       <!-- ปะกาว -->
                                       <v-row v-if="isvisibleInput('glue')" >
                                         <v-col xs="6" sm="6" md="6">
@@ -1027,7 +1072,7 @@ CSS
                                   {{ foldDetail }}
                                 </span>
                               </li>
-                              <!-- ฟอยล์ -->
+                               <!-- รายละเอียดฟอยล์ -->
                               <li v-show="
                                 isvisibleInput('foil_size_width') || 
                                 isvisibleInput('foil_size_height') || 
@@ -1038,7 +1083,7 @@ CSS
                                   {{ foilDetail }}
                                 </span>
                               </li>
-                              <!-- ปั๊มนูน -->
+                              <!-- รายละเอียดปั๊มนูน -->
                               <li v-show="
                                 isvisibleInput('emboss_size_width') ||
                                 isvisibleInput('emboss_size_height') ||

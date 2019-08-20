@@ -52,6 +52,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             [['quotation_id', 'product_id', 'paper_size_id', 'print_one_page', 'print_two_page', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id'], 'string', 'max' => 100],
             [['print_option', 'print_color', 'diecut', 'foli_print', 'emboss_print'], 'string', 'max' => 50],
             [['coating_option'], 'string', 'max' => 10],
+            [['foil_status','emboss_status'], 'string', 'max' => 4],
         ];
     }
     /**
@@ -97,6 +98,8 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'cust_quantity' => 'จำนวนที่ต้องการ',
             'final_price' => 'ราคา',
             'bill_detail_qty' => 'จำนวนแผ่นต่อชุด ',
+            'foil_status' => 'ปั๊มฟอยล์',
+            'emboss_status' => 'ปั๊มนูน'
         ];
     }
 
