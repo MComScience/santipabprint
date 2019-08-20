@@ -508,7 +508,7 @@ class CalculateOffset extends Component {
     public $sqFoilSize = 0; //ตารางนิ้วที่ต้องการปั๊ม
 
     public function findFoilPrice() {
-        if (!empty($this->model['foil_size_width']) && !empty($this->model['foil_size_height'])) {
+        if ($this->model['foil_status'] == 'Y' ) {
 
             $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 20); //จำนวนแผ่นพิมพ์ + เผื่อกระดาษ
             $sqFoilSize = 0;
@@ -548,7 +548,7 @@ class CalculateOffset extends Component {
     public $block_emboss_price = 0;  //ค่าบล๊อกปั๊มนูน
 
     public function findEmbossPrice() {
-        if (!empty($this->model['emboss_size_width']) && !empty($this->model['emboss_size_height'])) {
+        if ($this->model['emboss_status'] == 'Y') {
 
             $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 20); //จำนวนแผ่นพิมพ์ + เผื่อกระดาษ
 
