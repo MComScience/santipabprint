@@ -18,8 +18,9 @@ class CalculetFnc {
         return Yii::$app->formatter->format($result, ['decimal', 2]);
     }
 
-    public static function convertCmToIn($size) {
-        $result = $size * 0.3937;
+    public static function convertCmToIn($size) { ////เซนติเมตรเป็นนิ้ว
+       // $result = $size * 0.3937;
+          $result = $size * 0.24;
         return Yii::$app->formatter->format($result, ['decimal', 2]);
     }
 
