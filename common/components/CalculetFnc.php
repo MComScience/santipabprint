@@ -19,8 +19,7 @@ class CalculetFnc {
     }
 
     public static function convertCmToIn($size) { ////เซนติเมตรเป็นนิ้ว
-       // $result = $size * 0.3937;
-          $result = $size * 0.24;
+        $result = $size * 0.4; 
         return Yii::$app->formatter->format($result, ['decimal', 2]);
     }
 
@@ -35,8 +34,8 @@ class CalculetFnc {
         if ($fold === 'FOLD-00001') { //เช็คว่าถ้ามีการพับครึ่ง
             $width = $width * 2;
         }
-        $width = $width + 0.3;
-        $length = $length + 0.3;
+        $width = $width + 0.6;
+        $length = $length + 0.6;
         return [
             'width' => Yii::$app->formatter->format($width, ['decimal', 2]),
             'length' => Yii::$app->formatter->format($length, ['decimal', 2]),
