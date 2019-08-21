@@ -172,7 +172,7 @@ class CalculateDigital extends Component {
             if ($this->model['fold_id'] === 'FOLD-00001') { //เช็คว่าถ้ามีการพับครึ่ง
                 $messages .= "-:มีการพับครึ่ง นำความกว้างไปคูณ 2\n";
             }
-            $messages .= '-:บวก 0.3 เซนติเมตร\n';
+            $messages .= '-:บวก 0.6 เซนติเมตร\n';
             $messages .= "-:เช็คเงื่อนไข แปลงค่าหน่วยกระดาษที่รับค่าจากหน้าจอได้ขนาด {$this->paperWidth} x {$this->paperLenght}\n";
         }
         $this->messages = $messages;
