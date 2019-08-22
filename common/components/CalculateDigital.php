@@ -375,9 +375,9 @@ class CalculateDigital extends Component {
             if ($this->model['coating_option'] == 'two_page') { //เคลือบ 2 หน้า
                 $this->laminate_price = $this->laminate_price * 2;
             }
-            // ตรวจสอบราคาขั้นต่ำ 300
-            if ($this->laminate_price < 300) {
-                $this->laminate_price = 300;
+            // ตรวจสอบราคาขั้นต่ำ 200
+            if ($this->laminate_price < 200) {
+                $this->laminate_price = 200;
             }
         }
     }
