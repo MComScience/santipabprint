@@ -342,7 +342,7 @@ class CalculateOffset extends Component {
         }
         
         if($this->job_per_sheet != 0 && $model['cust_quantity'] != 0){
-            $this->print_sheet_total = $model['cust_quantity'] / $this->job_per_sheet;
+            $this->print_sheet_total = round($model['cust_quantity'] / $this->job_per_sheet); //คำนวณหาจำนวนแผ่นพิมพ์
         }
 
         $this->cal_print_sheet_total = $this->print_sheet_total;
