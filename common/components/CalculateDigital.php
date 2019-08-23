@@ -626,16 +626,18 @@ class CalculateDigital extends Component {
 
     public function summaryPrice() { //คำนวนราคาทั้งหมด
         $isDicut = !empty($this->model['diecut']) && $this->model['diecut'] != 'N';
-        $price_cut = 0;
+        $cutting_price = 0;
         if (!$isDicut) {
-            $price_cut = $this->paper['price_cut'];
+            $cutting_price = $this->paper['cutting_price'];
         }
         $this->final_price_digital = $this->final_paper_price + $this->printing_color_price +
                 $this->laminate_price + $this->dicut_price +
                 $this->fold_price + $this->emboss_price + $this->glue_price + $this->foil_price +
-                $this->printing_price + $this->paper['cutting_price'];
+                $this->printing_price + $cutting_price;
+        
         $final_price_digital_percent = ($this->final_price_digital / 100) * 20; //ค่าบริการจัดการ 20%
-        $this->final_price_digital = $this->final_price_digital + $final_price_digital_percent + $price_cut;
+        
+        $this->final_price_digital = $this->final_price_digital + $final_price_digital_percent;
     }
 
     public function getModel() {
