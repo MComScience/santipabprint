@@ -480,8 +480,8 @@ const vm = new Vue({
     // พิมพ์สองหน้าหรือหน้าเดียว
     printOptionOpts: {
       data: [
-        { id: "one_page", text: "พิมพ์สองหน้า" },
-        { id: "two_page", text: "พิมพ์หน้าเดียว" }
+        { id: "two_page", text: "พิมพ์สองหน้า" },
+        { id: "one_page", text: "พิมพ์หน้าเดียว" }
       ],
       allowClear: true,
       theme: "bootstrap",
