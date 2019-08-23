@@ -702,7 +702,7 @@ class CalculateOffset extends Component {
 
     public function findPaperBigsheet() {
         if($this->print_sheet_total != 0 && $this->paper_cut != 0 ){
-             $this->paper_bigsheet = $this->print_sheet_total / $this->paper_cut; //จำนวนแผ่นพิมพ์ที่บวกเผื่อ / (ขนาดกระดาษที่ตัด) 
+             $this->paper_bigsheet = round($this->print_sheet_total / $this->paper_cut,0); //จำนวนแผ่นพิมพ์ที่บวกเผื่อ / (ขนาดกระดาษที่ตัด) 
         }
         $this->final_paper_price = $this->paper_bigsheet * $this->paper_detail['paper_price']; //หาราคากระดาษ จำนวนกระดาษแผ่นใหญ่ * ราคากระดาษจากฐานข้อมูล
     }
@@ -749,7 +749,8 @@ class CalculateOffset extends Component {
                 $this->fold_price +
                 $this->emboss_price +
                 $this->glue_price +
-                $this->foil_price;
+                $this->foil_price +
+                $this->printing_color_price;
 
         $final_price_offset_percent = ($this->final_price_offset / 100 ) * 20;  //ค่าบริการจัดการ 20%
         $this->final_price_offset = $this->final_price_offset + $final_price_offset_percent;
