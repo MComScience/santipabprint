@@ -582,9 +582,9 @@ class CalculateDigital extends Component {
             }
         } else if ($this->print_two_page) {
             if ($this->model['print_color'] == 'PT-00005') { //สีดำ
-                $this->printing_color_price = ($this->cal_print_sheet_total * 5) * 2;
+                $this->printing_color_price = (($this->cal_print_sheet_total * 5) * 2);
             } else {
-                $this->printing_color_price = ($this->cal_print_sheet_total * 20) * 2;
+                $this->printing_color_price = (($this->cal_print_sheet_total * 20) * 2);
             }
         }
     }
