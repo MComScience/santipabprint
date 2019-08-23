@@ -231,13 +231,13 @@ class CalculateDigital extends Component {
                 $size = $calPaper['paper_print_area_width'] * $calPaper['paper_print_area_length'];
                 // หาการวางงานที่ได้จำนวนเยอะที่สุด
                 $job_per_sheet = 0;
-                
+
                 //เช็คว่าถ้าไม่มีไดคัทให้เพิ่มค่าตัด
-                $price_cut = 0;
+                $cutting_price = 0;
                 if (!$isDicut) {
-                    $price_cut = (($vertical_lay_total + 1) + ($horizon_lay_total + 1)) * 10;
+                    $cutting_price = (($vertical_lay_total + 1) + ($horizon_lay_total + 1)) * 10;
                 }
-                
+
                 if ($vertical_lay_total > $horizon_lay_total) { //ถ้ากระดาษแนวตั้งมากกว่าแนวนอน ให้ใช้ขนาดแนวตั้ง
                     $job_per_sheet = (int) $vertical_lay_total;
                 } else {
@@ -258,7 +258,7 @@ class CalculateDigital extends Component {
                     'paper_type' => $calPaper['paper_type'],
                     'paper_sticker' => $calPaper['paper_sticker'],
                     'paper_detail' => $paperDetail,
-                    'price_cut' => $price_cut
+                    'cutting_price' => $cutting_price
                 ];
             }
             if ($cal_job_per_sheets) {
@@ -354,7 +354,7 @@ class CalculateDigital extends Component {
         }
 
         if ($this->job_per_sheet != 0 && $model['cust_quantity'] != 0) {
-            $this->print_sheet_total = round($model['cust_quantity'] / $this->job_per_sheet) ; //คำนวณหาจำนวนแผ่นพิมพ์
+            $this->print_sheet_total = round($model['cust_quantity'] / $this->job_per_sheet); //คำนวณหาจำนวนแผ่นพิมพ์
         }
         $this->cal_print_sheet_total = $this->print_sheet_total;
 
@@ -594,7 +594,7 @@ class CalculateDigital extends Component {
     public $final_paper_price = 0; // ราคากระดาษ
 
     public function findPaperBigsheet() {
-        $this->paper_bigsheet = $this->print_sheet_total > 0 && $this->paper_cut > 0 ? $this->print_sheet_total / $this->paper_cut : 0; //จำนวนแผ่นพิมพ์ที่บวกเผื่อ / (ขนาดกระดาษที่ตัด)
+        $this->paper_bigsheet = $this->print_sheet_total > 0 && $this->paper_cut > 0 ? $this->print_sheet_total / $this->paper_cut : 0; //จำนวนแผ่นพิมพ์ที่บวกเผื่อดาษ / (ขนาดกระดาษที่ตัด)
         $this->final_paper_price = $this->paper_bigsheet * $this->paper_detail['paper_price']; //หาราคากระดาษ จำนวนกระดาษแผ่นใหญ่ * ราคากระดาษจากฐานข้อมูล
     }
 
@@ -627,12 +627,13 @@ class CalculateDigital extends Component {
     public function summaryPrice() { //คำนวนราคาทั้งหมด
         $isDicut = !empty($this->model['diecut']) && $this->model['diecut'] != 'N';
         $price_cut = 0;
-        if(!$isDicut){
+        if (!$isDicut) {
             $price_cut = $this->paper['price_cut'];
         }
-        $this->final_price_digital = $this->final_paper_price +
-                $this->printing_price + $this->laminate_price + $this->dicut_price +
-                $this->fold_price + $this->emboss_price + $this->glue_price + $this->foil_price;
+        $this->final_price_digital = $this->final_paper_price + $this->printing_color_price +
+                $this->laminate_price + $this->dicut_price +
+                $this->fold_price + $this->emboss_price + $this->glue_price + $this->foil_price +
+                $this->printing_price + $this->paper['cutting_price'];
         $final_price_digital_percent = ($this->final_price_digital / 100) * 20; //ค่าบริการจัดการ 20%
         $this->final_price_digital = $this->final_price_digital + $final_price_digital_percent + $price_cut;
     }
