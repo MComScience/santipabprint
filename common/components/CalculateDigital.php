@@ -684,6 +684,7 @@ class CalculateDigital extends Component {
             'พิมพ์สองหน้า' => $this->print_two_page,
             'ราคาพิมพ์สี' => $this->printing_color_price,
       //      'ราคาค่าพิมพ์งาน(วิ่ง)' => $this->printing_price,
+            'ราคาตัด' => $this->paper['cutting_price'],
             'ราคากระดาษ' => $this->final_paper_price,
             'ราคากระดาษแผ่นใหญ่' => $this->paper_bigsheet,
             'ราคารวมทั้งหมดฝั่งดิจิตอล' => $this->final_price_digital,
