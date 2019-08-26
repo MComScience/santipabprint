@@ -176,7 +176,7 @@ class ApiController extends \yii\web\Controller {
             
             //ราคาต่อชิ้น digital
             $price_per_item_digital_decimal = (int) substr(number_format($digitalAttr['price_per_item_digital'], 2), -2);
-            if($price_per_item_digital_decimal < 90 && $price_per_item_digital_decimal > 0 || $price_per_item_digital_decimal < 90 && $price_per_item_digital_decimal < 5 ){
+            if($price_per_item_digital_decimal < 90 && $price_per_item_digital_decimal > 0 ){
                 $price_per_item_digital_decimal = (ceil($price_per_item_digital_decimal / 10)) * 10;
                 $price_per_item_digital = (int)$digitalAttr['price_per_item_digital'].'.'.$price_per_item_digital_decimal;
             } else {
