@@ -58,7 +58,7 @@ class CalculateDigital extends Component {
             $this->findDicutPrice();
             $this->findGluePrice();
             $this->findPrintingColorPrice();
-            $this->findPrintingPrice();
+           // $this->findPrintingPrice();
             $this->findPaperBigsheet();
             $this->summaryPrice();
         }
@@ -683,7 +683,7 @@ class CalculateDigital extends Component {
             'พิมพ์หน้าเดียว' => $this->print_one_page,
             'พิมพ์สองหน้า' => $this->print_two_page,
             'ราคาพิมพ์สี' => $this->printing_color_price,
-            'ราคาค่าพิมพ์งาน(วิ่ง)' => $this->printing_price,
+      //      'ราคาค่าพิมพ์งาน(วิ่ง)' => $this->printing_price,
             'ราคากระดาษ' => $this->final_paper_price,
             'ราคากระดาษแผ่นใหญ่' => $this->paper_bigsheet,
             'ราคารวมทั้งหมดฝั่งดิจิตอล' => $this->final_price_digital,
