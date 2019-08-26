@@ -598,7 +598,7 @@ class CalculateDigital extends Component {
         $this->paper_bigsheet = round($paper_bigsheet, 0); //จำนวนแผ่นพิมพ์ที่บวกเผื่อดาษ / (ขนาดกระดาษที่ตัด)
         $this->final_paper_price = $this->paper_bigsheet * $this->paper_detail['paper_price']; //หาราคากระดาษ จำนวนกระดาษแผ่นใหญ่ * ราคากระดาษจากฐานข้อมูล
     }
-
+/*   
     //หาค่าพิมพ์งานตามจำนวนรอบ
     public $printing_price = 0;
 
@@ -621,7 +621,7 @@ class CalculateDigital extends Component {
             }
         }
     }
-
+*/
     //เอาราคาทั้งหมดมาบวกกัน
     public $final_price_digital = 0;
 
@@ -633,8 +633,8 @@ class CalculateDigital extends Component {
         }
         $this->final_price_digital = $this->final_paper_price + $this->printing_color_price +
                 $this->laminate_price + $this->dicut_price +
-                $this->fold_price + $this->emboss_price + $this->glue_price + $this->foil_price +
-                $this->printing_price + $cutting_price;
+                $this->fold_price + $this->emboss_price + $this->glue_price + $this->foil_price + $cutting_price;
+                /*+$this->printing_price*/ 
         
         $final_price_digital_percent = ($this->final_price_digital / 100) * 20; //ค่าบริการจัดการ 20%
         
