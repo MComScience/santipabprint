@@ -173,32 +173,36 @@ class ApiController extends \yii\web\Controller {
                 'model' => $data,
             ]);
             $offsetAttr = $offset->getAttributeValue();
-            
+
+            $final_price_digital = ceil($digitalAttr['final_price_digital'] / 10) * 10;
+            $price_per_item_digital = $final_price_digital / $data['cust_quantity'];
+
+            $final_price_offset = ceil($offsetAttr['final_price_offset'] / 10) * 10;
+            $price_per_item_offset = $final_price_offset / $data['cust_quantity'];
+
             //ราคาต่อชิ้น digital
-            $price_per_item_digital_decimal = (int) substr(number_format($digitalAttr['price_per_item_digital'], 2), -2);
-            if($price_per_item_digital_decimal < 90 && $price_per_item_digital_decimal > 0 ){
+            $price_per_item_digital_decimal = (int) substr(number_format($price_per_item_digital, 2), -2);
+            if ($price_per_item_digital_decimal < 90 && $price_per_item_digital_decimal > 0) {
                 $price_per_item_digital_decimal = (ceil($price_per_item_digital_decimal / 10)) * 10;
-                $price_per_item_digital = (int)$digitalAttr['price_per_item_digital'].'.'.$price_per_item_digital_decimal;
+                $price_per_item_digital = (int) $digitalAttr['price_per_item_digital'] . '.' . $price_per_item_digital_decimal;
             } else {
                 $price_per_item_digital = ceil($digitalAttr['price_per_item_digital']);
             }
             //ราคาต่อชิ้น offset
             $price_per_item_offset_decimal = (int) substr(number_format($offsetAttr['price_per_item_offset'], 2), -2);
-            if($price_per_item_offset_decimal < 90 && $price_per_item_offset_decimal > 0){
+            if ($price_per_item_offset_decimal < 90 && $price_per_item_offset_decimal > 0) {
                 $price_per_item_offset_decimal = (ceil($price_per_item_offset_decimal / 10)) * 10;
-                $price_per_item_offset = (int)$offsetAttr['price_per_item_offset'].'.'.$price_per_item_offset_decimal;
+                $price_per_item_offset = (int) $offsetAttr['price_per_item_offset'] . '.' . $price_per_item_offset_decimal;
             } else {
                 $price_per_item_offset = ceil($offsetAttr['price_per_item_offset']);
             }
 
-            $final_price_digital = ceil($digitalAttr['final_price_digital'] / 10) * 10;
-            
-            $final_price_offset = ceil($offsetAttr['final_price_offset'] / 10) * 10;
-           
+
+
             $cust_quantity = $qty;
             if ($final_price_digital > $final_price_offset) {
                 $priceList[] = [
-                    'final_price' => $final_price_offset ? number_format($final_price_offset, 2) : 0.00,
+                    'final_price' => number_format(($price_per_item_offset * $data['cust_quantity']), 2), //$final_price_offset ? number_format($final_price_offset, 2) : 0.00,
                     'price_per_item' => $price_per_item_offset ? $price_per_item_offset : 0.00,
                     'cust_quantity' => $cust_quantity,
                     'price_of' => 'offset',
@@ -211,7 +215,7 @@ class ApiController extends \yii\web\Controller {
                 ];
             } else {
                 $priceList[] = [
-                    'final_price' => $final_price_digital ? number_format($final_price_digital, 2) : 0.00,
+                    'final_price' => number_format(($price_per_item_digital * $data['cust_quantity']), 2),
                     'price_per_item' => $price_per_item_digital ? $price_per_item_digital : 0.00,
                     'cust_quantity' => $cust_quantity,
                     'price_of' => 'digital',
