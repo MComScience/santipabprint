@@ -596,7 +596,7 @@ class CalculateDigital extends Component {
     public function findPaperBigsheet() {
         $paper_bigsheet = $this->print_sheet_total > 0 && $this->paper_cut > 0 ? $this->print_sheet_total / $this->paper_cut : 0;
         $this->paper_bigsheet = round($paper_bigsheet, 0); //จำนวนแผ่นพิมพ์ที่บวกเผื่อดาษ / (ขนาดกระดาษที่ตัด)
-        $this->final_paper_price = $this->paper_bigsheet * $this->paper_detail['paper_price']; //หาราคากระดาษ จำนวนกระดาษแผ่นใหญ่ * ราคากระดาษจากฐานข้อมูล
+        $this->final_paper_price = round($this->paper_bigsheet * $this->paper_detail['paper_price']); //หาราคากระดาษ จำนวนกระดาษแผ่นใหญ่ * ราคากระดาษจากฐานข้อมูล
     }
 /*   
     //หาค่าพิมพ์งานตามจำนวนรอบ
