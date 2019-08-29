@@ -367,7 +367,7 @@ class CalculateDigital extends Component {
     public function findCoating() {
 
         if (!empty($this->model['coating_id']) && $this->model['coating_id'] != 'N') { //ถ้ามีเคลือบ
-            $coating_prices = TblCoatingPrice::find()->all(); //ราคาเคลือบ
+            $coating_prices = TblCoatingPrice::find()->orderBy('coating_sq_in asc')->all(); //ราคาเคลือบ
             $this->print_sheet_total = $this->print_sheet_total + 2; //จำนวนแผ่นพิมพ์ + เผื่อกระดาษ
             $sq = $this->paper_size;
             $this->laminate_price = CalculetFnc::calculateCoatingPrice($coating_prices, $this->model['coating_id'], $sq, $this->cal_print_sheet_total);

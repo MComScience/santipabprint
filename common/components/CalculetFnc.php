@@ -58,20 +58,26 @@ class CalculetFnc {
         $laminate_price = 0;
         foreach ($coating_prices as $key => $coating_price) {
             if ($sq <= $coating_price['coating_sq_in']) { //ขนาดกระดาษที่หาได้ไม่เกินขนาดในฐานข้อมูล
+                $success = false;
                 switch ($coaing_id) {
                     case "C-00001"://เคลือบ pvc ด้าน
                         $laminate_price = $coating_price['coating_matte_price'] * $cal_print_sheet_total;
+                        $success = true;
                         break;
                     case "C-00002": //เคลือบ pvc เงา
                         $laminate_price = $coating_price['coating_varnish_price'] * $cal_print_sheet_total;
+                        $success = true;
                         break;
                     case "C-00003": //เคลือบ  UV
                         $laminate_price = $coating_price['coating_uv_price'] * $cal_print_sheet_total;
+                        $success = true;
                         break;
                     default:
                         $laminate_price = 0;
                 }
-                break;
+                if($success){
+                   break; 
+                }
             }
         }
         return $laminate_price;
