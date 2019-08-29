@@ -57,7 +57,7 @@ class CalculetFnc {
     public static function calculateCoatingPrice($coating_prices, $coaing_id, $sq, $cal_print_sheet_total) { //คำนวนราคาเคลือบ
         $laminate_price = 0;
         foreach ($coating_prices as $key => $coating_price) {
-            if ($sq >= $coating_price['coating_sq_in']) { //ขนาดกระดาษที่หาได้ไม่เกินขนาดในฐานข้อมูล
+            if ($sq <= $coating_price['coating_sq_in']) { //ขนาดกระดาษที่หาได้ไม่เกินขนาดในฐานข้อมูล
                 $success = false;
                 switch ($coaing_id) {
                     case "C-00001"://เคลือบ pvc ด้าน
