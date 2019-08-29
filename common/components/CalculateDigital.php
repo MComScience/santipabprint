@@ -58,7 +58,7 @@ class CalculateDigital extends Component {
             $this->findDicutPrice();
             $this->findGluePrice();
             $this->findPrintingColorPrice();
-           // $this->findPrintingPrice();
+            // $this->findPrintingPrice();
             $this->findPaperBigsheet();
             $this->summaryPrice();
         }
@@ -363,14 +363,17 @@ class CalculateDigital extends Component {
 
     //หาราคาเคลือบ
     public $laminate_price = 0; //ราคาเคลือบ
+    public $coating = null;
 
     public function findCoating() {
 
         if (!empty($this->model['coating_id']) && $this->model['coating_id'] != 'N') { //ถ้ามีเคลือบ
             $coating_prices = TblCoatingPrice::find()->orderBy('coating_sq_in asc')->all(); //ราคาเคลือบ
             $this->print_sheet_total = $this->print_sheet_total + 2; //จำนวนแผ่นพิมพ์ + เผื่อกระดาษ
-            $sq = $this->paper_size;
-            $this->laminate_price = CalculetFnc::calculateCoatingPrice($coating_prices, $this->model['coating_id'], $sq, $this->cal_print_sheet_total);
+            $sq = $this->paper['size'];
+            $result = CalculetFnc::calculateCoatingPrice($coating_prices, $this->model['coating_id'], $sq, $this->cal_print_sheet_total);
+            $this->laminate_price = $result['laminate_price'];
+            $this->coating = $result['coating'];
             //ถ้าเคลือบสองหน้า
             if ($this->model['coating_option'] == 'two_page') { //เคลือบ 2 หน้า
                 $this->laminate_price = $this->laminate_price * 2;
@@ -598,30 +601,32 @@ class CalculateDigital extends Component {
         $this->paper_bigsheet = round($paper_bigsheet, 0); //จำนวนแผ่นพิมพ์ที่บวกเผื่อดาษ / (ขนาดกระดาษที่ตัด)
         $this->final_paper_price = round($this->paper_bigsheet * $this->paper_detail['paper_price']); //หาราคากระดาษ จำนวนกระดาษแผ่นใหญ่ * ราคากระดาษจากฐานข้อมูล
     }
-/*   
-    //หาค่าพิมพ์งานตามจำนวนรอบ
-    public $printing_price = 0;
 
-    public function findPrintingPrice() {
-        $print_prices = TblPrintPrice::find()->all(); //ราคาค่าพิมพ์(ค่าวิ่งงาน)
-        foreach ($print_prices as $key => $print_price) {
-            if ($this->cal_print_sheet_total <= $print_price['print_sheet_qty'] && $this->paper_cut == $print_price['print_paper_cut']) {
-                $this->printing_price = $print_price['price'];
-                break;
-            } else if ($this->cal_print_sheet_total > 10000) {
-                if ($this->paper_cut == 2) {
-                    $this->printing_price = ($this->cal_print_sheet_total / 1000) * 850;
-                }
-                if ($this->paper_cut == 3) {
-                    $this->printing_price = ($this->cal_print_sheet_total / 1000) * 660;
-                }
-                if ($this->paper_cut == 4) {
-                    $this->printing_price = ($this->cal_print_sheet_total / 1000) * 470;
-                }
-            }
-        }
-    }
-*/
+    /*
+      //หาค่าพิมพ์งานตามจำนวนรอบ
+      public $printing_price = 0;
+
+      public function findPrintingPrice() {
+      $print_prices = TblPrintPrice::find()->all(); //ราคาค่าพิมพ์(ค่าวิ่งงาน)
+      foreach ($print_prices as $key => $print_price) {
+      if ($this->cal_print_sheet_total <= $print_price['print_sheet_qty'] && $this->paper_cut == $print_price['print_paper_cut']) {
+      $this->printing_price = $print_price['price'];
+      break;
+      } else if ($this->cal_print_sheet_total > 10000) {
+      if ($this->paper_cut == 2) {
+      $this->printing_price = ($this->cal_print_sheet_total / 1000) * 850;
+      }
+      if ($this->paper_cut == 3) {
+      $this->printing_price = ($this->cal_print_sheet_total / 1000) * 660;
+      }
+      if ($this->paper_cut == 4) {
+      $this->printing_price = ($this->cal_print_sheet_total / 1000) * 470;
+      }
+      }
+      }
+      }
+     */
+
     //เอาราคาทั้งหมดมาบวกกัน
     public $final_price_digital = 0;
 
@@ -634,10 +639,10 @@ class CalculateDigital extends Component {
         $this->final_price_digital = $this->final_paper_price + $this->printing_color_price +
                 $this->laminate_price + $this->dicut_price +
                 $this->fold_price + $this->emboss_price + $this->glue_price + $this->foil_price + $cutting_price;
-                /*+$this->printing_price*/ 
-        
+        /* +$this->printing_price */
+
         $final_price_digital_percent = ($this->final_price_digital / 100) * 20; //ค่าบริการจัดการ 20%
-        
+
         $this->final_price_digital = $this->final_price_digital + $final_price_digital_percent;
     }
 
@@ -683,7 +688,7 @@ class CalculateDigital extends Component {
             'พิมพ์หน้าเดียว' => $this->print_one_page,
             'พิมพ์สองหน้า' => $this->print_two_page,
             'ราคาพิมพ์สี' => $this->printing_color_price,
-      //      'ราคาค่าพิมพ์งาน(วิ่ง)' => $this->printing_price,
+            //      'ราคาค่าพิมพ์งาน(วิ่ง)' => $this->printing_price,
             'ราคาตัด' => $this->paper['cutting_price'],
             'ราคากระดาษ' => $this->final_paper_price,
             'ราคากระดาษแผ่นใหญ่' => $this->paper_bigsheet,
@@ -691,6 +696,7 @@ class CalculateDigital extends Component {
             'final_price_digital' => $this->final_price_digital,
             'paper' => $this->paper,
             'price_per_item_digital' => $this->final_price_digital / $this->model['cust_quantity'],
+            'coating' => $this->coating
         ];
     }
 

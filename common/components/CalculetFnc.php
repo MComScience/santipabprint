@@ -53,34 +53,33 @@ class CalculetFnc {
         $horizon_lay_length = $print_area_length / $size_width_cal;
         return (int) $horizon_lay_width * (int) $horizon_lay_length;
     }
-
-    public static function calculateCoatingPrice($coating_prices, $coaing_id, $sq, $cal_print_sheet_total) { //คำนวนราคาเคลือบ
+    
+    public static function calculateCoatingPrice($coating_prices, $coating_id, $sq, $cal_print_sheet_total) { //คำนวนราคาเคลือบ
         $laminate_price = 0;
+        $coating = null;
         foreach ($coating_prices as $key => $coating_price) {
-            if ($sq <= $coating_price['coating_sq_in']) { //ขนาดกระดาษที่หาได้ไม่เกินขนาดในฐานข้อมูล
-                $success = false;
-                switch ($coaing_id) {
+           if ($sq <= $coating_price['coating_sq_in']) { //ขนาดกระดาษที่หาได้ไม่เกินขนาดในฐานข้อมูล
+                $coating = $coating_price;
+                switch ($coating_id) {
                     case "C-00001"://เคลือบ pvc ด้าน
                         $laminate_price = $coating_price['coating_matte_price'] * $cal_print_sheet_total;
-                        $success = true;
                         break;
                     case "C-00002": //เคลือบ pvc เงา
                         $laminate_price = $coating_price['coating_varnish_price'] * $cal_print_sheet_total;
-                        $success = true;
                         break;
                     case "C-00003": //เคลือบ  UV
                         $laminate_price = $coating_price['coating_uv_price'] * $cal_print_sheet_total;
-                        $success = true;
                         break;
                     default:
                         $laminate_price = 0;
                 }
-                if($success){
-                   break; 
-                }
+                break;
             }
         }
-        return $laminate_price;
+        return [
+            'laminate_price' => $laminate_price,
+            'coating' => $coating
+        ];
     }
 
     public static function calculateBlockFoil($block_prices, $sqFoilSize) {
