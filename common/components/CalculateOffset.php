@@ -246,6 +246,8 @@ class CalculateOffset extends Component {
                     'paper_type' => $calPaper['paper_type'],
                     'paper_sticker' => $calPaper['paper_sticker'],
                     'paper_detail' => $paperDetail,
+                    'vertical_lay_total' => $vertical_lay_total,
+                    'horizon_lay_total' => $horizon_lay_total
                 ];
             }
             if ($cal_job_per_sheets) {
