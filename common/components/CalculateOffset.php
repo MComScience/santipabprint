@@ -249,7 +249,7 @@ class CalculateOffset extends Component {
                 ];
             }
             if ($cal_job_per_sheets) {
-                $this->job_per_sheets = $cal_job_per_sheets;
+                $this->job_per_sheets[] = $cal_job_per_sheets;
                 ArrayHelper::multisort($cal_job_per_sheets, ['job_per_sheet', 'job_per_sheet'], [SORT_ASC, SORT_ASC]);
                 $cal_per_sheets = ArrayHelper::getColumn($cal_job_per_sheets, 'job_per_sheet');
 
