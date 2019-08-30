@@ -199,13 +199,13 @@ class CalculateOffset extends Component {
 
             if ($this->isSticker) { //เป็นสติ๊กเกอร์
                 $calPapers = TblPaperCut::find()->where([
-                            'paper_type' => 'digital',
+                            'paper_type' => 'offset',
                             'paper_sticker' => 1,
                             'paper_size' => $paperDetail['paper_size'],
                         ])->all();
             } else {
                 $calPapers = TblPaperCut::find()->where([
-                            'paper_type' => 'digital',
+                            'paper_type' => 'offset',
                             'paper_sticker' => 0,
                             'paper_size' => $paperDetail['paper_size'],
                         ])->all();
