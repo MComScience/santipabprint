@@ -843,7 +843,7 @@ class CalculateOffset extends Component {
             'ราคากระดาษ' => $this->final_paper_price,
             'ราคากระดาษแผ่นใหญ่' => $this->paper_bigsheet,
             'ราคารวมทั้งหมดฝั่งoffset' => $this->final_price_offset,
-            'ราคารวมทั้งหมดฝั่งoffset(ปัดเศษ)' => round($this->final_price_offset),
+            'ราคารวมทั้งหมดฝั่งoffset(ปัดเศษ)' => ceil($this->final_price_offset / 10) * 10,
             'final_price_offset' => $this->final_price_offset,
             'paper' => $this->paper,
             'price_per_item_offset' => $this->final_price_offset / $this->model['cust_quantity'],

@@ -693,7 +693,7 @@ class CalculateDigital extends Component {
             'ราคากระดาษ' => $this->final_paper_price,
             'ราคากระดาษแผ่นใหญ่' => $this->paper_bigsheet,
             'ราคารวมทั้งหมดฝั่งดิจิตอล' => $this->final_price_digital,
-            'ราคารวมทั้งหมดฝั่งดิจิตอล(ปัดเศษ)' => round($this->final_price_digital),
+            'ราคารวมทั้งหมดฝั่งดิจิตอล(ปัดเศษ)' => ceil($this->final_price_digital / 10) * 10,
             'final_price_digital' => $this->final_price_digital,
             'paper' => $this->paper,
             'price_per_item_digital' => $this->final_price_digital / $this->model['cust_quantity'],
