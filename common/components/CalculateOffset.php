@@ -770,8 +770,8 @@ class CalculateOffset extends Component {
     public $place_price = 0;
 
     public function findPlacePrice() { //2. เช็คสี/ขนาด ว่าต้องลงเครื่องพิมพ์ตัวไหน
-        $w = CalculetFnc::convertCmToIn($this->paperWidth);
-        $l = CalculetFnc::convertCmToIn($this->paperLenght);
+        $w = $this->paper['paper_print_area_width'];
+        $l = $this->paper['paper_print_area_length'];
 
         $this->place_price = CalculetFnc::calculatePricePlace($w, $l, $this->fourColors, $this->oneColors);
     }
@@ -780,16 +780,17 @@ class CalculateOffset extends Component {
     public $final_price_offset = 0;
 
     public function summaryPrice() { //คำนวนราคาทั้งหมด 
-        $this->final_price_offset = $this->place_price +
-                $this->final_paper_price +
-                $this->printing_price +
-                $this->laminate_price +
-                $this->dicut_price +
-                $this->fold_price +
-                $this->emboss_price +
-                $this->glue_price +
-                $this->foil_price +
-                $this->printing_color_price;
+        $this->final_price_offset = $this->place_price +//ราคาเพลท
+                $this->final_paper_price + //ราคากระดาษ
+                $this->printing_price +  //ราคาวิ่งงาน
+                $this->laminate_price +  //ราคาเคลือบ
+                $this->dicut_price +    //ราคาไดคัท
+                $this->fold_price +  //ราคาพับ
+                $this->emboss_price +  //ราคาปั๊มนูน
+                $this->glue_price + //ราคาปะกาว
+                $this->foil_price +  //ราคาฟอยล์
+                $this->printing_color_price //ราคาพิมพ์สี 
+                ;
 
         $final_price_offset_percent = ($this->final_price_offset / 100 ) * 20;  //ค่าบริการจัดการ 20%
         $this->final_price_offset = $this->final_price_offset + $final_price_offset_percent;
@@ -841,7 +842,8 @@ class CalculateOffset extends Component {
             'ราคาค่าพิมพ์งาน(วิ่ง)' => $this->printing_price,
             'ราคากระดาษ' => $this->final_paper_price,
             'ราคากระดาษแผ่นใหญ่' => $this->paper_bigsheet,
-            'ราคารวมทั้งหมดฝั่งดิจิตอล' => $this->final_price_offset,
+            'ราคารวมทั้งหมดฝั่งoffset' => $this->final_price_offset,
+            'ราคารวมทั้งหมดฝั่งoffset(ปัดเศษ)' => round($this->final_price_offset),
             'final_price_offset' => $this->final_price_offset,
             'paper' => $this->paper,
             'price_per_item_offset' => $this->final_price_offset / $this->model['cust_quantity'],
