@@ -88,6 +88,8 @@ class CalculateOffset extends Component {
         }
     }
 
+    public $paperSize = null;
+
     public function checkPaperSize() {
         $messages = $this->messages;
         $messages .= '===== หาขนาดกระดาษที่จะนำไปคำนวณ =====';
@@ -161,6 +163,7 @@ class CalculateOffset extends Component {
                     $this->paperWidth = $paper['paper_size_width'];
                     $this->paperLenght = $paper['paper_size_height'];
                 }
+                $this->paperSize = $paper;
             }
 
 
@@ -175,8 +178,9 @@ class CalculateOffset extends Component {
         }
         $this->messages = $messages;
     }
-    
+
     public $job_per_sheets = [];
+    public $job_per_sheets_mod = []; //การวาง lay ที่เป็นเลขคู่
 
     public function findJobPerSheet() {
         $messages = $this->messages;
@@ -233,6 +237,7 @@ class CalculateOffset extends Component {
                 } else {
                     $job_per_sheet = (int) $horizon_lay_total; //ถ้ากระดาษแนวตั้งน้อยกว่าแนวนอน ให้ใช้ขนาดแนวนอน
                 }
+                $is_mod = [];
                 $cal_job_per_sheets[] = [
                     'job_per_sheet' => $job_per_sheet,
                     'size' => $size,
@@ -247,11 +252,30 @@ class CalculateOffset extends Component {
                     'paper_sticker' => $calPaper['paper_sticker'],
                     'paper_detail' => $paperDetail,
                     'vertical_lay_total' => $vertical_lay_total,
-                    'horizon_lay_total' => $horizon_lay_total
+                    'horizon_lay_total' => $horizon_lay_total,
+                    'is_mod' => !($job_per_sheet%2) // true = เลขคู่ ,false = เลขคี่
                 ];
+                
+                if(($job_per_sheet%2) == 0){//เลขคู่
+                    $is_mod[] = $job_per_sheet;
+                }
             }
             if ($cal_job_per_sheets) {
                 $this->job_per_sheets[] = $cal_job_per_sheets;
+                
+                $new_cal_job_per_sheets = [];
+                if ($this->model['print_option'] == 'two_page' && count($is_mod) > 0) { //พิมพ์ 2 หน้า 
+                    foreach ($cal_job_per_sheets as $cal_job_per_sheet) {
+                        if($cal_job_per_sheet['is_mod']) { //งานพิมพ์ 2 หน้า หาชิ้นงานการวางที่เป็นเลขคู่
+                            $new_cal_job_per_sheets[] = $cal_job_per_sheet;
+                        }
+                    }
+                }
+                if($new_cal_job_per_sheets) {
+                    $cal_job_per_sheets = $new_cal_job_per_sheets;
+                }
+                $this->job_per_sheets_mod[] = $new_cal_job_per_sheets;
+                
                 ArrayHelper::multisort($cal_job_per_sheets, ['job_per_sheet', 'job_per_sheet'], [SORT_ASC, SORT_ASC]);
                 $cal_per_sheets = ArrayHelper::getColumn($cal_job_per_sheets, 'job_per_sheet');
 
@@ -346,8 +370,17 @@ class CalculateOffset extends Component {
         if ($this->job_per_sheet != 0 && $model['cust_quantity'] != 0) {
             $this->print_sheet_total = round($model['cust_quantity'] / $this->job_per_sheet); //คำนวณหาจำนวนแผ่นพิมพ์
         }
-
         $this->cal_print_sheet_total = $this->print_sheet_total;
+
+        if ($this->oneColors) {//งาน 1 สี บวกเริ่มต้นที่ 80 ใบ และบวกเพิ่ม 50 ใบ ทุก ๆ 1000 แผ่นพิมพ์
+            $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 80, 50);
+        }
+        if ($this->twoColors) {//งาน 2 สี บวกเริ่มต้นที่ 100 และบวกเพิ่ม 50 ใบ ทุก ๆ 1000 แผ่นพิมพ์
+            $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 100, 50);
+        }
+        if ($this->fourColors) {//งาน 4 สี บวกเริ่มต้นที่ 150 และบวกเพิ่ม 50 ใบ ทุก ๆ 1000 แผ่นพิมพ์
+            $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 150, 50);
+        }
 
         $this->messages = $messages;
     }
@@ -479,6 +512,7 @@ class CalculateOffset extends Component {
 
       $this->messages = $messages;
       } */
+
     //หาราคาเคลือบ
     public $laminate_price = 0; //ราคาเคลือบ
     public $coating = null;
@@ -735,8 +769,11 @@ class CalculateOffset extends Component {
     //ราคาเพลท
     public $place_price = 0;
 
-    public function findPlacePrice() {
-        $this->place_price = CalculetFnc::calculatePricePlace($this->paperWidth, $this->paperLenght, $this->fourColors, $this->oneColors);
+    public function findPlacePrice() { //2. เช็คสี/ขนาด ว่าต้องลงเครื่องพิมพ์ตัวไหน
+        $w = CalculetFnc::convertCmToIn($this->paperWidth);
+        $l = CalculetFnc::convertCmToIn($this->paperLenght);
+
+        $this->place_price = CalculetFnc::calculatePricePlace($w, $l, $this->fourColors, $this->oneColors);
     }
 
     //เอาราคาทั้งหมดมาบวกกัน
@@ -808,7 +845,9 @@ class CalculateOffset extends Component {
             'final_price_offset' => $this->final_price_offset,
             'paper' => $this->paper,
             'price_per_item_offset' => $this->final_price_offset / $this->model['cust_quantity'],
-            'coating' => $this->coating
+            'coating' => $this->coating,
+            'ราคาเพลท' => $this->place_price,
+            'job_per_sheets_mod' => $this->job_per_sheets_mod
         ];
     }
 
