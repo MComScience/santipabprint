@@ -177,8 +177,8 @@ class ApiController extends \yii\web\Controller {
             $final_price_digital = ceil($digitalAttr['final_price_digital'] / 10) * 10;
             $price_per_item_digital = $final_price_digital / $data['cust_quantity'];
 
-            $final_price_offset = ceil($offsetAttr['final_price_offset'] / 10) * 10;
-            $price_per_item_offset = $final_price_offset / $data['cust_quantity'];
+//            $final_price_offset = ceil($offsetAttr['final_price_offset'] / 10) * 10;
+//            $price_per_item_offset = $final_price_offset / $data['cust_quantity'];
 
             //ราคาต่อชิ้น digital
             $price_per_item_digital_decimal = (int) substr(number_format($price_per_item_digital, 2), -2);
@@ -189,26 +189,26 @@ class ApiController extends \yii\web\Controller {
                 $price_per_item_digital = ceil($digitalAttr['price_per_item_digital']);
             }
             //ราคาต่อชิ้น offset
-            $price_per_item_offset_decimal = (int) substr(number_format($offsetAttr['price_per_item_offset'], 2), -2);
-            if ($price_per_item_offset_decimal < 90 && $price_per_item_offset_decimal > 0) {
-                $price_per_item_offset_decimal = (ceil($price_per_item_offset_decimal / 10)) * 10;
-                $price_per_item_offset = (int) $offsetAttr['price_per_item_offset'] . '.' . $price_per_item_offset_decimal;
-            } else {
-                $price_per_item_offset = ceil($offsetAttr['price_per_item_offset']);
-            }
+            $price_per_item_offset_decimal = number_format($offsetAttr['price_per_item_offset'], 2);
+//            if ($price_per_item_offset_decimal < 90 && $price_per_item_offset_decimal > 0) {
+//                $price_per_item_offset_decimal = (ceil($price_per_item_offset_decimal / 10)) * 10;
+//                $price_per_item_offset = (int) $offsetAttr['price_per_item_offset'] . '.' . $price_per_item_offset_decimal;
+//            } else {
+//                $price_per_item_offset = ceil($offsetAttr['price_per_item_offset']);
+//            }
 
 
 
             $cust_quantity = $qty;
-            if ($final_price_digital > $final_price_offset) {
+            if ($final_price_digital > $offsetAttr['final_price_offset']) {
                 $priceList[] = [
-                    'final_price' => number_format(($price_per_item_offset * $data['cust_quantity']), 2), //$final_price_offset ? number_format($final_price_offset, 2) : 0.00,
-                    'price_per_item' => $price_per_item_offset ? $price_per_item_offset : 0.00,
+                    'final_price' => $offsetAttr['final_price_offset'], //$final_price_offset ? number_format($final_price_offset, 2) : 0.00,
+                    'price_per_item' => $offsetAttr['price_per_item_offset'],
                     'cust_quantity' => $cust_quantity,
                     'price_of' => 'offset',
                     'offsetAttr' => $offsetAttr,
                     'digitalAttr' => $digitalAttr,
-                    'paper' => $offsetAttr['paper'],
+                    'paper' => $offsetAttr['0.6[paper]'],
                     'unit' => $unit,
                     'price_per_item_digital_decimal' => $price_per_item_digital_decimal,
                     'price_per_item_offset_decimal' => $price_per_item_offset_decimal
@@ -228,6 +228,12 @@ class ApiController extends \yii\web\Controller {
                 ];
             }
         }
+//        $data = $request->post();
+//        $data['cust_quantity'] = 2000;
+//        $offset = new CalculateOffset([
+//            'model' => $data,
+//        ]);
+//        $offsetAttr = $offset->getAttributeValue();
         return [
             'price_list' => $priceList,
         ];

@@ -14,7 +14,7 @@ class CalculetFnc {
 
     //แปลงหน่วย นิ้ว เป็น เซนติเมตร
     public static function convertInToCm($size) {
-        $result = $size * 2.54;
+        $result = $size * 2.54;  //1 นิ้ว = 2.54
         return Yii::$app->formatter->format($result, ['decimal', 2]);
     }
 
@@ -34,8 +34,8 @@ class CalculetFnc {
         if ($fold === 'FOLD-00001') { //เช็คว่าถ้ามีการพับครึ่ง
             $width = $width * 2;
         }
-        $width = $width + 0.6;
-        $length = $length + 0.6;
+        $width = $width + 0.6; //บวกเผื่อกระดาษ 0.6 เซนติเมตร
+        $length = $length + 0.6; //บวกเผื่อกระดาษ 0.6 เซนติเมตร
         return [
             'width' => Yii::$app->formatter->format($width, ['decimal', 2]),
             'length' => Yii::$app->formatter->format($length, ['decimal', 2]),
@@ -192,21 +192,26 @@ class CalculetFnc {
 
     public static function calculatePricePlace($w, $l, $isFourColor, $oneColors) {
         $price = 0;
+        $place_cut = 0;
         if ($isFourColor) { // งาน 4 สี
             // ขนาดไม่เกิน 21*29 นิ้ว
             if ($w <= 21 && $l <= 29) {
-                // ขนาดไม่เกิน 18*25
-                if ($w <= 18 && $l <= 25) {
+                 //ขนาดตัดเพลท
+                if ($w <= 18 && $l <= 25) {// ขนาดไม่เกิน 18*25
+                    $place_cut = 4;
                     $price = 2000;
                 } else {
+                    $place_cut = 3;
                     $price = 3000;
                 }
             } else {
+                $place_cut = 2;
                 $price = 4000;
             }
         } else {// งาน 2 สี หรือ 1 สี 
             // ขนาดไม่เกิน 18*25 นิ้ว
             if ($w <= 18 && $l <= 25) { // ถ้าเป็นงาน 1 สี
+                $place_cut = 4;
                 if ($oneColors) {
                     $price = 500;
                 } else {
@@ -215,12 +220,14 @@ class CalculetFnc {
             } else {
                 // ขนาดไม่เกิน 21*29 นิ้ว
                 if ($w <= 21 && $l <= 29) {
+                    $place_cut = 3;
                     if ($oneColors) {
                         $price = 750;
                     } else {
                         $price = 1500;
                     }
                 } else {
+                    $place_cut = 2;
                     if ($oneColors) {
                         $price = 1000;
                     } else {
@@ -229,7 +236,10 @@ class CalculetFnc {
                 }
             }
         }
-        return $price;
+        return [
+            'place_cut' => $place_cut,
+            'place_price' =>  $price
+        ];
     }
 
 }
