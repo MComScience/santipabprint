@@ -466,7 +466,9 @@ class CalculateOffset extends Component {
             // จำนวนแผ่นพิมพ์ (จำนวนที่รับจากหน้าจอ/การวางงานที่ได้จำนวนเยอะที่สุด) + เผื่อกระดาษ
             $start_print_sheet_total = $job_per_sheet <= 0 ? 0 : round($model['cust_quantity'] / $job_per_sheet);
             $print_sheet_total = $start_print_sheet_total + $this->print_sheet_total;
-            if ($this->printTwoPage) { //พิมพ์ 2 หน้า 
+            
+            $is_mod = !($job_per_sheet % 2);
+            if ($this->printTwoPage && $is_mod) { //พิมพ์ 2 หน้า 
                 $print_sheet_total = $print_sheet_total * 2;
             }
             // จำนวนกระดาษแผ่นใหญ่ ( จำนวนแผ่นพิมพ์ total * paper_cut)
@@ -887,16 +889,16 @@ class CalculateOffset extends Component {
         $paper = $this->paper; // กระดาษที่หาได้
         $place_cut = $paper['place']['place_cut'];
         foreach ($print_prices as $key => $print_price) {
-            if ($paper['start_print_sheet_total'] <= $print_price['print_sheet_qty'] && $place_cut == $print_price['print_paper_cut']) {
+            if ($this->print_sheet_total <= $print_price['print_sheet_qty'] && $place_cut == $print_price['print_paper_cut']) {
                 $this->printing_price = $print_price['price'];
                 break;
-            } else if ($paper['start_print_sheet_total'] > 10000) {
+            } else if ($this->print_sheet_total > 10000) {
                 if ($place_cut == 2) {
-                    $this->printing_price = ($paper['start_print_sheet_total'] / 1000) * 850;
+                    $this->printing_price = ($this->print_sheet_total / 1000) * 850;
                 } elseif ($place_cut == 3) {
-                    $this->printing_price = ($paper['start_print_sheet_total'] / 1000) * 660;
+                    $this->printing_price = ($this->print_sheet_total / 1000) * 660;
                 } elseif ($place_cut == 4) {
-                    $this->printing_price = ($paper['start_print_sheet_total'] / 1000) * 470;
+                    $this->printing_price = ($this->print_sheet_total / 1000) * 470;
                 }
             }
         }
