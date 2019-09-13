@@ -380,18 +380,44 @@ class CalculateOffset extends Component {
                     }
                     if ($new_cal_job_per_sheets) { // ถ้ามีเลขคู่
                         $cal_job_per_sheets = $new_cal_job_per_sheets;
+                        $this->job_per_sheets_mod[$paperDetail['paper_size']] = $new_cal_job_per_sheets;
+                    } else {
+                        continue;
                     }
                 }
-                $this->job_per_sheets_mod[$paperDetail['paper_size']] = $new_cal_job_per_sheets;
                 // หาค่าพิมพ์งานขั้นต้นที่มีค่าต่ำสุด
                 ArrayHelper::multisort($cal_job_per_sheets, ['print_price_start', 'print_price_start'], [SORT_ASC, SORT_ASC]);
                 $cal_per_sheets = ArrayHelper::getColumn($cal_job_per_sheets, 'print_price_start');
                 $min_price_start = $this->findMinPriceStart($cal_per_sheets);
-                $cal_paper_sizes = ArrayHelper::merge($cal_paper_sizes, $this->getCalculatePriceStart($cal_job_per_sheets, $cal_per_sheets, $min_price_start, $paperDetail));
+                // ค่าพิมพ์งานขั้นต้น
+                $cal_paper_sizes = ArrayHelper::merge($cal_paper_sizes, $this->getCalculatePriceStart($cal_job_per_sheets, $min_price_start));
 //                ArrayHelper::multisort($cal_job_per_sheets, ['job_per_sheet', 'job_per_sheet'], [SORT_ASC, SORT_ASC]);
 //                $cal_per_sheets = ArrayHelper::getColumn($cal_job_per_sheets, 'job_per_sheet');
 //                $max_per_sheet = $this->findMaxJopPersheet($cal_per_sheets);
 //                $cal_paper_sizes = ArrayHelper::merge($cal_paper_sizes, $this->getCalculatePaperSize($cal_job_per_sheets, $cal_per_sheets, $max_per_sheet, $paperDetail));
+            }
+
+            //วางงานเป็นเลขคู่ไม่ได้  + งานพิมพ์ 2 หน้า (ค่าพิมพ์งานขั้นต้น)
+            if (count($this->job_per_sheets_mod) == 0 && $this->printTwoPage) {
+                $cal_job_per_sheets = [];
+                foreach ($this->job_per_sheets as $key => $item) {
+                    $place = $item['place'];
+
+                    $newPlace = ArrayHelper::merge($place, [ //ราคาเพลท * 2
+                        'place_price' => $place['place_price'] * 2
+                    ]);
+
+                    $cal_job_per_sheets[] = ArrayHelper::merge($item, [ //ราคาวิ่งงาน * 2
+                        'place' => $newPlace,
+                        'print_price_start' => $item['print_price_start'] * 2
+                    ]);
+                }
+                // หาค่าพิมพ์งานขั้นต้นที่มีค่าต่ำสุด
+                ArrayHelper::multisort($cal_job_per_sheets, ['print_price_start', 'print_price_start'], [SORT_ASC, SORT_ASC]);
+                $cal_per_sheets = ArrayHelper::getColumn($cal_job_per_sheets, 'print_price_start');
+                $min_price_start = $this->findMinPriceStart($cal_per_sheets);
+                // ค่าพิมพ์งานขั้นต้น
+                $cal_paper_sizes = ArrayHelper::merge($cal_paper_sizes, $this->getCalculatePriceStart($cal_job_per_sheets, $min_price_start));
             }
             $this->cal_paper_sizes = $cal_paper_sizes;
 
@@ -429,14 +455,16 @@ class CalculateOffset extends Component {
             $paper_print_area_length = CalculetFnc::convertInToCm($paper['paper_print_area_length']); //ความยาว
             //หาจำนวนชิ้นงานแนวตั้ง
             $vertical_lay_total = CalculetFnc::calculateVerticalLayWidth($paper_print_area_width, $this->paperWidth, $paper_print_area_length, $this->paperLenght); //แนวตั้ง
+//            $vertical_lay_total = round($vertical_lay_total, 2);
             //หาจำนวนชิ้นงานแนวนอน
             $horizon_lay_total = CalculetFnc::calculateHorizonLayWidth($paper_print_area_width, $this->paperWidth, $paper_print_area_length, $this->paperLenght); //แนวนอน
+//            $horizon_lay_total = round($horizon_lay_total, 2);
             //ขนาดกระดาษจากฐานข้อมูล = กว้าง x ยาว (นิ้ว)
             $size = $paper['paper_print_area_width'] * $paper['paper_print_area_length']; // in
             // หาการวางงานที่ได้จำนวนเยอะที่สุด
             $job_per_sheet = $this->compareLay($vertical_lay_total, $horizon_lay_total);
             // จำนวนแผ่นพิมพ์ (จำนวนที่รับจากหน้าจอ/การวางงานที่ได้จำนวนเยอะที่สุด) + เผื่อกระดาษ
-            $start_print_sheet_total = round($model['cust_quantity'] / $job_per_sheet);
+            $start_print_sheet_total = $job_per_sheet <= 0 ? 0 : round($model['cust_quantity'] / $job_per_sheet);
             $print_sheet_total = $start_print_sheet_total + $this->print_sheet_total;
             if ($this->printTwoPage) { //พิมพ์ 2 หน้า 
                 $print_sheet_total = $print_sheet_total * 2;
@@ -445,15 +473,14 @@ class CalculateOffset extends Component {
             $big_sheet_total = $print_sheet_total / $paper['paper_cut'];
             //เช็คว่าถ้าไม่มีไดคัทให้เพิ่มค่าตัด
             $cutting_price = 0;
-            if ($model['diecut'] == 'N') {
+            if (!$this->isDicut) {
                 $cutting_price = (($vertical_lay_total + 1) + ($horizon_lay_total + 1)) * 10;
             }
             // หาราคาเพลท
             $place = CalculetFnc::calculatePricePlace($paper['paper_print_area_width'], $paper['paper_print_area_length'], $this->fourColors, $this->oneColors);
-            if ($this->printTwoPage) { //พิมพ์ 2 หน้า 
-                $place['place_price'] = ($place['place_price'] * 2);
-            }
-
+//            if ($this->printTwoPage) { //พิมพ์ 2 หน้า 
+//                $place['place_price'] = ($place['place_price'] * 2);
+//            }
             // ค่ากระดาษ 
             $paper_price = $big_sheet_total * $paperDetail['paper_price'];
 
@@ -491,11 +518,11 @@ class CalculateOffset extends Component {
     private function compareLay($vertical, $horizontal) { // (แนวตั้ง, แนวนอน)
         $job_per_sheet = 0;
         if ($vertical > $horizontal) { //ถ้ากระดาษแนวตั้งมากกว่าแนวนอน ให้ใช้ขนาดแนวตั้ง
-            $job_per_sheet = (int) $vertical;
+            $job_per_sheet = $vertical;
         } else {
-            $job_per_sheet = (int) $horizontal; //ถ้ากระดาษแนวตั้งน้อยกว่าแนวนอน ให้ใช้ขนาดแนวนอน
+            $job_per_sheet = $horizontal; //ถ้ากระดาษแนวตั้งน้อยกว่าแนวนอน ให้ใช้ขนาดแนวนอน
         }
-        return $job_per_sheet;
+        return (int)$job_per_sheet;
     }
 
     private function findMaxJopPersheet($cal_per_sheets) {
@@ -562,7 +589,7 @@ class CalculateOffset extends Component {
     }
 
     // ค่าพิมพ์งานขั้นต้น
-    private function getCalculatePriceStart($cal_job_per_sheets, $cal_per_sheets, $min_price_start, $paperDetail) {
+    private function getCalculatePriceStart($cal_job_per_sheets, $min_price_start) {
         $model = $this->model;
         //
         $cal_paper_sizes = [];
@@ -628,9 +655,9 @@ class CalculateOffset extends Component {
                 }
             }
         }
-        if ($this->printTwoPage) { //พิมพ์ 2 หน้า 
-            $printing_price = ($printing_price * 2);
-        }
+//        if ($this->printTwoPage) { //พิมพ์ 2 หน้า 
+//            $printing_price = ($printing_price * 2);
+//        }
         return $printing_price;
     }
 
@@ -873,7 +900,7 @@ class CalculateOffset extends Component {
                 }
             }
         }
-        if ($this->printTwoPage) { //พิมพ์ 2 หน้า 
+        if (count($this->job_per_sheets_mod) == 0 && $this->printTwoPage) { //วางงานเลขคู่ไม่ได้ และเป็นพิมพ์ 2 หน้า 
             $this->printing_price = ($this->printing_price * 2);
         }
     }
@@ -894,7 +921,10 @@ class CalculateOffset extends Component {
                 $this->fold_price + //ราคาพับ
                 $this->emboss_price + //ราคาปั๊มนูน
                 $this->glue_price + //ราคาปะกาว
-                $this->foil_price; //ราคาฟอยล์
+                $this->foil_price + //ราคาฟอยล์
+                $paper['cutting_price']//ราคาค่าตัด
+                ;
+
 
 
         $final_price_offset_percent = ($this->final_price_offset / 100 ) * 20;  //ค่าบริการจัดการ 20%
