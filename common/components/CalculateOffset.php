@@ -64,7 +64,9 @@ class CalculateOffset extends Component {
             $this->modelPaperSize = $this->findModelPaperSize($model['paper_size_id']);
         }
         $this->modelPaper = $this->findModelPaper($model['paper_id']);
-        $this->modelColorPrint = $this->findModelColorPrinting($model['print_color']);
+        if (!empty($model['print_color'])) {
+            $this->modelColorPrint = $this->findModelColorPrinting($model['print_color']);
+        }
         if ($model['coating_id'] != 'N' && !empty($model['coating_id'])) {
             $this->modelCoating = $this->findModelCoating($model['coating_id']);
         }
