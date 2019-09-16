@@ -38,151 +38,151 @@ trait ModelTrait {
         if (($model = TblPaperSize::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblPaperSize');
     }
 
     protected function findModelPaperType($id) {
         if (($model = TblPaperType::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblPaperType');
     }
 
     protected function findModelPaper($id) {
         if (($model = TblPaper::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblPaper');
     }
 
     protected function findModelFold($id) {
         if (($model = TblFold::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblFold');
     }
 
     protected function findModelFoilColor($id) {
         if (($model = TblFoilColor::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblFoilColor');
     }
 
     protected function findModelCoating($id) {
         if (($model = TblCoating::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblCoating');
     }
 
     protected function findModelDiecutGroup($id) {
         if (($model = TblDiecutGroup::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblDiecutGroup');
     }
 
     protected function findModelDiecut($id) {
         if (($model = TblDiecut::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblDiecut');
     }
 
     protected function findModelUnit($id) {
         if (($model = TblUnit::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblUnit');
     }
 
     protected function findModelBookBinding($id) {
         if (($model = TblBookBinding::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblBookBinding');
     }
 
     protected function findModelColorPrinting($id) {
         if (($model = TblColorPrinting::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblColorPrinting');
     }
 
     protected function findModelProductCategory($id) {
         if (($model = TblProductCategory::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblProductCategory');
     }
 
     protected function findModelProduct($id) {
         if (($model = TblProduct::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblProduct');
     }
 
     protected function findModelProductOption($id) {
         if (($model = TblProductOption::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblProductOption');
     }
 
     protected function findModelQuotation($id) {
         if (($model = TblQuotation::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblQuotation');
     }
 
     protected function findModelQuotationDetail($id) {
         if (($model = TblQuotationDetail::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblQuotationDetail');
     }
 
     protected function findModelProductCatalog($id) {
         if (($model = TblProductCatalog::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblProductCatalog');
     }
 
-    protected function handleError() {
-        throw new NotFoundHttpException('The requested page does not exist.');
+    protected function handleError($model = '') {
+        throw new NotFoundHttpException('The requested page does not exist. model ['.$model.']');
     }
 
     protected function findModelPerforate($id) {
         if (($model = TblPerforate::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblPerforate');
     }
 
     protected function findModelPerforateOption($id) {
         if (($model = TblPerforateOption::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblPerforateOption');
     }
 
     protected function findModelPackageType($id) {
         if (($model = TblPackageType::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblPackageType');
     }
     
     protected function findModelBillPrice($id) {
         if (($model = TblBillPrice::findOne($id)) !== null) {
             return $model;
         }
-        $this->handleError();
+        $this->handleError('TblBillPrice');
     }
 
 }

@@ -70,7 +70,7 @@ class CalculateOffset extends Component {
         if ($model['coating_id'] != 'N' && !empty($model['coating_id'])) {
             $this->modelCoating = $this->findModelCoating($model['coating_id']);
         }
-        if ($model['diecut'] != 'N' && $model['diecut'] != 'Default' && !empty($model['diecut_id'])) {
+        if ($model['diecut'] != 'N' && $model['diecut'] != 'Default' && !empty($model['diecut_id'])){
             $this->modelDiCut = $this->findModelDiecut($model['diecut_id']);
         }
         if ($model['foil_status'] == 'Y' && !empty($model['foil_size_unit'])) {
@@ -84,7 +84,7 @@ class CalculateOffset extends Component {
             $this->modelPerforateOptiont = $this->findModelPerforateOption($model['perforate_option_id']);
         }
         if (!empty($model['fold_id']) && $model['fold_id'] != 'N') {
-            $this->modelFold = $this->findModelPerforateOption($model['fold_id']);
+            $this->modelFold = $this->findFlod($model['fold_id']);
         }
     }
 
