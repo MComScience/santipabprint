@@ -450,8 +450,8 @@ CSS
                                                     </div>
                                                 </v-col>
                                             </v-row>
-                                            <hr>
-                                          
+                                            
+                                             <hr v-show="isvisibleInput('coating_id')">
                                             <h4 v-show="isvisibleInput('coating_id')">งานเคลือบ :</h4>
                                             <!-- เคลือบ -->
                                             <v-row v-if="isvisibleInput('coating_id')" >
@@ -485,9 +485,12 @@ CSS
                                                 </v-col>
                                                 <p></p>
                                             </v-row>
+                                            
                                             <hr v-show="isvisibleInput('coating_id')">
                                             
-                                            <h4 v-show ="isvisibleInput('diecut') || isvisibleInput('perforate')">ไดคัท/ตัดเป็นตัว,เจาะ :</h4>
+                                            <h4 v-show="isvisibleInput('diecut') || isvisibleInput('perforate')">
+                                                ไดคัท/ตัดเป็นตัว,เจาะ :
+                                            </h4>
                                           <!--  <hr v-if="isvisibleInput('diecut') || isvisibleInput('perforate')">  -->
                                             <v-row v-if="isvisibleInput('diecut') || isvisibleInput('perforate')">
                                                 <v-col xs="12" sm="12" md="12">
