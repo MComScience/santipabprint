@@ -66,6 +66,10 @@ $this->registerCss(<<<CSS
     width: 50%;
   }
 }
+img.blur {
+  -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
+  filter: blur(2px);
+}
 CSS
 );
 SweetAlert2Asset::register($this);
@@ -93,7 +97,7 @@ SweetAlert2Asset::register($this);
                             <div class="lds-dual-ring" id="loading"></div>
                         </div>
                         <div id="app">
-                          <vm-categorys :categorys="categorys" />
+                          <vm-categorys :categorys="categorys" /> 
                         </div>
                     </div>
                 </div>

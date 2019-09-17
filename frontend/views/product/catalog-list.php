@@ -71,6 +71,10 @@ $this->registerCss(<<<CSS
     width: 50%;
   }
 }
+img.blur {
+  -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
+  filter: blur(2px);
+}
 CSS
 );
 SweetAlert2Asset::register($this);

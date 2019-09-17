@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Tanakorn
@@ -21,10 +22,10 @@ use common\modules\app\models\TblFoilColor;
 use common\modules\app\models\TblBookBinding;
 use common\modules\app\models\TblPerforateOption;
 
-class GridBuilder extends Component
-{
-    public static function getDataPaperSize($model)
-    {
+
+class GridBuilder extends Component {
+
+    public static function getDataPaperSize($model) {
         $provider = new ActiveDataProvider([
             'query' => TblPaperSize::find()->orderBy('paper_size_id ASC'),
             'pagination' => [
@@ -34,8 +35,7 @@ class GridBuilder extends Component
         return $provider;
     }
 
-    public static function getDataColorPrinting($model)
-    {
+    public static function getDataColorPrinting($model) {
         $provider = new ActiveDataProvider([
             'query' => TblColorPrinting::find(),
             'pagination' => [
@@ -45,8 +45,7 @@ class GridBuilder extends Component
         return $provider;
     }
 
-    public static function getDataPaper($model)
-    {
+    public static function getDataPaper($model) {
         $provider = new ActiveDataProvider([
             'query' => TblPaper::find()->orderBy('paper_type_id asc,paper_gram asc'),
             'pagination' => [
@@ -56,8 +55,7 @@ class GridBuilder extends Component
         return $provider;
     }
 
-    public static function getDataCoating($model)
-    {
+    public static function getDataCoating($model) {
         $provider = new ActiveDataProvider([
             'query' => TblCoating::find(),
             'pagination' => [
@@ -67,8 +65,7 @@ class GridBuilder extends Component
         return $provider;
     }
 
-    public static function getDataDiecut($model)
-    {
+    public static function getDataDiecut($model) {
         $provider = new ActiveDataProvider([
             'query' => TblDiecut::find(),
             'pagination' => [
@@ -78,8 +75,7 @@ class GridBuilder extends Component
         return $provider;
     }
 
-    public static function getDataFold($model)
-    {
+    public static function getDataFold($model) {
         $provider = new ActiveDataProvider([
             'query' => TblFold::find()->orderBy('fold_id  asc'),
             'pagination' => [
@@ -89,8 +85,7 @@ class GridBuilder extends Component
         return $provider;
     }
 
-    public static function getDataFoilColor($model)
-    {
+    public static function getDataFoilColor($model) {
         $provider = new ActiveDataProvider([
             'query' => TblFoilColor::find(),
             'pagination' => [
@@ -100,8 +95,7 @@ class GridBuilder extends Component
         return $provider;
     }
 
-    public static function getDataBookBinding($model)
-    {
+    public static function getDataBookBinding($model) {
         $provider = new ActiveDataProvider([
             'query' => TblBookBinding::find(),
             'pagination' => [
@@ -110,9 +104,8 @@ class GridBuilder extends Component
         ]);
         return $provider;
     }
-    
-    public static function getDataPerforate($model)
-    {
+
+    public static function getDataPerforate($model) {
         $provider = new ActiveDataProvider([
             'query' => TblPerforateOption::find(),
             'pagination' => [
@@ -122,23 +115,21 @@ class GridBuilder extends Component
         return $provider;
     }
 
-    public static function getCheckboxTemplate($value, $checked = false)
-    {
+    public static function getCheckboxTemplate($value, $checked = false) {
         return Html::beginTag('div', ['class' => 'checkbox', 'style' => 'margin-top: 0px;margin-bottom: 0px;']) .
-            Html::beginTag('label',['style' => 'min-height: 0px;padding-left: 5px;']) .
-            Html::checkbox('selection[]', $checked, ['value' => $value, 'class' => 'kv-row-checkbox']) .
-            Html::tag('span', Icon::show('ok', ['class' => 'cr-icon', 'framework' => Icon::BSG]), ['class' => 'cr']) .
-            Html::endTag('label') .
-            Html::endTag('div');
+                Html::beginTag('label', ['style' => 'min-height: 0px;padding-left: 5px;']) .
+                Html::checkbox('selection[]', $checked, ['value' => $value, 'class' => 'kv-row-checkbox']) .
+                Html::tag('span', Icon::show('ok', ['class' => 'cr-icon', 'framework' => Icon::BSG]), ['class' => 'cr']) .
+                Html::endTag('label') .
+                Html::endTag('div');
     }
 
-    public static function getCheckboxHeaderTemplate()
-    {
+    public static function getCheckboxHeaderTemplate() {
         return Html::beginTag('div', ['class' => 'checkbox', 'style' => 'margin-top: 0px;margin-bottom: 0px;']) .
-            Html::beginTag('label',['style' => 'min-height: 0px;padding-left: 5px;']) .
-            Html::checkbox('selection_all', false, ['class' => 'select-on-check-all', 'value' => 1]) .
-            Html::tag('span', Icon::show('ok', ['class' => 'cr-icon', 'framework' => Icon::BSG]), ['class' => 'cr']) .
-            Html::endTag('label') .
-            Html::endTag('div');
+                Html::beginTag('label', ['style' => 'min-height: 0px;padding-left: 5px;']) .
+                Html::checkbox('selection_all', false, ['class' => 'select-on-check-all', 'value' => 1]) .
+                Html::tag('span', Icon::show('ok', ['class' => 'cr-icon', 'framework' => Icon::BSG]), ['class' => 'cr']) .
+                Html::endTag('label') .
+                Html::endTag('div');
     }
 }

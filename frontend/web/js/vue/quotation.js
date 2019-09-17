@@ -519,6 +519,25 @@ const vm = new Vue({
       language: "th"
     },
     // ไดคัท
+    dicutOpts: {
+      data: [],
+      placeholder: "เลือกรายการ ...",
+      allowClear: true,
+      theme: "bootstrap",
+      width: "100%",
+      placeholder: "เลือกรูปแบบไดคัท",
+      language: "th",
+      data: [
+          {
+            id: "Default",
+            text: "ไดคัทตามรูปแบบ"
+          },
+          {
+            id: "Curve",
+            text: "ไดคัทมุมมน"
+          }
+      ],
+    },
     dicutIdOpts: {
       data: [],
       placeholder: "เลือกรายการ ...",
@@ -692,10 +711,10 @@ const vm = new Vue({
       }
     ],
     dicutOptions: [
-      {
-        value: "N",
-        text: "ไม่ไดคัท"
-      },
+      // {
+      //   value: "N",
+      //   text: "ไม่ไดคัท"
+      // },
       {
         value: "Default",
         text: "ไดคัทตามรูปแบบ"
@@ -728,11 +747,11 @@ const vm = new Vue({
     glueOptions: [
       {
         value: "0",
-        text: "No"
+        text: "ไม่ปะ"
       },
       {
         value: "1",
-        text: "Yes"
+        text: "ปะ"
       }
     ],
     priceList: [],
@@ -755,7 +774,8 @@ const vm = new Vue({
         value: "Y",
         text: "ปั๊มนูน"
       }
-    ]
+    ],
+    radioChecked: ''
   },
   created() {
     $(".loading, .product-detail").removeClass("hidden");
@@ -981,6 +1001,32 @@ const vm = new Vue({
     showEmbossInput: function() {
         return this.formAttributes.emboss_status === 'Y';
     },
+    isDicut(){
+      return this.radioChecked === 'dicut'
+    },
+    isPerforate(){
+      return this.radioChecked === 'perforate'
+    },
+    radioOptions() {
+      const options = []
+      if(this.isvisibleInput('diecut')) {
+        options.push({
+          value: "not-dicut",
+          text: "ไม่ไดคัท"
+        })
+        options.push({
+          value: "dicut",
+          text: "ไดคัท"
+        })
+      }
+      if(this.isvisibleInput('perforate')) {
+        options.push({
+          value: "perforate",
+          text: "ตัดเป็นตัว/เจาะ"
+        })
+      }
+      return options
+    }
   },
   mounted() {
     this.fetchDataOptions();
@@ -1086,6 +1132,18 @@ const vm = new Vue({
               this.formAttributes,
               formAttributes
             );
+            if (localStorage.getItem(`radioChecked[${p}]`)) {
+              this.radioChecked = localStorage.getItem(`radioChecked[${p}]`);
+              // if(this.radioChecked === 'not-dicut') {
+              //   $('#radio-option-0').prop("checked", true);
+              // }
+              // if(this.radioChecked === 'dicut') {
+              //   $('#radio-option-1').prop("checked", true);
+              // }
+              // if(this.radioChecked === 'perforate') {
+              //   $('#radio-option-2').prop("checked", true);
+              // }
+            }
           } else {
             this.formAttributes = Object.assign(
               this.formAttributes,
@@ -1190,8 +1248,8 @@ const vm = new Vue({
     onChangeCoatingId: function(e) {
       if (e.target.value === "N" || this.isEmpty(e.target.value)) {
         this.formAttributes.coating_option = null;
-        $("#tblquotationdetail-coating_option-0").attr("checked", false);
-        $("#tblquotationdetail-coating_option-1").attr("checked", false);
+        $("#tblquotationdetail-coating_option-0").prop("checked", false);
+        $("#tblquotationdetail-coating_option-1").prop("checked", false);
         this.$validator.reset();
       }
     },
@@ -1208,6 +1266,36 @@ const vm = new Vue({
           .trigger("change");
         this.$validator.reset();
       }
+      // if (this.formAttributes.product_id === 'P-2019073000001') { //ป้าย Tag สินค้า/ที่คั่นหนังสือ+
+      //   if(!this.isEmpty(this.formAttributes.perforate)){
+      //     Swal.fire({
+      //       title: '',
+      //       text: "กรุณาเลือกอย่างใดอย่างนึงเท่านั้น?",
+      //       type: 'warning',
+      //       showCancelButton: true,
+      //       confirmButtonText: 'ไดคัท',
+      //       cancelButtonText: 'ตัด/เจาะ',
+      //       allowOutsideClick: false,
+      //       cancelButtonColor: '#3085d6'
+      //     }).then((result) => {
+      //       if (result.value) {
+      //         this.formAttributes.perforate = "";
+      //         this.formAttributes.perforate_option_id = "";
+      //         $("#perforate, #perforate_option_id")
+      //           .val(null)
+      //           .trigger("change");
+      //       } else {
+      //         vm.formAttributes.diecut = "";
+      //         vm.formAttributes.diecut_id = "";
+      //         $("#diecut_id")
+      //           .val(null)
+      //           .trigger("change");
+      //         $('input[name="TblQuotationDetail[diecut]"]').prop("checked", false);
+      //       }
+      //     })
+      //   }
+      //   // $("#perforate, #perforate_option_id").prop("disabled", true);
+      // }
     },
     onChangeDidutId: function(e) {
       console.log(e.target.value);
@@ -1216,6 +1304,35 @@ const vm = new Vue({
       console.log(e.target.value);
     },
     onChangePerforate: function(e) {
+      const vm = this
+      // if (e.target.value && this.formAttributes.product_id === 'P-2019073000001') { //ป้าย Tag สินค้า/ที่คั่นหนังสือ
+      //   if(!this.isEmpty(vm.formAttributes.diecut)){
+      //     Swal.fire({
+      //       title: '',
+      //       text: "กรุณาเลือกอย่างใดอย่างนึงเท่านั้น?",
+      //       type: 'warning',
+      //       showCancelButton: true,
+      //       confirmButtonText: 'ตัด/เจาะ',
+      //       cancelButtonText: 'ไดคัท',
+      //       allowOutsideClick: false,
+      //       cancelButtonColor: '#3085d6'
+      //     }).then((result) => {
+      //       if (result.value) {
+      //         vm.formAttributes.diecut = "";
+      //         vm.formAttributes.diecut_id = "";
+      //         $("#diecut_id")
+      //           .val(null)
+      //           .trigger("change");
+      //         $('input[name="TblQuotationDetail[diecut]"]').prop("checked", false);
+      //       } else {
+      //         vm.formAttributes.perforate = "";
+      //         $("#perforate")
+      //           .val(null)
+      //           .trigger("change");
+      //       }
+      //     })
+      //   }
+      // }
       if (e.target.value !== "1") {
         this.formAttributes.perforate_option_id = "";
         $("#perforate_option_id")
@@ -1545,6 +1662,24 @@ const vm = new Vue({
         this.formAttributes.final_price = "";
         this.formAttributes.paper_detail_id = "";
       }
+    },
+    radioChecked(value) {
+      const vm = this
+      if(value === 'not-dicut' || value === 'perforate') {
+        vm.formAttributes.diecut = "N";
+        vm.formAttributes.diecut_id = "";
+        $("#diecut_id")
+          .val(null)
+          .trigger("change");
+        $('input[name="TblQuotationDetail[diecut]"]').prop("checked", false);
+      } else if(value === 'dicut') {
+        this.formAttributes.perforate = "";
+        this.formAttributes.perforate_option_id = "";
+        $("#perforate, #perforate_option_id")
+          .val(null)
+          .trigger("change");
+      }
+      localStorage.setItem(`radioChecked[${p}]`,value);
     }
   }
 });

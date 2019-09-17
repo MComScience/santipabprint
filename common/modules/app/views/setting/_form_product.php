@@ -331,12 +331,12 @@ CSS
         <div class="row">
             <div class="col-sm-12 text-right">
                 <?=
-                Html::a(Icon::show('close') . 'ยกเลิก', ['product'], [
+                Html::a(Icon::show('close') . 'Close', ['product'], [
                     'class' => 'btn btn-danger',
                 ])
                 ?>
                 <?=
-                Html::submitButton(Icon::show('save') . 'บันทึก', [
+                Html::submitButton(Icon::show('save') . 'Save', [
                     'class' => 'btn btn-success'
                 ])
                 ?>
