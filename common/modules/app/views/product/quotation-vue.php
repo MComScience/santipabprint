@@ -406,10 +406,13 @@ CSS
                                                 </v-col>
                                             </v-row>
 
-                                            <hr>
+                                            <hr v-show="isvisibleInput('print_option')">
 
                                             <!-- 2 -->
-                                            <h4 v-show="isvisibleInput('print_option')">งานพิมพ์ :</h4>
+                                            
+                                            <h4 v-show="isvisibleInput('print_option')">
+                                                งานพิมพ์ :
+                                            </h4>
                                             <!-- พิมพ์สองหน้า/หน้าเดียว -->
                                             <v-row v-if="isvisibleInput('print_option')" >
                                                 <v-col xs="12" sm="6" md="6">
@@ -450,9 +453,12 @@ CSS
                                                     </div>
                                                 </v-col>
                                             </v-row>
+                                           
                                             
-                                             <hr v-show="isvisibleInput('coating_id')">
-                                            <h4 v-show="isvisibleInput('coating_id')">งานเคลือบ :</h4>
+                                            <hr v-show="isvisibleInput('coating_id')">
+                                            <h4 v-show="isvisibleInput('coating_id')">
+                                                งานเคลือบ :
+                                            </h4>
                                             <!-- เคลือบ -->
                                             <v-row v-if="isvisibleInput('coating_id')" >
                                                 <v-col xs="12" sm="6" md="6">
