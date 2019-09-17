@@ -944,7 +944,7 @@ class CalculateOffset extends Component {
             $price_per_item_offset = ceil($price_per_item_offset);
         }
         $this->price_per_item_offset = $price_per_item_offset;
-        $this->final_price = number_format(($price_per_item_offset * $this->model['cust_quantity']), 2);
+        $this->final_price = ($price_per_item_offset * $this->model['cust_quantity']);
         //คำนวนราคาทั้งหมด (ค่าเพลท + ราคาเคลือบ + ราคาฟอยล์ + ราคาปั๊มนูน + ราคาไดคัท + ราคาปะกาว + ราคาพับ + ราคากระดาษ )
     }
 

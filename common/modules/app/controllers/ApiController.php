@@ -202,7 +202,7 @@ class ApiController extends \yii\web\Controller {
             $cust_quantity = $qty;
             if ($final_price_digital > $offsetAttr['final_price_offset']) {
                 $priceList[] = [
-                    'final_price' => $offsetAttr['final_price_offset'], //$final_price_offset ? number_format($final_price_offset, 2) : 0.00,
+                    'final_price' => number_format($offsetAttr['final_price_offset'], 2), //$final_price_offset ? number_format($final_price_offset, 2) : 0.00,
                     'price_per_item' => $offsetAttr['price_per_item_offset'],
                     'cust_quantity' => $cust_quantity,
                     'price_of' => 'offset',
