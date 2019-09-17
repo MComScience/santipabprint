@@ -647,7 +647,7 @@ CSS
                                             </v-row>
 
                                             <!-- ความกว้าง/ความยาว/หน่วย,สีฟอยล์และปั๊มฟอยล์ หน้า-หลัง/หน้าเดียว  -->
-                                            <v-row v-if="isvisibleInput('foil_status') && formAttributes.foil_status === 'Y'" >
+                                            <v-row v-if="isvisibleInput('foil_status') && showFoilInput" >
                                                 <v-col xs="12" sm="12" md="12">
                                                     <!-- ความกว้าง/ความยาว/หน่วย -->
                                                     <v-row v-if="

@@ -1378,26 +1378,26 @@ const vm = new Vue({
     onChangeFoilStatus: function(e) {
         this.formAttributes.foil_status = e.target.value;
         if (e.target.value === "Y") {
-            this.showFoilInput = true;
+            // this.showFoilInput = true;
         } else {
             this.formAttributes.foil_color_id = null;
             this.formAttributes.foil_size_height = '';
             this.formAttributes.foil_size_unit = null;
             this.formAttributes.foil_size_width = '';
             this.formAttributes.foli_print = '';
-            this.showFoilInput = false;
+            // this.showFoilInput = false;
         }
     },
     onChangeEmbossStatus: function(e) {
         this.formAttributes.emboss_status = e.target.value;
         if (e.target.value === "Y") {
-            this.showEmbossInput = true;
+            // this.showEmbossInput = true;
         } else {
             this.formAttributes.emboss_size_height = '';
             this.formAttributes.emboss_size_unit = null;
             this.formAttributes.emboss_size_width = '';
             this.formAttributes.emboss_print = '';
-            this.showEmbossInput = false;
+            // this.showEmbossInput = false;
         }
     },
     mapDataOptions: function(options) {
