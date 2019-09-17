@@ -488,7 +488,10 @@ CSS
                                             
                                             <hr v-show="isvisibleInput('coating_id')">
                                             
-                                            <h4 v-show="isvisibleInput('diecut') || isvisibleInput('perforate')">
+                                            <h4 v-show="isvisibleInput('diecut') && !isvisibleInput('perforate')">
+                                                ไดคัท :
+                                            </h4>
+                                            <h4 v-show="isvisibleInput('diecut') && isvisibleInput('perforate')">
                                                 ไดคัท/ตัดเป็นตัว,เจาะ :
                                             </h4>
                                           <!--  <hr v-if="isvisibleInput('diecut') || isvisibleInput('perforate')">  -->
