@@ -321,7 +321,7 @@ class TextMessageHandler implements EventHandler
                 break;
             case 'tag':
                 $userId = $this->textMessage->getUserId();
-                $this->bot->replyText($replyToken, \yii\helpers\Json::decode($json));
+                $this->bot->replyMessage($replyToken, $json);
                 break;
             case 'bye':
                 if ($this->textMessage->isRoomEvent()) {
