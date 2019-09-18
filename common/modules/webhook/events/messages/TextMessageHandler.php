@@ -57,6 +57,260 @@ class TextMessageHandler implements EventHandler
 
     public function handle()
     {
+        $json = '[
+  {
+    "type": "flex",
+    "altText": "ใบเสนอราคา",
+    "contents": {
+      "type": "bubble",
+      "styles": {
+        "footer": {
+          "separator": true
+        }
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "รายละเอียดใบเสนอราคา",
+            "weight": "bold",
+            "color": "#1DB446",
+            "size": "sm",
+            "align": "center"
+          },
+          {
+            "type": "text",
+            "text": "นามบัตร/บัตรสะสมแต้ม",
+            "weight": "bold",
+            "size": "md",
+            "margin": "md"
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "xxl",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ขนาด",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "5*8 นิ้ว",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "กระดาษ",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "อาร์ตการ์ดสองหน้า 300 แกรม",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "พิมพ์",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "พิมพ์สองหน้า พิมพ์ 2 สี",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "เคลือบ",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "เคลือบ pvc ด้าน สองด้าน",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ไดคัท",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "ไดคัทตามรูปแบบ",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ฟอยล์",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "ไม่ปั๊มฟอยล์",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ปั๊มนูน",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "ไม่ปั๊มนูน",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "text",
+                "text": "จำนวน",
+                "size": "md",
+                "color": "#ea7066",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "2000 ชิ้น",
+                "color": "#ea7066",
+                "size": "md",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ราคา",
+                "size": "md",
+                "color": "#ea7066",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "15,000฿",
+                "color": "#ea7066",
+                "size": "md",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ID",
+                "size": "xs",
+                "color": "#aaaaaa",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "#743289384279",
+                "color": "#aaaaaa",
+                "size": "xs",
+                "align": "end"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+]';
         $text = $this->textMessage->getText();
         $replyToken = $this->textMessage->getReplyToken();
         $this->logger->info("Got text message from $replyToken: $text");
@@ -64,6 +318,10 @@ class TextMessageHandler implements EventHandler
             case 'profile':
                 $userId = $this->textMessage->getUserId();
                 $this->sendProfile($replyToken, $userId);
+                break;
+            case 'tag':
+                $userId = $this->textMessage->getUserId();
+                $this->bot->replyMessage($replyToken, \yii\helpers\Json::decode($json));
                 break;
             case 'bye':
                 if ($this->textMessage->isRoomEvent()) {
