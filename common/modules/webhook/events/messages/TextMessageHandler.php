@@ -57,7 +57,7 @@ class TextMessageHandler implements EventHandler
 
     public function handle()
     {
-        $json = '[
+        $json = '
   {
     "type": "flex",
     "altText": "ใบเสนอราคา",
@@ -309,8 +309,7 @@ class TextMessageHandler implements EventHandler
         ]
       }
     }
-  }
-]';
+  }';
         $text = $this->textMessage->getText();
         $replyToken = $this->textMessage->getReplyToken();
         $this->logger->info("Got text message from $replyToken: $text");
@@ -321,7 +320,7 @@ class TextMessageHandler implements EventHandler
                 break;
             case 'tag':
                 $userId = $this->textMessage->getUserId();
-                $this->bot->replyMessage($replyToken, $json);
+                $this->bot->replyMessage($replyToken, \yii\helpers\Json::decode($json));
                 break;
             case 'bye':
                 if ($this->textMessage->isRoomEvent()) {
