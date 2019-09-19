@@ -39,7 +39,7 @@ class TblQuotationSearch extends TblQuotation
      */
     public function search($params)
     {
-        $query = TblQuotation::find();
+        $query = TblQuotation::find()->orderBy('quotation_id DESC');
 
         // add conditions that should always apply here
 
