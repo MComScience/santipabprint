@@ -410,7 +410,7 @@ CSS
 
                                             <!-- 2 -->
                                             
-                                            <h4 v-show="isvisibleInput('print_option')">
+                                            <h4 v-show="isvisibleInput('print_option')" style="font-size: 16px;">
                                                 งานพิมพ์ :
                                             </h4>
                                             <!-- พิมพ์สองหน้า/หน้าเดียว -->
@@ -456,7 +456,7 @@ CSS
                                            
                                             
                                             <hr v-show="isvisibleInput('coating_id')">
-                                            <h4 v-show="isvisibleInput('coating_id')">
+                                            <h4 v-show="isvisibleInput('coating_id')" style="font-size: 16px;">
                                                 งานเคลือบ :
                                             </h4>
                                             <!-- เคลือบ -->
@@ -494,10 +494,10 @@ CSS
                                             
                                             <hr v-show="isvisibleInput('coating_id')">
                                             
-                                            <h4 v-show="isvisibleInput('diecut') && !isvisibleInput('perforate')">
+                                            <h4 v-show="isvisibleInput('diecut') && !isvisibleInput('perforate')" style="font-size: 16px;">
                                                 ไดคัท :
                                             </h4>
-                                            <h4 v-show="isvisibleInput('diecut') && isvisibleInput('perforate')">
+                                            <h4 v-show="isvisibleInput('diecut') && isvisibleInput('perforate')" style="font-size: 16px;">
                                                 ไดคัท/ตัดเป็นตัว,เจาะ :
                                             </h4>
                                           <!--  <hr v-if="isvisibleInput('diecut') || isvisibleInput('perforate')">  -->
@@ -612,7 +612,9 @@ CSS
                                             </v-row>
                                             <hr v-show ="isvisibleInput('diecut') || isvisibleInput('perforate')">
                                             
-                                            <h4 v-show="isvisibleInput('fold_id')">วิธีพับ :</h4>
+                                            <h4 v-show="isvisibleInput('fold_id')" style="font-size: 16px;">
+                                                วิธีพับ :
+                                            </h4>
                                             <!-- วิธีพับ -->
                                             <v-row v-if="isvisibleInput('fold_id')" >
                                                 <v-col xs="12" sm="6" md="6">
@@ -635,7 +637,9 @@ CSS
                                             </v-row>
                                             <hr v-show="isvisibleInput('fold_id')">
                                             
-                                            <h4 v-show="isvisibleInput('foil_status')">ปั๊มฟอยล์ :</h4>
+                                            <h4 v-show="isvisibleInput('foil_status')" style="font-size: 16px;">
+                                                ปั๊มฟอยล์ :
+                                            </h4>
                                             <!-- แก้ไขform ปั๊มafoil !-->
                                             <v-row v-if="isvisibleInput('foil_status')">
                                                 <v-col xs="12" sm="12" md="12">
@@ -759,7 +763,7 @@ CSS
                                             <!--สิ้นสุด-->   
                                             <hr v-show="isvisibleInput('foil_status')">
                                             
-                                            <h4 v-show="isvisibleInput('emboss_status')">
+                                            <h4 v-show="isvisibleInput('emboss_status')" style="font-size: 16px;">
                                                 ปั๊มนูน :
                                             </h4>
                                             <!--แก้ไข form ปั๊มนูน -->
@@ -862,7 +866,7 @@ CSS
                                             </v-row>
                                             <hr v-show="isvisibleInput('emboss_status')">
                                             
-                                            <h4 v-show="isvisibleInput('glue')">
+                                            <h4 v-show="isvisibleInput('glue')" style="font-size: 16px;">
                                                 ปะกาว :
                                             </h4>
                                             <!-- ปะกาว -->
