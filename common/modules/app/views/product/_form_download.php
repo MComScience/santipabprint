@@ -82,13 +82,13 @@ $this->registerJsFile(
 ); */
 $this->registerJs(<<<JS
 $( document ).ready(function() {
-    console.log( "ready!" );
+    console.log( window.liff );
     var myApp = new Vue({
         el: '#form-download',
         data: {
             liffData: null
         },
-        mounted() {
+        beforeCreate() {
             this.initializeApp()
         },
         methods: {
