@@ -891,55 +891,6 @@ CSS
                                 <!-- footer -->
                                 <div class="panel-footer">
                                     <div v-html="product ? product.product_description : null"></div>
-                                    {{ liffData }}
-                                    <div id="profileinfo">
-                                        <h2>Profile</h2>
-                                        <div id="profilepicturediv">
-                                        </div>
-                                        <table border="1">
-                                            <tr>
-                                                <th>userId</th>
-                                                <td id="useridprofilefield"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>displayName</th>
-                                                <td id="displaynamefield"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>statusMessage</th>
-                                                <td id="statusmessagefield"></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div id="liffdata">
-                                        <h2>LIFF Data</h2>
-                                        <table border="1">
-                                            <tr>
-                                                <th>language</th>
-                                                <td id="languagefield"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>context.viewType</th>
-                                                <td id="viewtypefield"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>context.userId</th>
-                                                <td id="useridfield"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>context.utouId</th>
-                                                <td id="utouidfield"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>context.roomId</th>
-                                                <td id="roomidfield"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>context.groupId</th>
-                                                <td id="groupidfield"></td>
-                                            </tr>
-                                        </table>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1215,9 +1166,9 @@ $this->registerJsFile(
         YII_ENV_DEV ? '@web/js/vee-validate.js' : '@web/js/vee-validate.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]
 );
 
-// $this->registerJsFile(
-//         YII_ENV_DEV ? '@web/js/vue/quotation.js' : '@web/js/vue/quotation.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]
-// );
+$this->registerJsFile(
+        YII_ENV_DEV ? '@web/js/vue/quotation.js' : '@web/js/vue/quotation.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]
+);
 
 $this->registerJs(<<<JS
 $(window).on("load", function (e) {
@@ -1226,5 +1177,5 @@ $(window).on("load", function (e) {
 })
 JS
 );
-$this->registerJs($this->render('@app/web/js/vue/quotation.js'))
+// $this->registerJs($this->render('@app/web/js/vue/quotation.js'))
 ?>
