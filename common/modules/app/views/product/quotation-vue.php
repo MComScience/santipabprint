@@ -891,6 +891,7 @@ CSS
                                 <!-- footer -->
                                 <div class="panel-footer">
                                     <div v-html="product ? product.product_description : null"></div>
+                                    {{ liffData }}
                                 </div>
                             </div>
                         </div>
