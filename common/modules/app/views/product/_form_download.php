@@ -81,6 +81,11 @@ $this->registerJsFile(
         ['depends' => [\yii\web\JqueryAsset::className()]]
 ); */
 $this->registerJs(<<<JS
+window.onload = function (e) {
+    liff.init(function (data) {
+        console.log(data)
+    });
+};
 $( document ).ready(function() {
     console.log( window.liff );
     var myApp = new Vue({
