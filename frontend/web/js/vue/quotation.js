@@ -1702,9 +1702,9 @@ $(window).on("load", function() {
   console.log('load', liff)
   liff.init(
     data => {
-      vm.initializeApp(data);
       const userId = data.context.userId;
       alert(userId)
+      // vm.initializeApp(data);
     },
     err => {
       // LIFF initialization failed
