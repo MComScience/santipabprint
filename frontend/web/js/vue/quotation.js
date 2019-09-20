@@ -1703,6 +1703,8 @@ $(window).on("load", function() {
   liff.init(
     data => {
       vm.initializeApp(data);
+      const userId = data.context.userId;
+      alert(userId)
     },
     err => {
       // LIFF initialization failed
