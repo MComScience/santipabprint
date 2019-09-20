@@ -1167,9 +1167,9 @@ $this->registerJsFile(
         YII_ENV_DEV ? '@web/js/vee-validate.js' : '@web/js/vee-validate.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]
 );
 
-$this->registerJsFile(
-        YII_ENV_DEV ? '@web/js/vue/quotation.js' : '@web/js/vue/quotation.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]
-);
+// $this->registerJsFile(
+//         YII_ENV_DEV ? '@web/js/vue/quotation.js' : '@web/js/vue/quotation.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]
+// );
 
 $this->registerJs(<<<JS
 $(window).on("load", function (e) {
@@ -1178,5 +1178,5 @@ $(window).on("load", function (e) {
 })
 JS
 );
-// $this->registerJs($this->render('@app/web/js/vue/quotation.js'))
+$this->registerJs($this->render('@app/web/js/vue/quotation.js'))
 ?>
