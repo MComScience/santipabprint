@@ -73,19 +73,10 @@ use kartik\icons\Icon;
     {{ liffData }}
 </div>
 <?php
-$this->registerJsFile(
-    'https://d.line-scdn.net/liff/1.0/sdk.js',
-    ['depends' => [\yii\web\JqueryAsset::className()]]
-);
 /* $this->registerJsFile('@web/js/liff-starter.js',
         ['depends' => [\yii\web\JqueryAsset::className()]]
 ); */
 $this->registerJs(<<<JS
-window.onload = function (e) {
-    liff.init(function (data) {
-        console.log(data)
-    });
-};
 $( document ).ready(function() {
     console.log( window.liff );
     var myApp = new Vue({
@@ -93,7 +84,7 @@ $( document ).ready(function() {
         data: {
             liffData: null
         },
-        beforeCreate() {
+        mounted() {
             this.initializeApp()
         },
         methods: {
