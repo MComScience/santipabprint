@@ -79,11 +79,18 @@ $this->registerJsFile('@web/js/liff-starter.js',
         ['depends' => [\yii\web\JqueryAsset::className()]]
 );
 $this->registerJs(<<<JS
-liff.sendMessages([response.lineMessage]).then(function () {
-                    window.alert("Message sent");
-                }).catch(function (error) {
-                    window.alert("Error sending message: " + error);
-                });
+liff.sendMessages([{
+            type: 'text',
+            text: "You've successfully sent a message! Hooray!"
+        }, {
+            type: 'sticker',
+            packageId: '2',
+            stickerId: '144'
+        }]).then(function () {
+            window.alert("Message sent");
+        }).catch(function (error) {
+            window.alert("Error sending message: " + error);
+        });
 $('#ajaxCrudModal .modal-footer').hide();
 // if($('.list-group').find('a.list-group-item.active').length === 0){
 //     Swal({
