@@ -71,7 +71,19 @@ use kartik\icons\Icon;
 <?php ActiveForm::end(); ?>
 
 <?php
+$this->registerJsFile(
+    'https://d.line-scdn.net/liff/1.0/sdk.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+$this->registerJsFile('@web/js/liff-starter.js',
+        ['depends' => [\yii\web\JqueryAsset::className()]]
+);
 $this->registerJs(<<<JS
+liff.sendMessages([response.lineMessage]).then(function () {
+                    window.alert("Message sent");
+                }).catch(function (error) {
+                    window.alert("Error sending message: " + error);
+                });
 $('#ajaxCrudModal .modal-footer').hide();
 // if($('.list-group').find('a.list-group-item.active').length === 0){
 //     Swal({
@@ -117,7 +129,8 @@ var \$formQuo = $('#form-quotation');
             if (response.success) {
                 localStorage.removeItem('formData');
                 $('#ajaxCrudModal').modal('hide');
-                window.location.href = response.url;
+                
+                // window.location.href = response.url;
             } else {
                 Swal({
                     type: 'error',
