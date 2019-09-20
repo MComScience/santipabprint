@@ -1692,6 +1692,7 @@ const vm = new Vue({
 $(window).on("load", function() {
   $("span.desc").hide();
   liff.init(function (data) {
+    console.log(data)
     vm.initializeApp(data);
   });
 });
