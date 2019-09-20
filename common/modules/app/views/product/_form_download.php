@@ -94,12 +94,12 @@ $( document ).ready(function() {
         methods: {
             initializeApp(){
                 var _this = this
-                liff.init(function (data) {
+                window.liff.init(function (data) {
                     _this.liffData = data
                 });
             },
             sendMessages(messages) {
-                liff.sendMessages([{
+                window.liff.sendMessages([{
                     type: 'text',
                     text: "You've successfully sent a message! Hooray!"
                 }, {
