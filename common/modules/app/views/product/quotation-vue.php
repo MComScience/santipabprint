@@ -1153,10 +1153,6 @@ CSS
 
 <?php
 $this->registerJsFile(
-    'https://d.line-scdn.net/liff/1.0/sdk.js',
-    ['depends' => [\yii\web\JqueryAsset::className()]]
-);
-$this->registerJsFile(
         '@web/js/axios.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]
 );
 $this->registerJsFile(
