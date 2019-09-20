@@ -1683,16 +1683,31 @@ const vm = new Vue({
       localStorage.setItem(`radioChecked[${p}]`,value);
     },
     initializeApp(data) {
+      console.log('initializeApp')
       var _this = this
       _this.liffData = data
+
+      document.getElementById('languagefield').textContent = data.language;
+      document.getElementById('viewtypefield').textContent = data.context.viewType;
+      document.getElementById('useridfield').textContent = data.context.userId;
+      document.getElementById('utouidfield').textContent = data.context.utouId;
+      document.getElementById('roomidfield').textContent = data.context.roomId;
+      document.getElementById('groupidfield').textContent = data.context.groupId;
     }
   }
 });
 
 $(window).on("load", function() {
   $("span.desc").hide();
-  liff.init(function (data) {
-    console.log(data)
-    vm.initializeApp(data);
-  });
+  console.log('load', liff)
+  liff.init(
+    data => {
+      vm.initializeApp(data);
+    },
+    err => {
+      // LIFF initialization failed
+      console.log(err)
+      alert(err)
+    }
+  );
 });
