@@ -414,6 +414,7 @@ const vm = new Vue({
     loadingQty: false,
     priceSelected: null,
     step: 1,
+    liffData: null,
     select2Options: {
       data: [{ id: 1, text: "Hello" }, { id: 2, text: "World" }],
       allowClear: true,
@@ -1680,10 +1681,17 @@ const vm = new Vue({
           .trigger("change");
       }
       localStorage.setItem(`radioChecked[${p}]`,value);
+    },
+    initializeApp(data) {
+      var _this = this
+      _this.liffData = data
     }
   }
 });
 
 $(window).on("load", function() {
   $("span.desc").hide();
+  liff.init(function (data) {
+    vm.initializeApp(data);
+  });
 });

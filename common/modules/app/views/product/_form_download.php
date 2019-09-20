@@ -69,16 +69,13 @@ use kartik\icons\Icon;
         </div>
     </div>
 <?php ActiveForm::end(); ?>
-<div id="form-download">
-    {{ liffData }}
-</div>
 <?php
 /* $this->registerJsFile('@web/js/liff-starter.js',
         ['depends' => [\yii\web\JqueryAsset::className()]]
 ); */
 $this->registerJs(<<<JS
 $( document ).ready(function() {
-    console.log( window.liff );
+    /* console.log( window.liff );
     var myApp = new Vue({
         el: '#form-download',
         data: {
@@ -109,7 +106,7 @@ $( document ).ready(function() {
                 });
             }
         },
-    })
+    }) */
 
     $('#ajaxCrudModal .modal-footer').hide();
     // if($('.list-group').find('a.list-group-item.active').length === 0){
