@@ -722,7 +722,7 @@ class ProductController extends \yii\web\Controller
         //ไดคัท
         if ($queryBuilder->isShowInput($option, 'diecut')) {
             if ($item['diecut'] === 'N') {
-                $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ไม่ไดคัท' . $newline;
+                $details .= 'ไดคัท: ' . $nbsp2 . 'ไม่ไดคัท' . $newline;
                 //
                 $contents[] = ArrayHelper::merge($box, [
                     'contents' => [
@@ -735,7 +735,7 @@ class ProductController extends \yii\web\Controller
                     ]
                 ]);
             } elseif ($item['diecut'] === 'Default') {
-                $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ตามรูปแบบ' . $newline;
+                $details .= 'ไดคัท: ' . $nbsp2 . 'ตามรูปแบบ' . $newline;
                 //
                 $contents[] = ArrayHelper::merge($box, [
                     'contents' => [
@@ -841,6 +841,7 @@ class ProductController extends \yii\web\Controller
                         ])
                     ]
                 ]);
+                $details .= 'ปั๊มฟอยล์: ไม่ปั๊ม';
             } else {
                 $foil_size_width = $this->convertNumber($item['foil_size_width']);
                 $foil_size_height = $this->convertNumber($item['foil_size_height']);
@@ -856,7 +857,7 @@ class ProductController extends \yii\web\Controller
                     $foli_print = 'หน้าเดียว';
                 }
 
-                $details .= 'ฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $nbsp . $foli_print . $newline;
+                $details .= 'ปั๊มฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $nbsp . $foli_print . $newline;
                 //
                 $contents[] = ArrayHelper::merge($box, [
                     'contents' => [
@@ -884,6 +885,7 @@ class ProductController extends \yii\web\Controller
                         ])
                     ]
                 ]);
+                $details .= 'ปั๊มนูน: ไม่ปั๊ม';
             } else {
                 $emboss_size_width = $this->convertNumber($item['emboss_size_width']);
                 $emboss_size_height = $this->convertNumber($item['emboss_size_height']);
