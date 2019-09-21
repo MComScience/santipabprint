@@ -77,7 +77,7 @@ class TblProductCategory extends \yii\db\ActiveRecord
     public function getImageUrl()
     {
         if($this->image_path){
-            return Yii::getAlias('@web'.$this->image_base_url.$this->image_path);
+            return Yii::getAlias('@web'.$this->image_base_url.(str_replace('\\', '/', $this->image_path)));
         } else {
             return Yii::getAlias('@web/images/No_Image_Available.png');
         }

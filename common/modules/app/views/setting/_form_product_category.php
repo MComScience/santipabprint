@@ -19,7 +19,13 @@ use yii\web\JsExpression;
         <?= $form->field($model, 'icon')->widget(Upload::classname(), [
             'url' => ['upload-icon'],
             'acceptFileTypes' => new JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
-            'id' => 'group-icon'
+            'id' => 'group-icon',
+            'maxFileSize' => 1 * 1024 * 1024, // 1Mb
+            'clientOptions' => [
+                'fail' => new JsExpression('function(e, data) {
+                    console.log(data)
+                }')
+            ]
         ])->label('ภาพตัวอย่างสินค้า'); ?>
     </div>
 </div>

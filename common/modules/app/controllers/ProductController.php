@@ -95,13 +95,13 @@ class ProductController extends \yii\web\Controller
     {
         $catagory = TblProductCategory::findOne($id);
         $itemProducts = [];
-        if($catagory) {
+        if ($catagory) {
             $products = TblProduct::find()->where(['product_category_id' => $id])->orderBy('package_type_id ASC')->all();
             foreach ($products as $key => $product) {
                 $itemProducts[] = [
                     'product_id' => $product['product_id'],
                     'product_name' => $product['product_name'],
-                    'image_url' =>  Url::base(true) . $product->getImageUrl(),
+                    'image_url' => Url::base(true) . $product->getImageUrl(),
                 ];
             }
         }
@@ -177,10 +177,16 @@ class ProductController extends \yii\web\Controller
             if ($model->save()) {
                 $modelDetail->quotation_id = $model['quotation_id'];
                 if ($modelDetail->save()) {
+                    $result = $this->getFlexMessage($model['quotation_id']);
                     return [
                         'success' => true,
                         'message' => 'Success',
                         'url' => Url::to(['quo', 'q' => $model['quotation_id']]),
+                        'flexMessage' => [
+                            "type" => "flex",
+                            "altText" => "รายละเอียดสินค้า",
+                            "contents" => $result['flex']
+                        ]
                     ];
                 } else {
                     $model->delete();
@@ -206,190 +212,187 @@ class ProductController extends \yii\web\Controller
             return '';
         }
 
-        return (int) preg_replace("/.*\./", "", $number) > 0 ? number_format($number, 1) : number_format($number, 0);
+        return (int)preg_replace("/.*\./", "", $number) > 0 ? number_format($number, 1) : number_format($number, 0);
     }
 
     public function actionQuo($q)
     {
-        $model = $this->findModelQuotation($q);
-        $modelItems = TblQuotationDetail::find()->where(['quotation_id' => $q])->all();
-        $items = [];
-        $summary = 0;
-        $nbsp = '&nbsp';
-        $nbsp2 = ': &nbsp;';
-        $x = 'x';
-        $newline = "\n";
-        foreach ($modelItems as $item) {
-            $modelProduct = $this->findModelProduct($item['product_id']);
-            $option = $modelProduct->options;
-            $modelProductOption = $this->findModelProductOption($item['product_id']);
-            $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
-            $details = Html::tag('strong', $modelProduct['product_name']) . $newline;
-            //ขนาด
-            if (!empty($item['paper_size_id'])) {
-                if ($item['paper_size_id'] === 'custom') {
-                    $modelUnit = $this->findModelUnit($item['paper_size_unit']);
-                    $paper_size_width = $this->convertNumber($item['paper_size_width']);
-                    $paper_size_lenght = $this->convertNumber($item['paper_size_lenght']);
-                    $paper_size_height = $this->convertNumber($item['paper_size_height']);
-                    if (empty($paper_size_height)) {
-                        $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
-                            $paper_size_width . $x . $paper_size_lenght . $nbsp .
-                            $modelUnit['unit_name'] . $newline;
-                    } else {
-                        $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
-                            $paper_size_width . $x . $paper_size_lenght . $x . $paper_size_height . $nbsp .
-                            $modelUnit['unit_name'] . $newline;
-                    }
-                } else {
-                    $modelPaperSize = $this->findModelPaperSize($item['paper_size_id']);
-                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 . $modelPaperSize['paper_size_name'] . $newline;
-                }
-            }
-            //จำนวน
-            if (!empty($item['page_qty'])) {
-                $details .= $queryBuilder->getInputLabel($option, 'page_qty', $item) . $nbsp2 . $item['page_qty'] . $newline;
-            }
-            //กระดาษ
-            if (!empty($item['paper_id'])) {
-                $modelPaper = $this->findModelPaper($item['paper_id']);
-                $paperDetail = TblPaperDetail::findOne($item['paper_detail_id']);
-                $size = '&nbsp;(ขนาด ' . $this->convertNumber($paperDetail['paper_width']) . 'x' . $this->convertNumber($paperDetail['paper_length']) . ')';
-                $details .= $queryBuilder->getInputLabel($option, 'paper_id', $item) . ': &nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . $size . $newline;
-            }
-            // จำนวนแผ่นต่อชุด
-            if (!empty($item['bill_detail_qty'])) {
-                $billPrice = $this->findModelBillPrice($item['bill_detail_qty']);
-                $details .= 'จำนวนแผ่นต่อชุด:' . $nbsp2 . $billPrice['bill_floor'] . $newline;
-            }
-            //พิมพ์สองหน้า
-            if (!empty($item['print_option'])) {
-                $print_text = $item['print_option'] == 'one_page' ? 'พิมพ์หน้าเดียว' : 'พิมพ์สองหน้า';
-                $modelBeforePrint = $this->findModelColorPrinting($item['print_color']);
-                $details .= $print_text . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
-            }
-            //พิมพ์หน้าเดียว
-            // if (!empty($item['after_print'])) {
-            //     $modelBeforePrint = $this->findModelColorPrinting($item['after_print']);
-            //     $details .= $queryBuilder->getInputLabel($option, 'after_print', $item) . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
-            // }
-
-            //เคลือบ
-            if (!empty($item['coating_id']) && $queryBuilder->isShowInput($option, 'coating_id')) {
-                if ($item['coating_id'] === 'N') {
-                    $details .= 'เคลือบ : ' . $nbsp . 'ไม่เคลือบ' . $newline;
-                } else {
-                    $modelCoating = $this->findModelCoating($item['coating_id']);
-                    if ($item['coating_option'] === 'one_page') {
-                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . ' (ด้านเดียว)' . $newline;
-                    } elseif ($item['coating_option'] === 'two_page') {
-                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . ' (สองด้าน)' . $newline;
-                    } else {
-                        $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . $newline;
-                    }
-                }
-            }
-            //ไดคัท
-            if (!empty($item['diecut_id']) && $queryBuilder->isShowInput($option, 'diecut')) {
-                if ($item['diecut_id'] === 'N') {
-                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ไม่ไดคัท' . $newline;
-                } elseif ($item['diecut_id'] === 'default') {
-                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ตามรูปแบบ' . $newline;
-                } else {
-                    $modelDiecut = $this->findModelDiecut($item['diecut_id']);
-                    $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . $newline;
-                }
-            }
-            // ตัด
-            if($queryBuilder->isShowInput($option, 'perforate')) {
-                if($item['perforate'] == 0){
-                    $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัวอย่างเดียว' . $newline;
-                }
-                if($item['perforate'] == 1){
-                    $perforate = TblPerforate::findOne($item['perforate']);
-                    $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัว + เจาะรูกลม' . $nbsp . $perforate['perforate_name'] . $newline;
-                }
-            }
-            
-            //วิธีพับ
-            if (!empty($item['fold_id']) && $item['fold_id'] != 'N') {
-                if ($item['fold_id'] === 'N') {
-                    $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . $nbsp2 . 'ไม่พับ' . $newline;
-                } else {
-                    $modelFold = $this->findModelFold($item['fold_id']);
-                    $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . $nbsp2 . $modelFold['fold_name'] . $newline;
-                }
-            }
-            //ฟอยล์
-            if (!empty($item['foil_color_id'])) {
-                $foil_size_width = $this->convertNumber($item['foil_size_width']);
-                $foil_size_height = $this->convertNumber($item['foil_size_height']);
-
-                $modelFoil = $this->findModelFoilColor($item['foil_color_id']);
-                $modelFoilUnit = $this->findModelUnit($item['foil_size_unit']);
-
-                $foli_print = '';
-                if($item['foli_print'] == 'two_page'){
-                    $foli_print = 'ปั๊มฟอยล์ทั้งหน้า/หลัง';
-                }
-                if($item['foli_print'] == 'one_page'){
-                    $foli_print = 'ปั๊มฟอยล์หน้าเดียว';
-                }
-
-                $details .= 'ฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $nbsp . $foli_print . $newline;
-            }
-            //ปั๊มนูน
-            if (!empty($item['emboss_size_width']) && !empty($item['emboss_size_height']) && !empty($item['emboss_size_unit'])) {
-
-                $emboss_size_width = $this->convertNumber($item['emboss_size_width']);
-                $emboss_size_height = $this->convertNumber($item['emboss_size_height']);
-
-                $modelEmBossUnit = $this->findModelUnit($item['emboss_size_unit']);
-
-                $emboss_print = '';
-                if($item['emboss_print'] == 'two_page'){
-                    $emboss_print = 'ปั๊มนูนทั้งหน้า/หลัง';
-                }
-                if($item['emboss_print'] == 'one_page'){
-                    $emboss_print = 'ปั๊มนูนหน้าเดียว';
-                }
-
-                $details .= 'ปั๊มนูน ขนาด: ' . $nbsp . $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . $nbsp . $emboss_print . $newline;
-            }
-            //แนวตัง/แนวนอน
-            if (!empty($item['land_orient'])) {
-                $details .= 'แนวตั้ง/แนวนอน : ' . $nbsp . ($item['land_orient'] === '1' ? 'แนวตั้ง' : 'แนวนอน') . $newline;
-            }
-            //เข้าเล่ม
-            if (!empty($item['book_binding_id']) && $item['book_binding_id'] != 'N') {
-                if ($item['book_binding_id'] === 'N') {
-                    $details .= 'เข้าเล่ม : ' . $nbsp . 'ไม่เข้าเล่ม' . $newline;
-                } else {
-                    $modelBookBinding = $this->findModelBookBinding($item['book_binding_id']);
-                    $details .= 'เข้าเล่ม : ' . $nbsp . $modelBookBinding['book_binding_name'] . $newline;
-                }
-            }
-
-            if(!empty($item['glue'])){
-                if($item['glue'] == 1){
-                    $details .= 'ปะกาว';
-                }
-            }
-
-            $items[] = [
-                'product_id' => $item['product_id'],
-                'data' => $item,
-                'product_name' => $modelProduct['product_name'],
-                'details' => str_replace('<span class="text-danger">*</span>', '', $details),
-            ];
-            $summary = $summary + $item['final_price'];
-        }
-        return $this->renderAjax('invoice1', [
-            'model' => $model,
-            'items' => $items,
-            'summary' => $summary,
-            'modelItems' => $modelItems,
-        ]);
+        $result = $this->getFlexMessage($q);
+//        $model = $this->findModelQuotation($q);
+//        $item = TblQuotationDetail::find()->where(['quotation_id' => $q])->one();
+//        $items = [];
+//        $summary = 0;
+//        $nbsp = '&nbsp';
+//        $nbsp2 = ': &nbsp;';
+//        $x = 'x';
+//        $newline = "\n";
+//        // foreach ($modelItems as $item) {
+//        $modelProduct = $this->findModelProduct($item['product_id']);
+//        $option = $modelProduct->options;
+//        $modelProductOption = $this->findModelProductOption($item['product_id']);
+//        $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
+//        $details = Html::tag('strong', $modelProduct['product_name']) . $newline;
+//        //ขนาด
+//        if (!empty($item['paper_size_id'])) {
+//            if ($item['paper_size_id'] === 'custom') {
+//                $modelUnit = $this->findModelUnit($item['paper_size_unit']);
+//                $paper_size_width = $this->convertNumber($item['paper_size_width']);
+//                $paper_size_lenght = $this->convertNumber($item['paper_size_lenght']);
+//                $paper_size_height = $this->convertNumber($item['paper_size_height']);
+//                if (empty($paper_size_height)) {
+//                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
+//                        $paper_size_width . $x . $paper_size_lenght . $nbsp .
+//                        $modelUnit['unit_name'] . $newline;
+//                } else {
+//                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
+//                        $paper_size_width . $x . $paper_size_lenght . $x . $paper_size_height . $nbsp .
+//                        $modelUnit['unit_name'] . $newline;
+//                }
+//            } else {
+//                $modelPaperSize = $this->findModelPaperSize($item['paper_size_id']);
+//                $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 . $modelPaperSize['paper_size_name'] . $newline;
+//            }
+//        }
+//        //จำนวน
+//        if (!empty($item['page_qty'])) {
+//            $details .= $queryBuilder->getInputLabel($option, 'page_qty', $item) . $nbsp2 . $item['page_qty'] . $newline;
+//        }
+//        //กระดาษ
+//        if (!empty($item['paper_id'])) {
+//            $modelPaper = $this->findModelPaper($item['paper_id']);
+//            $paperDetail = TblPaperDetail::findOne($item['paper_detail_id']);
+//            $size = '&nbsp;(ขนาด ' . $this->convertNumber($paperDetail['paper_width']) . 'x' . $this->convertNumber($paperDetail['paper_length']) . ')';
+//            $details .= $queryBuilder->getInputLabel($option, 'paper_id', $item) . ': &nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . $size . $newline;
+//        }
+//        // จำนวนแผ่นต่อชุด
+//        if (!empty($item['bill_detail_qty'])) {
+//            $billPrice = $this->findModelBillPrice($item['bill_detail_qty']);
+//            $details .= 'จำนวนแผ่นต่อชุด:' . $nbsp2 . $billPrice['bill_floor'] . $newline;
+//        }
+//        //พิมพ์สองหน้า
+//        if (!empty($item['print_option'])) {
+//            $print_text = $item['print_option'] == 'one_page' ? 'พิมพ์หน้าเดียว' : 'พิมพ์สองหน้า';
+//            $modelBeforePrint = $this->findModelColorPrinting($item['print_color']);
+//            $details .= $print_text . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
+//        }
+//        //พิมพ์หน้าเดียว
+//        // if (!empty($item['after_print'])) {
+//        //     $modelBeforePrint = $this->findModelColorPrinting($item['after_print']);
+//        //     $details .= $queryBuilder->getInputLabel($option, 'after_print', $item) . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
+//        // }
+//
+//        //เคลือบ
+//        if (!empty($item['coating_id']) && $queryBuilder->isShowInput($option, 'coating_id')) {
+//            if ($item['coating_id'] === 'N') {
+//                $details .= 'เคลือบ : ' . $nbsp . 'ไม่เคลือบ' . $newline;
+//            } else {
+//                $modelCoating = $this->findModelCoating($item['coating_id']);
+//                if ($item['coating_option'] === 'one_page') {
+//                    $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . ' (ด้านเดียว)' . $newline;
+//                } elseif ($item['coating_option'] === 'two_page') {
+//                    $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . ' (สองด้าน)' . $newline;
+//                } else {
+//                    $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . $newline;
+//                }
+//            }
+//        }
+//        //ไดคัท
+//        if (!empty($item['diecut_id']) && $queryBuilder->isShowInput($option, 'diecut')) {
+//            if ($item['diecut_id'] === 'N') {
+//                $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ไม่ไดคัท' . $newline;
+//            } elseif ($item['diecut_id'] === 'default') {
+//                $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ตามรูปแบบ' . $newline;
+//            } else {
+//                $modelDiecut = $this->findModelDiecut($item['diecut_id']);
+//                $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . $newline;
+//            }
+//        }
+//        // ตัด
+//        if ($queryBuilder->isShowInput($option, 'perforate')) {
+//            if ($item['perforate'] == 0) {
+//                $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัวอย่างเดียว' . $newline;
+//            }
+//            if ($item['perforate'] == 1) {
+//                $perforate = TblPerforate::findOne($item['perforate']);
+//                $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัว + เจาะรูกลม' . $nbsp . $perforate['perforate_name'] . $newline;
+//            }
+//        }
+//
+//        //วิธีพับ
+//        if (!empty($item['fold_id']) && $item['fold_id'] != 'N') {
+//            if ($item['fold_id'] === 'N') {
+//                $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . $nbsp2 . 'ไม่พับ' . $newline;
+//            } else {
+//                $modelFold = $this->findModelFold($item['fold_id']);
+//                $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . $nbsp2 . $modelFold['fold_name'] . $newline;
+//            }
+//        }
+//        //ฟอยล์
+//        if (!empty($item['foil_color_id'])) {
+//            $foil_size_width = $this->convertNumber($item['foil_size_width']);
+//            $foil_size_height = $this->convertNumber($item['foil_size_height']);
+//
+//            $modelFoil = $this->findModelFoilColor($item['foil_color_id']);
+//            $modelFoilUnit = $this->findModelUnit($item['foil_size_unit']);
+//
+//            $foli_print = '';
+//            if ($item['foli_print'] == 'two_page') {
+//                $foli_print = 'ปั๊มฟอยล์ทั้งหน้า/หลัง';
+//            }
+//            if ($item['foli_print'] == 'one_page') {
+//                $foli_print = 'ปั๊มฟอยล์หน้าเดียว';
+//            }
+//
+//            $details .= 'ฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $nbsp . $foli_print . $newline;
+//        }
+//        //ปั๊มนูน
+//        if (!empty($item['emboss_size_width']) && !empty($item['emboss_size_height']) && !empty($item['emboss_size_unit'])) {
+//
+//            $emboss_size_width = $this->convertNumber($item['emboss_size_width']);
+//            $emboss_size_height = $this->convertNumber($item['emboss_size_height']);
+//
+//            $modelEmBossUnit = $this->findModelUnit($item['emboss_size_unit']);
+//
+//            $emboss_print = '';
+//            if ($item['emboss_print'] == 'two_page') {
+//                $emboss_print = 'ปั๊มนูนทั้งหน้า/หลัง';
+//            }
+//            if ($item['emboss_print'] == 'one_page') {
+//                $emboss_print = 'ปั๊มนูนหน้าเดียว';
+//            }
+//
+//            $details .= 'ปั๊มนูน ขนาด: ' . $nbsp . $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . $nbsp . $emboss_print . $newline;
+//        }
+//        //แนวตัง/แนวนอน
+//        if (!empty($item['land_orient'])) {
+//            $details .= 'แนวตั้ง/แนวนอน : ' . $nbsp . ($item['land_orient'] === '1' ? 'แนวตั้ง' : 'แนวนอน') . $newline;
+//        }
+//        //เข้าเล่ม
+//        if (!empty($item['book_binding_id']) && $item['book_binding_id'] != 'N') {
+//            if ($item['book_binding_id'] === 'N') {
+//                $details .= 'เข้าเล่ม : ' . $nbsp . 'ไม่เข้าเล่ม' . $newline;
+//            } else {
+//                $modelBookBinding = $this->findModelBookBinding($item['book_binding_id']);
+//                $details .= 'เข้าเล่ม : ' . $nbsp . $modelBookBinding['book_binding_name'] . $newline;
+//            }
+//        }
+//
+//        if (!empty($item['glue'])) {
+//            if ($item['glue'] == 1) {
+//                $details .= 'ปะกาว';
+//            }
+//        }
+//
+//        $items[] = [
+//            'product_id' => $item['product_id'],
+//            'data' => $item,
+//            'product_name' => $modelProduct['product_name'],
+//            'details' => str_replace('<span class="text-danger">*</span>', '', $details),
+//        ];
+//        $summary = $summary + $item['final_price'];
+        // }
+        // return Json::encode($result['flex']);
+        return $this->renderAjax('invoice1', $result);
 
 //        return $this->renderAjax('invoice1', [
         //            'model' => $model,
@@ -407,8 +410,8 @@ class ProductController extends \yii\web\Controller
         $valueOps = [];
         $labelOps = [];
         foreach ($option as $key => $ops) {
-            $requiredOps[$key] = (int) $ops['required'];
-            $valueOps[$key] = (int) $ops['value'];
+            $requiredOps[$key] = (int)$ops['required'];
+            $valueOps[$key] = (int)$ops['value'];
             $labelOps[$key] = $ops['label'];
         }
         foreach ($attributes as $attribute => $value) {
@@ -472,6 +475,611 @@ class ProductController extends \yii\web\Controller
         return $this->render('_test_form', [
             'model' => $model,
         ]);
+    }
+
+    private function getFlexMessage($q)
+    {
+        $model = $this->findModelQuotation($q);
+        $item = TblQuotationDetail::find()->where(['quotation_id' => $q])->one();
+        $items = [];
+        $summary = 0;
+        $nbsp = '&nbsp';
+        $nbsp2 = ': &nbsp;';
+        $x = 'x';
+        $newline = "\n";
+        // foreach ($modelItems as $item) {
+        $modelProduct = $this->findModelProduct($item['product_id']);
+        $modelProductCategory = $this->findModelProductCategory($modelProduct['product_category_id']);
+        $option = $modelProduct->options;
+        $modelProductOption = $this->findModelProductOption($item['product_id']);
+        $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
+        $details = Html::tag('strong', $modelProduct['product_name']) . $newline;
+
+        $hero = [
+            "type" => "image",
+            "url" => Url::base(true) . $modelProduct->getImageUrl(),
+            "size" => "full",
+            "aspectRatio" => "20:13",
+            "aspectMode" => "cover",
+            "action" => [
+                "type" => "uri",
+                "uri" => Url::base(true) . $modelProduct->getImageUrl()
+            ]
+        ];
+
+        $box = [
+            "type" => "box",
+            "layout" => "horizontal",
+            "margin" => "md",
+            "contents" => []
+        ];
+
+        $contentLeft = [
+            "type" => "text",
+            "text" => "",
+            "size" => "sm",
+            "color" => "#555555",
+            "flex" => 0
+        ];
+
+        $contentRight = [
+            "type" => "text",
+            "text" => "",
+            "size" => "sm",
+            "color" => "#111111",
+            "align" => "end"
+        ];
+
+        $contents = [];
+
+        //ขนาด
+        if (!empty($item['paper_size_id'])) {
+            if ($item['paper_size_id'] === 'custom') {
+                $modelUnit = $this->findModelUnit($item['paper_size_unit']);
+                $paper_size_width = $this->convertNumber($item['paper_size_width']);
+                $paper_size_lenght = $this->convertNumber($item['paper_size_lenght']);
+                $paper_size_height = $this->convertNumber($item['paper_size_height']);
+                if (empty($paper_size_height)) {
+                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
+                        $paper_size_width . $x . $paper_size_lenght . $nbsp .
+                        $modelUnit['unit_name'] . $newline;
+                    //
+                    $contents[] = ArrayHelper::merge($box, [
+                        'contents' => [
+                            ArrayHelper::merge($contentLeft, [
+                                "text" => "ขนาด"
+                            ]),
+                            ArrayHelper::merge($contentRight, [
+                                "text" => $paper_size_width . $x . $paper_size_lenght . ' ' . $modelUnit['unit_name']
+                            ])
+                        ]
+                    ]);
+                } else {
+                    $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 .
+                        $paper_size_width . $x . $paper_size_lenght . $x . $paper_size_height . $nbsp .
+                        $modelUnit['unit_name'] . $newline;
+                    //
+                    $contents[] = ArrayHelper::merge($box, [
+                        'contents' => [
+                            ArrayHelper::merge($contentLeft, [
+                                "text" => "ขนาด"
+                            ]),
+                            ArrayHelper::merge($contentRight, [
+                                "text" => $paper_size_width . $x . $paper_size_lenght . $x . $paper_size_height . ' ' . $modelUnit['unit_name']
+                            ])
+                        ]
+                    ]);
+                }
+            } else {
+                $modelPaperSize = $this->findModelPaperSize($item['paper_size_id']);
+                $modelUnit = $this->findModelUnit($modelPaperSize['paper_unit_id']);
+                $details .= $queryBuilder->getInputLabel($option, 'paper_size_id', $item) . $nbsp2 . $modelPaperSize['paper_size_name'] . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ขนาด"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => $modelPaperSize['paper_size_name']
+                        ])
+                    ]
+                ]);
+            }
+        }
+        //จำนวน
+        if (!empty($item['page_qty'])) {
+            $details .= $queryBuilder->getInputLabel($option, 'page_qty', $item) . $nbsp2 . $item['page_qty'] . $newline;
+            //
+            $contents[] = ArrayHelper::merge($box, [
+                'contents' => [
+                    ArrayHelper::merge($contentLeft, [
+                        "text" => "จำนวนหน้า"
+                    ]),
+                    ArrayHelper::merge($contentRight, [
+                        "text" => $item['page_qty']
+                    ])
+                ]
+            ]);
+        }
+        //กระดาษ
+        if (!empty($item['paper_id'])) {
+            $modelPaper = $this->findModelPaper($item['paper_id']);
+            $paperDetail = TblPaperDetail::findOne($item['paper_detail_id']);
+            $size = '&nbsp;(ขนาด ' . $this->convertNumber($paperDetail['paper_width']) . 'x' . $this->convertNumber($paperDetail['paper_length']) . ')';
+            $details .= $queryBuilder->getInputLabel($option, 'paper_id', $item) . ': &nbsp;(' . $modelPaper->paperType->paper_type_name . ') ' . $modelPaper['paper_name'] . $size . $newline;
+            //
+            $contents[] = ArrayHelper::merge($box, [
+                'contents' => [
+                    ArrayHelper::merge($contentLeft, [
+                        "text" => "กระดาษ"
+                    ]),
+                    ArrayHelper::merge($contentRight, [
+                        "text" => $modelPaper['paper_name']
+                    ])
+                ]
+            ]);
+        }
+        // จำนวนแผ่นต่อชุด
+        if (!empty($item['bill_detail_qty'])) {
+            $billPrice = $this->findModelBillPrice($item['bill_detail_qty']);
+            $details .= 'จำนวนแผ่นต่อชุด:' . $nbsp2 . $billPrice['bill_floor'] . $newline;
+            //
+            $contents[] = ArrayHelper::merge($box, [
+                'contents' => [
+                    ArrayHelper::merge($contentLeft, [
+                        "text" => "จำนวนแผ่นต่อชุด"
+                    ]),
+                    ArrayHelper::merge($contentRight, [
+                        "text" => $billPrice['bill_floor']
+                    ])
+                ]
+            ]);
+        }
+        //พิมพ์สองหน้า
+        if (!empty($item['print_option'])) {
+            $print_text = $item['print_option'] == 'one_page' ? 'หน้าเดียว' : 'สองหน้า';
+            $modelBeforePrint = $this->findModelColorPrinting($item['print_color']);
+            $details .= $print_text . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
+            //
+            $contents[] = ArrayHelper::merge($box, [
+                'contents' => [
+                    ArrayHelper::merge($contentLeft, [
+                        "text" => "พิมพ์"
+                    ]),
+                    ArrayHelper::merge($contentRight, [
+                        "text" => $print_text . ' ' . $modelBeforePrint['color_printing_name']
+                    ])
+                ]
+            ]);
+        }
+        //พิมพ์หน้าเดียว
+        // if (!empty($item['after_print'])) {
+        //     $modelBeforePrint = $this->findModelColorPrinting($item['after_print']);
+        //     $details .= $queryBuilder->getInputLabel($option, 'after_print', $item) . $nbsp2 . $modelBeforePrint['color_printing_name'] . $newline;
+        // }
+
+        //เคลือบ
+        if (!empty($item['coating_id']) && $queryBuilder->isShowInput($option, 'coating_id')) {
+            if ($item['coating_id'] === 'N') {
+                $details .= 'เคลือบ : ' . $nbsp . 'ไม่เคลือบ' . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "เคลือบ"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ไม่เคลือบ"
+                        ])
+                    ]
+                ]);
+            } else {
+                $modelCoating = $this->findModelCoating($item['coating_id']);
+                if ($item['coating_option'] === 'one_page') {
+                    $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . ' (ด้านเดียว)' . $newline;
+                    //
+                    $contents[] = ArrayHelper::merge($box, [
+                        'contents' => [
+                            ArrayHelper::merge($contentLeft, [
+                                "text" => "เคลือบ"
+                            ]),
+                            ArrayHelper::merge($contentRight, [
+                                "text" => $modelCoating['coating_name'] . ' (ด้านเดียว)'
+                            ])
+                        ]
+                    ]);
+                } elseif ($item['coating_option'] === 'two_page') {
+                    $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . ' (สองด้าน)' . $newline;
+                    //
+                    $contents[] = ArrayHelper::merge($box, [
+                        'contents' => [
+                            ArrayHelper::merge($contentLeft, [
+                                "text" => "เคลือบ"
+                            ]),
+                            ArrayHelper::merge($contentRight, [
+                                "text" => $modelCoating['coating_name'] . ' (สองด้าน)'
+                            ])
+                        ]
+                    ]);
+                } else {
+                    $details .= $queryBuilder->getInputLabel($option, 'coating_id', $item) . $nbsp2 . $modelCoating['coating_name'] . $newline;
+                    //
+                    $contents[] = ArrayHelper::merge($box, [
+                        'contents' => [
+                            ArrayHelper::merge($contentLeft, [
+                                "text" => "เคลือบ"
+                            ]),
+                            ArrayHelper::merge($contentRight, [
+                                "text" => $modelCoating['coating_name']
+                            ])
+                        ]
+                    ]);
+                }
+            }
+        }
+        //ไดคัท
+        if (!empty($item['diecut_id']) && $queryBuilder->isShowInput($option, 'diecut')) {
+            if ($item['diecut_id'] === 'N') {
+                $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ไม่ไดคัท' . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ไดคัท"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ไม่ไดคัท"
+                        ])
+                    ]
+                ]);
+            } elseif ($item['diecut_id'] === 'default') {
+                $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ตามรูปแบบ' . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ไดคัท"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ตามรูปแบบ"
+                        ])
+                    ]
+                ]);
+            } else {
+                $modelDiecut = $this->findModelDiecut($item['diecut_id']);
+                $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . ': &nbsp;(' . $modelDiecut->diecutGroup->diecut_group_name . ') ' . $modelDiecut['diecut_name'] . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ไดคัท"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => $modelDiecut['diecut_name']
+                        ])
+                    ]
+                ]);
+            }
+        }
+        // ตัด
+        if ($queryBuilder->isShowInput($option, 'perforate')) {
+            if ($item['perforate'] == 0) {
+                $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัวอย่างเดียว' . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ตัด/เจาะ"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ตัดเป็นตัวอย่างเดียว"
+                        ])
+                    ]
+                ]);
+            }
+            if ($item['perforate'] == 1) {
+                $perforate = TblPerforate::findOne($item['perforate']);
+                $details .= 'ตัดเป็นตัว/เจาะ: ตัดเป็นตัว + เจาะรูกลม' . $nbsp . $perforate['perforate_name'] . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ตัด/เจาะ"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ตัดเป็นตัว + เจาะรูกลม" . " " . $perforate['perforate_name']
+                        ])
+                    ]
+                ]);
+            }
+        }
+
+        //วิธีพับ
+        if (!empty($item['fold_id']) && $item['fold_id'] != 'N') {
+            if ($item['fold_id'] === 'N') {
+                $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . $nbsp2 . 'ไม่พับ' . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "วิธีพับ"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ไม่พับ"
+                        ])
+                    ]
+                ]);
+            } else {
+                $modelFold = $this->findModelFold($item['fold_id']);
+                $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . $nbsp2 . $modelFold['fold_name'] . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "วิธีพับ"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => $modelFold['fold_name']
+                        ])
+                    ]
+                ]);
+            }
+        }
+        //ฟอยล์
+        if (!empty($item['foil_color_id'])) {
+            $foil_size_width = $this->convertNumber($item['foil_size_width']);
+            $foil_size_height = $this->convertNumber($item['foil_size_height']);
+
+            $modelFoil = $this->findModelFoilColor($item['foil_color_id']);
+            $modelFoilUnit = $this->findModelUnit($item['foil_size_unit']);
+
+            $foli_print = '';
+            if ($item['foli_print'] == 'two_page') {
+                $foli_print = 'ทั้งหน้า/หลัง';
+            }
+            if ($item['foli_print'] == 'one_page') {
+                $foli_print = 'หน้าเดียว';
+            }
+
+            $details .= 'ฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $nbsp . $foli_print . $newline;
+            //
+            $contents[] = ArrayHelper::merge($box, [
+                'contents' => [
+                    ArrayHelper::merge($contentLeft, [
+                        "text" => "ปั๊มฟอยล์"
+                    ]),
+                    ArrayHelper::merge($contentRight, [
+                        "text" => $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . ' ' . $modelFoil['foil_color_name'] . ' ' . $foli_print
+                    ])
+                ]
+            ]);
+        }
+        //ปั๊มนูน
+        if (!empty($item['emboss_size_width']) && !empty($item['emboss_size_height']) && !empty($item['emboss_size_unit'])) {
+
+            $emboss_size_width = $this->convertNumber($item['emboss_size_width']);
+            $emboss_size_height = $this->convertNumber($item['emboss_size_height']);
+
+            $modelEmBossUnit = $this->findModelUnit($item['emboss_size_unit']);
+
+            $emboss_print = '';
+            if ($item['emboss_print'] == 'two_page') {
+                $emboss_print = 'ทั้งหน้า/หลัง';
+            }
+            if ($item['emboss_print'] == 'one_page') {
+                $emboss_print = 'หน้าเดียว';
+            }
+
+            $details .= 'ปั๊มนูน ขนาด: ' . $nbsp . $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . $nbsp . $emboss_print . $newline;
+            //
+            $contents[] = ArrayHelper::merge($box, [
+                'contents' => [
+                    ArrayHelper::merge($contentLeft, [
+                        "text" => "ปั๊มนูน"
+                    ]),
+                    ArrayHelper::merge($contentRight, [
+                        "text" => $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . ' ' . $emboss_print
+                    ])
+                ]
+            ]);
+        }
+        //แนวตัง/แนวนอน
+        if (!empty($item['land_orient'])) {
+            $details .= 'แนวตั้ง/แนวนอน : ' . $nbsp . ($item['land_orient'] === '1' ? 'แนวตั้ง' : 'แนวนอน') . $newline;
+            //
+            $contents[] = ArrayHelper::merge($box, [
+                'contents' => [
+                    ArrayHelper::merge($contentLeft, [
+                        "text" => "แนวตั้ง/แนวนอน"
+                    ]),
+                    ArrayHelper::merge($contentRight, [
+                        "text" => ($item['land_orient'] === '1' ? 'แนวตั้ง' : 'แนวนอน')
+                    ])
+                ]
+            ]);
+        }
+        //เข้าเล่ม
+        if (!empty($item['book_binding_id']) && $item['book_binding_id'] != 'N') {
+            if ($item['book_binding_id'] === 'N') {
+                $details .= 'เข้าเล่ม : ' . $nbsp . 'ไม่เข้าเล่ม' . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "เข้าเล่ม"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ไม่เข้าเล่ม"
+                        ])
+                    ]
+                ]);
+            } else {
+                $modelBookBinding = $this->findModelBookBinding($item['book_binding_id']);
+                $details .= 'เข้าเล่ม : ' . $nbsp . $modelBookBinding['book_binding_name'] . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "เข้าเล่ม"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => $modelBookBinding['book_binding_name']
+                        ])
+                    ]
+                ]);
+            }
+        }
+
+        if (!empty($item['glue'])) {
+            if ($item['glue'] == 1) {
+                $details .= 'ปะกาว';
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ปะกาว"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ปะ"
+                        ])
+                    ]
+                ]);
+            } else {
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ปะกาว"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ไม่ปะ"
+                        ])
+                    ]
+                ]);
+            }
+        }
+
+        //
+        $contents[] = [
+            "type" => "separator",
+            "margin" => "xxl"
+        ];
+        $contents[] = ArrayHelper::merge($box, [
+            'contents' => [
+                ArrayHelper::merge($contentLeft, [
+                    "text" => "จำนวน",
+                    "color" => "#ea7066"
+                ]),
+                ArrayHelper::merge($contentRight, [
+                    "text" => Yii::$app->formatter->format($item['cust_quantity'], ['decimal', 0]) . " ชิ้น",
+                    "color" => "#ea7066"
+                ])
+            ]
+        ]);
+        $contents[] = ArrayHelper::merge($box, [
+            'contents' => [
+                ArrayHelper::merge($contentLeft, [
+                    "text" => "ราคา",
+                    "color" => "#ea7066"
+                ]),
+                ArrayHelper::merge($contentRight, [
+                    "text" => "฿" . Yii::$app->formatter->format($item['final_price'], ['decimal', 2]),
+                    "color" => "#ea7066"
+                ])
+            ]
+        ]);
+
+        $items[] = [
+            'product_id' => $item['product_id'],
+            'data' => $item,
+            'product_name' => $modelProduct['product_name'],
+            'details' => str_replace('<span class="text-danger">*</span>', '', $details),
+        ];
+        $summary = $summary + $item['final_price'];
+
+        $body = [
+            "body" => [
+                "type" => "box",
+                "layout" => "vertical",
+                "contents" => ArrayHelper::merge([
+                    [
+                        "type" => "text",
+                        "text" => "รายละเอียดสินค้า",
+                        "weight" => "bold",
+                        "color" => "#1DB446",
+                        "size" => "sm"
+                    ],
+                    [
+                        "type" => "text",
+                        "text" => $modelProduct['product_name'],
+                        "weight" => "bold",
+                        "size" => "xs",
+                        "margin" => "md"
+                    ],
+                    [
+                        "type" => "separator",
+                        "margin" => "xxl"
+                    ],
+                    [
+                        "type" => "box",
+                        "layout" => "horizontal",
+                        "margin" => "md",
+                        "contents" => [
+                            [
+                                "type" => "text",
+                                "text" => "ID",
+                                "size" => "xs",
+                                "color" => "#aaaaaa",
+                                "flex" => 0
+                            ],
+                            [
+                                "type" => "text",
+                                "text" => "#" . $q,
+                                "color" => "#aaaaaa",
+                                "size" => "xs",
+                                "align" => "end"
+                            ]
+                        ]
+                    ],
+                ], $contents)
+            ]
+        ];
+
+        $footer = [
+            "type" => "box",
+            "layout" => "vertical",
+            "contents" => [
+                [
+                    "type" => "button",
+                    "color" => "#905c44",
+                    "action" => [
+                        "type" => "uri",
+                        "label" => "ดาวน์โหลดใบเสนอราคา",
+                        "uri" => Url::base(true) . Url::to(['quo', 'q' => $q])
+                    ]
+                ]
+            ]
+        ];
+
+        $flex = [
+            "type" => "bubble",
+            "styles" => [
+                "footer" => [
+                    "separator" => true
+                ]
+            ],
+            "hero" => $hero,
+            "body" => $body,
+            "footer" => $footer
+        ];
+
+        return [
+            'model' => $model,
+            'items' => $items,
+            'summary' => $summary,
+            'flex' => $flex
+        ];
     }
 
 }

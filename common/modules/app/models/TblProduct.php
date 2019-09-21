@@ -185,12 +185,13 @@ class TblProduct extends \yii\db\ActiveRecord
     {
         $urlBuilder = Yii::$app->glide->urlBuilder;
         if (!empty($this->product_image_path)){
-            $path = $urlBuilder->getUrl($this->product_image_base_url.str_replace('\\', '/', $this->product_image_path), []);
-            return $path;
+            // $path = $urlBuilder->getUrl($this->product_image_base_url.str_replace('\\', '/', $this->product_image_path), []);
+            return $this->product_image_base_url.str_replace('\\', '/', $this->product_image_path);
             //Url::to(['/glide', 'path' => $this->product_image_base_url.str_replace('\\', '/', $this->product_image_path)]);
         }
+        return Yii::getAlias('@web/images/No_Image_Available.png');
         //return Url::to(['/glide', 'path' => 'images/No_Image_Available.png']);
-        return $urlBuilder->getUrl('images/No_Image_Available.png', []);
+        // return $urlBuilder->getUrl('images/No_Image_Available.png', []);
     }
 
     public function getPreviewIcon()

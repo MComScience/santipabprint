@@ -70,8 +70,9 @@ CSS
                 $form->field($model, 'icon')->widget(Upload::classname(), [
                     'url' => ['upload-icon'],
                     'acceptFileTypes' => new JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
-                    'id' => 'product-icon'
-                ])->hint('<span class="text-danger">**ขนาดไฟล์: ไม่เกิน 10MB/ไฟล์</span> ,ชนิดไฟล์: gif, jpeg, png')->label('ภาพตัวอย่างสินค้า');
+                    'id' => 'product-icon',
+                    'maxFileSize' => 1 * 1024 * 1024, // 1Mb
+                ])->hint('<span class="text-danger">**ขนาดไฟล์: ไม่เกิน 1MB</span> ,ชนิดไฟล์: gif, jpeg, png')->label('ภาพตัวอย่างสินค้า');
                 ?>
             </div>
             <?php /*

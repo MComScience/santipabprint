@@ -3,6 +3,7 @@
 namespace common\modules\app\controllers;
 
 use common\components\QueryBuilder;
+use common\modules\app\models\TblProduct;
 use common\modules\app\models\TblProductCategory;
 use common\modules\app\models\TblQuotationDetail;
 use common\modules\app\models\TblUnit;
@@ -15,6 +16,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use common\components\CalculateDigital;
 use common\components\CalculateOffset;
+use yii\helpers\Url;
+use yii\helpers\Json;
 
 class ApiController extends \yii\web\Controller {
 
@@ -34,7 +37,10 @@ class ApiController extends \yii\web\Controller {
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['product-category-list', 'quotation', 'calculate-price', 'bill-floor-options'],
+                        'actions' => [
+                            'product-category-list', 'quotation', 'calculate-price', 'bill-floor-options',
+                            'get-product-category'
+                        ],
                         'roles' => ['?', '@'],
                     ],
                 ],
@@ -256,6 +262,25 @@ class ApiController extends \yii\web\Controller {
                 ])
                 ->all();
         return ArrayHelper::map($rows, 'bill_price_id', 'bill_floor');
+    }
+
+    public function actionGetProductCategory($id)
+    {
+        $catagory = TblProductCategory::findOne($id);
+        $itemProducts = [];
+        if($catagory) {
+            $products = TblProduct::find()->where(['product_category_id' => $id])->orderBy('package_type_id ASC')->all();
+            foreach ($products as $key => $product) {
+                $itemProducts[] = [
+                    'product_id' => $product['product_id'],
+                    'product_name' => $product['product_name'],
+                    'image_url' =>  Url::base(true) . $product->getImageUrl(),
+                ];
+            }
+        }
+        return Json::encode([
+            'items' => $itemProducts
+        ]);
     }
 
 }

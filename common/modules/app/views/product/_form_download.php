@@ -68,112 +68,118 @@ use kartik\icons\Icon;
             <?= Html::submitButton(Icon::show('print') . 'ดาวน์โหลดใบเสนอราคา', ['class' => 'btn btn-info', 'data-loading-text' => 'Loading...']) ?>
         </div>
     </div>
+    <div id="my-app"></div>
 <?php ActiveForm::end(); ?>
 <?php
 /* $this->registerJsFile('@web/js/liff-starter.js',
         ['depends' => [\yii\web\JqueryAsset::className()]]
 ); */
 $this->registerJs(<<<JS
-$( document ).ready(function() {
-    /* console.log( window.liff );
-    var myApp = new Vue({
-        el: '#form-download',
-        data: {
-            liffData: null
-        },
-        mounted() {
-            this.initializeApp()
-        },
-        methods: {
-            initializeApp(){
-                var _this = this
-                window.liff.init(function (data) {
+var myApp = new Vue({
+    el: '#my-app',
+    data: {
+        liffData: null
+    },
+    mounted() {
+        this.initializeApp()
+    },
+    methods: {
+        initializeApp(){
+            const _this = this
+            liff.init(
+                data => {
+                    // Now you can call LIFF API
                     _this.liffData = data
-                });
-            },
-            sendMessages(messages) {
-                window.liff.sendMessages([{
-                    type: 'text',
-                    text: "You've successfully sent a message! Hooray!"
-                }, {
-                    type: 'sticker',
-                    packageId: '2',
-                    stickerId: '144'
-                }]).then(function () {
-                    window.alert("Message sent");
-                }).catch(function (error) {
-                    window.alert("Error sending message: " + error);
-                });
-            }
-        },
-    }) */
-
-    $('#ajaxCrudModal .modal-footer').hide();
-    // if($('.list-group').find('a.list-group-item.active').length === 0){
-    //     Swal({
-    //         type: 'warning',
-    //         title: 'Oops!',
-    //         text: 'กรุณาเลือกจำนวนที่ต้องการพิมพ์',
-    //     });
-    //     $('#ajaxCrudModal').modal('hide');
-    // }
-    var \$form = $('#form-download');
-    var \$formQuo = $('#form-quotation');
-    \$form.on('beforeSubmit', function() {
-        var dataObj = {}, dataQO = {};
-        var \$items = $('.list-group').find('.list-group-item.active');
-        var qty = 0, final_price = 0;
-        \$items.each(function( i,v ) {
-            qty = $(this).data('qty');
-            final_price = $(this).data('final_price');
-        });
-        \$form.serializeArray().map(function (x) {
-            dataObj[x.name] = x.value;
-        });
-        /* \$formQuo.serializeArray().map(function (x) {
-            if(x.name === 'TblQuotationDetail[cust_quantity]'){
-                dataQO[x.name] = qty;
-            } else {
-                dataQO[x.name] = x.value;
-            }
-        }); */
-        if (localStorage.getItem("formData")) {
-            const formData = JSON.parse(localStorage.getItem("formData"));
-            dataQO = formData['{$modelDetail->product_id}'];
-        }
-        var \$btn = $('#form-download button[type="submit"]').button('loading');
-        $.ajax({
-            url: \$form.attr('action'),
-            type: \$form.attr('method'),
-            data: $.extend(dataObj, dataQO),
-            dataType:'JSON',
-            success: function (response) {
-                // Implement successful
-                \$btn.button('reset');
-                if (response.success) {
-                    // localStorage.removeItem('formData');
-                    $('#ajaxCrudModal').modal('hide');
-                    myApp.sendMessages({})
-                    // window.location.href = response.url;
-                } else {
-                    Swal({
-                        type: 'error',
-                        title: 'Oops!',
-                        text: 'เกิดข้อผิดพลาด!',
-                    });
+                    const userId = data.context.userId;
+                    alert(userId)
+                },
+                err => {
+                    // LIFF initialization failed
+                    console.log(err)
                 }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                \$btn.button('reset');
+            );
+        },
+        sendMessages(messages) {
+            window.liff.sendMessages([{
+                type: 'text',
+                text: "You've successfully sent a message! Hooray!"
+            }, {
+                type: 'sticker',
+                packageId: '2',
+                stickerId: '144'
+            }]).then(function () {
+                window.alert("Message sent");
+            }).catch(function (error) {
+                window.alert("Error sending message: " + error);
+            });
+        }
+    },
+}) 
+
+$('#ajaxCrudModal .modal-footer').hide();
+// if($('.list-group').find('a.list-group-item.active').length === 0){
+//     Swal({
+//         type: 'warning',
+//         title: 'Oops!',
+//         text: 'กรุณาเลือกจำนวนที่ต้องการพิมพ์',
+//     });
+//     $('#ajaxCrudModal').modal('hide');
+// }
+var \$form = $('#form-download');
+var \$formQuo = $('#form-quotation');
+\$form.on('beforeSubmit', function() {
+    var dataObj = {}, dataQO = {};
+    var \$items = $('.list-group').find('.list-group-item.active');
+    var qty = 0, final_price = 0;
+    \$items.each(function( i,v ) {
+        qty = $(this).data('qty');
+        final_price = $(this).data('final_price');
+    });
+    \$form.serializeArray().map(function (x) {
+        dataObj[x.name] = x.value;
+    });
+    /* \$formQuo.serializeArray().map(function (x) {
+        if(x.name === 'TblQuotationDetail[cust_quantity]'){
+            dataQO[x.name] = qty;
+        } else {
+            dataQO[x.name] = x.value;
+        }
+    }); */
+    if (localStorage.getItem("formData")) {
+        const formData = JSON.parse(localStorage.getItem("formData"));
+        dataQO = formData['{$modelDetail->product_id}'];
+    }
+    var \$btn = $('#form-download button[type="submit"]').button('loading');
+    $.ajax({
+        url: \$form.attr('action'),
+        type: \$form.attr('method'),
+        data: $.extend(dataObj, dataQO),
+        dataType:'JSON',
+        success: function (response) {
+            // Implement successful
+            \$btn.button('reset');
+            if (response.success) {
+                // localStorage.removeItem('formData');
+                $('#ajaxCrudModal').modal('hide');
+                // window.location.href = response.url;
+            } else {
                 Swal({
                     type: 'error',
-                    title: textStatus,
-                    text: errorThrown,
+                    title: 'Oops!',
+                    text: 'เกิดข้อผิดพลาด!',
                 });
             }
-        });
-        return false; // prevent default submit
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            \$btn.button('reset');
+            Swal({
+                type: 'error',
+                title: textStatus,
+                text: errorThrown,
+            });
+        }
     });
+    return false; // prevent default submit
 });
 JS
 );
