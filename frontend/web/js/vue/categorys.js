@@ -1871,6 +1871,7 @@ new Vue({
         //     .trigger("change");
         $('input[name="TblQuotationDetail[diecut]"]').prop("checked", false);
       } else if(value === 'dicut') {
+        vm.formAttributes.diecut = "";
         this.formAttributes.perforate = "";
         this.formAttributes.perforate_option_id = "";
         // $("#perforate, #perforate_option_id")

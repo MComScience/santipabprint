@@ -720,8 +720,8 @@ class ProductController extends \yii\web\Controller
             }
         }
         //ไดคัท
-        if (!empty($item['diecut_id']) && $queryBuilder->isShowInput($option, 'diecut')) {
-            if ($item['diecut_id'] === 'N') {
+        if ($queryBuilder->isShowInput($option, 'diecut')) {
+            if ($item['diecut'] === 'N') {
                 $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ไม่ไดคัท' . $newline;
                 //
                 $contents[] = ArrayHelper::merge($box, [
@@ -734,7 +734,7 @@ class ProductController extends \yii\web\Controller
                         ])
                     ]
                 ]);
-            } elseif ($item['diecut_id'] === 'default') {
+            } elseif ($item['diecut'] === 'Default') {
                 $details .= $queryBuilder->getInputLabel($option, 'diecut_id', $item) . $nbsp2 . 'ตามรูปแบบ' . $newline;
                 //
                 $contents[] = ArrayHelper::merge($box, [
@@ -828,62 +828,89 @@ class ProductController extends \yii\web\Controller
             }
         }
         //ฟอยล์
-        if (!empty($item['foil_color_id'])) {
-            $foil_size_width = $this->convertNumber($item['foil_size_width']);
-            $foil_size_height = $this->convertNumber($item['foil_size_height']);
+        if (!empty($item['foil_status'])) {
+            if ($item['foil_status'] == 'N') {
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ปั๊มฟอยล์"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => 'ไม่ปั๊ม'
+                        ])
+                    ]
+                ]);
+            } else {
+                $foil_size_width = $this->convertNumber($item['foil_size_width']);
+                $foil_size_height = $this->convertNumber($item['foil_size_height']);
 
-            $modelFoil = $this->findModelFoilColor($item['foil_color_id']);
-            $modelFoilUnit = $this->findModelUnit($item['foil_size_unit']);
+                $modelFoil = $this->findModelFoilColor($item['foil_color_id']);
+                $modelFoilUnit = $this->findModelUnit($item['foil_size_unit']);
 
-            $foli_print = '';
-            if ($item['foli_print'] == 'two_page') {
-                $foli_print = 'ทั้งหน้า/หลัง';
+                $foli_print = '';
+                if ($item['foli_print'] == 'two_page') {
+                    $foli_print = 'ทั้งหน้า/หลัง';
+                }
+                if ($item['foli_print'] == 'one_page') {
+                    $foli_print = 'หน้าเดียว';
+                }
+
+                $details .= 'ฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $nbsp . $foli_print . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ปั๊มฟอยล์"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . ' ' . $modelFoil['foil_color_name'] . ' ' . $foli_print
+                        ])
+                    ]
+                ]);
             }
-            if ($item['foli_print'] == 'one_page') {
-                $foli_print = 'หน้าเดียว';
-            }
-
-            $details .= 'ฟอยล์ ขนาด: ' . $nbsp . $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . $nbsp . $modelFoil['foil_color_name'] . $nbsp . $foli_print . $newline;
-            //
-            $contents[] = ArrayHelper::merge($box, [
-                'contents' => [
-                    ArrayHelper::merge($contentLeft, [
-                        "text" => "ปั๊มฟอยล์"
-                    ]),
-                    ArrayHelper::merge($contentRight, [
-                        "text" => $foil_size_width . $x . $foil_size_height . $modelFoilUnit['unit_name'] . ' ' . $modelFoil['foil_color_name'] . ' ' . $foli_print
-                    ])
-                ]
-            ]);
         }
         //ปั๊มนูน
-        if (!empty($item['emboss_size_width']) && !empty($item['emboss_size_height']) && !empty($item['emboss_size_unit'])) {
+        if (!empty($item['emboss_status'])) {
+            if ($item['emboss_status'] == 'N') {
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ปั๊มนูน"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => 'ไม่ปั๊ม'
+                        ])
+                    ]
+                ]);
+            } else {
+                $emboss_size_width = $this->convertNumber($item['emboss_size_width']);
+                $emboss_size_height = $this->convertNumber($item['emboss_size_height']);
 
-            $emboss_size_width = $this->convertNumber($item['emboss_size_width']);
-            $emboss_size_height = $this->convertNumber($item['emboss_size_height']);
+                $modelEmBossUnit = $this->findModelUnit($item['emboss_size_unit']);
 
-            $modelEmBossUnit = $this->findModelUnit($item['emboss_size_unit']);
+                $emboss_print = '';
+                if ($item['emboss_print'] == 'two_page') {
+                    $emboss_print = 'ทั้งหน้า/หลัง';
+                }
+                if ($item['emboss_print'] == 'one_page') {
+                    $emboss_print = 'หน้าเดียว';
+                }
 
-            $emboss_print = '';
-            if ($item['emboss_print'] == 'two_page') {
-                $emboss_print = 'ทั้งหน้า/หลัง';
+                $details .= 'ปั๊มนูน ขนาด: ' . $nbsp . $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . $nbsp . $emboss_print . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ปั๊มนูน"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . ' ' . $emboss_print
+                        ])
+                    ]
+                ]);
             }
-            if ($item['emboss_print'] == 'one_page') {
-                $emboss_print = 'หน้าเดียว';
-            }
-
-            $details .= 'ปั๊มนูน ขนาด: ' . $nbsp . $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . $nbsp . $emboss_print . $newline;
-            //
-            $contents[] = ArrayHelper::merge($box, [
-                'contents' => [
-                    ArrayHelper::merge($contentLeft, [
-                        "text" => "ปั๊มนูน"
-                    ]),
-                    ArrayHelper::merge($contentRight, [
-                        "text" => $emboss_size_width . $x . $emboss_size_height . $modelEmBossUnit['unit_name'] . ' ' . $emboss_print
-                    ])
-                ]
-            ]);
         }
         //แนวตัง/แนวนอน
         if (!empty($item['land_orient'])) {
