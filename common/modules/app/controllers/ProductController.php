@@ -1014,7 +1014,7 @@ class ProductController extends \yii\web\Controller
                     "color" => "#ea7066"
                 ]),
                 ArrayHelper::merge($contentRight, [
-                    "text" => Yii::$app->formatter->format($item['final_price'], ['decimal', 2]) . "บ.",
+                    "text" => Yii::$app->formatter->format($item['final_price'], ['decimal', 2]) . " บ.",
                     "color" => "#ea7066"
                 ])
             ]
