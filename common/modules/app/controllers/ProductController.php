@@ -797,7 +797,7 @@ class ProductController extends \yii\web\Controller
         }
 
         //วิธีพับ
-        if (!empty($item['fold_id']) && $item['fold_id'] != 'N') {
+        if (!empty($item['fold_id'])) {
             if ($item['fold_id'] === 'N') {
                 $details .= $queryBuilder->getInputLabel($option, 'fold_id', $item) . $nbsp2 . 'ไม่พับ' . $newline;
                 //
@@ -841,7 +841,7 @@ class ProductController extends \yii\web\Controller
                         ])
                     ]
                 ]);
-                $details .= 'ปั๊มฟอยล์: ไม่ปั๊ม';
+                $details .= 'ปั๊มฟอยล์: ไม่ปั๊ม' . $newline;
             } else {
                 $foil_size_width = $this->convertNumber($item['foil_size_width']);
                 $foil_size_height = $this->convertNumber($item['foil_size_height']);
@@ -885,7 +885,7 @@ class ProductController extends \yii\web\Controller
                         ])
                     ]
                 ]);
-                $details .= 'ปั๊มนูน: ไม่ปั๊ม';
+                $details .= 'ปั๊มนูน: ไม่ปั๊ม' . $newline;
             } else {
                 $emboss_size_width = $this->convertNumber($item['emboss_size_width']);
                 $emboss_size_height = $this->convertNumber($item['emboss_size_height']);
@@ -930,7 +930,7 @@ class ProductController extends \yii\web\Controller
             ]);
         }
         //เข้าเล่ม
-        if (!empty($item['book_binding_id']) && $item['book_binding_id'] != 'N') {
+        if (!empty($item['book_binding_id'])) {
             if ($item['book_binding_id'] === 'N') {
                 $details .= 'เข้าเล่ม : ' . $nbsp . 'ไม่เข้าเล่ม' . $newline;
                 //
@@ -963,7 +963,7 @@ class ProductController extends \yii\web\Controller
 
         if (!empty($item['glue'])) {
             if ($item['glue'] == 1) {
-                $details .= 'ปะกาว';
+                $details .= 'ปะกาว' . $newline;
                 //
                 $contents[] = ArrayHelper::merge($box, [
                     'contents' => [
@@ -1014,7 +1014,7 @@ class ProductController extends \yii\web\Controller
                     "color" => "#ea7066"
                 ]),
                 ArrayHelper::merge($contentRight, [
-                    "text" => Yii::$app->formatter->format($item['final_price'], ['decimal', 2])."บ.",
+                    "text" => Yii::$app->formatter->format($item['final_price'], ['decimal', 2]) . "บ.",
                     "color" => "#ea7066"
                 ])
             ]
