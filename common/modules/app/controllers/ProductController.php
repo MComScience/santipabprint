@@ -479,6 +479,7 @@ class ProductController extends \yii\web\Controller
 
     private function getFlexMessage($q)
     {
+        $baseUrl = 'https://santipab.info';
         $model = $this->findModelQuotation($q);
         $item = TblQuotationDetail::find()->where(['quotation_id' => $q])->one();
         $items = [];
@@ -497,13 +498,13 @@ class ProductController extends \yii\web\Controller
 
         $hero = [
             "type" => "image",
-            "url" => Url::base(true) . $modelProduct->getImageUrl(),
+            "url" => $baseUrl . $modelProduct->getImageUrl(),
             "size" => "full",
             "aspectRatio" => "20:13",
             "aspectMode" => "cover",
             "action" => [
                 "type" => "uri",
-                "uri" => Url::base(true) . $modelProduct->getImageUrl()
+                "uri" => $baseUrl . $modelProduct->getImageUrl()
             ]
         ];
 
@@ -1054,7 +1055,7 @@ class ProductController extends \yii\web\Controller
                     "action" => [
                         "type" => "uri",
                         "label" => "ดาวน์โหลดใบเสนอราคา",
-                        "uri" => Url::base(true) . Url::to(['quo', 'q' => $q])
+                        "uri" => $baseUrl . Url::to(['quo', 'q' => $q])
                     ]
                 ]
             ]
