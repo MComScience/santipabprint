@@ -999,51 +999,49 @@ class ProductController extends \yii\web\Controller
         $summary = $summary + $item['final_price'];
 
         $body = [
-            "body" => [
-                "type" => "box",
-                "layout" => "vertical",
-                "contents" => ArrayHelper::merge([
-                    [
-                        "type" => "text",
-                        "text" => "รายละเอียดสินค้า",
-                        "weight" => "bold",
-                        "color" => "#1DB446",
-                        "size" => "sm"
-                    ],
-                    [
-                        "type" => "text",
-                        "text" => $modelProduct['product_name'],
-                        "weight" => "bold",
-                        "size" => "xs",
-                        "margin" => "md"
-                    ],
-                    [
-                        "type" => "separator",
-                        "margin" => "xxl"
-                    ],
-                    [
-                        "type" => "box",
-                        "layout" => "horizontal",
-                        "margin" => "md",
-                        "contents" => [
-                            [
-                                "type" => "text",
-                                "text" => "ID",
-                                "size" => "xs",
-                                "color" => "#aaaaaa",
-                                "flex" => 0
-                            ],
-                            [
-                                "type" => "text",
-                                "text" => "#" . $q,
-                                "color" => "#aaaaaa",
-                                "size" => "xs",
-                                "align" => "end"
-                            ]
+            "type" => "box",
+            "layout" => "vertical",
+            "contents" => ArrayHelper::merge([
+                [
+                    "type" => "text",
+                    "text" => "รายละเอียดสินค้า",
+                    "weight" => "bold",
+                    "color" => "#1DB446",
+                    "size" => "sm"
+                ],
+                [
+                    "type" => "text",
+                    "text" => $modelProduct['product_name'],
+                    "weight" => "bold",
+                    "size" => "xs",
+                    "margin" => "md"
+                ],
+                [
+                    "type" => "separator",
+                    "margin" => "xxl"
+                ],
+                [
+                    "type" => "box",
+                    "layout" => "horizontal",
+                    "margin" => "md",
+                    "contents" => [
+                        [
+                            "type" => "text",
+                            "text" => "ID",
+                            "size" => "xs",
+                            "color" => "#aaaaaa",
+                            "flex" => 0
+                        ],
+                        [
+                            "type" => "text",
+                            "text" => "#" . $q,
+                            "color" => "#aaaaaa",
+                            "size" => "xs",
+                            "align" => "end"
                         ]
-                    ],
-                ], $contents)
-            ]
+                    ]
+                ],
+            ], $contents)
         ];
 
         $footer = [
