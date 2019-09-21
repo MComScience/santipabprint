@@ -155,9 +155,9 @@ var \$formQuo = $('#form-quotation');
                 // localStorage.removeItem('formData');
                 $('#ajaxCrudModal').modal('hide');
                 myApp.sendMessages(response.flexMessage)
-                // setTimeout(function(){
-                //   window.location.href = response.url;
-                // }, 1000)
+                setTimeout(function(){
+                  window.location.href = response.url;
+                }, 1000)
             } else {
                 Swal({
                     type: 'error',
