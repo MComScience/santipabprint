@@ -103,7 +103,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?= Url::base(true) ?>">
+                <a class="navbar-brand" href="<?= Url::to('/app/product/index') ?>">
                     <img src="<?= $urlBuilder->getUrl('images/logo-png.png', []) ?>" alt="<?= Yii::$app->name ?>" class="santipab-logo">
                     <span class="app-name hidden-lg hidden-md">
                         สันติภาพแพ็คพริ้นท์

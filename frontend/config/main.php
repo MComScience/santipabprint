@@ -48,7 +48,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'สินค้า' => 'app/product/index',
+                // 'สินค้า' => 'app/product/index',
                 '<slug>' => 'app/product/quotation',
             ],
         ],

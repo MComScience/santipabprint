@@ -75,6 +75,7 @@ $this->registerMetaTag([
     <?= $content ?>
     <?php $this->endBody() ?>
     <?= Html::endTag('body') ?>
+    <script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105362419-6"></script>
     <script>

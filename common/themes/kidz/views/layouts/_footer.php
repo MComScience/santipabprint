@@ -141,11 +141,9 @@
             <div class="row">
                 <div class="col-sm-5 col-sm-push-7 col-xs-12">
                     <ul class="list-inline">
-                        <li><a href="#" class="bg-color-1"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                        <li><a href="#" class="bg-color-2"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                        <li><a href="#" class="bg-color-3"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-                        <li><a href="#" class="bg-color-4"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a></li>
-                        <li><a href="#" class="bg-color-5"><i class="fa fa-vimeo" aria-hidden="true"></i></a></li>
+                        <li>
+                            <div class="line-it-button" data-lang="th" data-type="friend" data-lineid="@iwv8320q" data-count="true" data-home="true" style="display: none;"></div>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-sm-7 col-sm-pull-5 col-xs-12">
