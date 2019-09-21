@@ -90,8 +90,6 @@ var myApp = new Vue({
                 data => {
                     // Now you can call LIFF API
                     _this.liffData = data
-                    const userId = data.context.userId;
-                    alert(userId)
                 },
                 err => {
                     // LIFF initialization failed
@@ -100,18 +98,13 @@ var myApp = new Vue({
             );
         },
         sendMessages(messages) {
-            window.liff.sendMessages([{
-                type: 'text',
-                text: "You've successfully sent a message! Hooray!"
-            }, {
-                type: 'sticker',
-                packageId: '2',
-                stickerId: '144'
-            }]).then(function () {
+          if(this.liffData){
+            window.liff.sendMessages([messages]).then(function () {
                 window.alert("Message sent");
             }).catch(function (error) {
                 window.alert("Error sending message: " + error);
             });
+          }
         }
     },
 }) 
@@ -161,7 +154,10 @@ var \$formQuo = $('#form-quotation');
             if (response.success) {
                 // localStorage.removeItem('formData');
                 $('#ajaxCrudModal').modal('hide');
-                // window.location.href = response.url;
+                myApp.sendMessages(response.flexMessage)
+                setTimeout(function(){
+                  window.location.href = response.url;
+                }, 1000)
             } else {
                 Swal({
                     type: 'error',
