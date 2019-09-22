@@ -57,11 +57,12 @@ class ApiController extends \yii\web\Controller {
         $response->format = \yii\web\Response::FORMAT_JSON;
         $catagorys = TblProductCategory::find()->all();
         $itemCatagorys = [];
+        $baseUrl = Url::base(true);
         foreach ($catagorys as $key => $catagory) {
             $itemCatagorys[] = [
                 'product_category_id' => $catagory['product_category_id'],
                 'product_category_name' => $catagory['product_category_name'],
-                'image_url' => $catagory->getImageUrl(),
+                'image_url' => $baseUrl . $catagory->getImageUrl(),
             ];
         }
         return $itemCatagorys;
