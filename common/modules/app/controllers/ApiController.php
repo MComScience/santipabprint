@@ -57,7 +57,7 @@ class ApiController extends \yii\web\Controller {
         $response->format = \yii\web\Response::FORMAT_JSON;
         $catagorys = TblProductCategory::find()->all();
         $itemCatagorys = [];
-        $baseUrl = Url::base(true);
+        $baseUrl = 'https://santipab.info';
         foreach ($catagorys as $key => $catagory) {
             $itemCatagorys[] = [
                 'product_category_id' => $catagory['product_category_id'],
