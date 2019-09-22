@@ -39,7 +39,7 @@ class ApiController extends \yii\web\Controller {
                         'allow' => true,
                         'actions' => [
                             'product-category-list', 'quotation', 'calculate-price', 'bill-floor-options',
-                            'get-product-category'
+                            'get-product-category', 'get-all-product'
                         ],
                         'roles' => ['?', '@'],
                     ],
@@ -267,6 +267,7 @@ class ApiController extends \yii\web\Controller {
 
     public function actionGetProductCategory($id)
     {
+        $baseUrl = 'https://santipab.info';
         $catagory = TblProductCategory::findOne($id);
         $itemProducts = [];
         if($catagory) {
@@ -275,12 +276,31 @@ class ApiController extends \yii\web\Controller {
                 $itemProducts[] = [
                     'product_id' => $product['product_id'],
                     'product_name' => $product['product_name'],
-                    'image_url' =>  Url::base(true) . $product->getImageUrl(),
+                    'image_url' =>  $baseUrl . $product->getImageUrl(),
                 ];
             }
         }
         return Json::encode([
             'items' => $itemProducts
+        ]);
+    }
+
+    public function actionGetAllProduct()
+    {
+        $itemProducts = [];
+        $products = TblProduct::find()->orderBy('package_type_id ASC')->all();
+        $baseUrl = 'https://santipab.info';
+        foreach ($products as $key => $product) {
+            $itemProducts[] = [
+                'product_id' => $product['product_id'],
+                'product_name' => $product['product_name'],
+                'product_category_name' => $product->productCategory->product_category_name,
+                'image_url' =>  $baseUrl . $product->getImageUrl(),
+            ];
+        }
+        return Json::encode([
+            'items' => $itemProducts,
+            'keywords' => ArrayHelper::getColumn($itemProducts, 'product_name')
         ]);
     }
 
