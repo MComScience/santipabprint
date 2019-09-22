@@ -295,6 +295,7 @@ class ApiController extends \yii\web\Controller {
                 'product_id' => $product['product_id'],
                 'product_name' => $product['product_name'],
                 'product_category_name' => $product->productCategory->product_category_name,
+                'product_category_id' => $product->productCategory->product_category_id,
                 'image_url' =>  $baseUrl . $product->getImageUrl(),
             ];
         }

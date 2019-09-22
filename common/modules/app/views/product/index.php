@@ -50,10 +50,10 @@ ThemeBootstrapAsset::register($this);
                         </li>
                         <li v-if="isSelectedCategory" class="active">
                             <a href="javascript:void(0)" @click="onSelectCat(category.product_category_id)">
-                                {{ category.product_category_name }}
+                                {{ category ? category.product_category_name : '' }}
                             </a>
                         </li>
-                        <li v-if="isSelectedProduct" class="active">
+                        <li v-if="isSelectedProduct && product" class="active">
                             {{ product.product_name }}
                         </li>
                     </ol>
