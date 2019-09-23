@@ -121,13 +121,15 @@ class FlexQuotation
                 ->setText($item['text'])
                 ->setSize(ComponentIconSize::XS)
                 ->setColor('#555555')
-                ->setAlign(ComponentAlign::START);
+                ->setAlign(ComponentAlign::START)
+                ->setWrap(true);
 
             $itemEnd = TextComponentBuilder::builder()
                 ->setText($item['value'])
                 ->setSize(ComponentIconSize::XS)
                 ->setColor('#111111')
-                ->setAlign(ComponentAlign::END);
+                ->setAlign(ComponentAlign::END)
+                ->setWrap(true);
 
             $boxItems = ArrayHelper::merge($boxItems, [
                 BoxComponentBuilder::builder()
@@ -148,12 +150,14 @@ class FlexQuotation
                     ->setText('ID')
                     ->setSize(ComponentIconSize::XS)
                     ->setColor('#aaaaaa')
-                    ->setAlign(ComponentAlign::START),
+                    ->setAlign(ComponentAlign::START)
+                    ->setWrap(true),
                 TextComponentBuilder::builder()
                     ->setText('#743289384279')
                     ->setSize(ComponentIconSize::XS)
                     ->setColor('#aaaaaa')
                     ->setAlign(ComponentAlign::END)
+                    ->setWrap(true)
             ]);
 
         $boxDetail = BoxComponentBuilder::builder()
@@ -172,12 +176,14 @@ class FlexQuotation
                     ->setText('จำนวน')
                     ->setSize(ComponentIconSize::MD)
                     ->setColor('#ea7066')
-                    ->setAlign(ComponentAlign::START),
+                    ->setAlign(ComponentAlign::START)
+                    ->setWrap(true),
                 TextComponentBuilder::builder()
                     ->setText('2,000 ชิ้น')
                     ->setSize(ComponentIconSize::XS)
                     ->setColor('#ea7066')
                     ->setAlign(ComponentAlign::END)
+                    ->setWrap(true)
             ]);
 
         $boxPrice = BoxComponentBuilder::builder()
@@ -188,12 +194,14 @@ class FlexQuotation
                     ->setText('ราคา')
                     ->setSize(ComponentIconSize::MD)
                     ->setColor('#ea7066')
-                    ->setAlign(ComponentAlign::START),
+                    ->setAlign(ComponentAlign::START)
+                    ->setWrap(true),
                 TextComponentBuilder::builder()
                     ->setText('15,000 บาท')
                     ->setSize(ComponentIconSize::XS)
                     ->setColor('#ea7066')
                     ->setAlign(ComponentAlign::END)
+                    ->setWrap(true)
             ]);
 
         return BoxComponentBuilder::builder()
