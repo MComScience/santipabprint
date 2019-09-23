@@ -121,7 +121,8 @@ class FlexQuotation
                 ->setText($item['text'])
                 ->setSize(ComponentIconSize::XS)
                 ->setColor('#555555')
-                ->setAlign(ComponentAlign::START)
+                // ->setAlign(ComponentAlign::START)
+                ->setFlex(0)
                 ->setWrap(true);
 
             $itemEnd = TextComponentBuilder::builder()
@@ -151,6 +152,7 @@ class FlexQuotation
                     ->setSize(ComponentIconSize::XS)
                     ->setColor('#aaaaaa')
                     ->setAlign(ComponentAlign::START)
+                    ->setFlex(0)
                     ->setWrap(true),
                 TextComponentBuilder::builder()
                     ->setText('#743289384279')
@@ -177,6 +179,7 @@ class FlexQuotation
                     ->setSize(ComponentIconSize::MD)
                     ->setColor('#ea7066')
                     ->setAlign(ComponentAlign::START)
+                    ->setFlex(0)
                     ->setWrap(true),
                 TextComponentBuilder::builder()
                     ->setText('2,000 ชิ้น')
@@ -195,6 +198,7 @@ class FlexQuotation
                     ->setSize(ComponentIconSize::MD)
                     ->setColor('#ea7066')
                     ->setAlign(ComponentAlign::START)
+                    ->setFlex(0)
                     ->setWrap(true),
                 TextComponentBuilder::builder()
                     ->setText('15,000 บาท')
