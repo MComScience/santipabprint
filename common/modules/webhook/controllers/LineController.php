@@ -92,7 +92,7 @@ class LineController extends \yii\web\Controller
             $handler = null;
             if ($event instanceof MessageEvent) {
                 if ($event instanceof TextMessage) {
-                    $handler = new TextMessageHandler($bot, $logger, $request, $event, $line);
+                    $handler = new TextMessageHandler($bot, $logger, $request, $event, $line->getHttpClient());
                 } elseif ($event instanceof StickerMessage) {
                     $handler = new StickerMessageHandler($bot, $logger, $event);
                 } elseif ($event instanceof LocationMessage) {

@@ -33,7 +33,6 @@ use LINE\LINEBot\TemplateActionBuilder\LocationTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
-use LINE\LINEBot\HTTPClient;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\Request;
@@ -49,22 +48,22 @@ class TextMessageHandler implements EventHandler
     private $req;
     /** @var TextMessage $textMessage */
     private $textMessage;
-
+    /** @var HTTPClient */
     private $httpClient;
 
-    public function __construct($bot, $logger, Request $req, TextMessage $textMessage, $line)
+    public function __construct($bot, $logger, Request $req, TextMessage $textMessage, $httpClient)
     {
         $this->bot = $bot;
         $this->logger = $logger;
         $this->req = $req;
         $this->textMessage = $textMessage;
-        $this->httpClient = $line->getHttpClient();
+        $this->httpClient = $httpClient;
     }
 
     public function handle()
     {
         $json = '
-  {
+  [{
     "type": "flex",
     "altText": "ใบเสนอราคา",
     "contents": {
@@ -315,7 +314,7 @@ class TextMessageHandler implements EventHandler
         ]
       }
     }
-  }';
+  }]';
         $text = $this->textMessage->getText();
         $replyToken = $this->textMessage->getReplyToken();
         $userId = $this->textMessage->getUserId();
@@ -328,7 +327,7 @@ class TextMessageHandler implements EventHandler
             case 'tag':
                 return $this->httpClient->post(LineBotBuilder::ENDPOINT_BASE . '/v2/bot/message/reply', [
                     'replyToken' => $replyToken,
-                    'messages' => $json,
+                    'messages' => Json::decode($json),
                 ]);
                 break;
             case 'bye':
