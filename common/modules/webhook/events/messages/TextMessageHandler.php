@@ -324,14 +324,14 @@ class TextMessageHandler implements EventHandler
                 $this->sendProfile($replyToken, $userId);
                 break;
             case 'tag':
-                $client->createRequest()
+                return $client->createRequest()
                     ->setMethod('POST')
                     ->setUrl('/v2/bot/message/reply')
                     ->addHeaders([
                         'Content-Type' => 'application/json',
                         'Authorization' => 'Bearer '. LineBotBuilder::ACCESS_TOKEN
                     ])
-                    ->setContent($json)
+                    ->setContent(Json::encode(['replyToken' => $replyToken, 'messages' => Json::decode($json)]))
                     ->send();
                 break;
             case 'bye':
