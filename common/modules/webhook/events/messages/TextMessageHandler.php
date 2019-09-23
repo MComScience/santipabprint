@@ -8,6 +8,7 @@
 
 namespace common\modules\webhook\events\messages;
 
+use common\components\LineBotBuilder;
 use common\modules\webhook\events\messages\flex\FlexSampleRestaurant;
 use common\modules\webhook\events\messages\flex\FlexSampleShopping;
 use LINE\LINEBot;
@@ -32,7 +33,9 @@ use LINE\LINEBot\TemplateActionBuilder\LocationTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
+use LINE\LINEBot\HTTPClient;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\Request;
 use common\modules\webhook\interfaces\EventHandler;
 
@@ -47,12 +50,15 @@ class TextMessageHandler implements EventHandler
     /** @var TextMessage $textMessage */
     private $textMessage;
 
+    private $httpClient;
+
     public function __construct($bot, $logger, Request $req, TextMessage $textMessage)
     {
         $this->bot = $bot;
         $this->logger = $logger;
         $this->req = $req;
         $this->textMessage = $textMessage;
+        $this->httpClient = $bot->getHttpClient();
     }
 
     public function handle()
@@ -312,6 +318,7 @@ class TextMessageHandler implements EventHandler
   }';
         $text = $this->textMessage->getText();
         $replyToken = $this->textMessage->getReplyToken();
+        $userId = $this->textMessage->getUserId();
         $this->logger->info("Got text message from $replyToken: $text");
         switch ($text) {
             case 'profile':
@@ -319,8 +326,10 @@ class TextMessageHandler implements EventHandler
                 $this->sendProfile($replyToken, $userId);
                 break;
             case 'tag':
-                $userId = $this->textMessage->getUserId();
-                $this->bot->replyMessage($replyToken, \yii\helpers\Json::decode($json));
+                return $this->httpClient->post(LineBotBuilder::ENDPOINT_BASE . '/v2/bot/message/reply', [
+                    'replyToken' => $replyToken,
+                    'messages' => Json::decode($json),
+                ]);
                 break;
             case 'bye':
                 if ($this->textMessage->isRoomEvent()) {
