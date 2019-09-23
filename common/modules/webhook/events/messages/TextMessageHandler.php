@@ -422,7 +422,7 @@ class TextMessageHandler implements EventHandler
                 $flexMessageBuilder = FlexSampleRestaurant::get();
                 $this->bot->replyMessage($replyToken, $flexMessageBuilder);
                 break;
-            case 'บัตรสะสมแต้ม':
+            case 'flex1':
                 $flexMessageBuilder = FlexQuotation::get();
                 $this->bot->replyMessage($replyToken, $flexMessageBuilder);
                 break;
