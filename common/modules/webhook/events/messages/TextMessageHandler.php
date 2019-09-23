@@ -328,7 +328,7 @@ class TextMessageHandler implements EventHandler
             case 'tag':
                 return $this->httpClient->post(LineBotBuilder::ENDPOINT_BASE . '/v2/bot/message/reply', [
                     'replyToken' => $replyToken,
-                    'messages' => Json::decode($json),
+                    'messages' => $json,
                 ]);
                 break;
             case 'bye':
