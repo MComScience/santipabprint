@@ -52,13 +52,13 @@ class TextMessageHandler implements EventHandler
 
     private $httpClient;
 
-    public function __construct($bot, $logger, Request $req, TextMessage $textMessage)
+    public function __construct($bot, $logger, Request $req, TextMessage $textMessage, $line)
     {
         $this->bot = $bot;
         $this->logger = $logger;
         $this->req = $req;
         $this->textMessage = $textMessage;
-        $this->httpClient = $bot->getHttpClient();
+        $this->httpClient = $line->getHttpClient();
     }
 
     public function handle()
