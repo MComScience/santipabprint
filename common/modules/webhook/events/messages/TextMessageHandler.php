@@ -9,6 +9,7 @@
 namespace common\modules\webhook\events\messages;
 
 use common\components\LineBotBuilder;
+use common\modules\webhook\events\messages\flex\FlexQuotation;
 use common\modules\webhook\events\messages\flex\FlexSampleRestaurant;
 use common\modules\webhook\events\messages\flex\FlexSampleShopping;
 use LINE\LINEBot;
@@ -329,7 +330,7 @@ class TextMessageHandler implements EventHandler
                     ->setUrl('/v2/bot/message/reply')
                     ->addHeaders([
                         'Content-Type' => 'application/json',
-                        'Authorization' => 'Bearer '. LineBotBuilder::ACCESS_TOKEN
+                        'Authorization' => 'Bearer ' . LineBotBuilder::ACCESS_TOKEN
                     ])
                     ->setContent(Json::encode(['replyToken' => $replyToken, 'messages' => Json::decode($json)]))
                     ->send();
@@ -419,6 +420,10 @@ class TextMessageHandler implements EventHandler
                 break;
             case 'restaurant':
                 $flexMessageBuilder = FlexSampleRestaurant::get();
+                $this->bot->replyMessage($replyToken, $flexMessageBuilder);
+                break;
+            case 'บัตรสะสมแต้ม':
+                $flexMessageBuilder = FlexQuotation::get();
                 $this->bot->replyMessage($replyToken, $flexMessageBuilder);
                 break;
             case 'shopping':
