@@ -35,6 +35,7 @@ use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use yii\httpclient\Client;
 use yii\web\Request;
 use common\modules\webhook\interfaces\EventHandler;
 
@@ -48,16 +49,13 @@ class TextMessageHandler implements EventHandler
     private $req;
     /** @var TextMessage $textMessage */
     private $textMessage;
-    /** @var HTTPClient */
-    private $httpClient;
 
-    public function __construct($bot, $logger, Request $req, TextMessage $textMessage, $httpClient)
+    public function __construct($bot, $logger, Request $req, TextMessage $textMessage)
     {
         $this->bot = $bot;
         $this->logger = $logger;
         $this->req = $req;
         $this->textMessage = $textMessage;
-        $this->httpClient = $httpClient;
     }
 
     public function handle()
@@ -315,6 +313,7 @@ class TextMessageHandler implements EventHandler
       }
     }
   }]';
+        $client = new Client(['baseUrl' => LineBotBuilder::ENDPOINT_BASE]);
         $text = $this->textMessage->getText();
         $replyToken = $this->textMessage->getReplyToken();
         $userId = $this->textMessage->getUserId();
@@ -325,10 +324,15 @@ class TextMessageHandler implements EventHandler
                 $this->sendProfile($replyToken, $userId);
                 break;
             case 'tag':
-                return $this->httpClient->post(LineBotBuilder::ENDPOINT_BASE . '/v2/bot/message/reply', [
-                    'replyToken' => $replyToken,
-                    'messages' => $json,
-                ]);
+                $client->createRequest()
+                    ->setMethod('POST')
+                    ->setUrl('/v2/bot/message/reply')
+                    ->addHeaders([
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer '. LineBotBuilder::ACCESS_TOKEN
+                    ])
+                    ->setContent($json)
+                    ->send();
                 break;
             case 'bye':
                 if ($this->textMessage->isRoomEvent()) {
