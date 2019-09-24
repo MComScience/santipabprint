@@ -834,13 +834,31 @@ ThemeBootstrapAsset::register($this);
                                                         </div>
                                                     </v-col>
                                                 </v-row>
+                                                
+                                                <h4 v-show="isvisibleInput('rope')" style="font-size: 16px;">
+                                                    ร้อยเชือกหูถุง :
+                                                </h4>
+                                                <!-- ร้อยเชือกหูถุง -->
+                                                <v-row v-if="isvisibleInput('rope')" >
+                                                    <v-col xs="12" sm="6" md="6">
+                                                        <div v-bind:class="['form-group', errors.first('rope') ? 'has-error' : 'has-success']">
+                                                            <v-rope 
+                                                                :options="ropeOptions"
+                                                                name="rope"
+                                                                v-model="formAttributes.rope" /> 
+                                                        </div>
+                                                        <div class="help-block text-danger">
+                                                            {{ errors.first('rope') }}
+                                                        </div>
+                                                    </v-col>
+                                                </v-row>
 
                                             </form>
                                         </div>
                                     </div>
                                     <!-- footer -->
                                     <div class="panel-footer">
-                                        <div v-html="product ? product.product_description : null"></div>
+                                        <div v-html="productData ? productData.product_description : null"></div>
                                     </div>
                                 </div>
                             </div>
