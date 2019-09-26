@@ -177,7 +177,7 @@ class TextMessageHandler implements EventHandler
                 $flexMessageBuilder = FlexQuotation::get();
                 $this->bot->replyMessage($replyToken, $flexMessageBuilder);
                 break;
-            case 'สินค้า':
+            case 'ขอใบเสนอราคา':
                 $flexMessageBuilder = FlexShopping::get();
                 return $client->createRequest()
                     ->setMethod('POST')
