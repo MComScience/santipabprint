@@ -487,7 +487,7 @@ class TextMessageHandler implements EventHandler
             $category = TblProductCategory::findOne(['product_category_name' => $text]);
             if ($category) {
                 $flexMessageBuilder = FlexProduct::get($category);
-                $client->createRequest()
+                return $client->createRequest()
                     ->setMethod('POST')
                     ->setUrl('/v2/bot/message/reply')
                     ->addHeaders([
