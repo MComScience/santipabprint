@@ -12,6 +12,7 @@ use common\components\LineBotBuilder;
 use common\modules\webhook\events\messages\flex\FlexQuotation;
 use common\modules\webhook\events\messages\flex\FlexSampleRestaurant;
 use common\modules\webhook\events\messages\flex\FlexSampleShopping;
+use common\modules\webhook\events\messages\flex\FlexShopping;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\ImagemapActionBuilder\AreaBuilder;
@@ -425,6 +426,10 @@ class TextMessageHandler implements EventHandler
             case 'flex1':
                 $flexMessageBuilder = FlexQuotation::get();
                 $this->bot->replyMessage($replyToken, $flexMessageBuilder);
+                break;
+            case 'สินค้า':
+                $flexMessageBuilder = FlexShopping::get();
+                $this->bot->replyMessage($replyToken, json_encode($flexMessageBuilder, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE));
                 break;
             case 'shopping':
                 $flexMessageBuilder = FlexSampleShopping::get();
