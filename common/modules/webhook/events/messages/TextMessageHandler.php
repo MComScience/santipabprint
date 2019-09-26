@@ -481,8 +481,9 @@ class TextMessageHandler implements EventHandler
     private function echoBack($replyToken, $text)
     {
         $client = new Client(['baseUrl' => LineBotBuilder::ENDPOINT_BASE]);
-        $categorys = ArrayHelper::map(TblProductCategory::find()->all(), 'product_category_id', 'product_category_name');
-        if (ArrayHelper::isIn($text, $categorys)) {
+        $categorys = TblProductCategory::find()->all();
+        $keywords = ArrayHelper::getColumn($categorys, 'product_category_name');
+        if (ArrayHelper::isIn($text, $keywords)) {
             $category = TblProductCategory::findOne(['product_category_name' => $text]);
             if ($category) {
                 $flexMessageBuilder = FlexProduct::get($category);
