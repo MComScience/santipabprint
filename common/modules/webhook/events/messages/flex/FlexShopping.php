@@ -83,7 +83,7 @@ class FlexShopping
                 if (mb_strlen($label, 'UTF-8') > 20) {
                     $label = mb_substr($label, 0, 17) . '...';
                 }
-                $image = self::getImageBuilder($item['image_url'], $label, $product_category_name);
+                $image = self::getImageBuilder($item['image_url'], $label, $item['product_category_name']);
                 $text = self::getLabelBuilder($item['product_category_name'], $label);
                 if (count($images) < 3) {
                     $images = ArrayHelper::merge($images, [$image]);

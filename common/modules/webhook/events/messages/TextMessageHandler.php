@@ -65,259 +65,6 @@ class TextMessageHandler implements EventHandler
 
     public function handle()
     {
-        $json = '
-  [{
-    "type": "flex",
-    "altText": "ใบเสนอราคา",
-    "contents": {
-      "type": "bubble",
-      "styles": {
-        "footer": {
-          "separator": true
-        }
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "text",
-            "text": "รายละเอียดใบเสนอราคา",
-            "weight": "bold",
-            "color": "#1DB446",
-            "size": "sm",
-            "align": "center"
-          },
-          {
-            "type": "text",
-            "text": "นามบัตร/บัตรสะสมแต้ม",
-            "weight": "bold",
-            "size": "md",
-            "margin": "md"
-          },
-          {
-            "type": "separator",
-            "margin": "xxl"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "margin": "xxl",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "ขนาด",
-                    "size": "sm",
-                    "color": "#555555",
-                    "flex": 0
-                  },
-                  {
-                    "type": "text",
-                    "text": "5*8 นิ้ว",
-                    "size": "sm",
-                    "color": "#111111",
-                    "align": "end"
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "กระดาษ",
-                    "size": "sm",
-                    "color": "#555555",
-                    "flex": 0
-                  },
-                  {
-                    "type": "text",
-                    "text": "อาร์ตการ์ดสองหน้า 300 แกรม",
-                    "size": "sm",
-                    "color": "#111111",
-                    "align": "end"
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "พิมพ์",
-                    "size": "sm",
-                    "color": "#555555",
-                    "flex": 0
-                  },
-                  {
-                    "type": "text",
-                    "text": "พิมพ์สองหน้า พิมพ์ 2 สี",
-                    "size": "sm",
-                    "color": "#111111",
-                    "align": "end"
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "เคลือบ",
-                    "size": "sm",
-                    "color": "#555555",
-                    "flex": 0
-                  },
-                  {
-                    "type": "text",
-                    "text": "เคลือบ pvc ด้าน สองด้าน",
-                    "size": "sm",
-                    "color": "#111111",
-                    "align": "end"
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "ไดคัท",
-                    "size": "sm",
-                    "color": "#555555",
-                    "flex": 0
-                  },
-                  {
-                    "type": "text",
-                    "text": "ไดคัทตามรูปแบบ",
-                    "size": "sm",
-                    "color": "#111111",
-                    "align": "end"
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "ฟอยล์",
-                    "size": "sm",
-                    "color": "#555555",
-                    "flex": 0
-                  },
-                  {
-                    "type": "text",
-                    "text": "ไม่ปั๊มฟอยล์",
-                    "size": "sm",
-                    "color": "#111111",
-                    "align": "end"
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "ปั๊มนูน",
-                    "size": "sm",
-                    "color": "#555555",
-                    "flex": 0
-                  },
-                  {
-                    "type": "text",
-                    "text": "ไม่ปั๊มนูน",
-                    "size": "sm",
-                    "color": "#111111",
-                    "align": "end"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "separator",
-            "margin": "xxl"
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "md",
-            "contents": [
-              {
-                "type": "text",
-                "text": "จำนวน",
-                "size": "md",
-                "color": "#ea7066",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "2000 ชิ้น",
-                "color": "#ea7066",
-                "size": "md",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "md",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ราคา",
-                "size": "md",
-                "color": "#ea7066",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "15,000฿",
-                "color": "#ea7066",
-                "size": "md",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "md",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ID",
-                "size": "xs",
-                "color": "#aaaaaa",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "#743289384279",
-                "color": "#aaaaaa",
-                "size": "xs",
-                "align": "end"
-              }
-            ]
-          }
-        ]
-      }
-    }
-  }]';
         $client = new Client(['baseUrl' => LineBotBuilder::ENDPOINT_BASE]);
         $text = $this->textMessage->getText();
         $replyToken = $this->textMessage->getReplyToken();
@@ -328,17 +75,17 @@ class TextMessageHandler implements EventHandler
                 $userId = $this->textMessage->getUserId();
                 $this->sendProfile($replyToken, $userId);
                 break;
-            case 'tag':
-                return $client->createRequest()
-                    ->setMethod('POST')
-                    ->setUrl('/v2/bot/message/reply')
-                    ->addHeaders([
-                        'Content-Type' => 'application/json',
-                        'Authorization' => 'Bearer ' . LineBotBuilder::ACCESS_TOKEN
-                    ])
-                    ->setContent(Json::encode(['replyToken' => $replyToken, 'messages' => Json::decode($json)]))
-                    ->send();
-                break;
+//            case 'tag':
+//                return $client->createRequest()
+//                    ->setMethod('POST')
+//                    ->setUrl('/v2/bot/message/reply')
+//                    ->addHeaders([
+//                        'Content-Type' => 'application/json',
+//                        'Authorization' => 'Bearer ' . LineBotBuilder::ACCESS_TOKEN
+//                    ])
+//                    ->setContent(Json::encode(['replyToken' => $replyToken, 'messages' => Json::decode($json)]))
+//                    ->send();
+//                break;
             case 'bye':
                 if ($this->textMessage->isRoomEvent()) {
                     $this->bot->replyText($replyToken, 'Leaving room');
@@ -487,15 +234,17 @@ class TextMessageHandler implements EventHandler
             $category = TblProductCategory::findOne(['product_category_name' => $text]);
             if ($category) {
                 $flexMessageBuilder = FlexProduct::get($category);
-                return $client->createRequest()
-                    ->setMethod('POST')
-                    ->setUrl('/v2/bot/message/reply')
-                    ->addHeaders([
-                        'Content-Type' => 'application/json',
-                        'Authorization' => 'Bearer ' . LineBotBuilder::ACCESS_TOKEN
-                    ])
-                    ->setContent(Json::encode(['replyToken' => $replyToken, 'messages' => $flexMessageBuilder], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE))
-                    ->send();
+                if ($flexMessageBuilder) {
+                    $client->createRequest()
+                        ->setMethod('POST')
+                        ->setUrl('/v2/bot/message/reply')
+                        ->addHeaders([
+                            'Content-Type' => 'application/json',
+                            'Authorization' => 'Bearer ' . LineBotBuilder::ACCESS_TOKEN
+                        ])
+                        ->setContent(Json::encode(['replyToken' => $replyToken, 'messages' => $flexMessageBuilder], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE))
+                        ->send();
+                }
             }
         } else {
             $this->bot->replyText($replyToken, $text);
