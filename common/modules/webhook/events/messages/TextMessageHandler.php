@@ -235,7 +235,7 @@ class TextMessageHandler implements EventHandler
             if ($category) {
                 $flexMessageBuilder = FlexProduct::get($category);
                 if ($flexMessageBuilder) {
-                    $client->createRequest()
+                    return $client->createRequest()
                         ->setMethod('POST')
                         ->setUrl('/v2/bot/message/reply')
                         ->addHeaders([
