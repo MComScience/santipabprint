@@ -9,6 +9,9 @@
 namespace common\modules\webhook\events\messages;
 
 use common\components\LineBotBuilder;
+use common\modules\app\models\TblProduct;
+use common\modules\app\models\TblProductCategory;
+use common\modules\webhook\events\messages\flex\FlexProduct;
 use common\modules\webhook\events\messages\flex\FlexQuotation;
 use common\modules\webhook\events\messages\flex\FlexSampleRestaurant;
 use common\modules\webhook\events\messages\flex\FlexSampleShopping;
@@ -436,7 +439,7 @@ class TextMessageHandler implements EventHandler
                         'Content-Type' => 'application/json',
                         'Authorization' => 'Bearer ' . LineBotBuilder::ACCESS_TOKEN
                     ])
-                    ->setContent(json_encode(['replyToken' => $replyToken, 'messages' => $flexMessageBuilder], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE))
+                    ->setContent(Json::encode(['replyToken' => $replyToken, 'messages' => $flexMessageBuilder], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE))
                     ->send();
                 break;
             case 'shopping':
@@ -477,8 +480,26 @@ class TextMessageHandler implements EventHandler
      */
     private function echoBack($replyToken, $text)
     {
+        $client = new Client(['baseUrl' => LineBotBuilder::ENDPOINT_BASE]);
+        $categorys = ArrayHelper::map(TblProductCategory::find()->all(), 'product_category_id', 'product_category_name');
+        if (ArrayHelper::isIn($text, $categorys)) {
+            $category = TblProductCategory::findOne(['product_category_name' => $text]);
+            if ($category) {
+                $flexMessageBuilder = FlexProduct::get($category);
+                $client->createRequest()
+                    ->setMethod('POST')
+                    ->setUrl('/v2/bot/message/reply')
+                    ->addHeaders([
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . LineBotBuilder::ACCESS_TOKEN
+                    ])
+                    ->setContent(Json::encode(['replyToken' => $replyToken, 'messages' => $flexMessageBuilder], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE))
+                    ->send();
+            }
+        } else {
+            $this->bot->replyText($replyToken, $text);
+        }
         $this->logger->info("Returns echo message $replyToken: $text");
-        $this->bot->replyText($replyToken, $text);
     }
 
     private function sendProfile($replyToken, $userId)
