@@ -81,11 +81,11 @@ class FlexShopping
             if ($key + 1 < 80) { // max item limit 80 object
                 $product_category_name = str_replace('/', ',', $item['product_category_name']);
                 $label = $product_category_name;
-                if (strlen($label) > 20) {
-                    $label = substr($label, 0, 17) . '...';
+                if (mb_strlen($label, 'UTF-8') > 20) {
+                    $label = mb_substr($label, 0, 17) . '...';
                 }
                 $image = self::getImageBuilder($item['image_url'], $label, $product_category_name);
-                $text = self::getLabelBuilder($label, $product_category_name);
+                $text = self::getLabelBuilder($item['product_category_name'], $label);
                 if (count($images) < 3) {
                     $images = ArrayHelper::merge($images, [$image]);
                 }
