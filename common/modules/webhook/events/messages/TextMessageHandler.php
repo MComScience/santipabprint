@@ -429,7 +429,15 @@ class TextMessageHandler implements EventHandler
                 break;
             case 'สินค้า':
                 $flexMessageBuilder = FlexShopping::get();
-                $this->bot->replyMessage($replyToken, json_encode($flexMessageBuilder, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE));
+                return $client->createRequest()
+                    ->setMethod('POST')
+                    ->setUrl('/v2/bot/message/reply')
+                    ->addHeaders([
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . LineBotBuilder::ACCESS_TOKEN
+                    ])
+                    ->setContent(json_encode(['replyToken' => $replyToken, 'messages' => $flexMessageBuilder], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE))
+                    ->send();
                 break;
             case 'shopping':
                 $flexMessageBuilder = FlexSampleShopping::get();
