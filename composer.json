@@ -39,7 +39,7 @@
     "mdmsoft/yii2-admin": "~2.0",
     "kartik-v/yii2-mpdf": "*",
     "lajax/yii2-language-picker": "^1.2",
-    "linecorp/line-bot-sdk": "^3.6",
+    "linecorp/line-bot-sdk": "^3.14",
     "monolog/monolog": "^1.24",
     "mdmsoft/yii2-autonumber": "~1.0",
     "almasaeed2010/adminlte": "^2.4.0",
