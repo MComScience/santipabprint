@@ -1,8 +1,14 @@
 <?php
+
 namespace frontend\controllers;
 
+use common\modules\webhook\events\messages\flex\FlexEmsTracking;
+use common\modules\webhook\events\messages\flex\FlexQuotation;
+use common\modules\webhook\events\messages\flex\FlexSampleShopping;
+use common\modules\webhook\events\messages\flex\FlexShopping;
 use Yii;
 use yii\base\InvalidParamException;
+use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -12,6 +18,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\httpclient\Client;
 
 /**
  * Site controller
@@ -254,6 +261,14 @@ class SiteController extends Controller
 
     public function actionInvoice()
     {
-        return $this->renderAjax('invoice');
+        $flexMessageBuilder = FlexShopping::get();
+        return json_encode($flexMessageBuilder, JSON_UNESCAPED_UNICODE|JSON_INVALID_UTF8_IGNORE);
+        // return $this->renderAjax('invoice');
     }
+
+    public function actionOrgchart()
+    {
+        return $this->render('orgchart');
+    }
+
 }

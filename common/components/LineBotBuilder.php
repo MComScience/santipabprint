@@ -16,7 +16,7 @@ class LineBotBuilder extends Component
 {
     public $access_token;
 
-    public $channelSecret = 'e7ea194db06c7d844d24505ed3e2a916';
+    public $channelSecret = 'ce992cd02ebc9ee90dedef4fa2f6a286';
 
     private $_httpClient;
 
@@ -24,7 +24,7 @@ class LineBotBuilder extends Component
 
     const ENDPOINT_BASE = 'https://api.line.me';
 
-    const ACCESS_TOKEN = '1t6nQ9r4R9DQvdMttAeM8RO11d+RuhC1cLvg0jtY+5AcItMSGuyK62RtUpm9zZl55WXKi9NSuqHdj5uzi+hHKwrJPeOzDiNIuqlMwICmkH9p1e4cYuvX/S48wqc7svlTSQgvdunNelC9+wuLFwhnEQdB04t89/1O/w1cDnyilFU=';
+    const ACCESS_TOKEN = 'XeDPCIvrQ7CxTFYSug0g1OGL0R2qTR0mw+7dIXewZ9A0lOV1MY3oqaq+F7EAKsKAOY+Vh63IfjHC1Lb8C8JhJgBYdkYe4AzMJuqz+XJmhVp+nL9wYtjTyIwSdSBnAPHNNidnoYQzSTpy2+lwzd2Rw1GUYhWQfeY8sLGRXgo3xvw=';
 
     public function init()
     {

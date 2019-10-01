@@ -42,7 +42,7 @@ use LINE\LINEBot\KitchenSink\EventHandler;
 
 class LineController extends \yii\web\Controller
 {
-    const LINE_SIGNATURE = 'X-LINE-SIGNATURE';
+    const LINE_SIGNATURE = 'X-Line-Signature';
 
     public function behaviors()
     {
