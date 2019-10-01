@@ -45,13 +45,13 @@ class CalculetFnc {
     public static function calculateVerticalLayWidth($print_area_width, $size_width_cal, $print_area_length, $size_length_cal) {
         $vertical_lay_width = $print_area_width / $size_width_cal;
         $vertical_lay_length = $print_area_length / $size_length_cal;
-        return (int) $vertical_lay_width * (int) $vertical_lay_length;
+        return (int)($vertical_lay_width * $vertical_lay_length);
     }
 
     public static function calculateHorizonLayWidth($print_area_width, $size_width_cal, $print_area_length, $size_length_cal) {
         $horizon_lay_width = $print_area_width / $size_length_cal;
         $horizon_lay_length = $print_area_length / $size_width_cal;
-        return (int) $horizon_lay_width * (int) $horizon_lay_length;
+        return (int)($horizon_lay_width * $horizon_lay_length);
     }
     
     public static function calculateCoatingPrice($coating_prices, $coating_id, $sq, $cal_print_sheet_total) { //คำนวนราคาเคลือบ
@@ -122,7 +122,7 @@ class CalculetFnc {
     }
 
     public static function calculateDicutDefaultDigital($params) {
-        if ($params['isSticker'] && $params['cal_print_sheet_total'] < 100) {//ตรวจก่อนว่าเป็นสติกเกอร์ที่มีจำนวนน้อยกว่า 100 แผ่นหรือไม่
+        if ($params['isSticker'] && $params['cal_print_sheet_total'] <= 100) {//ตรวจก่อนว่าเป็นสติกเกอร์ที่มีจำนวนน้อยกว่า 100 แผ่นหรือไม่
             if ($params['job_per_sheet'] < 30) {
                 $params['dicut_price'] = $params['cal_print_sheet_total'] * 10; //จำนวนงานน้อยกว่า 30 ไดคัทแผ่นละ 10 บาท
             } else {
@@ -137,7 +137,17 @@ class CalculetFnc {
                 $params['dicut_price'] = 300;
             }
             $params['dicut_price'] = $params['block_dicut_price'] + $params['dicut_price']; //ราคาบล๊อก + ราคาไดคัท
-        } else if (!$params['isSticker'] && $params['cal_print_sheet_total'] < 100) {//ไม่ใช่สติกเกอร์และมีกระดาษน้อยกว่า 100 แผ่น
+        }else if(!$params['isSticker'] && $params['cal_print_sheet_total'] <= 20){//ไม่ใช่สติกเกอร์และมีกระดาษน้อยกว่า 20 แผ่น
+            $params['print_sheet_total'] = $params['print_sheet_total'] + 5; //ต้องมีการเผื่อกระดาษ 5 แผ่น
+            $params['block_dicut_price'] = 800; //ค่าบล๊อก
+            $params['dicut_price'] = $params['cal_print_sheet_total'] * 50; //ถ้าไม่เกิน 20 แผ่น ให้คิดไดคัทแผ่นละ 50 บาท
+
+            if ($params['dicut_price'] < 300) { //ราคาขั้นต่ำ
+                $params['dicut_price'] = 300;
+            }
+            $params['dicut_price'] = $params['block_dicut_price'] + $params['dicut_price']; //ราคาบล๊อก + ราคาไดคัท
+            
+        }else if (!$params['isSticker'] && $params['cal_print_sheet_total'] <= 100) {//ไม่ใช่สติกเกอร์และมีกระดาษน้อยกว่า 100 แผ่น
             $params['print_sheet_total'] = $params['print_sheet_total'] + 5; //ต้องมีการเผื่อกระดาษ 5 แผ่น
             $params['block_dicut_price'] = 800; //ค่าบล๊อก
             $params['dicut_price'] = $params['cal_print_sheet_total'] * 0.3;
@@ -157,8 +167,8 @@ class CalculetFnc {
             $print_sheet_total = $print_sheet_total + $total_1; // บวกเผื่อกระดาษ (เริ่มต้นที่ 20 ใบ)
         } else {
             //บวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
-            $for_paper = ($print_sheet_total / 1000) - 1;
-            $print_sheet_total = ($total_2 * (int) $for_paper);
+            $for_paper = ceil(($print_sheet_total / 1000));
+            $print_sheet_total = $print_sheet_total + ($total_2 * $for_paper);
         }
         return $print_sheet_total;
     }

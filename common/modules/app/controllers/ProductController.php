@@ -963,7 +963,7 @@ class ProductController extends \yii\web\Controller
 
         if (!empty($item['glue'])) {
             if ($item['glue'] == 1) {
-                $details .= 'ปะกาว' . $newline;
+                $details .= 'ปะกาว : มีปะกาว' . $newline;
                 //
                 $contents[] = ArrayHelper::merge($box, [
                     'contents' => [
@@ -977,6 +977,7 @@ class ProductController extends \yii\web\Controller
                 ]);
             } else {
                 //
+                $details .= 'ปะกาว : ไม่มีปะกาว' . $newline;
                 $contents[] = ArrayHelper::merge($box, [
                     'contents' => [
                         ArrayHelper::merge($contentLeft, [
@@ -984,6 +985,36 @@ class ProductController extends \yii\web\Controller
                         ]),
                         ArrayHelper::merge($contentRight, [
                             "text" => "ไม่ปะ"
+                        ])
+                    ]
+                ]);
+            }
+        }
+        
+        if (!empty($item['rope'])) {
+            if ($item['rope'] == 1) {
+                $details .= 'ร้อยเชือกหูถุง : มีเชือกร้อยหู' . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ร้อยเชือกหูถุง"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ร้อยเชือกหูถุง"
+                        ])
+                    ]
+                ]);
+            } else {
+                $details .= 'ร้อยเชือกหูถุง : ไม่มีเชือกร้อยหู' . $newline;
+                //
+                $contents[] = ArrayHelper::merge($box, [
+                    'contents' => [
+                        ArrayHelper::merge($contentLeft, [
+                            "text" => "ร้อยเชือกหูถุง"
+                        ]),
+                        ArrayHelper::merge($contentRight, [
+                            "text" => "ไม่ร้อยเชือกหูถุง"
                         ])
                     ]
                 ]);

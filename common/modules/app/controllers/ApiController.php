@@ -186,7 +186,6 @@ class ApiController extends \yii\web\Controller {
 
 //            $final_price_offset = ceil($offsetAttr['final_price_offset'] / 10) * 10;
 //            $price_per_item_offset = $final_price_offset / $data['cust_quantity'];
-
             //ราคาต่อชิ้น digital
             $price_per_item_digital_decimal = (int) substr(number_format($price_per_item_digital, 2), -2);
             if ($price_per_item_digital_decimal < 90 && $price_per_item_digital_decimal > 0) {
@@ -207,7 +206,35 @@ class ApiController extends \yii\web\Controller {
 
 
             $cust_quantity = $qty;
-            if ($final_price_digital > $offsetAttr['final_price_offset']) {
+            if ($final_price_digital > 0 && $offsetAttr['final_price_offset'] > 0) {
+                if ($final_price_digital > $offsetAttr['final_price_offset']) {
+                    $priceList[] = [
+                        'final_price' => number_format($offsetAttr['final_price_offset'], 2), //$final_price_offset ? number_format($final_price_offset, 2) : 0.00,
+                        'price_per_item' => $offsetAttr['price_per_item_offset'],
+                        'cust_quantity' => $cust_quantity,
+                        'price_of' => 'offset',
+                        'offsetAttr' => $offsetAttr,
+                        'digitalAttr' => $digitalAttr,
+                        'paper' => $offsetAttr['0.6[paper]'],
+                        'unit' => $unit,
+                        'price_per_item_digital_decimal' => $price_per_item_digital_decimal,
+                        'price_per_item_offset_decimal' => $price_per_item_offset_decimal
+                    ];
+                } elseif ($final_price_digital < $offsetAttr['final_price_offset']) {
+                    $priceList[] = [
+                        'final_price' => number_format(($price_per_item_digital * $data['cust_quantity']), 2),
+                        'price_per_item' => $price_per_item_digital ? $price_per_item_digital : 0.00,
+                        'cust_quantity' => $cust_quantity,
+                        'price_of' => 'digital',
+                        'offsetAttr' => $offsetAttr,
+                        'digitalAttr' => $digitalAttr,
+                        'paper' => $digitalAttr['paper'],
+                        'unit' => $unit,
+                        'price_per_item_digital_decimal' => $price_per_item_digital_decimal,
+                        'price_per_item_offset_decimal' => $price_per_item_offset_decimal
+                    ];
+                }
+            } elseif ($final_price_digital == 0 && $offsetAttr['final_price_offset'] > 0) {
                 $priceList[] = [
                     'final_price' => number_format($offsetAttr['final_price_offset'], 2), //$final_price_offset ? number_format($final_price_offset, 2) : 0.00,
                     'price_per_item' => $offsetAttr['price_per_item_offset'],
@@ -220,7 +247,7 @@ class ApiController extends \yii\web\Controller {
                     'price_per_item_digital_decimal' => $price_per_item_digital_decimal,
                     'price_per_item_offset_decimal' => $price_per_item_offset_decimal
                 ];
-            } else {
+            } elseif ($final_price_digital > 0 && $offsetAttr['final_price_offset'] == 0) {
                 $priceList[] = [
                     'final_price' => number_format(($price_per_item_digital * $data['cust_quantity']), 2),
                     'price_per_item' => $price_per_item_digital ? $price_per_item_digital : 0.00,
@@ -234,6 +261,9 @@ class ApiController extends \yii\web\Controller {
                     'price_per_item_offset_decimal' => $price_per_item_offset_decimal
                 ];
             }
+        }
+        if (count($priceList) == 0) {
+            throw new \yii\web\HttpException(422, 'เนื่องจากขนาดชิ้นงานของท่านมีไชส์ใหญ่เกินระบบจะประมาณผล กรุณาติดต่อโรงพิมพ์');
         }
 //        $data = $request->post();
 //        $data['cust_quantity'] = 2000;
@@ -265,28 +295,26 @@ class ApiController extends \yii\web\Controller {
         return ArrayHelper::map($rows, 'bill_price_id', 'bill_floor');
     }
 
-    public function actionGetProductCategory($id)
-    {
+    public function actionGetProductCategory($id) {
         $baseUrl = 'https://santipab.info';
         $catagory = TblProductCategory::findOne($id);
         $itemProducts = [];
-        if($catagory) {
+        if ($catagory) {
             $products = TblProduct::find()->where(['product_category_id' => $id])->orderBy('package_type_id ASC')->all();
             foreach ($products as $key => $product) {
                 $itemProducts[] = [
                     'product_id' => $product['product_id'],
                     'product_name' => $product['product_name'],
-                    'image_url' =>  $baseUrl . $product->getImageUrl(),
+                    'image_url' => $baseUrl . $product->getImageUrl(),
                 ];
             }
         }
         return Json::encode([
-            'items' => $itemProducts
+                    'items' => $itemProducts
         ]);
     }
 
-    public function actionGetAllProduct()
-    {
+    public function actionGetAllProduct() {
         $itemProducts = [];
         $products = TblProduct::find()->orderBy('package_type_id ASC')->all();
         $baseUrl = 'https://santipab.info';
@@ -296,12 +324,12 @@ class ApiController extends \yii\web\Controller {
                 'product_name' => $product['product_name'],
                 'product_category_name' => $product->productCategory->product_category_name,
                 'product_category_id' => $product->productCategory->product_category_id,
-                'image_url' =>  $baseUrl . $product->getImageUrl(),
+                'image_url' => $baseUrl . $product->getImageUrl(),
             ];
         }
         return Json::encode([
-            'items' => $itemProducts,
-            'keywords' => ArrayHelper::getColumn($itemProducts, 'product_name')
+                    'items' => $itemProducts,
+                    'keywords' => ArrayHelper::getColumn($itemProducts, 'product_name')
         ]);
     }
 

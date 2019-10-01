@@ -394,6 +394,39 @@ Vue.component("v-emboss-status", {
   `
 });
 
+Vue.component("v-rope", {
+  props: ["options", "value"],
+  $_veeValidate: {
+    value() {
+      return this.$el.value;
+    }
+  },
+  data() {
+    return {
+      checked: ""
+    };
+  },
+  mounted: function() {
+    this.checked = this.value;
+  },
+  template: `
+  <div id="tblquotationdetail-rope" role="radiogroup" aria-invalid="false">
+    <div v-for="(option, key) in options" :key="key" class="radio inline-block">
+      <label class="radio-inline">
+        <input type="radio" 
+          :id="'tblquotationdetail-rope-' + key" 
+          name="TblQuotationDetail[rope]" 
+          :value="option.value"
+          v-model="checked"
+          v-on:input="$emit('input', $event.target.value)"
+          v-on:change="$emit('change', $event)">
+        <span class="cr"><i class="cr-icon fa fa-circle"></i></span> {{ option.text }}
+      </label>
+    </div>
+  </div>
+  `
+});
+
 function format(state) {
   if (!state.id) return state.text; // optgroup
   return state.text;
@@ -687,7 +720,8 @@ const vm = new Vue({
       bill_detail_qty: "",
       product_id: p,
       foil_status:"",
-      emboss_status:""
+      emboss_status:"",
+      rope:""
       
     },
     landOrientOptions: [
@@ -774,6 +808,16 @@ const vm = new Vue({
         value: "Y",
         text: "ปั๊มนูน"
       }
+    ],
+    ropeOptions: [
+     {
+        value: "0",
+        text: "ไม่ร้อยเชือกหูถุง"
+     },
+     {
+       value: "1",
+       text: "ร้อยเชือกหูถุง"
+     }
     ],
     radioChecked: ''
   },
@@ -1399,6 +1443,9 @@ const vm = new Vue({
             this.formAttributes.emboss_print = '';
             // this.showEmbossInput = false;
         }
+    },
+    onChangeRope: function(e) {
+      console.log(e.target.value);
     },
     mapDataOptions: function(options) {
       let dataOptions = [];

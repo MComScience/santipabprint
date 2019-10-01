@@ -437,6 +437,39 @@ const vmCategorys = Vue.component("vm-categorys", {
   `
 })
 
+Vue.component("v-rope", {
+  props: ["options", "value"],
+  $_veeValidate: {
+    value() {
+      return this.$el.value;
+    }
+  },
+  data() {
+    return {
+      checked: ""
+    };
+  },
+  mounted: function() {
+    this.checked = this.value;
+  },
+  template: `
+  <div id="tblquotationdetail-rope" role="radiogroup" aria-invalid="false">
+    <div v-for="(option, key) in options" :key="key" class="radio inline-block">
+      <label class="radio-inline">
+        <input type="radio" 
+          :id="'tblquotationdetail-rope-' + key" 
+          name="TblQuotationDetail[rope]" 
+          :value="option.value"
+          v-model="checked"
+          v-on:input="$emit('input', $event.target.value)"
+          v-on:change="$emit('change', $event)">
+        <span class="cr"><i class="cr-icon fa fa-circle"></i></span> {{ option.text }}
+      </label>
+    </div>
+  </div>
+  `
+});
+
 Vue.config.productionTip = false
 
 function format(state) {
@@ -739,7 +772,8 @@ new Vue({
       bill_detail_qty: "",
       product_id: p,
       foil_status: "",
-      emboss_status: ""
+      emboss_status: "",
+      rope: ""
     },
     landOrientOptions: [
       {
@@ -825,6 +859,16 @@ new Vue({
         value: "Y",
         text: "ปั๊มนูน"
       }
+    ],
+    ropeOptions: [
+     {
+        value: "0",
+        text: "ไม่ร้อยเชือกหูถุง"
+     },
+     {
+       value: "1",
+       text: "ร้อยเชือกหูถุง"
+     }
     ],
     radioChecked: ""
   },
@@ -1091,7 +1135,11 @@ new Vue({
         })
       }
       return options
-    }
+    },
+    ropeDetail: function() {
+      if (!this.formAttributes.rope) return "-"
+      return this.formAttributes.rope === '1' ? 'ร้อยเชือกหูถุง' : 'ไม่ร้อยเชือกหูถุง'
+    },
   },
   created() {
     $(".loading, .product-detail").removeClass("hidden")

@@ -32,13 +32,15 @@ class CalculateOffset extends Component {
             $this->findModeles();
             $this->setOptions();
             $this->findJobPerSheet();
-            $this->findCoating();
-            $this->findFoilPrice();
-            $this->findEmbossPrice();
+            //$this->findCoating();
+//            $this->findFoilPrice();
+//            $this->findEmbossPrice();
             $this->findDicutPrice();
             $this->findDicutPrice();
             $this->findGluePrice();
             $this->findFlod();
+            $this->findRopePrice();
+            $this->findGlueBagPrice();
             $this->findPaperBigsheet();
             $this->findPrintingPriceTotal();
             $this->summaryPrice();
@@ -70,7 +72,7 @@ class CalculateOffset extends Component {
         if ($model['coating_id'] != 'N' && !empty($model['coating_id'])) {
             $this->modelCoating = $this->findModelCoating($model['coating_id']);
         }
-        if ($model['diecut'] != 'N' && $model['diecut'] != 'Default' && !empty($model['diecut_id'])){
+        if ($model['diecut'] != 'N' && $model['diecut'] != 'Default' && !empty($model['diecut_id'])) {
             $this->modelDiCut = $this->findModelDiecut($model['diecut_id']);
         }
         if ($model['foil_status'] == 'Y' && !empty($model['foil_size_unit'])) {
@@ -258,16 +260,20 @@ class CalculateOffset extends Component {
         }
     }
 
-    ######################## สินค้าเป็นประเภทกล่อง ########################
+    ######################## สินค้าบรรจุภัณฑ์ ########################
 
-    public $isBox = false; // 
+    public $isBox = false; //กล่องกระดาษ
+    public $isBag = false; // ถุงกระดาษ
 
     public function checkProductOptions() {
         $model = $this->model;
         $product = $this->modelProduct;
         // 
-        if ($product['package_type_id'] == 21 && $product['product_category_id'] == 'PC-00011') {
-            $this->isBox = true; // ใช้ box
+
+        if (ArrayHelper::isIn($product['package_type_id'], [54, 58]) && ArrayHelper::isIn($product['product_category_id'], [17, 18])) {
+            $this->isBox = true; // ใช้ กล่อง
+        } else if ($product['package_type_id'] == 36 && $product['product_category_id'] == 6) {
+            $this->isBag = true; // ใช้ ถุง
         }
     }
 
@@ -297,6 +303,13 @@ class CalculateOffset extends Component {
 
                     $this->paperWidth = (($paperWidth * 2) + ($paperLenght * 2)) + 0.635; //ความกว้าง = (กว้าง * 2 (2ด้าน))+(ความยาว * 2 (2ด้าน)) + 0.635 เผื่ดติดกาว(แปลงจาก0.25นิ้ว) 
                     $this->paperLenght = $paperHight + ($paperWidth * 2) + 1.27; //ความยาว = ความสูง + (ความกว้าง*2) + 1.27 ส่วนพับ(แปลงจาก 0.5 นิ้ว)
+                } else if ($this->isBag) {//ถุงกระดาษ
+                    $paperWidth = CalculetFnc::convertInToCm($this->model['paper_size_width']); //กว้าง
+                    $paperLenght = CalculetFnc::convertInToCm($this->model['paper_size_lenght']); // ยาว
+                    $paperHight = CalculetFnc::convertInToCm($this->model['paper_size_height']); // สูง
+
+                    $this->paperWidth = (($paperWidth * 2) + ($paperLenght * 2)) + 1.27; //ความกว้าง = (กว้าง * 2 (2ด้าน))+(ความยาว * 2 (2ด้าน)) +  เผื่ดติดกาว(แปลงจาก 0.5 นิ้ว)
+                    $this->paperLenght = $paperHight + $paperWidth + 3.81; //ความยาว = ความสูง + ความกว้าง + ส่วนพับ(แปลงจาก 1.5 นิ้ว)   
                 } else {
                     // แปลงนิ้วเป็นเซนติเมตร
                     $this->paperWidth = CalculetFnc::convertInToCm($paper_size_width);
@@ -306,6 +319,9 @@ class CalculateOffset extends Component {
                 if ($this->isBox) {// สินค้าเป็นประเภทกล่อง
                     $this->paperWidth = (($paper_size_width * 2) + ($paper_size_lenght * 2)) + 0.635;
                     $this->paperLenght = $paper_size_height + ($paper_size_width * 2) + 1.27;
+                } else if ($this->isBag) { //ถุงกระดาษ
+                    $this->paperWidth = (($paper_size_width * 2) + ($paper_size_lenght * 2)) + 1.27;
+                    $this->paperLenght = $paper_size_height + $paper_size_width + 3.81;
                 } else {
                     $this->paperWidth = $paper_size_width; // (cm)
                     $this->paperLenght = $paper_size_lenght; // (cm)
@@ -399,34 +415,50 @@ class CalculateOffset extends Component {
 //                $cal_paper_sizes = ArrayHelper::merge($cal_paper_sizes, $this->getCalculatePaperSize($cal_job_per_sheets, $cal_per_sheets, $max_per_sheet, $paperDetail));
             }
 
-            //วางงานเป็นเลขคู่ไม่ได้  + งานพิมพ์ 2 หน้า (ค่าพิมพ์งานขั้นต้น)
-            if (count($this->job_per_sheets_mod) == 0 && $this->printTwoPage) {
+            //วางงานเป็นเลขคู่ไม่ได้ (ค่าพิมพ์งานขั้นต้น)
+            if (count($this->job_per_sheets_mod) == 0) {
                 $cal_job_per_sheets = [];
                 foreach ($this->job_per_sheets as $key => $item) {
-                    $place = $item['place'];
+                    foreach ($item as $index => $data) {
+                        if ($data['job_per_sheet'] > 0) {
+                            if ($this->printOnePage) { //งานพิมพ์ 1 หน้า
+                                $cal_job_per_sheets[] = $data;
+                            } elseif ($this->printTwoPage) { //งานพิมพ์ 2 หน้า
+                                $place = $data['place'];
 
-                    $newPlace = ArrayHelper::merge($place, [ //ราคาเพลท * 2
-                        'place_price' => $place['place_price'] * 2
-                    ]);
+                                $newPlace = ArrayHelper::merge($place, [//ราคาเพลท * 2
+                                            'place_price' => $place['place_price'] * 2
+                                ]);
 
-                    $cal_job_per_sheets[] = ArrayHelper::merge($item, [ //ราคาวิ่งงาน * 2
-                        'place' => $newPlace,
-                        'print_price_start' => $item['print_price_start'] * 2
-                    ]);
+                                $cal_job_per_sheets[] = ArrayHelper::merge($data, [//ราคาวิ่งงาน * 2
+                                            'place' => $newPlace,
+                                            'print_price_start' => $data['print_price_start'] * 2
+                                ]);
+                            }
+                        }
+                    }
                 }
+//                if (count($cal_job_per_sheets) == 0) {
+//                    throw new \yii\web\HttpException(422, 'เนื่องจากขนาดชิ้นงานของท่านมีไชส์ใหญ่เกินระบบจะประมาณผล กรุณาติดต่อโรงพิมพ์');
+//                }
                 // หาค่าพิมพ์งานขั้นต้นที่มีค่าต่ำสุด
-                ArrayHelper::multisort($cal_job_per_sheets, ['print_price_start', 'print_price_start'], [SORT_ASC, SORT_ASC]);
-                $cal_per_sheets = ArrayHelper::getColumn($cal_job_per_sheets, 'print_price_start');
-                $min_price_start = $this->findMinPriceStart($cal_per_sheets);
+//                ArrayHelper::multisort($cal_job_per_sheets, ['print_price_start', 'print_price_start'], [SORT_ASC, SORT_ASC]);
+//                $cal_per_sheets = ArrayHelper::getColumn($cal_job_per_sheets, 'print_price_start');
+//                $min_price_start = $this->findMinPriceStart($cal_per_sheets);
                 // ค่าพิมพ์งานขั้นต้น
-                $cal_paper_sizes = ArrayHelper::merge($cal_paper_sizes, $this->getCalculatePriceStart($cal_job_per_sheets, $min_price_start));
+                // $cal_paper_sizes = ArrayHelper::merge($cal_job_per_sheets, $this->getCalculatePriceStart($cal_job_per_sheets, $min_price_start));
+                $cal_paper_sizes = $cal_job_per_sheets;
             }
             $this->cal_paper_sizes = $cal_paper_sizes;
 
-            // เปรียบเทียบราคาที่ถูกที่สุด
-            $this->paper = $this->getPaperMinPriceStart($cal_paper_sizes);
-            $this->start_print_sheet_total = $this->paper['start_print_sheet_total']; //จำนวนแผ่นที่ยังไม่เผื่อ
-            $this->print_sheet_total = $this->paper['print_sheet_total']; //จำนวนแผ่นพิมพ์ที่บวกเผื่อกระดาษจากการคำนวนพิมพ์สี
+            if ($cal_paper_sizes) {
+                // เปรียบเทียบราคาที่ถูกที่สุด
+                $this->paper = $this->getPaperMinPriceStart($cal_paper_sizes);
+                $this->start_print_sheet_total = $this->paper['start_print_sheet_total']; //จำนวนแผ่นที่ยังไม่เผื่อ
+                $this->print_sheet_total = $this->paper['print_sheet_total']; //จำนวนแผ่นพิมพ์ที่บวกเผื่อกระดาษจากการคำนวนพิมพ์สี
+            }
+
+            $this->findCoating();
         }
     }
 
@@ -468,12 +500,12 @@ class CalculateOffset extends Component {
             // จำนวนแผ่นพิมพ์ (จำนวนที่รับจากหน้าจอ/การวางงานที่ได้จำนวนเยอะที่สุด) + เผื่อกระดาษ
             $start_print_sheet_total = $job_per_sheet <= 0 ? 0 : round($model['cust_quantity'] / $job_per_sheet);
             $print_sheet_total = $start_print_sheet_total + $this->print_sheet_total;
-            
+
             $is_mod = !($job_per_sheet % 2);
             if ($this->printTwoPage && $is_mod) { //พิมพ์ 2 หน้า 
                 $print_sheet_total = $print_sheet_total * 2;
             }
-            // จำนวนกระดาษแผ่นใหญ่ ( จำนวนแผ่นพิมพ์ total * paper_cut)
+            // จำนวนกระดาษแผ่นใหญ่ ( จำนวนแผ่นพิมพ์ total / paper_cut)
             $big_sheet_total = $print_sheet_total / $paper['paper_cut'];
             //เช็คว่าถ้าไม่มีไดคัทให้เพิ่มค่าตัด
             $cutting_price = 0;
@@ -511,9 +543,11 @@ class CalculateOffset extends Component {
                 'place' => $place,
                 'paper_price' => $paper_price,
                 'printing_price' => $printing_price,
-                'is_mod' => !($job_per_sheet % 2), // true = เลขคู่ ,false = เลขคี่
-                'price' => round((($model['cust_quantity'] / $job_per_sheet) / $paper['paper_cut']) * $paperDetail['paper_price'], 2),
-                'print_price_start' => $print_price_start
+                'is_mod' => (!($job_per_sheet % 2) && $job_per_sheet != 0), // true = เลขคู่ ,false = เลขคี่
+                'price' => $job_per_sheet > 0 ? round((($model['cust_quantity'] / $job_per_sheet) / $paper['paper_cut']) * $paperDetail['paper_price'], 2) : 0,
+                'print_price_start' => $print_price_start,
+                'paperWidth' => $this->paperWidth,
+                'paperLenght' => $this->paperLenght
             ];
         }
         return $cal_job_per_sheets;
@@ -526,7 +560,7 @@ class CalculateOffset extends Component {
         } else {
             $job_per_sheet = $horizontal; //ถ้ากระดาษแนวตั้งน้อยกว่าแนวนอน ให้ใช้ขนาดแนวนอน
         }
-        return (int)$job_per_sheet;
+        return (int) $job_per_sheet;
     }
 
     private function findMaxJopPersheet($cal_per_sheets) {
@@ -673,7 +707,7 @@ class CalculateOffset extends Component {
     public function findCoating() {
         $model = $this->model;
         $paper = $this->paper; // กระดาษที่หาได้
-        if ($this->isCoating) {
+        if ($this->isCoating && $paper) {
             $coating_prices = TblCoatingPrice::find()->all(); //ราคาเคลือบ
             $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 20); //บวกเริ่มต้นที่ 20 ใบ และบวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
             $sq = $paper['size'];
@@ -689,6 +723,7 @@ class CalculateOffset extends Component {
                 $this->laminate_price = 300;
             }
         }
+        $this->findFoilPrice();
     }
 
     ######################## ปั๊มฟอยล์ ########################
@@ -700,7 +735,7 @@ class CalculateOffset extends Component {
 
     public function findFoilPrice() {
         $model = $this->model;
-        if ($model['foil_status'] == 'Y') {
+        if ($model['foil_status'] == 'Y' && $this->paper) {
 
             $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 20); //บวกเริ่มต้นที่ 20 ใบ และบวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
             $sqFoilSize = 0;
@@ -732,7 +767,11 @@ class CalculateOffset extends Component {
                 $this->foil_price = 300;
             }
             $this->foil_price = $this->block_foil_price + $this->foil_price + 100; //ค่าบล๊อกฟอยล์ + ราคาฟอยล์ + ค่าขนส่งบล๊อก
+            if ($this->foilTwoPage) {
+                $this->foil_price = $this->foil_price * 2;
+            }
         }
+        $this->findEmbossPrice();
     }
 
     ######################## การปั๊มนูน ########################
@@ -742,7 +781,7 @@ class CalculateOffset extends Component {
 
     public function findEmbossPrice() {
         $model = $this->model;
-        if ($model['emboss_status'] == 'Y') {
+        if ($model['emboss_status'] == 'Y' && $this->paper) {
             $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 20); //บวกเริ่มต้นที่ 20 ใบ และบวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
 
             $sqeEbossSize = 0; // ขนาด ตรน
@@ -760,12 +799,15 @@ class CalculateOffset extends Component {
                 $block_prices = TblEmbossPrice::find()->all(); //ราคาบล๊อกปั๊มนูน
                 $this->block_emboss_price = CalculetFnc::calculateBlockEmboss($block_prices, $sqeEbossSize);
             }
-            $this->emboss_price = $model['cust_quantity'] * 0.3; // คำนวณค่าปั๊มนูนใบละ 0.25 คูณจำนวนงานพิมพ์
+            $this->emboss_price = $model['cust_quantity'] * 0.3; // คำนวณค่าปั๊มนูนใบละ 0.3 คูณจำนวนงานพิมพ์
             if ($this->emboss_price < 300) { //ราคาขั้นต่ำปั๊มนูน 300
                 $this->emboss_price = 300;
             }
             $this->block_emboss_price = $this->block_emboss_price * 2;
             $this->emboss_price = $this->block_emboss_price + $this->emboss_price + 100; //ค่าบล๊อกปั๊มนูน + ราคาปั๊มนูน + ค่าขนส่งบล๊อก
+            if ($this->embossTwoPage) {
+                $this->emboss_price = $this->emboss_price * 2;
+            }
         }
     }
 
@@ -777,7 +819,7 @@ class CalculateOffset extends Component {
     public function findDicutPrice() {
         $paper = $this->paper; // กระดาษที่หาได้
         $isSticker = false;
-        if ($this->isDicut) {
+        if ($this->isDicut && $this->paper) {
             $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 20); //บวกเริ่มต้นที่ 20 ใบ และบวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
             $isSticker = $paper['paper_detail']['stk_flag'] == 'Y';
             if ($this->isDicutDefault) { //ไดคัทตามรูปแบบ
@@ -804,7 +846,7 @@ class CalculateOffset extends Component {
     public function findGluePrice() {
         $model = $this->model;
         $paper = $this->paper; // กระดาษที่หาได้
-        if ($this->isGlue) {
+        if ($this->isGlue && $this->paper) {
             $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 20); //บวกเริ่มต้นที่ 20 ใบ และบวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
 
             $this->glue_price = $paper['start_print_sheet_total'] * 0.3; //คำนวณค่าปะกาวตามจำนวนจริง (ข้อ 4) คุณด้วย 0.3 (ขั้นต่ำ 300 บาท)
@@ -824,7 +866,7 @@ class CalculateOffset extends Component {
         $modelPaper = $this->modelPaper; // ประเภทกระดาษ
         $paper = $this->paper; // กระดาษที่หาได้
         $cust_quantity = $model['cust_quantity']; // จำนวนที่ลูกค้าต้องการ
-        if ($this->isFold) {
+        if ($this->isFold && $this->paper) {
             $this->fold_block_price = 300;
             if ($modelPaper['paper_gram'] >= 200) {
                 if ($paper['start_print_sheet_total'] <= 50) {
@@ -877,10 +919,12 @@ class CalculateOffset extends Component {
 
     public function findPaperBigsheet() {
         $paper = $this->paper; // กระดาษที่หาได้
-        if ($this->print_sheet_total != 0 && $paper['paper_cut']['paper_cut'] != 0) {
-            $this->paper_bigsheet = round($this->print_sheet_total / $paper['paper_cut']['paper_cut'], 0); //จำนวนแผ่นพิมพ์ที่บวกเผื่อ / (ขนาดกระดาษที่ตัด) 
+        if ($paper) {
+            if ($this->print_sheet_total != 0 && $paper['paper_cut']['paper_cut'] != 0) {
+                $this->paper_bigsheet = round($this->print_sheet_total / $paper['paper_cut']['paper_cut'], 0); //จำนวนแผ่นพิมพ์ที่บวกเผื่อ / (ขนาดกระดาษที่ตัด) 
+            }
+            $this->final_paper_price = round($this->paper_bigsheet * $paper['paper_detail']['paper_price']); //หาราคากระดาษ จำนวนกระดาษแผ่นใหญ่ * ราคากระดาษจากฐานข้อมูล
         }
-        $this->final_paper_price = round($this->paper_bigsheet * $paper['paper_detail']['paper_price']); //หาราคากระดาษ จำนวนกระดาษแผ่นใหญ่ * ราคากระดาษจากฐานข้อมูล
     }
 
     //หาค่าพิมพ์งานตามจำนวนรอบ
@@ -889,23 +933,62 @@ class CalculateOffset extends Component {
     public function findPrintingPriceTotal() {
         $print_prices = TblPrintPrice::find()->all(); //ราคาค่าพิมพ์(ค่าวิ่งงาน)
         $paper = $this->paper; // กระดาษที่หาได้
-        $place_cut = $paper['place']['place_cut'];
-        foreach ($print_prices as $key => $print_price) {
-            if ($this->print_sheet_total <= $print_price['print_sheet_qty'] && $place_cut == $print_price['print_paper_cut']) {
-                $this->printing_price = $print_price['price'];
-                break;
-            } else if ($this->print_sheet_total > 10000) {
-                if ($place_cut == 2) {
-                    $this->printing_price = ($this->print_sheet_total / 1000) * 850;
-                } elseif ($place_cut == 3) {
-                    $this->printing_price = ($this->print_sheet_total / 1000) * 660;
-                } elseif ($place_cut == 4) {
-                    $this->printing_price = ($this->print_sheet_total / 1000) * 470;
+
+        if ($paper) {
+            $place_cut = $paper['place']['place_cut'];
+            foreach ($print_prices as $key => $print_price) {
+                if ($this->print_sheet_total <= $print_price['print_sheet_qty'] && $place_cut == $print_price['print_paper_cut']) {
+                    $this->printing_price = $print_price['price'];
+                    break;
+                } else if ($this->print_sheet_total > 10000) {
+                    if ($place_cut == 2) {
+                        $this->printing_price = ($this->print_sheet_total / 1000) * 850;
+                    } elseif ($place_cut == 3) {
+                        $this->printing_price = ($this->print_sheet_total / 1000) * 660;
+                    } elseif ($place_cut == 4) {
+                        $this->printing_price = ($this->print_sheet_total / 1000) * 470;
+                    }
                 }
             }
+            if (count($this->job_per_sheets_mod) == 0 && $this->printTwoPage) { //วางงานเลขคู่ไม่ได้ และเป็นพิมพ์ 2 หน้า 
+                $this->printing_price = ($this->printing_price * 2);
+            }
         }
-        if (count($this->job_per_sheets_mod) == 0 && $this->printTwoPage) { //วางงานเลขคู่ไม่ได้ และเป็นพิมพ์ 2 หน้า 
-            $this->printing_price = ($this->printing_price * 2);
+    }
+
+    ######################## ราคาเชือกร้อยถุง ########################
+
+    public $rope_price = 0; // ราคาเชือกร้อยถุง
+
+    public function findRopePrice() {
+        if ($this->isBag && $this->model['rope'] == 1 && $this->paper) { //มีเชือกร้อยถุง
+            $this->rope_price = $this->model['cust_quantity'] * 4;  //จำนวนที่ลูกค้าต้องการ + 4(ค่าร้อยเชือก)
+        }
+    }
+
+    ######################## ราคาประกอบถุงกระดาษ ########################
+
+    public $glue_bag_price = 0;
+
+    public function findGlueBagPrice() { //ราคาประกอบถุงกระดาษ
+        if ($this->isBag && $this->paper) {
+            $rows = (new \yii\db\Query())
+                    ->select(['tbl_glue.*'])
+                    ->from('tbl_glue')
+                    ->all();
+
+            $width = CalculetFnc::convertCmToIn($this->paperWidth);
+            $lenght = CalculetFnc::convertCmToIn($this->paperLenght);
+            $size = $width * $lenght;
+            $glue_bag_price = 0;
+            foreach ($rows as $row) {
+                $glueSize = $row['glue_size_width'] * $row['glue_size_lenght']; //ขนาดจากฐานข้อมูล กว้าง * ยาว
+                if ($size <= $glueSize) {
+                    $glue_bag_price = $row['glue_price'];
+                    break;
+                }
+            }
+            $this->glue_bag_price = $glue_bag_price > 0 ? $this->model['cust_quantity'] * $glue_bag_price : 0;
         }
     }
 
@@ -917,35 +1000,38 @@ class CalculateOffset extends Component {
 
     public function summaryPrice() { //คำนวนราคาทั้งหมด 
         $paper = $this->paper; // กระดาษที่หาได้
-        $this->final_price_offset = $paper['place']['place_price'] + //ราคาเพลท
-                $this->final_paper_price + //ราคากระดาษ
-                $this->printing_price + //ราคาวิ่งงาน
-                $this->laminate_price + //ราคาเคลือบ
-                $this->dicut_price + //ราคาไดคัท
-                $this->fold_price + //ราคาพับ
-                $this->emboss_price + //ราคาปั๊มนูน
-                $this->glue_price + //ราคาปะกาว
-                $this->foil_price + //ราคาฟอยล์
-                $paper['cutting_price']//ราคาค่าตัด
-                ;
+        if ($paper) {
+            $this->final_price_offset = $paper['place']['place_price'] + //ราคาเพลท
+                    $this->final_paper_price + //ราคากระดาษ
+                    $this->printing_price + //ราคาวิ่งงาน
+                    $this->laminate_price + //ราคาเคลือบ
+                    $this->dicut_price + //ราคาไดคัท
+                    $this->fold_price + //ราคาพับ
+                    $this->emboss_price + //ราคาปั๊มนูน
+                    $this->glue_price + //ราคาปะกาว
+                    $this->foil_price + //ราคาฟอยล์
+                    $paper['cutting_price'] + //ราคาค่าตัด 
+                    $this->rope_price + //ราคามีเชือกร้อยถุง
+                    $this->glue_bag_price; //ราคาค่าประกอบถุง
 
 
 
-        $final_price_offset_percent = ($this->final_price_offset / 100 ) * 20;  //ค่าบริการจัดการ 20%
-        $this->final_price_offset = $this->final_price_offset + $final_price_offset_percent;
+            $final_price_offset_percent = ($this->final_price_offset / 100 ) * 20;  //ค่าบริการจัดการ 20%
+            $this->final_price_offset = $this->final_price_offset + $final_price_offset_percent;
 
-        //ราคาต่อชิ้น offset
-        $price_per_item_offset = $this->final_price_offset / $this->model['cust_quantity'];
-        $price_per_item_offset_decimal = (int) substr(number_format($price_per_item_offset, 2), -2);
-        if ($price_per_item_offset_decimal < 90 && $price_per_item_offset_decimal > 0) {
-            $price_per_item_offset_decimal = (ceil($price_per_item_offset_decimal / 10)) * 10;
-            $price_per_item_offset = (int) $price_per_item_offset . '.' . $price_per_item_offset_decimal;
-        } else {
-            $price_per_item_offset = ceil($price_per_item_offset);
+            //ราคาต่อชิ้น offset
+            $price_per_item_offset = $this->final_price_offset / $this->model['cust_quantity'];
+            $price_per_item_offset_decimal = (int) substr(number_format($price_per_item_offset, 2), -2);
+            if ($price_per_item_offset_decimal < 90 && $price_per_item_offset_decimal > 0) {
+                $price_per_item_offset_decimal = (ceil($price_per_item_offset_decimal / 10)) * 10;
+                $price_per_item_offset = (int) $price_per_item_offset . '.' . $price_per_item_offset_decimal;
+            } else {
+                $price_per_item_offset = ceil($price_per_item_offset);
+            }
+            $this->price_per_item_offset = $price_per_item_offset;
+            $this->final_price = ($price_per_item_offset * $this->model['cust_quantity']);
+            //คำนวนราคาทั้งหมด (ค่าเพลท + ราคาเคลือบ + ราคาฟอยล์ + ราคาปั๊มนูน + ราคาไดคัท + ราคาปะกาว + ราคาพับ + ราคากระดาษ )
         }
-        $this->price_per_item_offset = $price_per_item_offset;
-        $this->final_price = ($price_per_item_offset * $this->model['cust_quantity']);
-        //คำนวนราคาทั้งหมด (ค่าเพลท + ราคาเคลือบ + ราคาฟอยล์ + ราคาปั๊มนูน + ราคาไดคัท + ราคาปะกาว + ราคาพับ + ราคากระดาษ )
     }
 
     public function getAttributeValue() {
@@ -1028,6 +1114,8 @@ class CalculateOffset extends Component {
             'รวมราคา [final_price]' => $this->final_price,
             'final_price_offset' => $this->final_price,
             'price_per_item_offset' => $this->price_per_item_offset,
+            'ราคามีเชือกร้อยหู' => $this->rope_price,
+            'ราคาค่าประกอบถุง' => $this->glue_bag_price
         ];
     }
 

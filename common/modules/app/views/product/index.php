@@ -31,7 +31,7 @@ Select2Asset::register($this);
 ThemeBootstrapAsset::register($this);
 ?>
     <div id="app">
-        <section class="whiteSection full-width clearfix productsSection">
+        <section class="whiteSection full-width clearfix productsSection hidden">
             <div class="container">
                 <!-- Section Title -->
                 <div class="sectionTitle text-center">
@@ -996,8 +996,15 @@ ThemeBootstrapAsset::register($this);
                                         <!-- ปะกาว -->
                                         <li v-show="isvisibleInput('glue')">
                                             <span>ปะกาว:</span>
-                                            <span class="op_embossing float-right" id="op_embossing">
+                                            <span class="op_glue float-right" id="op_glue">
                                             {{ glueDetail }}
+                                        </span>
+                                        </li>
+                                        <!-- ปะกาว -->
+                                        <li v-show="isvisibleInput('rope')">
+                                            <span>ร้อยเชือกหูถุง:</span>
+                                            <span class="op_rope float-right" id="op_rope">
+                                            {{ ropeDetail }}
                                         </span>
                                         </li>
                                     </ul>

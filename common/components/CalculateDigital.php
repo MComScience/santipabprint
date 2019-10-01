@@ -58,6 +58,8 @@ class CalculateDigital extends Component {
             $this->findDicutPrice();
             $this->findGluePrice();
             $this->findPrintingColorPrice();
+            $this->findRopePrice();
+            $this->findGlueBagPrice();
             // $this->findPrintingPrice();
             $this->findPaperBigsheet();
             $this->summaryPrice();
@@ -91,44 +93,72 @@ class CalculateDigital extends Component {
         }
     }
 
+    public $product = null;
+    public $is_bag = false;
+    public $paperWidthIN;
+    public $paperLenghtIN;
+
     public function checkPaperSize() {
         $messages = $this->messages;
         $messages .= '===== หาขนาดกระดาษที่จะนำไปคำนวณ =====';
         $product = TblProduct::findOne($this->model['product_id']);
+        $this->product = $product;
         if ($this->model['paper_size_id'] == 'custom') { // กำหนดเอง
             $messages .= '-:เป็นขนาดกำหนดเอง\n';
             //สินค้าเป็นประเภทกล่อง อยู่ในกลุ่มสินค้าบรรจุภัณฑ์
             $is_box = false;
-            if ($product['package_type_id'] == 21 && $product['product_category_id'] == 'PC-00011') {
+            if (ArrayHelper::isIn($product['package_type_id'], [54, 58]) && ArrayHelper::isIn($product['product_category_id'], [17, 18])) {
                 $is_box = true;
+            }
+            $is_bag = false; //ถุงกระดาษ
+            if ($product['package_type_id'] == 36 && $product['product_category_id'] == 6) {
+                $is_bag = true;
+                $this->is_bag = true;
             }
             //ขนาดสินค้า รับค่าจากหน้าจอ มีหน่วยเป็นนิ้ว
             if ($this->model['paper_size_unit'] == 3) {
-                $messages .= "-:รับขนาดมาเป็นนิ้ว {$this->model['paper_size_width']} x {$this->model['paper_size_lenght']} นิ้ว\n";
 
-                if ($is_box) {
+                $messages .= "-:รับขนาดมาเป็นนิ้ว {$this->model['paper_size_width']} x {$this->model['paper_size_lenght']}x {$this->model['paper_size_height']} นิ้ว\n";
+
+                if ($is_box) { //กล่อง
                     $paperWidth = CalculetFnc::convertInToCm($this->model['paper_size_width']); //กว้าง
                     $paperLenght = CalculetFnc::convertInToCm($this->model['paper_size_lenght']); // ยาว
                     $paperHight = CalculetFnc::convertInToCm($this->model['paper_size_height']); // สูง
 
                     $this->paperWidth = (($paperWidth * 2) + ($paperLenght * 2)) + 0.635; //ความกว้าง = (กว้าง * 2 (2ด้าน))+(ความยาว * 2 (2ด้าน)) + 0.635 เผื่ดติดกาว(แปลงจาก0.25นิ้ว)
                     $this->paperLenght = $paperHight + ($paperWidth * 2) + 1.27; //ความยาว = ความสูง + (ความกว้าง*2) + 1.27 ส่วนพับ(แปลงจาก 0.5 นิ้ว)
+                } else if ($is_bag) { //ถุง
+                    $paperWidth = CalculetFnc::convertInToCm($this->model['paper_size_width']); //กว้าง
+                    $paperLenght = CalculetFnc::convertInToCm($this->model['paper_size_lenght']); // ยาว
+                    $paperHight = CalculetFnc::convertInToCm($this->model['paper_size_height']); // สูง
+
+                    $this->paperWidth = (($paperWidth * 2) + ($paperLenght * 2)) + 1.27; //ความกว้าง = (กว้าง * 2 (2ด้าน))+(ความยาว * 2 (2ด้าน)) +  เผื่ดติดกาว(แปลงจาก 0.5 นิ้ว)
+                    $this->paperLenght = $paperHight + $paperWidth + 3.81; //ความยาว = ความสูง + ความกว้าง + ส่วนพับ(แปลงจาก 1.5 นิ้ว)
                 } else {
                     $this->paperWidth = CalculetFnc::convertInToCm($this->model['paper_size_width']);
                     $this->paperLenght = CalculetFnc::convertInToCm($this->model['paper_size_lenght']);
                 }
+                $this->paperWidthIN = CalculetFnc::convertCmToIn($this->paperWidth);
+                $this->paperLenghtIN = CalculetFnc::convertCmToIn($this->paperLenght);
                 //
                 $messages .= "-:แปลงขนาดจากนิ้วเป็นเซนติเมตร ได้ขนาด {$this->paperWidth} x {$this->paperLenght}";
             } else {
                 $messages .= "-:รับขนาดมา {$this->model['paper_size_width']} x {$this->model['paper_size_lenght']} เซนติเมตร\n";
 
-                if ($is_box) {
+                if ($is_box) {//กล่อง
                     $paperWidth = $this->model['paper_size_width']; //กว้าง
                     $paperLenght = $this->model['paper_size_lenght']; // ยาว
                     $paperHight = $this->model['paper_size_height']; // สูง
 
-                    $this->paperWidth = (($paperWidth * 2) + ($paperLenght * 2)) + 0.635;
+                    $this->paperWidth = (($paperWidth * 2) + ($paperLen2ght * 2)) + 0.635;
                     $this->paperLenght = $paperHight + ($paperWidth * 2) + 1.27;
+                } else if ($is_bag) { //ถุงกระดาษ
+                    $paperWidth = $this->model['paper_size_width']; //กว้าง
+                    $paperLenght = $this->model['paper_size_lenght']; // ยาว
+                    $paperHight = $this->model['paper_size_height']; // สูง
+
+                    $this->paperWidth = (($paperWidth * 2) + ($paperLenght * 2)) + 1.27;
+                    $this->paperLenght = $paperHight + $paperWidth + 3.81;
                 } else {
                     $this->paperWidth = $this->model['paper_size_width'];
                     $this->paperLenght = $this->model['paper_size_lenght'];
@@ -141,6 +171,8 @@ class CalculateDigital extends Component {
             $sizes = CalculetFnc::calculateWidthLength($this->model['fold_id'], $this->model['paper_size_unit'], $this->paperWidth, $this->paperLenght);
             $this->paperWidth = $sizes['width'];
             $this->paperLenght = $sizes['length'];
+            $this->paperWidthIN = CalculetFnc::convertCmToIn($this->paperWidth);
+            $this->paperLenghtIN = CalculetFnc::convertCmToIn($this->paperLenght);
             //
             $messages .= "-:เช็คเงื่อนไข แปลงค่าหน่วยกระดาษที่รับค่าจากหน้าจอได้ขนาด {$this->paperWidth} x {$this->paperLenght}\n";
         } else {
@@ -234,7 +266,7 @@ class CalculateDigital extends Component {
 
                 //เช็คว่าถ้าไม่มีไดคัทให้เพิ่มค่าตัด
                 $cutting_price = 0;
-                if ($this->model['diecut'] == 'N') {
+                if ($this->model['diecut'] == 'N' || empty($this->model['diecut'])) {
                     $cutting_price = (($vertical_lay_total + 1) + ($horizon_lay_total + 1)) * 10;
                 }
 
@@ -263,64 +295,73 @@ class CalculateDigital extends Component {
             }
             if ($cal_job_per_sheets) {
                 $this->job_per_sheets[] = $cal_job_per_sheets;
-                ArrayHelper::multisort($cal_job_per_sheets, ['job_per_sheet', 'job_per_sheet'], [SORT_ASC, SORT_ASC]);
-                $cal_per_sheets = ArrayHelper::getColumn($cal_job_per_sheets, 'job_per_sheet');
 
-                // หาจำนวนชิ้นงานที่มีค่ามากสุด
-                $max_per_sheet = max($cal_per_sheets);
-
-                //หาค่าที่ซ้ำกัน
-                $duplicates = [];
-                foreach (array_count_values($cal_per_sheets) as $val => $per_sheet) {
-                    if ($per_sheet > 1) {
-                        $duplicates[] = $val;
+                $new_cal_job_per_sheets = [];
+                foreach ($cal_job_per_sheets as $item) {
+                    if ($item['job_per_sheet'] > 0) {
+                        $new_cal_job_per_sheets[] = $item;
                     }
                 }
+                if ($new_cal_job_per_sheets) {
+                    ArrayHelper::multisort($new_cal_job_per_sheets, ['job_per_sheet', 'job_per_sheet'], [SORT_ASC, SORT_ASC]);
+                    $cal_per_sheets = ArrayHelper::getColumn($new_cal_job_per_sheets, 'job_per_sheet');
 
-                //ตรวจสอบหาชิ้นงานที่มีค่ามากสุด ในกลุ่มชิ้นงาน
-                if (count($duplicates) > 0 && in_array($max_per_sheet, $duplicates)) {
-                    $papers = [];
-                    foreach ($cal_job_per_sheets as $key => $job_per_sheet) {
-                        if ($job_per_sheet['job_per_sheet'] == $max_per_sheet) {
-                            $papers[] = $job_per_sheet;
+                    // หาจำนวนชิ้นงานที่มีค่ามากสุด
+                    $max_per_sheet = max($cal_per_sheets);
+
+                    //หาค่าที่ซ้ำกัน
+                    $duplicates = [];
+                    foreach (array_count_values($cal_per_sheets) as $val => $per_sheet) {
+                        if ($per_sheet > 1) {
+                            $duplicates[] = $val;
                         }
                     }
 
-                    //หา size กระดาษ
-                    $paper_sizes = ArrayHelper::getColumn($papers, 'size');
-                    // หาค่ากระดาษ size เล็กสุด
-                    $min_size = min($paper_sizes);
-                    // หากระดาษที่ต้องการนำไปคำนวน ตามขนาดกระดาษ size เล็กสุด
-                    $paper = null;
-                    foreach ($papers as $key => $paper) {
-                        if ($paper['size'] == $min_size) {
-                            $paper = $paper;
-                            break;
-                        }
-                    }
-                    if ($paper) {
-                        $paper['price'] = 0;
-                        if ($model['cust_quantity'] != 0 && $paper['job_per_sheet'] != 0 && $paper['paper_cut'] != 0) {
-                            $paper['price'] = (($model['cust_quantity'] / $paper['job_per_sheet']) / $paper['paper_cut'] ) * $paperDetail['paper_price'];
-                        }
-                        $cal_paper_sizes[] = $paper;
-                    }
-                } else {
-                    // หาค่าสูงสุด
-                    $paper = null;
-                    foreach ($cal_job_per_sheets as $key => $job_per_sheet) {
-                        if ($job_per_sheet['job_per_sheet'] == $max_per_sheet) {
-                            $paper = $job_per_sheet;
-                            break;
-                        }
-                    }
-                    if ($paper) {
-                        $paper['price'] = 0;
-                        if ($model['cust_quantity'] != 0 && $paper['job_per_sheet'] != 0 && $paper['paper_cut'] != 0) {
-                            $paper['price'] = (($model['cust_quantity'] / $paper['job_per_sheet']) / $paper['paper_cut']) * $paperDetail['paper_price'];
+                    //ตรวจสอบหาชิ้นงานที่มีค่ามากสุด ในกลุ่มชิ้นงาน
+                    if (count($duplicates) > 0 && in_array($max_per_sheet, $duplicates)) {
+                        $papers = [];
+                        foreach ($new_cal_job_per_sheets as $key => $job_per_sheet) {
+                            if ($job_per_sheet['job_per_sheet'] == $max_per_sheet) {
+                                $papers[] = $job_per_sheet;
+                            }
                         }
 
-                        $cal_paper_sizes[] = $paper;
+                        //หา size กระดาษ
+                        $paper_sizes = ArrayHelper::getColumn($papers, 'size');
+                        // หาค่ากระดาษ size เล็กสุด
+                        $min_size = min($paper_sizes);
+                        // หากระดาษที่ต้องการนำไปคำนวน ตามขนาดกระดาษ size เล็กสุด
+                        $paper = null;
+                        foreach ($papers as $key => $paper) {
+                            if ($paper['size'] == $min_size) {
+                                $paper = $paper;
+                                break;
+                            }
+                        }
+                        if ($paper) {
+                            $paper['price'] = 0;
+                            if ($model['cust_quantity'] != 0 && $paper['job_per_sheet'] != 0 && $paper['paper_cut'] != 0) {
+                                $paper['price'] = (($model['cust_quantity'] / $paper['job_per_sheet']) / $paper['paper_cut'] ) * $paperDetail['paper_price'];
+                            }
+                            $cal_paper_sizes[] = $paper;
+                        }
+                    } else {
+                        // หาค่าสูงสุด
+                        $paper = null;
+                        foreach ($new_cal_job_per_sheets as $key => $job_per_sheet) {
+                            if ($job_per_sheet['job_per_sheet'] == $max_per_sheet) {
+                                $paper = $job_per_sheet;
+                                break;
+                            }
+                        }
+                        if ($paper) {
+                            $paper['price'] = 0;
+                            if ($model['cust_quantity'] != 0 && $paper['job_per_sheet'] != 0 && $paper['paper_cut'] != 0) {
+                                $paper['price'] = (($model['cust_quantity'] / $paper['job_per_sheet']) / $paper['paper_cut']) * $paperDetail['paper_price'];
+                            }
+
+                            $cal_paper_sizes[] = $paper;
+                        }
                     }
                 }
             }
@@ -354,7 +395,7 @@ class CalculateDigital extends Component {
         }
 
         if ($this->job_per_sheet != 0 && $model['cust_quantity'] != 0) {
-            $this->print_sheet_total = round($model['cust_quantity'] / $this->job_per_sheet); //คำนวณหาจำนวนแผ่นพิมพ์
+            $this->print_sheet_total = $this->job_per_sheet > 0 ? round($model['cust_quantity'] / $this->job_per_sheet) : 0; //คำนวณหาจำนวนแผ่นพิมพ์
         }
         $this->cal_print_sheet_total = $this->print_sheet_total;
 
@@ -367,7 +408,7 @@ class CalculateDigital extends Component {
 
     public function findCoating() {
 
-        if (!empty($this->model['coating_id']) && $this->model['coating_id'] != 'N') { //ถ้ามีเคลือบ
+        if (!empty($this->model['coating_id']) && $this->model['coating_id'] != 'N' && $this->paper) { //ถ้ามีเคลือบ
             $coating_prices = TblCoatingPrice::find()->orderBy('coating_sq_in asc')->all(); //ราคาเคลือบ
             $this->print_sheet_total = $this->print_sheet_total + 2; //จำนวนแผ่นพิมพ์ + เผื่อกระดาษ
             $sq = $this->paper['size'];
@@ -392,7 +433,7 @@ class CalculateDigital extends Component {
     public $sqFoilSize = 0; //ตารางนิ้วที่ต้องการปั๊ม
 
     public function findFoilPrice() {
-        if ($this->model['foil_status'] == 'Y') {
+        if ($this->model['foil_status'] == 'Y' && $this->paper) {
 
             $this->print_sheet_total = $this->print_sheet_total + 5; //บวกเผื่อกระดาษ
             $sqFoilSize = 0;
@@ -433,7 +474,7 @@ class CalculateDigital extends Component {
     public $block_emboss_price = 0; //ค่าบล๊อกปั๊มนูน
 
     public function findEmbossPrice() {
-        if ($this->model['emboss_status'] == 'Y') {
+        if ($this->model['emboss_status'] == 'Y' && $this->paper) {
             $sqeEbossSize = 0;
             $this->print_sheet_total = $this->print_sheet_total + 5; // เผื่อกระดาษ
             $emboss_size_width = CalculetFnc::convertCmToIn($this->model['emboss_size_width']);
@@ -461,7 +502,7 @@ class CalculateDigital extends Component {
 
     public function findFlod() {
         $details = $this->flod_detail;
-        if (!empty($this->model['fold_id']) && $this->model['fold_id'] !== 'N') {
+        if (!empty($this->model['fold_id']) && $this->model['fold_id'] !== 'N' && $this->paper) {
             if ($this->paper_type['paper_gram'] >= 200) {
                 if ($this->cal_print_sheet_total <= 50) {
                     $this->fold_price = $this->cal_print_sheet_total * 20; //จำนวนที่คำนวนได้ * 20
@@ -516,7 +557,7 @@ class CalculateDigital extends Component {
     public $block_dicut_price = 0; //ราคาบล๊อกไดคัท
 
     public function findDicutPrice() {
-        if (!empty($this->model['diecut']) && $this->model['diecut'] != 'N') {
+        if (!empty($this->model['diecut']) && $this->model['diecut'] != 'N' && $this->paper) {
             if ($this->model['diecut'] == 'Curve') { // ไดคัทมุมม
                 $diecut_curve = (new \yii\db\Query())
                         ->select(['tbl_diecut.*', 'tbl_diecut_group.*'])
@@ -557,11 +598,43 @@ class CalculateDigital extends Component {
     public $glue_price = 0;
 
     public function findGluePrice() {
-        if ($this->model['glue'] == 1) {
+        if ($this->model['glue'] == 1 && $this->paper) {
             $this->glue_price = $this->cal_print_sheet_total * 0.3; //จำนวนกระดาษทที่ยังไม่เผื่อกระดาษ * 0.3
             if ($this->glue_price < 300) { //ราคาขั้นต่ำปะกาว
                 $this->glue_price = 300;
             }
+        }
+    }
+
+    public $rope_price = 0; // ราคาเชือกร้อยถุง
+
+    public function findRopePrice() {
+        if ($this->is_bag && $this->model['rope'] == 1 && $this->paper) { //มีเชือกร้อยถุง
+            $this->rope_price = $this->model['cust_quantity'] * 4;  //จำนวนที่ลูกค้าต้องการ + 4(ค่าร้อยเชือก)
+        }
+    }
+
+    public $glue_bag_price = 0;
+
+    public function findGlueBagPrice() { //ราคาประกอบถุงกระดาษ
+        if ($this->is_bag && $this->paper) {
+            $rows = (new \yii\db\Query())
+                    ->select(['tbl_glue.*'])
+                    ->from('tbl_glue')
+                    ->all();
+
+            $width = CalculetFnc::convertCmToIn($this->paperWidth);
+            $lenght = CalculetFnc::convertCmToIn($this->paperLenght);
+            $size = $width * $lenght;
+            $glue_bag_price = 0;
+            foreach ($rows as $row) {
+                $glueSize = $row['glue_size_width'] * $row['glue_size_lenght']; //ขนาดจากฐานข้อมูล กว้าง * ยาว
+                if ($size <= $glueSize) {
+                    $glue_bag_price = $row['glue_price'];
+                    break;
+                }
+            }
+            $this->glue_bag_price = $glue_bag_price > 0 ? $this->model['cust_quantity'] * $glue_bag_price : 0;
         }
     }
 
@@ -633,17 +706,20 @@ class CalculateDigital extends Component {
     public function summaryPrice() { //คำนวนราคาทั้งหมด
         $isDicut = !empty($this->model['diecut']) && $this->model['diecut'] != 'N';
         $cutting_price = 0;
-        if (!$isDicut) {
-            $cutting_price = $this->paper['cutting_price'];
+        if ($this->paper) {
+            if (!$isDicut) {
+                $cutting_price = $this->paper['cutting_price'];
+            }
+            $this->final_price_digital = $this->final_paper_price + $this->printing_color_price +
+                    $this->laminate_price + $this->dicut_price +
+                    $this->fold_price + $this->emboss_price + $this->glue_price + $this->foil_price +
+                    $cutting_price + $this->rope_price + $this->glue_bag_price;
+            /* +$this->printing_price */
+
+            $final_price_digital_percent = ($this->final_price_digital / 100) * 20; //ค่าบริการจัดการ 20%
+
+            $this->final_price_digital = $this->final_price_digital + $final_price_digital_percent;
         }
-        $this->final_price_digital = $this->final_paper_price + $this->printing_color_price +
-                $this->laminate_price + $this->dicut_price +
-                $this->fold_price + $this->emboss_price + $this->glue_price + $this->foil_price + $cutting_price;
-        /* +$this->printing_price */
-
-        $final_price_digital_percent = ($this->final_price_digital / 100) * 20; //ค่าบริการจัดการ 20%
-
-        $this->final_price_digital = $this->final_price_digital + $final_price_digital_percent;
     }
 
     public function getModel() {
@@ -689,15 +765,20 @@ class CalculateDigital extends Component {
             'พิมพ์สองหน้า' => $this->print_two_page,
             'ราคาพิมพ์สี' => $this->printing_color_price,
             //      'ราคาค่าพิมพ์งาน(วิ่ง)' => $this->printing_price,
-            'ราคาตัด' => $this->paper['cutting_price'],
+            'ราคาตัด' => $this->paper ? $this->paper['cutting_price'] : 0,
             'ราคากระดาษ' => $this->final_paper_price,
-            'ราคากระดาษแผ่นใหญ่' => $this->paper_bigsheet,
+            'กระดาษแผ่นใหญ่' => $this->paper_bigsheet,
             'ราคารวมทั้งหมดฝั่งดิจิตอล' => $this->final_price_digital,
             'ราคารวมทั้งหมดฝั่งดิจิตอล(ปัดเศษ)' => ceil($this->final_price_digital / 10) * 10,
             'final_price_digital' => $this->final_price_digital,
             'paper' => $this->paper,
             'price_per_item_digital' => $this->final_price_digital / $this->model['cust_quantity'],
-            'coating' => $this->coating
+            'coating' => $this->coating,
+            'ราคามีเชือกร้อยหู' => $this->rope_price,
+            'ราคาค่าประกอบถุง' => $this->glue_bag_price,
+            'ถุงกระดาษ' => $this->is_bag,
+            'paperWidthIN' => $this->paperWidthIN,
+            'paperLenghtIN' => $this->paperLenghtIN
         ];
     }
 
