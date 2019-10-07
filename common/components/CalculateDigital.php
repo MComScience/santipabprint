@@ -150,7 +150,7 @@ class CalculateDigital extends Component {
                     $paperLenght = $this->model['paper_size_lenght']; // ยาว
                     $paperHight = $this->model['paper_size_height']; // สูง
 
-                    $this->paperWidth = (($paperWidth * 2) + ($paperLen2ght * 2)) + 0.635;
+                    $this->paperWidth = (($paperWidth * 2) + ($paperLenght * 2)) + 0.635;
                     $this->paperLenght = $paperHight + ($paperWidth * 2) + 1.27;
                 } else if ($is_bag) { //ถุงกระดาษ
                     $paperWidth = $this->model['paper_size_width']; //กว้าง
