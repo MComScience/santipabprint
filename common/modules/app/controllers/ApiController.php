@@ -105,6 +105,8 @@ class ApiController extends \yii\web\Controller {
         $foilColorOptions = $queryBuilder->getFoilOption();
         // หน่วยปั๊มนูน
         $embossUnitOptions = ArrayHelper::map(TblUnit::find()->where(['unit_id' => [2, 3]])->asArray()->all(), 'unit_id', 'unit_name');
+        
+        $windowBoxUnitOpts = ArrayHelper::map(TblUnit::find()->where(['unit_id' => [2, 3]])->asArray()->all(), 'unit_id', 'unit_name');
         return [
             'formOptions' => $formOptions,
             'formAttributes' => $QuotationDetail->getAttributes(),
@@ -123,6 +125,7 @@ class ApiController extends \yii\web\Controller {
                 'foilUnitOptions' => $foilUnitOptions,
                 'foilColorOptions' => $foilColorOptions,
                 'embossUnitOptions' => $embossUnitOptions,
+                'windowBoxUnitOpts' => $windowBoxUnitOpts,
             ],
         ];
     }
@@ -202,9 +205,9 @@ class ApiController extends \yii\web\Controller {
 //            } else {
 //                $price_per_item_offset = ceil($offsetAttr['price_per_item_offset']);
 //            }
-
-
-
+            if ($product['product_category_id'] == 12) {
+                $unit = 'แผ่น (' . (round($qty / $data['book_binding_qty'])).' เล่ม)';
+            }
             $cust_quantity = $qty;
             if ($final_price_digital > 0 && $offsetAttr['final_price_offset'] > 0) {
                 if ($final_price_digital > $offsetAttr['final_price_offset']) {
