@@ -904,6 +904,25 @@ CSS
                                                 </v-col>
                                             </v-row>
                                             
+                                            <h4 v-show="isvisibleInput('perforated_ripped')" style="font-size: 16px;">
+                                                ปรุฉีก :
+                                            </h4>
+                                            <!-- ปรุฉีก -->
+                                            <v-row v-if="isvisibleInput('perforated_ripped')" >
+                                                <v-col xs="12" sm="6" md="6">
+                                                    <div v-bind:class="['form-group', errors.first('perforated_ripped') ? 'has-error' : 'has-success']">
+                                                        <v-perforated-ripped 
+                                                            :options="perforatedRippedOptions"
+                                                            @change="onChangePerforatedRipped"
+                                                            name="perforated_ripped"
+                                                            v-model="formAttributes.perforated_ripped" /> 
+                                                    </div>
+                                                    <div class="help-block text-danger">
+                                                        {{ errors.first('perforated_ripped') }}
+                                                    </div>
+                                                </v-col>
+                                            </v-row>
+                                            
                                         </form>
                                     </div>
                                 </div>
@@ -1047,8 +1066,23 @@ CSS
                                     <!-- ปะกาว -->
                                     <li v-show="isvisibleInput('glue')">
                                         <span>ปะกาว:</span>
-                                        <span class="op_embossing float-right" id="op_embossing">
+                                        <span class="op_glue float-right" id="op_glue">
                                             {{ glueDetail }}
+                                        </span>
+                                    </li>
+                                    
+                                    <!--ปรุฉีก -->
+                                    <li v-show="isvisibleInput('perforated_ripped')">
+                                        <span>ปรุฉีก:</span>
+                                        <span class="op_perforated_ripped float-right" id="op_perforated_ripped">
+                                            {{ perforatedRippedDetail }}
+                                        </span>
+                                    </li>
+                                    <!--running number-->
+                                    <li v-show="isvisibleInput('running_number')">
+                                        <span>running number:</span>
+                                        <span class="op_running_number float-right" id="op_running_number">
+                                            {{ runningNumberDetail }}
                                         </span>
                                     </li>
                                 </ul>

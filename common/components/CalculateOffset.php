@@ -41,6 +41,12 @@ class CalculateOffset extends Component {
             $this->findFlod();
             $this->findRopePrice();
             $this->findGlueBagPrice();
+            $this->findBookBindingPrice();
+            $this->findRunningNumberPrice();
+            $this->findPerforatedRippedPrice();
+            $this->findWindowBoxPrice();
+            $this->findCorrugatedBoxPrice(); //ปะกบกล่องลูกฟูก
+            $this->findGluingBoxPrice();
             $this->findPaperBigsheet();
             $this->findPrintingPriceTotal();
             $this->summaryPrice();
@@ -71,6 +77,10 @@ class CalculateOffset extends Component {
         }
         if ($model['coating_id'] != 'N' && !empty($model['coating_id'])) {
             $this->modelCoating = $this->findModelCoating($model['coating_id']);
+        }
+
+        if (ArrayHelper::isIn($this->modelProduct['package_type_id'], [54, 66]) && ArrayHelper::isIn($this->modelProduct['product_category_id'], [17])) {
+            $this->model['diecut'] = 'Default';
         }
         if ($model['diecut'] != 'N' && $model['diecut'] != 'Default' && !empty($model['diecut_id'])) {
             $this->modelDiCut = $this->findModelDiecut($model['diecut_id']);
@@ -260,20 +270,22 @@ class CalculateOffset extends Component {
         }
     }
 
-    ######################## สินค้าบรรจุภัณฑ์ ########################
+    ######################## ตรวจสอบประเภทสินค้า ########################
 
     public $isBox = false; //กล่องกระดาษ
     public $isBag = false; // ถุงกระดาษ
+    public $isvoucher = false;  //บัตรกำนัล/คูปอง/Voucher
 
     public function checkProductOptions() {
         $model = $this->model;
         $product = $this->modelProduct;
-        // 
 
-        if (ArrayHelper::isIn($product['package_type_id'], [54, 58]) && ArrayHelper::isIn($product['product_category_id'], [17, 18])) {
-            $this->isBox = true; // ใช้ กล่อง
+        if (ArrayHelper::isIn($product['package_type_id'], [54, 66]) && ArrayHelper::isIn($product['product_category_id'], [17])) {
+            $this->isBox = true; //กล่องบรรจุภัณฑ์
         } else if ($product['package_type_id'] == 36 && $product['product_category_id'] == 6) {
-            $this->isBag = true; // ใช้ ถุง
+            $this->isBag = true; // ถุงกระดาษ
+        } else if ($product['package_type_id'] == 44 && $product['product_category_id'] == 12) {
+            $this->isvoucher = true; //บัตรกำนัล/คูปอง/Voucher
         }
     }
 
@@ -570,7 +582,7 @@ class CalculateOffset extends Component {
     }
 
     private function findMinPriceStart($cal_per_sheets) {
-        // หา้ค่าพิมพ์งานขั้นต้น min
+        // หาค่าพิมพ์งานขั้นต้น min
         $min_price_start = min($cal_per_sheets);
         return $min_price_start;
     }
@@ -787,7 +799,8 @@ class CalculateOffset extends Component {
             $sqeEbossSize = 0; // ขนาด ตรน
             $emboss_size_width = $model['emboss_size_width'];
             $emboss_size_height = $model['emboss_size_height'];
-            if ($model['emboss_size_unit'] == 2) { // หน่วยเป็นเซน
+
+            if ($model['emboss_size_unit'] == 2) { // หน่วยเป็นเซนติเมตร
                 $emboss_size_width = CalculetFnc::convertCmToIn($model['emboss_size_width']);
                 $emboss_size_height = CalculetFnc::convertCmToIn($model['emboss_size_height']);
             }
@@ -912,6 +925,182 @@ class CalculateOffset extends Component {
         }
     }
 
+    ######################## ราคาเชือกร้อยถุง ########################
+
+    public $rope_price = 0; // ราคาเชือกร้อยถุง
+
+    public function findRopePrice() {
+        if ($this->isBag && $this->model['rope'] == 1 && $this->paper) { //มีเชือกร้อยถุง
+            $this->rope_price = $this->model['cust_quantity'] * 4;  //จำนวนที่ลูกค้าต้องการ + 4(ค่าร้อยเชือก)
+        }
+    }
+
+    ######################## ราคาประกอบถุงกระดาษ ########################
+
+    public $glue_bag_price = 0;
+
+    public function findGlueBagPrice() { //ราคาประกอบถุงกระดาษ
+        if ($this->isBag && $this->paper) {
+            $rows = (new \yii\db\Query())
+                    ->select(['tbl_glue.*'])
+                    ->from('tbl_glue')
+                    ->all();
+
+            $width = CalculetFnc::convertCmToIn($this->paperWidth);
+            $lenght = CalculetFnc::convertCmToIn($this->paperLenght);
+            $size = $width * $lenght;
+            $glue_bag_price = 0;
+            foreach ($rows as $row) {
+                $glueSize = $row['glue_size_width'] * $row['glue_size_lenght']; //ขนาดจากฐานข้อมูล กว้าง * ยาว
+                if ($size <= $glueSize) {
+                    $glue_bag_price = $row['glue_price'];
+                    break;
+                }
+            }
+            $this->glue_bag_price = $glue_bag_price > 0 ? $this->model['cust_quantity'] * $glue_bag_price : 0;
+        }
+    }
+
+    ######################## เข้าเล่ม ########################
+
+    public $book_binding_price = 0; //ราคาเข้าเล่ม
+
+    public function findBookBindingPrice() {
+        if ($this->isvoucher && $this->model['book_binding_status'] == 1) { //เข้าเล่มบัตรกำนัล/คูปอง/voucher
+            $this->book_binding_price = round($this->model['cust_quantity'] / $this->model['book_binding_qty']) * 2;  //จำนวนที่ลูกค้าต้องการ + 2 (ค่าเข้าเล่ม)
+        }
+    }
+
+    ########################ราคา running number########################
+
+    public $running_number_price = 0; //ราคา running number
+
+    public function findRunningNumberPrice() {
+        $paper = $this->paper;
+        if ($this->model['running_number'] == '1' && !empty($paper)) { //มี runningnumber
+            $this->running_number_price = $paper['start_print_sheet_total'] * 5;   //จำนวนกระดาษทที่ยังไม่เผื่อกระดาษ + 5(ค่า unning number)
+        }
+    }
+
+    ########################คิดราคาปรุฉีก########################
+
+    public $perforated_ripped_price = 0; //ราคาปรุฉีก
+    public $block_perforated_ripped = 300; //ราคา block
+
+    public function findPerforatedRippedPrice() {
+        $paper = $this->paper;
+        if ($this->model['perforated_ripped'] == 1 && !empty($paper)) { //มีปรุฉีก
+            if ($paper['start_print_sheet_total'] <= 50) { // ไม่เกิน 50 แผ่น คิดใบละ 5 บาท 
+                $this->perforated_ripped_price = $paper['start_print_sheet_total'] * 5;
+            } else { // ถ้าเกิน 50 แผ่น ให้คิดค่าบล็อค 300 แล้วคิดค่าปรุอีกใบละ 0.3 บาท 
+                $this->perforated_ripped_price = ($paper['start_print_sheet_total'] * 0.3) + $this->block_perforated_ripped;
+            }
+
+            if ($this->perforated_ripped_price < 300) { //ราคาขั้นต่ำปรุฉีก
+                $this->perforated_ripped_price = 300;
+            }
+        }
+    }
+
+    ########################คิดราคาติดหน้าต่างกล่อง########################
+
+    public $window_box_price = 0; //ราคาติดหน้าต่างกล่อง
+    public $plastic_price = 0; //ราคาพลาสติก
+
+    public function findWindowBoxPrice() {  //ติดหน้าต่างกล่อง
+        $product = $this->modelProduct;
+
+        if ($this->model['window_box'] == 1 && $this->paper) {
+            $sqeWindowSize = 0;
+            $window_box_width = $this->model['window_box_width'];
+            $window_box_lenght = $this->model['window_box_lenght'];
+            $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 10); //บวกเริ่มต้นที่ 20 ใบ และบวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
+
+            if ($this->model['window_box_unit'] == 2) {//เซนติเมตร
+                $window_box_width = CalculetFnc::convertCmToIn($this->model['window_box_width']);
+                $window_box_lenght = CalculetFnc::convertCmToIn($this->model['window_box_lenght']);
+            }
+
+            $sqeWindowSize = $window_box_width * $window_box_lenght; // ตรน ที่ลูกค้ากำหนด
+
+            if ($sqeWindowSize > 0) { //ขนาด 1 ตารางนิ้ว
+                $this->plastic_price = $sqeWindowSize * 0.04; //ค่าพลาสติก ตารางนิ้วละ 0.04 บาท
+            }
+            if ($this->plastic_price < 0.50) { //ถ้าราคาไม่ถึง 50 สตางค์ 
+                $this->plastic_price = $sqeWindowSize * 0.50;
+            }
+            $this->window_box_price = $this->plastic_price + 1;  //ค่าพลาสติก + ค่าติดหน้าต่าง
+
+            if ($this->window_box_price < 1.50) { //ตรวจสอบราคาขั้นต่ำ ค่าพลาสติก + ค่าติดหน้าต่าง (น้อยกว่า 1.50 ให้คิด 1.50)
+                $this->window_box_price = 1.50;
+            }
+            $this->window_box_price = $this->model['cust_quantity'] * $this->window_box_price; //จำนวนที่ลูกค้าต้องการ * ราคาติดหน้าต่าง
+        }
+    }
+
+    ########################คิดราคาประกบกล่องลูกฟูก########################
+
+    public $corrugated_box_price = 0; //ราคาประกบกล่องลูกฟูก
+    public $width_feet; //กว้างฟุต
+    public $lenght_feet; //ยาวฟุต
+    public $corrugated_box_size = 0; //ขนาดกล่องลูกฟูก
+
+    public function findCorrugatedBoxPrice() { //ราคาประกบกล่องลูกฟูก
+        $product = $this->modelProduct;
+        if (ArrayHelper::isIn($product['package_type_id'], [66]) && ArrayHelper::isIn($product['product_category_id'], [17]) && $this->paper) {
+            $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal2($this->print_sheet_total, 20, 5); //บวกเริ่มต้นที่ 20 ใบ และบวกเพิ่ม 5 ใบ ทุก ๆ 100 แผ่นพิมพ์
+            $this->width_feet = CalculetFnc::convertCmToFt($this->paperWidth); //กว้าง
+            $this->lenght_feet = CalculetFnc::convertCmToFt($this->paperLenght); //ยาว
+            $this->corrugated_box_size = $this->width_feet * $this->lenght_feet; //ขนาดกล่องลูกฟูก = กว้าง * ยาว
+
+            if ($this->corrugated_box_size > 0) {
+                if ($this->corrugated_box_size < 2) { //ขั้นต่ำ 2 ตารางฟุต 
+                    $this->corrugated_box_price = 2 * 3; // 2 ตารางฟุต * 3 บาท
+                } else {
+                    $this->corrugated_box_price = ($this->corrugated_box_size * 3); // ขนาดจากหน้าจอ * ราคาตารางฟุตละ 3 บาท 
+                }
+                $this->corrugated_box_price = $this->model['cust_quantity'] * $this->corrugated_box_price; //จำนวนที่ลูกค้าต้องการ * ค่าประกบลูกฟูก
+            }
+
+            if ($this->corrugated_box_price < 1000) { //ราคาขั้นต่ำค่าประกบลูกฟูก
+                $this->corrugated_box_price = 1000;
+            }
+        }
+    }
+
+    ########################คิดราคาปะกาวกล่อง########################
+
+    public $gluing_box_price = 0;
+
+    public function findGluingBoxPrice() { //ปะกาวกล่อง
+        $product = $this->modelProduct;
+        if (ArrayHelper::isIn($product['package_type_id'], [54, 66]) && ArrayHelper::isIn($product['product_category_id'], [17]) && $this->paper) {
+            $rows = (new \yii\db\Query())
+                    ->select(['tbl_assemble_box.*'])
+                    ->from('tbl_assemble_box')
+                    ->all();
+
+            $paperHight = $this->model['paper_size_height']; //สูง
+            if ($this->model['paper_size_unit'] == 2) {//เซนติเมตร
+                $paperHight = CalculetFnc::convertCmToIn($this->model['paper_size_height']);
+            }
+
+            $gluing_box_price = 0;
+            foreach ($rows as $row) {
+                $gluingBoxHight = $row['assemble_box_size_height']; //ขนาดจากฐานข้อมูลความสูง
+                if ($paperHight <= $gluingBoxHight) {
+                    $gluing_box_price = $row['assemble_box_price'];
+                    break;
+                }
+            }
+            $this->gluing_box_price = $gluing_box_price > 0 ? $this->model['cust_quantity'] * $gluing_box_price : 0;
+
+            if ($this->gluing_box_price < 300) { //ราคาขั้นต่ำปะกล่อง
+                $this->gluing_box_price = 300;
+            }
+        }
+    }
+
     ######################## กระดาษแผ่นใหญ่ ########################
 
     public $paper_bigsheet = 0;  //กระดาษแผ่นใหญ่
@@ -956,42 +1145,6 @@ class CalculateOffset extends Component {
         }
     }
 
-    ######################## ราคาเชือกร้อยถุง ########################
-
-    public $rope_price = 0; // ราคาเชือกร้อยถุง
-
-    public function findRopePrice() {
-        if ($this->isBag && $this->model['rope'] == 1 && $this->paper) { //มีเชือกร้อยถุง
-            $this->rope_price = $this->model['cust_quantity'] * 4;  //จำนวนที่ลูกค้าต้องการ + 4(ค่าร้อยเชือก)
-        }
-    }
-
-    ######################## ราคาประกอบถุงกระดาษ ########################
-
-    public $glue_bag_price = 0;
-
-    public function findGlueBagPrice() { //ราคาประกอบถุงกระดาษ
-        if ($this->isBag && $this->paper) {
-            $rows = (new \yii\db\Query())
-                    ->select(['tbl_glue.*'])
-                    ->from('tbl_glue')
-                    ->all();
-
-            $width = CalculetFnc::convertCmToIn($this->paperWidth);
-            $lenght = CalculetFnc::convertCmToIn($this->paperLenght);
-            $size = $width * $lenght;
-            $glue_bag_price = 0;
-            foreach ($rows as $row) {
-                $glueSize = $row['glue_size_width'] * $row['glue_size_lenght']; //ขนาดจากฐานข้อมูล กว้าง * ยาว
-                if ($size <= $glueSize) {
-                    $glue_bag_price = $row['glue_price'];
-                    break;
-                }
-            }
-            $this->glue_bag_price = $glue_bag_price > 0 ? $this->model['cust_quantity'] * $glue_bag_price : 0;
-        }
-    }
-
     ######################## เอาราคาทั้งหมดมาบวกกัน ########################
 
     public $final_price_offset = 0;
@@ -1012,7 +1165,14 @@ class CalculateOffset extends Component {
                     $this->foil_price + //ราคาฟอยล์
                     $paper['cutting_price'] + //ราคาค่าตัด 
                     $this->rope_price + //ราคามีเชือกร้อยถุง
-                    $this->glue_bag_price; //ราคาค่าประกอบถุง
+                    $this->glue_bag_price + //ราคาค่าประกอบถุง
+                    $this->book_binding_price + //ราคาเข้าเล่ม
+                    $this->running_number_price + //ราคา running number
+                    $this->perforated_ripped_price + // ราคาปรุฉีก
+                    $this->window_box_price + //ราคาติดหน้าต่างกล่อง
+                    $this->corrugated_box_price + //ราคา ปะกบกล่องลูกฟูก
+                    $this->gluing_box_price // ราคาปะกล่อง
+            ;
 
 
 
@@ -1050,6 +1210,7 @@ class CalculateOffset extends Component {
                 'ใช้ Box [isBox]' => $this->isBox,
                 'ความกว้าง (cm) [paperWidth]' => $this->paperWidth,
                 'ความยาว (cm) [paperLenght]' => $this->paperLenght,
+                'คูปอง[isvoucher]' => $this->isvoucher,
             ],
             '6 เคลือบ' => [
                 'ข้อมูลเคลือบ [modelCoating]' => $this->modelCoating,
@@ -1115,7 +1276,14 @@ class CalculateOffset extends Component {
             'final_price_offset' => $this->final_price,
             'price_per_item_offset' => $this->price_per_item_offset,
             'ราคามีเชือกร้อยหู' => $this->rope_price,
-            'ราคาค่าประกอบถุง' => $this->glue_bag_price
+            'ราคาค่าประกอบถุง' => $this->glue_bag_price,
+            'ราคาเข้าเล่ม' => $this->book_binding_price,
+            'ราคาrunning_number' => $this->running_number_price,
+            'ราคาปรุฉีก' => $this->perforated_ripped_price,
+            'ค่าติดหน้าต่างกล่อง' => $this->window_box_price,
+            'ราคาปะกบกล่องลูกฟูก' => $this->corrugated_box_price,
+            'ราคาปะกาวกล่อง' => $this->gluing_box_price,
+            'model' => $this->model
         ];
     }
 
