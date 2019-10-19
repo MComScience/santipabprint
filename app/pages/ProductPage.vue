@@ -2660,6 +2660,7 @@ export default {
     async handleNextStep() {
       const _this = this;
       // คำนวณราคา
+      _this.priceList = [];
       await _this.fetchDataPriceList();
       _this.step = 2;
       _this.scrollTop();
