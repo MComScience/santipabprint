@@ -65,7 +65,7 @@ class FlexProduct
                 if (mb_strlen($label, 'UTF-8') > 20) {
                     $label = mb_substr($label, 0, 17) . '...';
                 }
-                $actionUrl = 'https://line.me/R/app/1583147071-w3v6DmZZ?catId=' . $item['product_category_id'] . '&productId=' . $item['product_id'];
+                $actionUrl = 'https://line.me/R/app/1629709716-kN7qEX7m?catId=' . $item['product_category_id'] . '&productId=' . $item['product_id'];
                 $image = self::getImageBuilder($item['image_url'], $actionUrl, $label);
                 $text = self::getLabelBuilder($item['product_name'], $label, $actionUrl);
                 if (count($images) < 3) {
@@ -147,7 +147,7 @@ class FlexProduct
                     ->setAction(
                         new UriTemplateActionBuilder(
                             'ดูผลิตภัณฑ์อื่นๆ',
-                            'https://line.me/R/app/1583147071-w3v6DmZZ'
+                            'https://line.me/R/app/1629709716-kN7qEX7m'
                         )
                     )
             ]);
