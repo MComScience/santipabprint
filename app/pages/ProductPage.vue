@@ -1975,6 +1975,7 @@ export default {
         _this.products = await data.items;
         _this.setLoading(false);
         loadingInstance.close();
+        _this.scrollTop();
       } catch (error) {
         _this.setLoading(false);
         loadingInstance.close();
