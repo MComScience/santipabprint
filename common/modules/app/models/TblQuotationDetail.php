@@ -112,7 +112,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'paper_detail_id' => 'ขนาดกระดาษ',
             'coating_id' => 'เคลือบ',
             'coating_option' => 'เคลือบ ด้านเดียว/สองด้าน',
-            'diecut_status' => 'ไม่ไดคัท, ไดคัทมุมมน, ไดคัทตามรูปแบบ',
+            'diecut_status' => 'ไดคัท',
             'diecut' => 'รูปแบบไดคัท',
             'diecut_id' => 'ไดคัทมุมมน',
             'perforate' => 'ตัดเป็นตัว+เจาะมุม,ตัดเป็นตัว',
