@@ -60,7 +60,13 @@ class CalculateDigital extends Component {
             $this->findPrintingColorPrice();
             $this->findRopePrice();
             $this->findGlueBagPrice();
-            // $this->findPrintingPrice();
+            $this->findBookBindingPrice();
+            $this->findRunningNumberPrice();
+            $this->findPerforatedRippedPrice();
+            $this->findWindowBoxPrice();
+            $this->findCorrugatedBoxPrice(); //ปะกบกล่องลูกฟูก
+            $this->findGluingBoxPrice();
+            // $this->findPrintingPrice(); ไม่ต้องคิด คิดเฉพาะoffset
             $this->findPaperBigsheet();
             $this->summaryPrice();
         }
@@ -97,6 +103,7 @@ class CalculateDigital extends Component {
     public $is_bag = false;
     public $paperWidthIN;
     public $paperLenghtIN;
+    public $is_voucher = false;
 
     public function checkPaperSize() {
         $messages = $this->messages;
@@ -107,13 +114,19 @@ class CalculateDigital extends Component {
             $messages .= '-:เป็นขนาดกำหนดเอง\n';
             //สินค้าเป็นประเภทกล่อง อยู่ในกลุ่มสินค้าบรรจุภัณฑ์
             $is_box = false;
-            if (ArrayHelper::isIn($product['package_type_id'], [54, 58]) && ArrayHelper::isIn($product['product_category_id'], [17, 18])) {
+            if (ArrayHelper::isIn($product['package_type_id'], [54, 66]) && ArrayHelper::isIn($product['product_category_id'], [17, 17])) {
                 $is_box = true;
+                $this->model['diecut'] = 'Default';
             }
             $is_bag = false; //ถุงกระดาษ
             if ($product['package_type_id'] == 36 && $product['product_category_id'] == 6) {
                 $is_bag = true;
                 $this->is_bag = true;
+            }
+            $is_voucher = false; //บัตรกำนัล/คูปอง/Voucher
+            if ($product['package_type_id'] == 44 && $product['product_category_id'] == 12) {
+                $is_voucher = true;
+                $this->is_voucher = true;
             }
             //ขนาดสินค้า รับค่าจากหน้าจอ มีหน่วยเป็นนิ้ว
             if ($this->model['paper_size_unit'] == 3) {
@@ -437,14 +450,12 @@ class CalculateDigital extends Component {
 
             $this->print_sheet_total = $this->print_sheet_total + 5; //บวกเผื่อกระดาษ
             $sqFoilSize = 0;
-            if ($this->model['foil_size_unit'] == 3) {
-                $foil_size_width = CalculetFnc::convertInToCm($this->model['foil_size_width']);
-                $foil_size_height = CalculetFnc::convertInToCm($this->model['foil_size_height']);
-            } else {
+            $foil_size_width = $this->model['foil_size_width'];
+            $foil_size_height = $this->model['foil_size_height'];
+            if ($this->model['foil_size_unit'] == 2) {
                 $foil_size_width = CalculetFnc::convertCmToIn($this->model['foil_size_width']);
                 $foil_size_height = CalculetFnc::convertCmToIn($this->model['foil_size_height']);
             }
-
             $sqFoilSize = $foil_size_width * $foil_size_height; // ตรน ที่ลูกค้ากำหนด
             $this->sqFoilSize = $sqFoilSize;
             if ($sqFoilSize >= 30) { //ขนาด 30 ตารางนิ้วขึ้นไป
@@ -477,8 +488,13 @@ class CalculateDigital extends Component {
         if ($this->model['emboss_status'] == 'Y' && $this->paper) {
             $sqeEbossSize = 0;
             $this->print_sheet_total = $this->print_sheet_total + 5; // เผื่อกระดาษ
-            $emboss_size_width = CalculetFnc::convertCmToIn($this->model['emboss_size_width']);
-            $emboss_size_height = CalculetFnc::convertCmToIn($this->model['emboss_size_height']);
+            $emboss_size_width = $this->model['emboss_size_width'];
+            $emboss_size_height = $this->model['emboss_size_height'];
+
+            if ($this->model['paper_size_unit'] == 2) {//เซนติเมตร
+                $emboss_size_width = CalculetFnc::convertCmToIn($this->model['emboss_size_width']);
+                $emboss_size_height = CalculetFnc::convertCmToIn($this->model['emboss_size_height']);
+            }
             $sqeEbossSize = $emboss_size_width * $emboss_size_height; // ตรน ที่ลูกค้ากำหนด
 
             if ($sqeEbossSize >= 30) { //ขนาด 30 ตารางนิ้วขึ้นไป
@@ -557,6 +573,7 @@ class CalculateDigital extends Component {
     public $block_dicut_price = 0; //ราคาบล๊อกไดคัท
 
     public function findDicutPrice() {
+        
         if (!empty($this->model['diecut']) && $this->model['diecut'] != 'N' && $this->paper) {
             if ($this->model['diecut'] == 'Curve') { // ไดคัทมุมม
                 $diecut_curve = (new \yii\db\Query())
@@ -638,6 +655,132 @@ class CalculateDigital extends Component {
         }
     }
 
+    public $book_binding_price = 0; //ราคา
+
+    public function findBookBindingPrice() {
+        if ($this->is_voucher && $this->model['book_binding_status'] == 1) {//เข้าเล่มบัตรกำนัล/คูปอง/voucher
+            $this->book_binding_price = round($this->model['cust_quantity'] / $this->model['book_binding_qty']) * 2;  //จำนวนที่ลูกค้าต้องการ + 2 (ค่าเข้าเล่ม)
+        }
+    }
+
+    public $running_number_price = 0; //ราคา running number
+
+    public function findRunningNumberPrice() {//มี running number
+        if ($this->model['running_number'] == 1 && $this->paper) { //มี runningnumber
+            $this->running_number_price = $this->cal_print_sheet_total * 5;   //จำนวนกระดาษทที่ยังไม่เผื่อกระดาษ + 5(ค่า unning number)
+        }
+    }
+
+    public $perforated_ripped_price = 0; //ราคาปรุฉีก
+    public $block_perforated_ripped = 300; //ราคา block
+
+    public function findPerforatedRippedPrice() { //ปรุฉีก
+        if ($this->model['perforated_ripped'] == 1 && $this->paper) { //มีปรุฉีก
+            if ($this->cal_print_sheet_total <= 50) { // ไม่เกิน 50 แผ่น คิดใบละ 5 บาท 
+                $this->perforated_ripped_price = $this->cal_print_sheet_total * 5;
+            } else { // ถ้าเกิน 50 แผ่น ให้คิดค่าบล็อค 300 แล้วคิดค่าปรุอีกใบละ 0.3 บาท 
+                $this->perforated_ripped_price = ($this->cal_print_sheet_total * 0.3) + $this->block_perforated_ripped;
+            }
+
+            if ($this->perforated_ripped_price < 300) { //ราคาขั้นต่ำปรุฉีก
+                $this->perforated_ripped_price = 300;
+            }
+        }
+    }
+
+    public $window_box_price = 0; //ราคาติดหน้าต่างกล่อง
+    public $plastic_price = 0; //ราคาพลาสติก
+
+    public function findWindowBoxPrice() {  //ติดหน้าต่างกล่อง
+        $product = $this->product;
+
+        if ($this->model['window_box'] == 1 && $this->paper) {
+            $sqeWindowSize = 0;
+            $window_box_width = $this->model['window_box_width'];
+            $window_box_lenght = $this->model['window_box_lenght'];
+            $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal($this->print_sheet_total, 20, 10); //บวกเริ่มต้นที่ 20 ใบ และบวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
+
+            if ($this->model['window_box_unit'] == 2) {//เซนติเมตร
+                $window_box_width = CalculetFnc::convertCmToIn($this->model['window_box_width']);
+                $window_box_lenght = CalculetFnc::convertCmToIn($this->model['window_box_lenght']);
+            }
+
+            $sqeWindowSize = $window_box_width * $window_box_lenght; // ตรน ที่ลูกค้ากำหนด
+
+            if ($sqeWindowSize > 0) { //ขนาด 1 ตารางนิ้ว
+                $this->plastic_price = $sqeWindowSize * 0.04; //ค่าพลาสติก ตารางนิ้วละ 0.04 บาท
+            }
+            if ($this->plastic_price < 0.50) { //ถ้าราคาไม่ถึง 50 สตางค์ 
+                $this->plastic_price = $sqeWindowSize * 0.50;
+            }
+            $this->window_box_price = $this->plastic_price + 1;  //ค่าพลาสติก + ค่าติดหน้าต่าง
+
+            if ($this->window_box_price < 1.50) { //ตรวจสอบราคาขั้นต่ำ ค่าพลาสติก + ค่าติดหน้าต่าง (น้อยกว่า 1.50 ให้คิด 1.50)
+                $this->window_box_price = 1.50;
+            }
+            $this->window_box_price = $this->model['cust_quantity'] * $this->window_box_price; //จำนวนที่ลูกค้าต้องการ * ราคาติดหน้าต่าง
+        }
+    }
+
+    public $corrugated_box_price = 0; //ราคาประกบกล่องลูกฟูก
+    public $width_feet; //กว้างฟุต
+    public $lenght_feet; //ยาวฟุต
+    public $corrugated_box_size = 0; //ขนาดกล่องลูกฟูก
+
+    public function findCorrugatedBoxPrice() { //ราคาประกบกล่องลูกฟูก
+        $product = $this->product;
+        if (ArrayHelper::isIn($product['package_type_id'], [66]) && ArrayHelper::isIn($product['product_category_id'], [17]) && $this->paper) {
+            $this->print_sheet_total = CalculetFnc::calculatePrintSheetTotal2($this->print_sheet_total, 20, 5); //บวกเริ่มต้นที่ 20 ใบ และบวกเพิ่ม 5 ใบ ทุก ๆ 100 แผ่นพิมพ์
+            $this->width_feet = CalculetFnc::convertCmToFt($this->paperWidth); //กว้าง
+            $this->lenght_feet = CalculetFnc::convertCmToFt($this->paperLenght); //ยาว
+            $this->corrugated_box_size = $this->width_feet * $this->lenght_feet; //ขนาดกล่องลูกฟูก = กว้าง * ยาว
+
+            if ($this->corrugated_box_size > 0) {
+                if ($this->corrugated_box_size < 2) { //ขั้นต่ำ 2 ตารางฟุต 
+                    $this->corrugated_box_price = 2 * 3; // 2 ตารางฟุต * 3 บาท
+                } else {
+                    $this->corrugated_box_price = ($this->corrugated_box_size * 3); // ขนาดจากหน้าจอ * ราคาตารางฟุตละ 3 บาท 
+                }
+                $this->corrugated_box_price = $this->model['cust_quantity'] * $this->corrugated_box_price; //จำนวนที่ลูกค้าต้องการ * ค่าประกบลูกฟูก
+            }
+
+            if ($this->corrugated_box_price < 1000) { //ราคาขั้นต่ำค่าประกบลูกฟูก
+                $this->corrugated_box_price = 1000;
+            }
+        }
+    }
+
+    public $gluing_box_price = 0;
+
+    public function findGluingBoxPrice() { //ปะกาวกล่อง
+        $product = $this->product;
+        if (ArrayHelper::isIn($product['package_type_id'], [54, 66]) && ArrayHelper::isIn($product['product_category_id'], [17]) && $this->paper) {
+            $rows = (new \yii\db\Query())
+                    ->select(['tbl_assemble_box.*'])
+                    ->from('tbl_assemble_box')
+                    ->all();
+
+            $paperHight = $this->model['paper_size_height']; //สูง
+            if ($this->model['paper_size_unit'] == 2) {//เซนติเมตร
+                $paperHight = CalculetFnc::convertCmToIn($this->model['paper_size_height']);
+            }
+
+            $gluing_box_price = 0;
+            foreach ($rows as $row) {
+                $gluingBoxHight = $row['assemble_box_size_height']; //ขนาดจากฐานข้อมูลความสูง
+                if ($paperHight <= $gluingBoxHight) {
+                    $gluing_box_price = $row['assemble_box_price'];
+                    break;
+                }
+            }
+            $this->gluing_box_price = $gluing_box_price > 0 ? $this->model['cust_quantity'] * $gluing_box_price : 0;
+
+            if ($this->gluing_box_price < 300) { //ราคาขั้นต่ำปะกล่อง
+                $this->gluing_box_price = 300;
+            }
+        }
+    }
+
     //คำนวณค่าพิมพ์  ตรวจสอบจากหน้าจอว่าลูกค้าเลือกพิมพ์สองหน้า หรือหน้าเดียว
     public $print_one_page = false; //พิมพ์หน้าเดียว
     public $print_two_page = false; //พิมพ์สองหน้า
@@ -713,7 +856,9 @@ class CalculateDigital extends Component {
             $this->final_price_digital = $this->final_paper_price + $this->printing_color_price +
                     $this->laminate_price + $this->dicut_price +
                     $this->fold_price + $this->emboss_price + $this->glue_price + $this->foil_price +
-                    $cutting_price + $this->rope_price + $this->glue_bag_price;
+                    $cutting_price + $this->rope_price + $this->glue_bag_price + $this->book_binding_price +
+                    $this->running_number_price + $this->perforated_ripped_price + $this->window_box_price +
+                    $this->corrugated_box_price + $this->gluing_box_price;
             /* +$this->printing_price */
 
             $final_price_digital_percent = ($this->final_price_digital / 100) * 20; //ค่าบริการจัดการ 20%
@@ -778,7 +923,13 @@ class CalculateDigital extends Component {
             'ราคาค่าประกอบถุง' => $this->glue_bag_price,
             'ถุงกระดาษ' => $this->is_bag,
             'paperWidthIN' => $this->paperWidthIN,
-            'paperLenghtIN' => $this->paperLenghtIN
+            'paperLenghtIN' => $this->paperLenghtIN,
+            'ราคาเข้าเล่ม_คูปอง' => $this->book_binding_price,
+            'ราคา running_number' => $this->running_number_price,
+            'ราคาปรุฉีก' => $this->perforated_ripped_price,
+            'ราคาค่าติดหน้าต่างกล่อง' => $this->window_box_price,
+            'ราคาปะกบกล่องลูกฟูก' => $this->corrugated_box_price,
+            'ปะกาวกล่อง' => $this->gluing_box_price
         ];
     }
 

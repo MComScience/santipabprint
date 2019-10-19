@@ -427,6 +427,39 @@ Vue.component("v-rope", {
   `
 });
 
+Vue.component("v-perforated-ripped", {
+  props: ["options", "value"],
+  $_veeValidate: {
+    value() {
+      return this.$el.value;
+    }
+  },
+  data() {
+    return {
+      checked: ""
+    };
+  },
+  mounted: function() {
+    this.checked = this.value;
+  },
+  template: `
+  <div id="tblquotationdetail-perforated-ripped" role="radiogroup" aria-invalid="false">
+    <div v-for="(option, key) in options" :key="key" class="radio inline-block">
+      <label class="radio-inline">
+        <input type="radio" 
+          :id="'tblquotationdetail-perforated-ripped-' + key" 
+          name="TblQuotationDetail[perforated-ripped]" 
+          :value="option.value"
+          v-model="checked"
+          v-on:input="$emit('input', $event.target.value)"
+          v-on:change="$emit('change', $event)">
+        <span class="cr"><i class="cr-icon fa fa-circle"></i></span> {{ option.text }}
+      </label>
+    </div>
+  </div>
+  `
+});
+
 function format(state) {
   if (!state.id) return state.text; // optgroup
   return state.text;
@@ -498,7 +531,8 @@ const vm = new Vue({
       },
       theme: "bootstrap",
       width: "100%",
-      placeholder: "เลือกรายการ...",
+    //  placeholder: "เลือกรายการ...",
+      placeholder: "เลือกเข้าเล่ม",
       language: "th"
     },
     // กระดาษ
@@ -721,7 +755,9 @@ const vm = new Vue({
       product_id: p,
       foil_status:"",
       emboss_status:"",
-      rope:""
+      rope:"",
+      perforated_ripped: "",
+      window_box: ""
       
     },
     landOrientOptions: [
@@ -818,6 +854,26 @@ const vm = new Vue({
        value: "1",
        text: "ร้อยเชือกหูถุง"
      }
+    ],
+    perforatedRippedOptions: [
+      {
+        value: "0",
+        text: "ไม่ปรุฉีก"
+      },
+      {
+        value: "1",
+        text: "ปรุฉีก"
+      }
+    ],
+    windowBoxOptions: [
+      {
+        value: "0",
+        text: "ไม่ติดหน้าต่าง"
+      },
+      {
+        value: "1",
+        text: "ติดหน้าต่าง"
+      }
     ],
     radioChecked: ''
   },
@@ -1070,7 +1126,11 @@ const vm = new Vue({
         })
       }
       return options
-    }
+    },
+    perforatedRippedDetail: function() {
+    const perforated_ripped = this.findDataOption(this.perforatedRippedOptions, "value", "perforated_ripped");
+        return this.getTextValue(perforated_ripped);
+    }   
   },
   mounted() {
     this.fetchDataOptions();
@@ -1445,6 +1505,13 @@ const vm = new Vue({
         }
     },
     onChangeRope: function(e) {
+      console.log(e.target.value);
+    },
+    
+    onChangePerforatedRipped: function(e) {
+      console.log(e.target.value);
+    },
+    onChangewindowBox: function(e) {
       console.log(e.target.value);
     },
     mapDataOptions: function(options) {

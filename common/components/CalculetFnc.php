@@ -22,6 +22,10 @@ class CalculetFnc {
         $result = $size * 0.4; 
         return Yii::$app->formatter->format($result, ['decimal', 2]);
     }
+    public static function convertCmToFt($size) { ////เซนติเมตรเป็นฟุต
+        $result = $size * 0.0328084; 
+        return round($result);
+    }
 
     //เช็คเงื่อนไข แปลงค่าหน่วยกระดาษที่รับค่าจากหน้าจอ
     public static function calculateWidthLength($fold, $paper_size_unit, $width, $length) {
@@ -168,6 +172,17 @@ class CalculetFnc {
         } else {
             //บวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
             $for_paper = ceil(($print_sheet_total / 1000));
+            $print_sheet_total = $print_sheet_total + ($total_2 * $for_paper);
+        }
+        return $print_sheet_total;
+    }
+    
+    public static function calculatePrintSheetTotal2($print_sheet_total, $total_1, $total_2) {
+        if ($print_sheet_total <= 100) {
+            $print_sheet_total = $print_sheet_total + $total_1; // บวกเผื่อกระดาษ (เริ่มต้นที่ 20 ใบ)
+        } else {
+            //บวกเพิ่ม 5 ใบ ทุก ๆ 100 แผ่นพิมพ์
+            $for_paper = ceil(($print_sheet_total / 100));
             $print_sheet_total = $print_sheet_total + ($total_2 * $for_paper);
         }
         return $print_sheet_total;

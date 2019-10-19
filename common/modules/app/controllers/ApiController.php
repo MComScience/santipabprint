@@ -150,6 +150,7 @@ class ApiController extends \yii\web\Controller {
 
         // ฟิลด์ที่ไม่ต้องการให้แสดงรายละเอียด
         $skipAttributes = InPutOptions::skipAttributes();
+
         return [
             'formOptions' => $formOptions,
             'formAttributes' => $QuotationDetail->getAttributes(),
@@ -264,9 +265,9 @@ class ApiController extends \yii\web\Controller {
 //            } else {
 //                $price_per_item_offset = ceil($offsetAttr['price_per_item_offset']);
 //            }
-
-
-
+            if ($product['product_category_id'] == 12) {
+                $unit = 'แผ่น (' . (round($qty / $data['book_binding_qty'])).' เล่ม)';
+            }
             $cust_quantity = $qty;
             if ($final_price_digital > 0 && $offsetAttr['final_price_offset'] > 0) {
                 if ($final_price_digital > $offsetAttr['final_price_offset']) {

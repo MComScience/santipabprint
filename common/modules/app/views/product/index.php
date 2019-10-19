@@ -274,7 +274,6 @@ ThemeBootstrapAsset::register($this);
                                                         </div>
                                                     </v-col>
                                                 </v-row>
-
                                                 <!-- แนวตั้ง/แนวนอน  -->
                                                 <v-row v-if="isvisibleInput('land_orient')">
                                                     <v-col xs="12" sm="6" md="6">
@@ -293,26 +292,53 @@ ThemeBootstrapAsset::register($this);
                                                         </div>
                                                     </v-col>
                                                 </v-row>
-
-
+                                                
                                                 <!-- เข้าเล่ม -->
-                                                <v-row v-if="isvisibleInput('book_binding_id')">
+                                                <v-row v-if="isvisibleInput('book_binding_status')">
                                                     <v-col xs="12" sm="6" md="6">
-                                                        <div v-bind:class="['form-group', errors.first('book_binding_id') ? 'has-error' : 'has-success']">
+                                                        <div class="form-group">
                                                             <label class="control-label">
                                                                 เข้าเล่ม
+                                                            </label>
+                                                            <v-select2
+                                                                    id="book_binding_status"
+                                                                    :options="bookBindingOptions"
+                                                                    v-model="formAttributes.book_binding_status"
+                                                                    name="book_binding_status"
+                                                                    @change="onChangeBookBindingStatus">
+                                                                <option disabled value="">เลือกรายการ...</option>
+                                                            </v-select2>
+                                                        </div>
+                                                    </v-col>
+                                                    <v-col v-if="isvisibleInput('book_binding_id') && isBookBinding" xs="12" sm="6" md="6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                วิธีเข้าเล่ม
                                                             </label>
                                                             <v-select2
                                                                     id="book_binding_id"
                                                                     :options="BookBindingOpts"
                                                                     v-model="formAttributes.book_binding_id"
-                                                                    name="book_binding_id"
-                                                                    @change="onChangeBookBinding">
+                                                                    name="book_binding_id">
                                                                 <option disabled value="">เลือกรายการ...</option>
                                                             </v-select2>
                                                         </div>
+                                                    </v-col>
+                                                    <v-col v-if="isvisibleInput('book_binding_qty') && isBookBinding" xs="12" sm="6" md="6">
+                                                        <div v-bind:class="['form-group', errors.first('book_binding_qty') ? 'has-error' : 'has-success']">
+                                                            <label class="control-label">
+                                                                จำนวนแผ่นต่อเล่ม 
+                                                            </label>
+                                                            <input
+                                                                    id="book_binding_qty"
+                                                                    name="book_binding_qty"
+                                                                    placeholder="ระบุจำนวน"
+                                                                    class="form-control"
+                                                                    v-model="formAttributes.book_binding_qty"
+                                                            />
+                                                        </div>
                                                         <div class="help-block text-danger">
-                                                            {{ errors.first('book_binding_id') }}
+                                                            {{ errors.first('book_binding_qty') }}
                                                         </div>
                                                     </v-col>
                                                 </v-row>
@@ -411,7 +437,6 @@ ThemeBootstrapAsset::register($this);
                                                     </v-col>
                                                 </v-row>
 
-
                                                 <hr v-show="isvisibleInput('coating_id')">
                                                 <h4 v-show="isvisibleInput('coating_id')" style="font-size: 16px;">
                                                     งานเคลือบ :
@@ -450,7 +475,7 @@ ThemeBootstrapAsset::register($this);
                                                     <p></p>
                                                 </v-row>
 
-                                                <hr v-show="isvisibleInput('coating_id')">
+                                                <hr v-show="isvisibleInput('diecut')">
 
                                                 <h4 v-show="isvisibleInput('diecut') && !isvisibleInput('perforate')"
                                                     style="font-size: 16px;">
@@ -525,7 +550,7 @@ ThemeBootstrapAsset::register($this);
                                                         </div>
                                                     </v-col>
                                                 </v-row>
-
+                                           
                                                 <!-- ตัดเป็นตัว/เจาะ -->
                                                 <v-row v-if="isvisibleInput('perforate') && isPerforate">
                                                     <v-col xs="12" sm="6" md="6">
@@ -569,6 +594,7 @@ ThemeBootstrapAsset::register($this);
                                                 </v-row>
                                                 <hr v-show="isvisibleInput('diecut') || isvisibleInput('perforate')">
 
+                                                
                                                 <h4 v-show="isvisibleInput('fold_id')" style="font-size: 16px;">
                                                     วิธีพับ :
                                                 </h4>
@@ -843,6 +869,8 @@ ThemeBootstrapAsset::register($this);
                                                     </v-col>
                                                 </v-row>
                                                 
+                                                <hr v-show="isvisibleInput('glue')">
+                                                
                                                 <h4 v-show="isvisibleInput('rope')" style="font-size: 16px;">
                                                     ร้อยเชือกหูถุง :
                                                 </h4>
@@ -860,8 +888,131 @@ ThemeBootstrapAsset::register($this);
                                                         </div>
                                                     </v-col>
                                                 </v-row>
-
-                                            </form>
+                                             <hr v-show="isvisibleInput('rope')">
+                                             
+                                            <h4 v-show="isvisibleInput('perforated_ripped')" style="font-size: 16px;">
+                                                ปรุฉีก :
+                                            </h4>
+                                            <!-- ปรุฉีก -->
+                                            <v-row v-if="isvisibleInput('perforated_ripped')" >
+                                                <v-col xs="12" sm="6" md="6">
+                                                    <div v-bind:class="['form-group', errors.first('perforated_ripped') ? 'has-error' : 'has-success']">
+                                                        <v-perforated-ripped 
+                                                            :options="perforatedRippedOptions"
+                                                            @change="onChangePerforatedRipped"
+                                                            name="perforated_ripped"
+                                                            v-model="formAttributes.perforated_ripped" /> 
+                                                    </div>
+                                                    <div class="help-block text-danger">
+                                                        {{ errors.first('perforated_ripped') }}
+                                                    </div>
+                                                </v-col>
+                                            </v-row>
+                                            
+                                            <hr v-show="isvisibleInput('perforated_ripped')">
+                                            <h4 v-show="isvisibleInput('running_number')" style="font-size: 16px;">
+                                                running number :
+                                            </h4>
+                                            <!-- running number -->
+                                            <v-row v-if="isvisibleInput('running_number')" >
+                                                <v-col xs="12" sm="6" md="6">
+                                                    <div v-bind:class="['form-group', errors.first('running_number') ? 'has-error' : 'has-success']">
+                                                        <v-running-number 
+                                                            :options="runningNumberOptions"
+                                                            @change="onChangeRunningNumber"
+                                                            name="running_number"
+                                                            v-model="formAttributes.running_number" /> 
+                                                    </div>
+                                                    <div class="help-block text-danger">
+                                                        {{ errors.first('running_number') }}
+                                                    </div>
+                                                </v-col>
+                                            </v-row>
+                                            <hr v-show="isvisibleInput('running_number')">
+                                            
+                                            <h4 v-show="isvisibleInput('window_box')" style="font-size: 16px;">
+                                                ติดหน้าต่าง :
+                                            </h4>
+                                            <!-- ติดหน้าต่าง -->
+                                            <v-row v-if="isvisibleInput('window_box')" >
+                                                <v-col xs="12" sm="6" md="6">
+                                                    <div v-bind:class="['form-group', errors.first('window_box') ? 'has-error' : 'has-success']">
+                                                        <v-window-box 
+                                                            :options="windowBoxOptions"
+                                                            @change="onChangewindowBox"
+                                                            name="window_box"
+                                                            v-model="formAttributes.window_box" /> 
+                                                    </div>
+                                                    <div class="help-block text-danger">
+                                                        {{ errors.first('window_box') }}
+                                                    </div>
+                                                </v-col>
+                                            </v-row>
+                                            
+                                            <v-row v-if="isvisibleInput('window_box') && showWindowBoxInput">
+                                                <v-col xs="12" sm="12" md="12">
+                                                    <!-- ความกว้าง/ความยาว/หน่วย -->
+                                                    <v-row v-if="
+                                                       isvisibleInput('window_box_width') ||
+                                                       isvisibleInput('window_box_lenght') ||
+                                                       isvisibleInput('window_box_unit')">
+                                                        <!-- กว้าง -->
+                                                        <v-col xs="12" sm="3" md="3">
+                                                            <div v-bind:class="['form-group', errors.first('window_box_width') ? 'has-error' : 'has-success']">
+                                                                    <label class="control-label">
+                                                                       กว้าง
+                                                                    </label>
+                                                                <input
+                                                                        id="window_box_width"
+                                                                        name="window_box_width"
+                                                                        placeholder="กว้าง"
+                                                                        class="form-control"
+                                                                        v-model="formAttributes.window_box_width"/>
+                                                            </div>
+                                                            <div class="help-block text-danger">
+                                                                {{ errors.first('window_box_width') }}
+                                                            </div>
+                                                        </v-col>
+                                                        <!-- ยาว -->
+                                                        <v-col xs="12" sm="3" md="3">
+                                                            <div v-bind:class="['form-group', errors.first('window_box_lenght') ? 'has-error' : 'has-success']">
+                                                               <label class="control-label">
+                                                                       ยาว
+                                                                </label>
+                                                                <input
+                                                                        id="window_box_lenght"
+                                                                        name="window_box_lenght"
+                                                                        placeholder="ยาว"
+                                                                        class="form-control"
+                                                                        v-model="formAttributes.window_box_lenght"/>
+                                                            </div>
+                                                            <div class="help-block text-danger">
+                                                                {{ errors.first('window_box_lenght') }}
+                                                            </div>
+                                                        </v-col>
+                                                        <v-col xs="12" sm="3" md="3">
+                                                                <div v-bind:class="['form-group', errors.first('window_box_unit') ? 'has-error' : 'has-success']">
+                                                                    <label class="control-label has-star">
+                                                                        หน่วย
+                                                                    </label>
+                                                                    <v-select2
+                                                                            id="window_box_unit"
+                                                                            :options="windowBoxUnitOpts"
+                                                                            v-model="formAttributes.window_box_unit"
+                                                                            name="window_box_unit"
+                                                                            @change="onChangeWindowBoxUnit">
+                                                                        <option disabled value="">เลือกรายการ...
+                                                                        </option>
+                                                                    </v-select2>
+                                                                </div>
+                                                                <div class="help-block text-danger">
+                                                                    {{ errors.first('window_box_unit') }}
+                                                                </div>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-col>
+                                            </v-row>
+                                          </form>
                                         </div>
                                     </div>
                                     <!-- footer -->
@@ -916,20 +1067,6 @@ ThemeBootstrapAsset::register($this);
                                             {{ paperSizeDetail }}
                                         </span>
                                         </li>
-                                        <!-- เข้าเล่ม -->
-                                        <li v-show="isvisibleInput('book_binding_id')">
-                                            <span>{{ inputLabel('book_binding_id', 'เข้าเล่ม') }}:</span>
-                                            <span class="op_book_binding_id float-right" id="op_book_binding_id">
-                                            {{ bookBindingDetail }}
-                                        </span>
-                                        </li>
-                                        <!-- จำนวนหน้า -->
-                                        <li v-show="isvisibleInput('page_qty')">
-                                            <span>{{ inputLabel('page_qty', 'จำนวนหน้า') }}:</span>
-                                            <span class="op_page_qty float-right" id="op_page_qty">
-                                            {{ page_qty }}
-                                        </span>
-                                        </li>
                                         <!-- กระดาษ -->
                                         <li v-show="isvisibleInput('paper_id')">
                                             <span>{{ inputLabel('paper_id', 'กระดาษ') }}:</span>
@@ -937,6 +1074,31 @@ ThemeBootstrapAsset::register($this);
                                             {{ paperDetail }}
                                         </span>
                                         </li>
+                                        
+                                         <!-- เข้าเล่ม -->
+                                        <li v-show="isvisibleInput('book_binding_status')">
+                                            <span>เข้าเล่ม :</span>
+                                            <span class="op_book_binding_status float-right" id="op_book_binding_status">
+                                            {{ bookBindingDetail }}
+                                        </span>
+                                        </li>
+
+                                         <!--จำนวนแผ่นต่อเล่ม-->
+                                        <li v-show="isvisibleInput('book_binding_qty')">
+                                            <span>{{ inputLabel('book_binding_qty', 'จำนวนแผ่นต่อเล่ม') }}:</span>
+                                            <span class="op_book_binding_qty float-right" id="op_book_binding_qty">
+                                            {{ book_binding_qty }}
+                                        </span>
+                                        </li>
+                                        
+                                        <!-- จำนวนหน้า -->
+                                        <li v-show="isvisibleInput('page_qty')">
+                                            <span>{{ inputLabel('page_qty', 'จำนวนหน้า') }}:</span>
+                                            <span class="op_page_qty float-right" id="op_page_qty">
+                                            {{ page_qty }}
+                                        </span>
+                                        </li>
+                                        
                                         <!-- จำนวนชั้นกระดาษ -->
                                         <li v-show="isvisibleInput('bill_detail_qty')">
                                             <span>{{ inputLabel('bill_detail_qty', 'จำนวนชั้นกระดาษ') }}:</span>
@@ -990,6 +1152,7 @@ ThemeBootstrapAsset::register($this);
                                             {{ foilDetail }}
                                         </span>
                                         </li>
+                                        
                                         <!-- รายละเอียดปั๊มนูน -->
                                         <li v-show="
                                         isvisibleInput('emboss_size_width') ||
@@ -1008,11 +1171,42 @@ ThemeBootstrapAsset::register($this);
                                             {{ glueDetail }}
                                         </span>
                                         </li>
-                                        <!-- ปะกาว -->
+                                        <!-- ร้อยเชือกหูถุง -->
                                         <li v-show="isvisibleInput('rope')">
                                             <span>ร้อยเชือกหูถุง:</span>
                                             <span class="op_rope float-right" id="op_rope">
                                             {{ ropeDetail }}
+                                        </span>
+                                        </li>
+                                        <!--ปรุฉีก -->
+                                        <li v-show="isvisibleInput('perforated_ripped')">
+                                            <span>ปรุฉีก:</span>
+                                            <span class="op_perforated_ripped float-right" id="op_perforated_ripped">
+                                            {{ perforatedRippedDetail }}
+                                        </span>
+                                        </li>
+                                         <!--running number-->
+                                        <li v-show="isvisibleInput('running_number')">
+                                            <span>running number:</span>
+                                            <span class="op_running_number float-right" id="op_running_number">
+                                                {{ runningNumberDetail }}
+                                            </span>
+                                        </li>
+<!--                                         ติดหน้าต่างกล่องบรรจุภัณฑ์
+                                        <li v-show="isvisibleInput('window_box')">
+                                            <span>ติดหน้าต่างกล่อง :</span>
+                                            <span class="op_window_box float-right" id="op_window_box">
+                                                {{ windowBoxDetail }}
+                                            </span>
+                                        </li>-->
+                                        <!-- รายละเอียดติดหน้าต่างกล่องบรรจุภัณฑ์ -->
+                                        <li v-show="
+                                        isvisibleInput('window_box_width') ||
+                                        isvisibleInput('window_box_height') ||
+                                        isvisibleInput('window_box_unit')">
+                                            <span>หน้าต่างกล่อง:</span>
+                                            <span class="op_window_box float-right" id="op_window_box">
+                                            {{ windowBoxDetail }}
                                         </span>
                                         </li>
                                     </ul>
@@ -1089,7 +1283,7 @@ ThemeBootstrapAsset::register($this);
                             <div class="col-xs-4">
 
                                 <div class="form-group highlight-addon field-tblquotationdetail-cust_quantity has-success">
-                                    <label class="control-label has-star" for="tblquotationdetail-cust_quantity">เพิ่มจำนวนอื่นๆ</label>
+                                    <label class="control-label has-star" for="tblquotationdetail-cust_quantity">{{ inputLabel('cust_quantity', 'เพิ่มจำนวนอื่นๆ') }}</label>
                                     <input type="tel"
                                            id="tblquotationdetail-cust_quantity"
                                            class="form-control"
