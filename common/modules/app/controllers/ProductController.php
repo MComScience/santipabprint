@@ -298,125 +298,128 @@ class ProductController extends \yii\web\Controller
         $contents = [];
 
         foreach ($productOptions as $attribute => $option) {
-            $label = empty($option['label']) ? $model->getAttributeLabel($attribute) : $option['label'];
-            $options = empty($option['options']) ? [] : InPutOptions::getOption($attribute);
-            $value = empty($option['options']) ? $model[$attribute] : InPutOptions::getAttributeValue($model[$attribute], $options);
-            $attributeOption = [
-                'label' => $option['label'],
-                'value' => $value,
-            ];
-            if (!ArrayHelper::isIn($attribute, $skipAttributes)) {
-                // ขนาด กำหนดเอง
-                if ($attribute === 'paper_size_id' && $model['paper_size_id'] == 'custom') {
-                    $unitOptions = InPutOptions::getOption('paper_size_unit');
-                    $unitName = InPutOptions::getAttributeValue($model['paper_size_unit'], $unitOptions);
-                    if (!empty($model['paper_size_height'])) {
+            if ($option['value']) {
+                $label = empty($option['label']) ? $model->getAttributeLabel($attribute) : $option['label'];
+                $options = empty($option['options']) ? [] : InPutOptions::getOption($attribute);
+                $value = empty($option['options']) ? $model[$attribute] : InPutOptions::getAttributeValue($model[$attribute], $options);
+                $attributeOption = [
+                    'label' => $option['label'],
+                    'value' => $value,
+                ];
+                if (!ArrayHelper::isIn($attribute, $skipAttributes)) {
+                    // ขนาด กำหนดเอง
+                    if ($attribute === 'paper_size_id' && $model['paper_size_id'] == 'custom') {
+                        $unitOptions = InPutOptions::getOption('paper_size_unit');
+                        $unitName = InPutOptions::getAttributeValue($model['paper_size_unit'], $unitOptions);
+                        if (!empty($model['paper_size_height'])) {
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $model['paper_size_width'] . $x . $model['paper_size_lenght'] . $x . $model['paper_size_height'] . $spacebar . $unitName,
+                            ]);
+                        } else {
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $model['paper_size_width'] . $x . $model['paper_size_lenght'] . $spacebar . $unitName,
+                            ]);
+                        }
+                    }
+                    // เคลือบ
+                    if ($attribute === 'coating_id' && !empty($model['coating_option'])) {
+                        // ด้านที่เคลือบ
+                        $options = InPutOptions::getOption('coating_option');
+                        $coating_option = InPutOptions::getAttributeValue($model['coating_option'], $options);
                         $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $model['paper_size_width'] . $x . $model['paper_size_lenght'] . $x . $model['paper_size_height'] . $spacebar . $unitName,
-                        ]);
-                    } else {
-                        $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $model['paper_size_width'] . $x . $model['paper_size_lenght'] . $spacebar . $unitName,
+                            'value' => $value . $spacebar . '(' . $coating_option . ')',
                         ]);
                     }
-                }
-                // เคลือบ
-                if ($attribute === 'coating_id' && !empty($model['coating_option'])) {
-                    // ด้านที่เคลือบ
-                    $options = InPutOptions::getOption('coating_option');
-                    $coating_option = InPutOptions::getAttributeValue($model['coating_option'], $options);
-                    $attributeOption = ArrayHelper::merge($attributeOption, [
-                        'value' => $value . $spacebar . '(' . $coating_option . ')',
+                    // ตัดเป็นตัว+เจาะมุม,ตัดเป็นตัว
+                    if ($attribute === 'perforate') {
+                        $perforateOptions = InPutOptions::getOption('perforate');
+                        $perforate = InPutOptions::getAttributeValue($model['perforate'], $perforateOptions);
+                        // มุมที่เจาะ
+                        if (!empty($model['perforate_option_id'])) {
+                            $perforateOptionIdOptions = InPutOptions::getOption('perforate_option_id');
+                            $perforate_option_id = InPutOptions::getAttributeValue($model['perforate_option_id'], $perforateOptionIdOptions);
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $perforate . $spacebar . ' + เจาะ' . $perforate_option_id,
+                            ]);
+                        } else {
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $perforate,
+                            ]);
+                        }
+                    }
+                    // ปั๊มฟอยล์
+                    if ($attribute === 'foil_status') {
+                        $foilStatusOptions = InPutOptions::getOption('foil_status');
+                        $foil_status = InPutOptions::getAttributeValue($model['foil_status'], $foilStatusOptions);
+                        // ปั๊ม
+                        if ($model['foil_status'] !== 'N') {
+                            // หน่วยฟอยล์
+                            $foilSizeUnitOptions = InPutOptions::getOption('foil_size_unit');
+                            $foil_size_unit = InPutOptions::getAttributeValue($model['foil_size_unit'], $foilSizeUnitOptions);
+                            // สีฟอยล์
+                            $foilColorIdOptions = InPutOptions::getOption('foil_color_id');
+                            $foil_color_id = InPutOptions::getAttributeValue($model['foil_color_id'], $foilColorIdOptions);
+
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $spacebar . $model['foil_size_width'] . $x . $model['foil_size_height'] . $spacebar . $foil_size_unit . $spacebar . $foil_color_id,
+                            ]);
+                        } else {
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $foil_status,
+                            ]);
+                        }
+                    }
+                    // ปั๊มฟอยล์
+                    if ($attribute === 'emboss_status') {
+                        $embossStatusOptions = InPutOptions::getOption('emboss_status');
+                        $emboss_status = InPutOptions::getAttributeValue($model['emboss_status'], $embossStatusOptions);
+                        // ปั๊ม
+                        if ($model['foil_status'] !== 'N') {
+                            // หน่วย
+                            $embossSizeUnitOptions = InPutOptions::getOption('emboss_size_unit');
+                            $emboss_size_unit = InPutOptions::getAttributeValue($model['emboss_size_unit'], $embossSizeUnitOptions);
+
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $spacebar . $model['emboss_size_width'] . $x . $model['emboss_size_height'] . $spacebar . $foil_size_unit,
+                            ]);
+                        } else {
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $emboss_status,
+                            ]);
+                        }
+                    }
+                    // window_box
+                    if ($attribute === 'window_box') {
+                        $windowBoxOptions = InPutOptions::getOption('window_box');
+                        $window_box = InPutOptions::getAttributeValue($model['window_box'], $windowBoxOptions);
+                        if ($model['window_box']) {
+                            // หน่วย
+                            $windowBoxUnitOptions = InPutOptions::getOption('window_box_unit');
+                            $window_box_unit = InPutOptions::getAttributeValue($model['window_box_unit'], $windowBoxUnitOptions);
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $model['window_box_width'] . $x . $model['window_box_lenght'] . $spacebar . $window_box_unit,
+                            ]);
+                        } else {
+                            $attributeOption = ArrayHelper::merge($attributeOption, [
+                                'value' => $window_box,
+                            ]);
+                        }
+                    }
+                    $details .= $attributeOption['label'] . ': ' . $attributeOption['value'] . $newline;
+                    $contents[] = ArrayHelper::merge($box, [
+                        'contents' => [
+                            ArrayHelper::merge($contentLeft, [
+                                "text" => $attributeOption['label'],
+                            ]),
+                            ArrayHelper::merge($contentRight, [
+                                "text" => empty($attributeOption['value']) ? "" : $attributeOption['value'],
+                            ]),
+                        ],
                     ]);
+                    $inputOptions[$attribute] = $attributeOption;
                 }
-                // ตัดเป็นตัว+เจาะมุม,ตัดเป็นตัว
-                if ($attribute === 'perforate') {
-                    $perforateOptions = InPutOptions::getOption('perforate');
-                    $perforate = InPutOptions::getAttributeValue($model['perforate'], $perforateOptions);
-                    // มุมที่เจาะ
-                    if (!empty($model['perforate_option_id'])) {
-                        $perforateOptionIdOptions = InPutOptions::getOption('perforate_option_id');
-                        $perforate_option_id = InPutOptions::getAttributeValue($model['perforate_option_id'], $perforateOptionIdOptions);
-                        $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $perforate . $spacebar . ' + เจาะ' . $perforate_option_id,
-                        ]);
-                    } else {
-                        $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $perforate,
-                        ]);
-                    }
-                }
-                // ปั๊มฟอยล์
-                if ($attribute === 'foil_status') {
-                    $foilStatusOptions = InPutOptions::getOption('foil_status');
-                    $foil_status = InPutOptions::getAttributeValue($model['foil_status'], $foilStatusOptions);
-                    // ปั๊ม
-                    if ($model['foil_status'] !== 'N') {
-                        // หน่วยฟอยล์
-                        $foilSizeUnitOptions = InPutOptions::getOption('foil_size_unit');
-                        $foil_size_unit = InPutOptions::getAttributeValue($model['foil_size_unit'], $foilSizeUnitOptions);
-                        // สีฟอยล์
-                        $foilColorIdOptions = InPutOptions::getOption('foil_color_id');
-                        $foil_color_id = InPutOptions::getAttributeValue($model['foil_color_id'], $foilColorIdOptions);
-
-                        $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $spacebar . $model['foil_size_width'] . $x . $model['foil_size_height'] . $spacebar . $foil_size_unit . $spacebar . $foil_color_id,
-                        ]);
-                    } else {
-                        $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $foil_status,
-                        ]);
-                    }
-                }
-                // ปั๊มฟอยล์
-                if ($attribute === 'emboss_status') {
-                    $embossStatusOptions = InPutOptions::getOption('emboss_status');
-                    $emboss_status = InPutOptions::getAttributeValue($model['emboss_status'], $embossStatusOptions);
-                    // ปั๊ม
-                    if ($model['foil_status'] !== 'N') {
-                        // หน่วย
-                        $embossSizeUnitOptions = InPutOptions::getOption('emboss_size_unit');
-                        $emboss_size_unit = InPutOptions::getAttributeValue($model['emboss_size_unit'], $embossSizeUnitOptions);
-
-                        $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $spacebar . $model['emboss_size_width'] . $x . $model['emboss_size_height'] . $spacebar . $foil_size_unit,
-                        ]);
-                    } else {
-                        $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $emboss_status,
-                        ]);
-                    }
-                }
-                // window_box
-                if ($attribute === 'window_box') {
-                    $windowBoxOptions = InPutOptions::getOption('window_box');
-                    $window_box = InPutOptions::getAttributeValue($model['window_box'], $windowBoxOptions);
-                    if ($model['window_box']) {
-                        // หน่วย
-                        $windowBoxUnitOptions = InPutOptions::getOption('window_box_unit');
-                        $window_box_unit = InPutOptions::getAttributeValue($model['window_box_unit'], $windowBoxUnitOptions);
-                        $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $model['window_box_width'] . $x . $model['window_box_lenght'] . $spacebar . $window_box_unit,
-                        ]);
-                    } else {
-                        $attributeOption = ArrayHelper::merge($attributeOption, [
-                            'value' => $window_box,
-                        ]);
-                    }
-                }
-                $details .= $attributeOption['label'] . ': ' . $attributeOption['value'] . $newline;
-                $contents[] = ArrayHelper::merge($box, [
-                    'contents' => [
-                        ArrayHelper::merge($contentLeft, [
-                            "text" => $attributeOption['label'],
-                        ]),
-                        ArrayHelper::merge($contentRight, [
-                            "text" => empty($attributeOption['value']) ? "" : $attributeOption['value'],
-                        ]),
-                    ],
-                ]);
-                $inputOptions[$attribute] = $attributeOption;
             }
+
         }
 
         $body = [
