@@ -2772,10 +2772,7 @@ export default {
         liff
           .sendMessages([messages])
           .then(function() {
-            _this.$message({
-              message: "Message sent",
-              type: "success"
-            });
+            _this.$message.success("Message sent");
           })
           .catch(function(error) {
             _this.$message.error("Error sending message: " + error);
