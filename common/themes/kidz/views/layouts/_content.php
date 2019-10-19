@@ -10,5 +10,11 @@ use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 
 ?>
-<?= Alert::widget() ?>
-<?= $content ?>
+<transition>
+  <router-view></router-view>
+</transition>
+<div v-if="$route.matched.length == 0" class="content-wrapper">
+    <?= Alert::widget() ?>
+    <?= $content ?>
+</div>
+

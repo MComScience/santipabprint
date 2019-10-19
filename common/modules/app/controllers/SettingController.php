@@ -4,6 +4,8 @@ namespace common\modules\app\controllers;
 
 use common\base\DynamicModel;
 use common\components\GridBuilder;
+use common\components\InPutOptions;
+use common\modules\app\models\DynamicSettingModel;
 use common\modules\app\models\search\TblBookBindingSearch;
 use common\modules\app\models\search\TblCoatingSearch;
 use common\modules\app\models\search\TblColorPrintingSearch;
@@ -281,16 +283,37 @@ class SettingController extends \yii\web\Controller
 
     public function actionProduct()
     {
-        $searchModel = new TblProductSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->sort->defaultOrder = [
-            'product_category_id' => SORT_ASC,
-        ];
+        /* $products = TblProduct::find()->all();
+        $result = [];
+        foreach ($products as $product) {
+            if(!ArrayHelper::isIn($product['product_id'], ['P-2019101600001', 'P-2019101500004', 'P-2019101600002'])) {
+                $options = Json::decode($product['product_options']);
+                $i = 0;
+                $newOptions = [];
+                foreach ($options as $option) {
+                    $newOptions[] = ArrayHelper::merge($option, [
+                        'order' => $i,
+                        'options' => []
+                    ]);
+                    $i++;
+                }
+                $result[] = $newOptions;
+            }
 
-        return $this->render('_product', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+            //$product->product_options = serialize($options);
+            // $product->save();
+        }
+        return Json::encode($result); */
+       $searchModel = new TblProductSearch();
+       $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+       $dataProvider->sort->defaultOrder = [
+           'product_category_id' => SORT_ASC,
+       ];
+
+       return $this->render('_product', [
+           'searchModel' => $searchModel,
+           'dataProvider' => $dataProvider,
+       ]);
     }
 
     /* ###### เจาะมุม ##### */
@@ -2076,5 +2099,484 @@ class SettingController extends \yii\web\Controller
             'error' => ActiveForm::validate($modelCopy)
         ];
     }
+
+    public function actionCreateDynamicForm()
+    {
+        $request = Yii::$app->request;
+        $model = new TblProduct();
+        $modelProductOption = new TblProductOption();
+        $modelSettings = [new DynamicSettingModel()];
+        $modelQuotationDetail = new TblQuotationDetail();
+        $attributes = $modelQuotationDetail->getAttributes();
+        $fieldNameOptions = [];
+        $skipAttributes = ['quotation_detail_id', 'quotation_id', 'product_id', 'final_price', 'cust_quantity', 'paper_detail_id', 'print_one_page', 'print_two_page'];
+        foreach ($attributes as $key => $attribute) {
+            $fieldNameOptions[$key] = $modelQuotationDetail->getAttributeLabel($key);
+        }
+        if ($model->load($request->post(), 'TblProduct')) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $transaction = TblProduct::getDb()->beginTransaction();
+            $postData = Yii::$app->request->post('DynamicSettingModel', []);
+            $options = [];
+            $paper_size_option = [];
+            $print_one_page_option = [];
+            $paper_option = [];
+            $coating_option = [];
+            $dicut_option = [];
+            $fold_option = [];
+            $foil_color_option = [];
+            $book_binding_option = [];
+            $perforate_option = [];
+            $fieldOptions = [];
+            $i = 0;
+            foreach ($postData as $key => $data) {
+                if ($data['filed_active']) {
+                    $fieldOptions = ArrayHelper::merge($fieldOptions, [$data['field_name']]); // รายการที่เลือก
+                    $options[$data['field_name']] = [
+                        'value' => '1',
+                        'label' => $data['field_label'],
+                        'required' => '1',
+                        'options' => $data['field_option_values'],
+                        'order' => $i
+                    ];
+                } elseif (!ArrayHelper::isIn($data['field_name'], $skipAttributes)) {
+                    $options[$data['field_name']] = [
+                        'value' => '0',
+                        'label' => $data['field_label'],
+                        'required' => '0',
+                        'options' => [],
+                        'order' => $i
+                    ];
+                }
+
+                switch ($data['field_name']) {
+                    case 'paper_size_id':
+                        $paper_size_option = $data['field_option_values'];
+                        break;
+                    case 'print_one_page':
+                    case 'print_color':
+                        $print_one_page_option = $data['field_option_values'];
+                        break;
+                    case 'paper_id':
+                        $paper_option = $data['field_option_values'];
+                        break;
+                    case 'coating_id':
+                        $coating_option = $data['field_option_values'];
+                        break;
+                    case 'diecut':
+                        $dicut_option = $data['field_option_values'];
+                        break;
+                    case 'fold_id':
+                        $fold_option = $data['field_option_values'];
+                        break;
+                    case 'foil_color_id':
+                        $foil_color_option = $data['field_option_values'];
+                        break;
+                    case 'book_binding_id':
+                        $book_binding_option = $data['field_option_values'];
+                        break;
+                    case 'perforate':
+                        $perforate_option = $data['field_option_values'];
+                        break;
+                    default:
+                }
+            }
+            $i = $i + 1;
+            foreach ($attributes as $key => $attribute) {
+                if (!ArrayHelper::isIn($key, $fieldOptions) && !ArrayHelper::isIn($key, $skipAttributes)) {
+                    $options[$key] = [
+                        'value' => '0',
+                        'label' => $modelQuotationDetail->getAttributeLabel($key),
+                        'required' => '0',
+                        'options' => [],
+                        'order' => $i
+                    ];
+                    $i++;
+                }
+                /*elseif (ArrayHelper::isIn($key, $fieldOptions)) {
+                    $orderOptions[$key] = $options[$key];
+                }*/
+            }
+            ArrayHelper::multisort($options, ['order', 'order'], [SORT_ASC, SORT_ASC]);
+            try {
+                $model->product_options = !empty($options) ? serialize($options) : '';
+                if ($model->save()) {
+                    $productOptions = [
+                        'product_id' => $model['product_id'],
+                        'paper_size_option' => Json::encode($paper_size_option),
+                        'print_one_page' => Json::encode($print_one_page_option),
+                        //'print_two_page' => (isset($posted['printTwoPageKeys']) && is_array($posted['printTwoPageKeys']) && $options['print_two_page']['value'] === '1') ? Json::encode($posted['printTwoPageKeys']) : null,
+                        'paper_option' => Json::encode($paper_option),
+                        'coating_option' => Json::encode($coating_option),
+                        'diecut_option' => Json::encode($dicut_option),
+                        'fold_option' => Json::encode($fold_option),
+                        'foil_color_option' => Json::encode($foil_color_option),
+                        'book_binding_option' => Json::encode($book_binding_option),
+                        'perforate_option' => Json::encode($perforate_option),
+                        'two_page_option' => '',
+                        'one_page_option' => '',
+                    ];
+                    $modelProductOption->setAttributes($productOptions);
+                    if ($modelProductOption->save()) {
+                        $transaction->commit();
+                        return [
+                            'success' => true,
+                            'message' => 'บันทึกสำเร็จ',
+                            'action' => 'create-dynamic-form',
+                            'data' => [
+                                'url' => Url::to(['update-dynamic-form', 'id' => $model['product_id']]),
+                                'modelProductOption' => $modelProductOption,
+                                'model' => $model,
+                            ],
+                        ];
+                    } else {
+                        $transaction->rollBack();
+                        return [
+                            'success' => false,
+                            'data' => $model,
+                            'validate' => ArrayHelper::merge(
+                                ActiveForm::validate($model), ActiveForm::validate($modelProductOption)
+                            ),
+                        ];
+                    }
+                } else {
+                    $transaction->rollBack();
+                    return [
+                        'success' => false,
+                        'data' => $model,
+                        'validate' => ArrayHelper::merge(
+                            ActiveForm::validate($model), ActiveForm::validate($modelProductOption)
+                        ),
+                    ];
+                }
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+        } else {
+            return $this->render('_dynamic_form', [
+                'modelSettings' => (empty($modelSettings)) ? [new DynamicSettingModel()] : $modelSettings,
+                'fieldNameOptions' => $fieldNameOptions,
+                'modelQuotationDetail' => $modelQuotationDetail,
+                'model' => $model,
+                'isCreate' => true
+            ]);
+        }
+    }
+
+    public function actionUpdateDynamicForm($id)
+    {
+        $request = Yii::$app->request;
+        $model = $this->findModelProduct($id);
+        $modelProductOption = $this->findModelProductOption($id);
+        $modelSettings = [new DynamicSettingModel()];
+        $modelQuotationDetail = new TblQuotationDetail();
+        $attributes = $modelQuotationDetail->getAttributes();
+        $fieldNameOptions = [];
+        $skipAttributes = ['quotation_detail_id', 'quotation_id', 'product_id', 'final_price', 'cust_quantity', 'paper_detail_id', 'print_one_page', 'print_two_page'];
+        foreach ($attributes as $key => $attribute) {
+            $fieldNameOptions[$key] = $modelQuotationDetail->getAttributeLabel($key);
+        }
+        if ($model->load($request->post())) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $transaction = TblProduct::getDb()->beginTransaction();
+            $postData = Yii::$app->request->post('DynamicSettingModel', []);
+            $options = [];
+            $paper_size_option = [];
+            $print_one_page_option = [];
+            $paper_option = [];
+            $coating_option = [];
+            $dicut_option = [];
+            $fold_option = [];
+            $foil_color_option = [];
+            $book_binding_option = [];
+            $perforate_option = [];
+            $fieldOptions = [];
+            $i = 0;
+            foreach ($postData as $key => $data) {
+                $fieldOptions = ArrayHelper::merge($fieldOptions, [$data['field_name']]); // รายการที่เลือก
+                if ($data['filed_active']) {
+                    $options[$data['field_name']] = [
+                        'value' => '1',
+                        'label' => $data['field_label'],
+                        'required' => '1',
+                        'options' => $data['field_option_values'],
+                        'order' => $i
+                    ];
+                } elseif (!ArrayHelper::isIn($data['field_name'], $skipAttributes)) {
+                    $options[$data['field_name']] = [
+                        'value' => '0',
+                        'label' => $data['field_label'],
+                        'required' => '0',
+                        'options' => [],
+                        'order' => $i
+                    ];
+                }
+                $i++;
+                switch ($data['field_name']) {
+                    case 'paper_size_id':
+                        $paper_size_option = $data['field_option_values'];
+                        break;
+                    case 'print_one_page':
+                    case 'print_color':
+                        $print_one_page_option = $data['field_option_values'];
+                        break;
+                    case 'paper_id':
+                        $paper_option = $data['field_option_values'];
+                        break;
+                    case 'coating_id':
+                        $coating_option = $data['field_option_values'];
+                        break;
+                    case 'diecut':
+                        $dicut_option = $data['field_option_values'];
+                        break;
+                    case 'fold_id':
+                        $fold_option = $data['field_option_values'];
+                        break;
+                    case 'foil_color_id':
+                        $foil_color_option = $data['field_option_values'];
+                        break;
+                    case 'book_binding_id':
+                        $book_binding_option = $data['field_option_values'];
+                        break;
+                    case 'perforate':
+                        $perforate_option = $data['field_option_values'];
+                        break;
+                    default:
+                }
+            }
+            $i = $i + 1;
+            foreach ($attributes as $key => $attribute) {
+                if (!ArrayHelper::isIn($key, $fieldOptions) && !ArrayHelper::isIn($key, $skipAttributes)) {
+                    $options[$key] = [
+                        'value' => '0',
+                        'label' => $modelQuotationDetail->getAttributeLabel($key),
+                        'required' => '0',
+                        'options' => [],
+                        'order' => $i
+                    ];
+                    $i++;
+                }
+                /*elseif (ArrayHelper::isIn($key, $fieldOptions)) {
+                    $orderOptions[$key] = $options[$key];
+                }*/
+            }
+            ArrayHelper::multisort($options, ['order', 'order'], [SORT_ASC, SORT_ASC]);
+            try {
+                $model->product_options = !empty($options) ? serialize($options) : '';
+                if ($model->save()) {
+                    $productOptions = [
+                        'product_id' => $model['product_id'],
+                        'paper_size_option' => Json::encode($paper_size_option),
+                        'print_one_page' => Json::encode($print_one_page_option),
+                        //'print_two_page' => (isset($posted['printTwoPageKeys']) && is_array($posted['printTwoPageKeys']) && $options['print_two_page']['value'] === '1') ? Json::encode($posted['printTwoPageKeys']) : null,
+                        'paper_option' => Json::encode($paper_option),
+                        'coating_option' => Json::encode($coating_option),
+                        'diecut_option' => Json::encode($dicut_option),
+                        'fold_option' => Json::encode($fold_option),
+                        'foil_color_option' => Json::encode($foil_color_option),
+                        'book_binding_option' => Json::encode($book_binding_option),
+                        'perforate_option' => Json::encode($perforate_option),
+                        'two_page_option' => '',
+                        'one_page_option' => '',
+                    ];
+                    $modelProductOption->setAttributes($productOptions);
+                    if ($modelProductOption->save()) {
+                        $transaction->commit();
+                        return [
+                            'success' => true,
+                            'message' => 'บันทึกสำเร็จ',
+                            'action' => 'update-dynamic-form',
+                            'data' => [
+                                'url' => Url::to(['update-dynamic-form', 'id' => $model['product_id']]),
+                                'modelProductOption' => $modelProductOption,
+                                'model' => $model,
+                            ],
+                        ];
+                    } else {
+                        $transaction->rollBack();
+                        return [
+                            'success' => false,
+                            'data' => $model,
+                            'validate' => ArrayHelper::merge(
+                                ActiveForm::validate($model), ActiveForm::validate($modelProductOption)
+                            ),
+                        ];
+                    }
+                } else {
+                    $transaction->rollBack();
+                    return [
+                        'success' => false,
+                        'data' => $model,
+                        'validate' => ArrayHelper::merge(
+                            ActiveForm::validate($model), ActiveForm::validate($modelProductOption)
+                        ),
+                    ];
+                }
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+        } else {
+            if (empty($model->product_options)) {
+                $modelSettings = [];
+                foreach ($attributes as $key => $attribute) {
+                    if (!ArrayHelper::isIn($key, $skipAttributes)) {
+                        $modelSettings = ArrayHelper::merge($modelSettings, [new DynamicSettingModel([
+                            'filed_active' => 0,
+                            'field_name' => $key,
+                            'field_label' => $modelQuotationDetail->getAttributeLabel($key),
+                            'field_option' => ArrayHelper::map(InPutOptions::getOption($key), 'id', 'name'),
+                            'field_option_values' => [],
+                            'field_default_value' => ''
+                        ])]);
+                    }
+                }
+            } else {
+                $productOptions = unserialize($model->product_options);
+                $modelSettings = [];
+                foreach ($productOptions as $key => $option) {
+                    if (!ArrayHelper::isIn($key, $skipAttributes)) {
+                        $modelSettings = ArrayHelper::merge($modelSettings, [new DynamicSettingModel([
+                            'filed_active' => $option['value'],
+                            'field_name' => $key,
+                            'field_label' => !empty($option['label']) ? $option['label'] : $modelQuotationDetail->getAttributeLabel($key),
+                            'field_option' => ArrayHelper::map(InPutOptions::getOption($key), 'id', 'name'),
+                            'field_option_values' => $option['options'],
+                            'field_default_value' => ''
+                        ])]);
+                    }
+                }
+                // return Json::encode($productOptions);
+            }
+            return $this->render('_dynamic_form', [
+                'modelSettings' => (empty($modelSettings)) ? [new DynamicSettingModel()] : $modelSettings,
+                'fieldNameOptions' => $fieldNameOptions,
+                'modelQuotationDetail' => $modelQuotationDetail,
+                'model' => $model,
+                'isCreate' => false
+            ]);
+        }
+    }
+
+    public function actionGetAttributeLabel($attribute)
+    {
+        $list = InPutOptions::getOption($attribute);
+        $modelQuotationDetail = new TblQuotationDetail();
+
+        return Json::encode([
+            'label' => $modelQuotationDetail->getAttributeLabel($attribute),
+            'options' => $list
+        ]);
+    }
+
+    /*public function actionChildOption($option)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+        if ($option) {
+            $list = [];
+            if ($option == 'paper_size') {
+                $paperSizes = TblPaperSize::find()->orderBy('paper_size_id ASC')->all();
+                foreach ($paperSizes as $paper) {
+                    $list[] = [
+                        'id' => $paper['paper_size_id'],
+                        'name' => $paper['paper_size_name']
+                    ];
+                }
+            }
+            if ($option == 'paper') {
+                $papers = TblPaper::find()->orderBy('paper_type_id asc,paper_gram asc')->all();
+                foreach ($papers as $paper) {
+                    $list[] = [
+                        'id' => $paper['paper_id'],
+                        'name' => $paper['paper_name']
+                    ];
+                }
+            }
+            if ($option == 'print_color') {
+                $options = TblColorPrinting::find()->all();
+                foreach ($options as $option) {
+                    $list[] = [
+                        'id' => $option['color_printing_id'],
+                        'name' => $option['color_printing_name']
+                    ];
+                }
+            }
+            if ($option == 'coating') {
+                $options = TblCoating::find()->all();
+                foreach ($options as $option) {
+                    $list[] = [
+                        'id' => $option['coating_id'],
+                        'name' => $option['coating_name']
+                    ];
+                }
+            }
+            if ($option == 'dicut') {
+                $options = TblDiecut::find()->all();
+                foreach ($options as $option) {
+                    $list[] = [
+                        'id' => $option['diecut_id'],
+                        'name' => $option['diecut_name']
+                    ];
+                }
+            }
+            if ($option == 'fold') {
+                $options = TblFold::find()->orderBy('fold_id  asc')->all();
+                foreach ($options as $option) {
+                    $list[] = [
+                        'id' => $option['fold_id'],
+                        'name' => $option['fold_name']
+                    ];
+                }
+            }
+            if ($option == 'foil_color') {
+                $options = TblFoilColor::find()->all();
+                foreach ($options as $option) {
+                    $list[] = [
+                        'id' => $option['foil_color_id'],
+                        'name' => $option['foil_color_name']
+                    ];
+                }
+            }
+            if ($option == 'book_binding') {
+                $options = TblBookBinding::find()->all();
+                foreach ($options as $option) {
+                    $list[] = [
+                        'id' => $option['book_binding_id'],
+                        'name' => $option['book_binding_name']
+                    ];
+                }
+            }
+            if ($option == 'perforate') {
+                $options = TblPerforateOption::find()->all();
+                foreach ($options as $option) {
+                    $list[] = [
+                        'id' => $option['perforate_id'],
+                        'name' => $option['perforate_option_name']
+                    ];
+                }
+            }
+            $selected = null;
+            if (count($list) > 0) {
+                $selected = '';
+                foreach ($list as $i => $account) {
+                    $out[] = ['id' => $account['id'], 'name' => $account['name']];
+                    if ($i == 0) {
+                        $selected = null;
+                    }
+                }
+                // Shows how you can preselect a value
+                return ['output' => $out, 'selected' => $selected];
+            }
+        }
+        return ['output' => '', 'selected' => ''];
+    }*/
 
 }

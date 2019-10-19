@@ -6,6 +6,7 @@
  * Date: 20/1/2562
  * Time: 20:40
  */
+
 use kartik\form\ActiveForm;
 use adminlte\helpers\Html;
 use kartik\icons\Icon;
@@ -349,6 +350,6 @@ CSS
 
 <?php
 $this->registerJsFile(
-        '@web/js/product-setting.js', ['depends' => [\yii\web\JqueryAsset::className()]]
+    '@web/js/product-setting.js', ['depends' => [\yii\web\JqueryAsset::className()]]
 );
 ?>

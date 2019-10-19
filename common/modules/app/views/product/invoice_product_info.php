@@ -33,31 +33,29 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($items as $index => $item) : ?>
             <?php 
-                $vat = ($item['data']['final_price'] / 100) * 7;
+                $vat = ($modelDetail['final_price'] / 100) * 7;
             ?>
-                <tr style="border: 1px solid;height: 300px;">
-                    <td style="border-right: 1px solid;text-align:center;font-size: 13pt;white-space: pre-line;">
-                        <?= ($index + 1) ?>
-                    </td>
-                    <td style="border-right: 1px solid;font-size: 13pt;padding-left: 5px;white-space: pre-line;">
-                        <?= $item['details']; ?>   
-                    </td>
-                    <td style="border-right: 1px solid;text-align: center;font-size: 13pt;white-space: pre-line;">
-                        <!--จำนวน-->
-                        <?= Yii::$app->formatter->format($item['data']['cust_quantity'], ['decimal', 0]) ?>
-                    </td>
-                    <td style="border-right: 1px solid;text-align: right;font-size: 13pt;white-space: pre-line;">
-                        <!--ราคา/ต่อหน่วย  -->
-                        <?= Yii::$app->formatter->format($item['data']['final_price'] / $item['data']['cust_quantity'], ['decimal', 2]) ?>&nbsp;
-                    </td>
-                    <td style="text-align: right;font-size: 13pt;white-space: pre-line;">
-                        <!--จำนวนเงิน-->
-                        <?= Yii::$app->formatter->format($summary, ['decimal', 2]) ?>&nbsp;
-                    </td>
-                </tr>
-            <?php endforeach; ?>
+            <tr style="border: 1px solid;height: 300px;">
+                <td style="border-right: 1px solid;text-align:center;font-size: 13pt;white-space: pre-line;">
+                    1
+                </td>
+                <td style="border-right: 1px solid;font-size: 13pt;padding-left: 5px;white-space: pre-line;">
+                    <?= $details; ?>   
+                </td>
+                <td style="border-right: 1px solid;text-align: center;font-size: 13pt;white-space: pre-line;">
+                    <!--จำนวน-->
+                    <?= Yii::$app->formatter->format($modelDetail['cust_quantity'], ['decimal', 0]) ?>
+                </td>
+                <td style="border-right: 1px solid;text-align: right;font-size: 13pt;white-space: pre-line;">
+                    <!--ราคา/ต่อหน่วย  -->
+                    <?= Yii::$app->formatter->format($modelDetail['final_price'] / $modelDetail['cust_quantity'], ['decimal', 2]) ?>&nbsp;
+                </td>
+                <td style="text-align: right;font-size: 13pt;white-space: pre-line;">
+                    <!--จำนวนเงิน-->
+                    <?= Yii::$app->formatter->format($modelDetail['final_price'], ['decimal', 2]) ?>&nbsp;
+                </td>
+            </tr>
             <tr style="border: 1px solid;">
                 <td colspan="3" rowspan="2">
                     <p style="font-weight: bold">&nbsp;&nbsp;หมายเหตุ</p>
@@ -68,7 +66,7 @@
                     <p>&nbsp;&nbsp;Total</p>
                 </td>
                 <td style="border-left: 1px solid;text-align: right;font-size: 13pt;vertical-align: middle;">
-                    <?= Yii::$app->formatter->format($summary, ['decimal', 2]) ?> &nbsp;&nbsp;
+                    <?= Yii::$app->formatter->format($modelDetail['final_price'], ['decimal', 2]) ?> &nbsp;&nbsp;
                 </td>
             </tr>
             <tr style="border: 1px solid;">
@@ -82,14 +80,14 @@
             </tr>
             <tr style="border: 1px solid;">
                 <td colspan="3" style="font-size: 14pt; text-align: center;font-weight: bold; vertical-align: middle;">
-                    <p><?= Yii::$app->NumberThai->convertBaht($summary + $vat); ?> </p>
+                    <p><?= Yii::$app->NumberThai->convertBaht($modelDetail['final_price'] + $vat); ?> </p>
                 </td>
                 <td style="border-left: 1px solid;font-weight: bold;vertical-align: middle;">
                     <p>&nbsp;&nbsp;รวมทั้งสิ้น</p>
                     <p>&nbsp;&nbsp;Grand Total</p>
                 </td>
                 <td style="border-left: 1px solid;text-align: right;font-size: 13pt;vertical-align: middle;">
-                    <?= Yii::$app->formatter->format($summary + $vat, ['decimal', 2]) ?>&nbsp;&nbsp;
+                    <?= Yii::$app->formatter->format($modelDetail['final_price'] + $vat, ['decimal', 2]) ?>&nbsp;&nbsp;
                 </td>
             </tr>
         </tbody>

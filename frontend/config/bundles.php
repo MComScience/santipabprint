@@ -6,10 +6,10 @@ return [
             'css/bootstrap.min.css',
         ]
     ],
-    /* 'wbraganca\dynamicform\DynamicFormAsset' => [
+     'wbraganca\dynamicform\DynamicFormAsset' => [
         'sourcePath' => null,   // do not publish the bundle
         'js' => [
             '/js/yii2-dynamic-form.js',
         ]
-    ], */
+    ],
 ];

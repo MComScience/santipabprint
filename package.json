@@ -2,14 +2,18 @@
   "private": true,
   "scripts": {
     "build": "webpack --progress",
-    "watch": "webpack --progress --watch"
+    "watch": "npm run dev -- --watch",
+    "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-loader": "^7.1.5",
     "babel-preset-latest": "^6.24.0",
+    "cross-env": "^6.0.3",
     "css-loader": "^0.28.11",
     "extract-text-webpack-plugin": "^3.0.2",
+    "laravel-mix": "^5.0.0",
     "less": "^2.7.2",
     "less-loader": "^3.0.0",
     "less-plugin-clean-css": "^1.5.1",
@@ -17,7 +21,23 @@
     "npm": "^6.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "uglifyjs-webpack-plugin": "^2.0.1",
+    "vue-template-compiler": "^2.6.10",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "ant-design-vue": "^1.4.1",
+    "axios": "^0.19.0",
+    "bootstrap": "^3.4.1",
+    "element-ui": "^2.12.0",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.0",
+    "select2": "^4.0.11",
+    "select2-bootstrap-theme": "0.1.0-beta.10",
+    "sweetalert2": "^8.18.4",
+    "vee-validate": "^3.0.11",
+    "vue": "^2.6.10",
+    "vue-meta": "^2.3.1",
+    "vue-router": "^3.1.3"
   }
 }

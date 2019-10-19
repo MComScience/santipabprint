@@ -103,7 +103,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?= Url::to('/app/product/index') ?>">
+                <a class="navbar-brand" href="<?= Url::to('/product') ?>">
                     <img src="<?= $urlBuilder->getUrl('images/logo-png.png', []) ?>" alt="<?= Yii::$app->name ?>" class="santipab-logo">
                     <span class="app-name hidden-lg hidden-md">
                         สันติภาพแพ็คพริ้นท์
@@ -128,7 +128,7 @@ $urlBuilder = Yii::$app->glide->urlBuilder;
                         ],
                         [
                             'label' => Icon::show('file-text-o', ['style' => 'background-color: #b5d56a;color:#fff;']) . '<span> ขอใบเสนอราคา</span><span class="hidden-xs hidden-sm">Quotation</span>',
-                            'url' => ['/app/product/index'],
+                            'url' => ['/product'],
                             'options' => [
                                 'class' => 'singleDrop',
                             ]

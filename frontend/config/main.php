@@ -11,7 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log','languagepicker'],
     'controllerNamespace' => 'frontend\controllers',
-    'defaultRoute' => 'app/product/index',
+    'defaultRoute' => 'site/index',
     'controllerMap' => [
         'glide' => '\trntv\glide\controllers\GlideController'
     ],
@@ -49,7 +49,12 @@ return [
             'showScriptName' => false,
             'rules' => [
                 // 'สินค้า' => 'app/product/index',
-                '<slug>' => 'app/product/quotation',
+                // '<slug>' => 'app/product/quotation',
+                '<controller:(about|login|product)>' => 'site/index',
+                '<controller:(\w|-)+>/' => '<controller>/index',
+                '<controller:\w+>/<action:(\w|-)+>/<id:\d+>' => '<controller>/<action>',
+                '<module:\w+>/<controller:\w+>/<action:(\w|-)+>' => '<module>/<controller>/<action>',
+                '<controller:\w+>/<action:(\w|-)+>' => '<controller>/<action>'
             ],
         ],
         'view' => [

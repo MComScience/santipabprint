@@ -243,12 +243,12 @@ Vue.component("v-foli-print", {
     this.checked = this.value
   },
   template: `
-  <div id="tblquotationdetail-foli_print" role="radiogroup" aria-invalid="false">
+  <div id="tblquotationdetail-foil_print" role="radiogroup" aria-invalid="false">
     <div v-for="(option, key) in options" :key="key" class="radio inline-block">
       <label class="radio-inline">
         <input type="radio" 
-          :id="'tblquotationdetail-foli_print-' + key" 
-          name="TblQuotationDetail[foli_print]" 
+          :id="'tblquotationdetail-foil_print-' + key" 
+          name="TblQuotationDetail[foil_print]" 
           :value="option.value"
           v-model="checked"
           v-on:input="$emit('input', $event.target.value)"
@@ -564,10 +564,7 @@ new Vue({
     },
     // พิมพ์สองหน้าหรือหน้าเดียว
     printOptionOpts: {
-      data: [
-        { id: "two_page", text: "พิมพ์สองหน้า" },
-        { id: "one_page", text: "พิมพ์หน้าเดียว" }
-      ],
+      data: [],
       allowClear: true,
       theme: "bootstrap",
       width: "100%",
@@ -612,16 +609,7 @@ new Vue({
       width: "100%",
       placeholder: "เลือกรูปแบบไดคัท",
       language: "th",
-      data: [
-        {
-          id: "Default",
-          text: "ไดคัทตามรูปแบบ"
-        },
-        {
-          id: "Curve",
-          text: "ไดคัทมุมมน"
-        }
-      ]
+      data: []
     },
     dicutIdOpts: {
       data: [],
@@ -734,12 +722,14 @@ new Vue({
       width: "100%",
       language: "th"
     },
+    dataOptions: [],
     formOptions: null,
     formAttributes: {
       "_csrf-frontend": yiiLib ? yiiLib.getCsrfToken() : null,
       book_binding_id: "",
       coating_id: "",
       coating_option: "",
+      diecut_status: "",
       diecut: "",
       diecut_id: "",
       emboss_print: "",
@@ -751,7 +741,7 @@ new Vue({
       foil_size_unit: "",
       foil_size_width: "",
       fold_id: "",
-      foli_print: "",
+      foil_print: "",
       glue: "",
       land_orient: "",
       page_qty: "",
@@ -775,101 +765,16 @@ new Vue({
       emboss_status: "",
       rope: ""
     },
-    landOrientOptions: [
-      {
-        value: "1",
-        text: "แนวตั้ง"
-      },
-      {
-        value: "2",
-        text: "แนวนอน"
-      }
-    ],
-    coatingOptionOptions: [
-      {
-        value: "one_page",
-        text: "ด้านเดียว"
-      },
-      {
-        value: "two_page",
-        text: "สองด้าน"
-      }
-    ],
-    dicutOptions: [
-      // {
-      //   value: "N",
-      //   text: "ไม่ไดคัท"
-      // },
-      {
-        value: "Default",
-        text: "ไดคัทตามรูปแบบ"
-      },
-      {
-        value: "Curve",
-        text: "ไดคัทมุมมน"
-      }
-    ],
-    foliPrintOptions: [
-      {
-        value: "two_page",
-        text: "ทั้งหน้า/หลัง"
-      },
-      {
-        value: "one_page",
-        text: "หน้าเดียว"
-      }
-    ],
-    embossPrintOptions: [
-      {
-        value: "two_page",
-        text: "ทั้งหน้า/หลัง"
-      },
-      {
-        value: "one_page",
-        text: "หน้าเดียว"
-      }
-    ],
-    glueOptions: [
-      {
-        value: "0",
-        text: "ไม่ปะ"
-      },
-      {
-        value: "1",
-        text: "ปะ"
-      }
-    ],
+    landOrientOptions: [],
+    coatingOptionOptions: [],
+    dicutOptions: [],
+    foliPrintOptions: [],
+    embossPrintOptions: [],
+    glueOptions: [],
     priceList: [],
-    foilStatusOptions: [
-      {
-        value: "N",
-        text: "ไม่ปั๊มฟอยล์"
-      },
-      {
-        value: "Y",
-        text: "ปั๊มฟอยล์"
-      }
-    ],
-    embossStatusOptions: [
-      {
-        value: "N",
-        text: "ไม่ปั๊มนูน"
-      },
-      {
-        value: "Y",
-        text: "ปั๊มนูน"
-      }
-    ],
-    ropeOptions: [
-     {
-        value: "0",
-        text: "ไม่ร้อยเชือกหูถุง"
-     },
-     {
-       value: "1",
-       text: "ร้อยเชือกหูถุง"
-     }
-    ],
+    foilStatusOptions: [],
+    embossStatusOptions: [],
+    ropeOptions: [],
     radioChecked: ""
   },
   computed: {
@@ -899,11 +804,7 @@ new Vue({
     },
     landOrientDetail: function() {
       if (this.isEmptyValue("land_orient")) return "-"
-      const data = this.findDataOption(
-        this.landOrientOptions,
-        "value",
-        "land_orient"
-      )
+      const data = this.landOrientOptions.find(item => item.value.toString() === this.formAttributes.land_orient)
       return this.getTextValue(data)
     },
     paperSizeDetail: function() {
@@ -992,10 +893,10 @@ new Vue({
         "id",
         "foil_color_id"
       )
-      const foli_print = this.findDataOption(
+      const foil_print = this.findDataOption(
         this.foliPrintOptions,
         "value",
-        "foli_print"
+        "foil_print"
       )
       foil_size_width = this.isEmpty(foil_size_width)
         ? ""
@@ -1006,11 +907,11 @@ new Vue({
 
       const colorTxt =
         this.getTextValue(color) === "-" ? "" : this.getTextValue(color)
-      const foli_print_txt =
-        this.getTextValue(foli_print) === "-"
+      const foil_print_txt =
+        this.getTextValue(foil_print) === "-"
           ? ""
-          : this.getTextValue(foli_print)
-      return `${foil_size_width}${foil_size_height} ${unitTxt} ${colorTxt} ${foli_print_txt}`
+          : this.getTextValue(foil_print)
+      return `${foil_size_width}${foil_size_height} ${unitTxt} ${colorTxt} ${foil_print_txt}`
     },
     embossDetail: function() {
       if (!this.showEmbossInput) return "ไม่ปั๊มนูน"
@@ -1044,16 +945,8 @@ new Vue({
     },
     coatingDetail: function() {
       if (this.isEmptyValue("coating_id")) return "-"
-      const coating = this.findDataOption(
-        this.coatingIdOpts.data,
-        "id",
-        "coating_id"
-      )
-      const coating_option = this.findDataOption(
-        this.coatingOptionOptions,
-        "value",
-        "coating_option"
-      )
+      const coating = this.coatingIdOpts.data.find(item => item.id === this.formAttributes.coating_id)
+      const coating_option = this.coatingOptionOptions.find(item => item.value === this.formAttributes.coating_option)
       const coatingTxt =
         this.getTextValue(coating_option) === "-"
           ? ""
@@ -1061,8 +954,8 @@ new Vue({
       return this.getTextValue(coating) + " " + coatingTxt
     },
     dicutDetail: function() {
-      if (!this.isDicut && this.radioChecked === "not-dicut") return "ไม่ไดคัท"
-      const diecut = this.findDataOption(this.dicutOptions, "value", "diecut")
+      if (!this.isDicut && this.formAttributes.diecut_status === "not-dicut") return "ไม่ไดคัท"
+      const diecut = this.dicutOpts.data.find(item => item.id === this.formAttributes.diecut)
       const diecut_id = this.findDataOption(
         this.dicutIdOpts.data,
         "id",
@@ -1111,29 +1004,38 @@ new Vue({
       return this.formAttributes.emboss_status === "Y"
     },
     isDicut() {
-      return this.radioChecked === "dicut"
+      return this.formAttributes.diecut_status === "dicut"
     },
     isPerforate() {
-      return this.radioChecked === "perforate"
+      return this.formAttributes.diecut_status === "perforate"
     },
     radioOptions() {
       const options = []
+      if(!this.dataOptions) return []
       if (this.isvisibleInput("diecut")) {
-        options.push({
-          value: "not-dicut",
-          text: "ไม่ไดคัท"
+        this.dataOptions.dicutStatusOptions.map(option => {
+          if (this.isvisibleInput("perforate") && option.value === 'perforate') {
+            options.push(option)
+          } else if(option.value !== 'perforate'){
+            options.push(option)
+          }
         })
-        options.push({
-          value: "dicut",
-          text: "ไดคัท"
-        })
+        // options.push({
+        //   value: "not-dicut",
+        //   text: "ไม่ไดคัท"
+        // })
+        // options.push({
+        //   value: "dicut",
+        //   text: "ไดคัท"
+        // })
+
       }
-      if (this.isvisibleInput("perforate")) {
-        options.push({
-          value: "perforate",
-          text: "ตัดเป็นตัว/เจาะ"
-        })
-      }
+      // if (this.isvisibleInput("perforate")) {
+      //   options.push({
+      //     value: "perforate",
+      //     text: "ตัดเป็นตัว/เจาะ"
+      //   })
+      // }
       return options
     },
     ropeDetail: function() {
@@ -1147,7 +1049,7 @@ new Vue({
   updated() {
     this.$nextTick(function() {
       this.formAttributes.product_id = this.productId
-      this.storeData()
+      // this.storeData()
     })
   },
   mounted() {
@@ -1218,6 +1120,7 @@ new Vue({
       try {
         const { data } = await axios.get("/app/api/quotation?p=" + vm.productId)
         const { dataOptions, formOptions, formAttributes, product } = data
+        vm.dataOptions = dataOptions
         // ขนาด
         if (
           formOptions.paper_size_width.value === "1" &&
@@ -1259,9 +1162,9 @@ new Vue({
         this.coatingIdOpts = await updateObject(this.coatingIdOpts, {
           data: this.mapDataOptions(dataOptions.coatingOptions)
         })
-        // ไดคัท
+        // ไดคัทมุมมน
         this.dicutIdOpts = await updateObject(this.dicutIdOpts, {
-          data: this.mapDataOptions(dataOptions.dicutOptions)
+          data: this.mapDataOptions(dataOptions.dicutRoundedOptions)
         })
         // ตัดเป็นตัว เจาะ
         this.perforateOpts = await updateObject(this.perforateOpts, {
@@ -1298,6 +1201,30 @@ new Vue({
         this.embossStatusOpts = await updateObject(this.embossStatusOpts, {
           data: this.mapDataOptions(dataOptions.embossStatusOpts)
         })
+        // พิมพ์สองหน้า หน้าเดียว
+        this.printOptionOpts = await updateObject(this.printOptionOpts, {
+          data: dataOptions.printOptions
+        })
+        // รูปแบบไดคัท
+        this.dicutOpts = await updateObject(this.dicutOpts, {
+          data: dataOptions.dicutOptions
+        })
+        // สถานะปั๊มฟอยล์
+        this.foilStatusOptions = await dataOptions.foilStatusOptions
+        // ปั๊มฟอยล์ ทั้งหน้าหลัง
+        this.foliPrintOptions = await dataOptions.foilPrintOptions
+        // สถานะปั๊มนูน
+        this.embossStatusOptions = await dataOptions.embossStatusOptions
+        // ปัีมนุน หน้าหลัง
+        this.embossPrintOptions = await dataOptions.embossPrintOptions
+        // ปะกาว
+        this.glueOptions = await dataOptions.glueOptions
+        // ร้อยเชือกหูถุง
+        this.ropeOptions = await dataOptions.ropeOptions
+        // แนวตั้ง แนวนอน
+        this.landOrientOptions = await dataOptions.landOrientOptions
+        //
+        this.coatingOptionOptions = await dataOptions.coatingOptionOptions
 
         const formData = await JSON.parse(localStorage.getItem("formData"))
         if (formData && formData[this.productId]) {
@@ -1311,11 +1238,11 @@ new Vue({
             this.formAttributes,
             formAttributes
           )
-          if (localStorage.getItem(`radioChecked[${this.productId}]`)) {
-            this.radioChecked = await localStorage.getItem(
-              `radioChecked[${this.productId}]`
-            )
-          }
+          // if (localStorage.getItem(`radioChecked[${this.productId}]`)) {
+          //   this.radioChecked = await localStorage.getItem(
+          //     `radioChecked[${this.productId}]`
+          //   )
+          // }
         } else {
           this.formAttributes = await updateObject(
             this.formAttributes,
@@ -1328,8 +1255,10 @@ new Vue({
         this.productData = await product
         this.formOptions = await formOptions
 
-        $("#loading, #loading2").hide()
         vm.loading = false
+        setTimeout(function () {
+          $("#loading, #loading2, .desc").hide()
+        }, 300)
       } catch (error) {
         $("#loading, #loading2").hide()
         vm.loading = false
@@ -1633,7 +1562,7 @@ new Vue({
         this.formAttributes.foil_size_height = ""
         this.formAttributes.foil_size_unit = null
         this.formAttributes.foil_size_width = ""
-        this.formAttributes.foli_print = ""
+        this.formAttributes.foil_print = ""
         // this.showFoilInput = false;
       }
     },
@@ -1647,6 +1576,29 @@ new Vue({
         this.formAttributes.emboss_size_width = ""
         this.formAttributes.emboss_print = ""
         // this.showEmbossInput = false;
+      }
+    },
+    onChangeDiecutStatus: function(e) {
+      const vm = this;
+      const value = e.target.value;
+      if (value === "not-dicut" || value === "perforate") {
+        vm.formAttributes.diecut = "N"
+        vm.formAttributes.diecut_id = ""
+        setTimeout(function () {
+          $("#diecut, #diecut_id, #perforate")
+              .val(null)
+              .trigger("change");
+        }, 300)
+        $('input[name="TblQuotationDetail[diecut]"]').prop("checked", false)
+      } else if (value === "dicut") {
+        vm.formAttributes.diecut = ""
+        this.formAttributes.perforate = ""
+        this.formAttributes.perforate_option_id = ""
+        setTimeout(function () {
+          $("#perforate, #perforate_option_id")
+              .val(null)
+              .trigger("change");
+        }, 300)
       }
     },
     findPaper: function(options) {
@@ -1688,17 +1640,24 @@ new Vue({
         )
       })
     },
-    storeData: function() {
-      const formData = {}
-      // const cacheData = JSON.parse(localStorage.getItem("formData"))
-      // if(cacheData && this.productId) {
-      //   formData[this.productId] = updateObject(cacheData[this.productId], this.formAttributes);
-      // } else if(cacheData) {
-      //   formData[this.productId] = this.formAttributes;
-      //   formData = updateObject(formData, cacheData)
-      // }
-      formData[this.productId] = this.formAttributes
-      localStorage.setItem("formData", JSON.stringify(formData))
+    storeData: async function() {
+      let formData = {}
+      const cacheData = await JSON.parse(localStorage.getItem("formData"))
+      if(cacheData && cacheData[this.productId]) {
+        const formAttributes = await this.formAttributes
+        const cacheAttributes = await cacheData[this.productId]
+        for(let i in this.formAttributes) {
+          if(this.isEmpty(formAttributes[i]) && !this.isEmpty(cacheAttributes[i])) {
+            formAttributes[i] = cacheAttributes[i]
+          }
+        }
+        formData[this.productId] = await formAttributes
+      } else if(cacheData) {
+        formData[this.productId] = await this.formAttributes;
+        formData = await updateObject(formData, cacheData)
+      }
+      // formData[this.productId] = this.formAttributes
+      localStorage.setItem("formData", JSON.stringify(Object.assign(cacheData, formData)))
     },
     reStoreData: function() {
       if (localStorage.getItem("formData")) {
@@ -1887,8 +1846,15 @@ new Vue({
     }
   },
   watch: {
-    formAttributes: function(val, oldVal) {
-      console.log(val)
+    formAttributes: {
+      handler: function (val, oldVal) {
+        this.$nextTick(function() {
+          if(val.product_id) {
+            this.storeData()
+          }
+        })
+      },
+      deep: true
     },
     step: function(value) {
       if (value === 1) {

@@ -32,7 +32,7 @@
     $foilSizeHeight = $("#tblquotationdetail-foil_size_height"),
     $foilSizeUnit = $("#tblquotationdetail-foil_size_unit"),
     $foilColorId = $("#tblquotationdetail-foil_color_id"),
-    $foilPrint = $('input[name="TblQuotationDetail[foli_print]"]'),
+    $foilPrint = $('input[name="TblQuotationDetail[foil_print]"]'),
     $opFoil = $("#op_foil_color_id"),
     $embossSizeWidth = $("#tblquotationdetail-emboss_size_width"),
     $emBossSizeHeight = $("#tblquotationdetail-emboss_size_height"),
@@ -344,9 +344,9 @@
     var unitOptions = $q.select2Options($foilSizeUnit),
       colorOptions = $q.select2Options($foilColorId);
     var foilprint = "";
-    if ($("#tblquotationdetail-foli_print-1").is(":checked")) {
+    if ($("#tblquotationdetail-foil_print-1").is(":checked")) {
       foilprint = "หน้าเดียว";
-    } else if ($("#tblquotationdetail-foli_print-0").is(":checked")) {
+    } else if ($("#tblquotationdetail-foil_print-0").is(":checked")) {
       foilprint = "ทั้งหน้า/หลัง";
     }
     $opFoil.html(
@@ -370,9 +370,9 @@
     var unitOptions = $q.select2Options($foilSizeUnit),
       colorOptions = $q.select2Options($foilColorId);
     var foilprint = "";
-    if ($("#tblquotationdetail-foli_print-1").is(":checked")) {
+    if ($("#tblquotationdetail-foil_print-1").is(":checked")) {
       foilprint = "หน้าเดียว";
-    } else if ($("#tblquotationdetail-foli_print-0").is(":checked")) {
+    } else if ($("#tblquotationdetail-foil_print-0").is(":checked")) {
       foilprint = "ทั้งหน้า/หลัง";
     }
     $opFoil.html(
@@ -396,9 +396,9 @@
     var unitOptions = $q.select2Options($(this)),
       colorOptions = $q.select2Options($foilColorId);
     var foilprint = "";
-    if ($("#tblquotationdetail-foli_print-1").is(":checked")) {
+    if ($("#tblquotationdetail-foil_print-1").is(":checked")) {
       foilprint = "หน้าเดียว";
-    } else if ($("#tblquotationdetail-foli_print-0").is(":checked")) {
+    } else if ($("#tblquotationdetail-foil_print-0").is(":checked")) {
       foilprint = "ทั้งหน้า/หลัง";
     }
     $opFoil.html(
@@ -422,9 +422,9 @@
     var colorOptions = $q.select2Options($(this)),
       unitOptions = $q.select2Options($foilSizeUnit);
     var foilprint = "";
-    if ($("#tblquotationdetail-foli_print-1").is(":checked")) {
+    if ($("#tblquotationdetail-foil_print-1").is(":checked")) {
       foilprint = "หน้าเดียว";
-    } else if ($("#tblquotationdetail-foli_print-0").is(":checked")) {
+    } else if ($("#tblquotationdetail-foil_print-0").is(":checked")) {
       foilprint = "ทั้งหน้า/หลัง";
     }
     $opFoil.html(
@@ -701,20 +701,20 @@
                 }
                 $diecut.change();
               }
-              if ($(this).attr("name") === "TblQuotationDetail[foli_print]") {
+              if ($(this).attr("name") === "TblQuotationDetail[foil_print]") {
                 if (
-                  !$q.isEmpty(productOps["foli_print"]) &&
-                  productOps["foli_print"] === "one_page"
+                  !$q.isEmpty(productOps["foil_print"]) &&
+                  productOps["foil_print"] === "one_page"
                 ) {
-                  $("#tblquotationdetail-foli_print-1").prop("checked", true);
-                  $("#tblquotationdetail-foli_print-1").change();
+                  $("#tblquotationdetail-foil_print-1").prop("checked", true);
+                  $("#tblquotationdetail-foil_print-1").change();
                 }
                 if (
-                  !$q.isEmpty(productOps["foli_print"]) &&
-                  productOps["foli_print"] === "two_page"
+                  !$q.isEmpty(productOps["foil_print"]) &&
+                  productOps["foil_print"] === "two_page"
                 ) {
-                  $("#tblquotationdetail-foli_print-0").prop("checked", true);
-                  $("#tblquotationdetail-foli_print-0").change();
+                  $("#tblquotationdetail-foil_print-0").prop("checked", true);
+                  $("#tblquotationdetail-foil_print-0").change();
                 }
               }
               if ($(this).attr("name") === "TblQuotationDetail[emboss_print]") {

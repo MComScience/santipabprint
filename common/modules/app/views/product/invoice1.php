@@ -33,7 +33,7 @@ $stylecontent = 'style="font-size: 16pt; text-align: center;border-bottom: 0.5px
                 บริษัทฯ มีความยินดีขอเสนอราคา ตามรายการต่อ ไปนี้ / We are pleased to submit our quotation as follows
             </p>
             <!-- ข้อมูลสินค้า -->
-            <?= $this->render('invoice_product_info', ['model' => $model, 'items' => $items, 'summary' => $summary]) ?>
+            <?= $this->render('invoice_product_info', ['model' => $model, 'details' => $details, 'modelDetail' => $modelDetail]) ?>
         </content>
     </div>
 </div>

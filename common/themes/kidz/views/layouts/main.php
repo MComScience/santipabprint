@@ -25,7 +25,7 @@ $themeAsset = Yii::$app->assetManager->getPublishedUrl('@kidz/assets/dist');
        </div>
      </div>-->
 
-    <div class="main-wrapper">
+    <div class="main-wrapper" id="myApp">
         <?= $this->render('_header', ['themeAsset' => $themeAsset]); ?>
         <?= $this->render('_content', ['content' => $content, 'themeAsset' => $themeAsset]); ?>
         <?= $this->render('_footer', ['themeAsset' => $themeAsset]); ?>

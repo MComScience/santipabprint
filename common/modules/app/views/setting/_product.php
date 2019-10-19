@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'panel' => [
                 'heading' => false,
                 'type' => 'default',
-                'before' => Html::a(Icon::show('plus') . 'เพิ่มรายการ', ['create-product'], [
+                'before' => Html::a(Icon::show('plus') . 'เพิ่มรายการ', ['create-dynamic-form'], [
                     'class' => 'btn btn-primary',
                     'role' => 'modal-remote',
                     'data-pjax' => 0,
@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     'urlCreator' => function ($action, $model, $key, $index) {
                         if ($action == 'update') {
-                            return Url::to(['update-product', 'id' => $key]);
+                            return Url::to(['update-dynamic-form', 'id' => $key]);
                         }
                         if ($action == 'delete') {
                             return Url::to(['delete-product', 'id' => $key]);

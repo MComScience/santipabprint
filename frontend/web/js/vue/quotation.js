@@ -245,12 +245,12 @@ Vue.component("v-foli-print", {
     this.checked = this.value;
   },
   template: `
-  <div id="tblquotationdetail-foli_print" role="radiogroup" aria-invalid="false">
+  <div id="tblquotationdetail-foil_print" role="radiogroup" aria-invalid="false">
     <div v-for="(option, key) in options" :key="key" class="radio inline-block">
       <label class="radio-inline">
         <input type="radio" 
-          :id="'tblquotationdetail-foli_print-' + key" 
-          name="TblQuotationDetail[foli_print]" 
+          :id="'tblquotationdetail-foil_print-' + key" 
+          name="TblQuotationDetail[foil_print]" 
           :value="option.value"
           v-model="checked"
           v-on:input="$emit('input', $event.target.value)"
@@ -699,7 +699,7 @@ const vm = new Vue({
       foil_size_unit: "",
       foil_size_width: "",
       fold_id: "",
-      foli_print: "",
+      foil_print: "",
       glue: "",
       land_orient: "",
       page_qty: "",
@@ -930,10 +930,10 @@ const vm = new Vue({
         "id",
         "foil_color_id"
       );
-      const foli_print = this.findDataOption(
+      const foil_print = this.findDataOption(
         this.foliPrintOptions,
         "value",
-        "foli_print"
+        "foil_print"
       );
       foil_size_width = this.isEmpty(foil_size_width)
         ? ""
@@ -944,11 +944,11 @@ const vm = new Vue({
 
       const colorTxt =
         this.getTextValue(color) === "-" ? "" : this.getTextValue(color);
-      const foli_print_txt =
-        this.getTextValue(foli_print) === "-"
+      const foil_print_txt =
+        this.getTextValue(foil_print) === "-"
           ? ""
-          : this.getTextValue(foli_print);
-      return `${foil_size_width}${foil_size_height} ${unitTxt} ${colorTxt} ${foli_print_txt}`;
+          : this.getTextValue(foil_print);
+      return `${foil_size_width}${foil_size_height} ${unitTxt} ${colorTxt} ${foil_print_txt}`;
     },
     embossDetail: function() {
         if(!this.showEmbossInput) return 'ไม่ปั๊มนูน';
@@ -1428,7 +1428,7 @@ const vm = new Vue({
             this.formAttributes.foil_size_height = '';
             this.formAttributes.foil_size_unit = null;
             this.formAttributes.foil_size_width = '';
-            this.formAttributes.foli_print = '';
+            this.formAttributes.foil_print = '';
             // this.showFoilInput = false;
         }
     },

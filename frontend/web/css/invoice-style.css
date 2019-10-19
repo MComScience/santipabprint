@@ -79,7 +79,7 @@ body {
 
 .invoice-page {
     width: 21cm;
-    max-height: 29.7cm;
+    /* max-height: 29.7cm; */
     /*min-height: 27cm;*/
     /*height: auto;*/
     box-sizing: border-box;

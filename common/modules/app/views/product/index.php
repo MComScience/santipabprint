@@ -26,6 +26,13 @@ foreach ($css as $css_path) {
         ],
     ]);
 }
+$this->registerCss(<<<CSS
+.select2-container--bootstrap .select2-selection,
+.form-control {
+    background-color: #fafafa;
+}
+CSS
+);
 SweetAlert2Asset::register($this);
 Select2Asset::register($this);
 ThemeBootstrapAsset::register($this);
@@ -457,7 +464,7 @@ ThemeBootstrapAsset::register($this);
                                                 <v-row v-if="isvisibleInput('diecut') || isvisibleInput('perforate')">
                                                     <v-col xs="12" sm="12" md="12">
                                                         <div class="form-group">
-                                                            <div id="tblquotationdetail-foil-status" role="radiogroup"
+                                                            <div id="tblquotationdetail-diecut-status" role="radiogroup"
                                                                  aria-invalid="false">
                                                                 <div v-for="(option, key) in radioOptions" :key="key"
                                                                      class="radio inline-block">
@@ -465,7 +472,8 @@ ThemeBootstrapAsset::register($this);
                                                                         <input type="radio"
                                                                                :id="'radio-option-' + key"
                                                                                :value="option.value"
-                                                                               v-model="radioChecked">
+                                                                               v-model="formAttributes.diecut_status"
+                                                                               @change="onChangeDiecutStatus">
                                                                         <span class="cr">
                                                                         <i class="cr-icon fa fa-circle"></i></span>
                                                                         {{ option.text }}
@@ -689,21 +697,21 @@ ThemeBootstrapAsset::register($this);
                                                         </v-row>
                                                         <!-- ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
                                                         <v-row v-if="
-                                                           isvisibleInput('foli_print')">
+                                                           isvisibleInput('foil_print')">
                                                             <v-col xs="12" sm="6" md="6">
-                                                                <div v-show="isvisibleInput('foli_print')"
-                                                                     v-bind:class="['form-group', errors.first('foli_print') ? 'has-error' : 'has-success']">
+                                                                <div v-show="isvisibleInput('foil_print')"
+                                                                     v-bind:class="['form-group', errors.first('foil_print') ? 'has-error' : 'has-success']">
                                                                     <label class="control-label">
                                                                         ปั๊มฟอยล์ หน้า-หลัง/หน้าเดียว
                                                                     </label>
                                                                     <v-foli-print
                                                                             :options="foliPrintOptions"
                                                                             @change="onChangeFoliPrint"
-                                                                            name="foli_print"
-                                                                            v-model="formAttributes.foli_print"/>
+                                                                            name="foil_print"
+                                                                            v-model="formAttributes.foil_print"/>
                                                                 </div>
                                                                 <div class="help-block text-danger">
-                                                                    {{ errors.first('foli_print') }}
+                                                                    {{ errors.first('foil_print') }}
                                                                 </div>
                                                             </v-col>
                                                         </v-row>

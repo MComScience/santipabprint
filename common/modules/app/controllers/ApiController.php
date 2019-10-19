@@ -18,6 +18,7 @@ use common\components\CalculateDigital;
 use common\components\CalculateOffset;
 use yii\helpers\Url;
 use yii\helpers\Json;
+use common\components\InPutOptions;
 
 class ApiController extends \yii\web\Controller {
 
@@ -48,6 +49,14 @@ class ApiController extends \yii\web\Controller {
         ];
     }
 
+    public function beforeAction($action)
+    {
+        if (in_array($action->id, ['calculate-price'])) {
+            $this->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex() {
         return $this->render('index');
     }
@@ -73,12 +82,15 @@ class ApiController extends \yii\web\Controller {
         $response->format = \yii\web\Response::FORMAT_JSON;
         $product = $this->findModelProduct($p);
         $modelProductOption = $this->findModelProductOption($p);
-        $formOptions = $product->options;
+        $formOptions = empty($product['product_options']) ? [] : unserialize($product['product_options']);//$product->options;
         $QuotationDetail = new TblQuotationDetail();
-        $queryBuilder = new QueryBuilder(['modelOption' => $modelProductOption]);
+        $queryBuilder = new QueryBuilder([
+            'modelOption' => $modelProductOption,
+            'product' => $product
+        ]);
 
         // หน่วย ขนาดกำหนดเอง
-        $paperSizeUnitOptions = ArrayHelper::map(TblUnit::find()->where(['unit_id' => [2, 3]])->asArray()->all(), 'unit_id', 'unit_name');
+        $paperSizeUnitOptions = $queryBuilder->getPaperSizeCustomUnitOption();
         // ตัวเลือกขนาดสำเร็จ
         $paperSizeOptions = $queryBuilder->getPaperSizeOption();
         // วิธีเข้าเล่ม
@@ -90,25 +102,59 @@ class ApiController extends \yii\web\Controller {
         // เคลือบ
         $coatingOptions = $queryBuilder->getCoatingOption();
         // ไดคัทมุมมน
-        $dicutOptions = $queryBuilder->getDiecutOption();
+        $dicutRoundedOptions = $queryBuilder->getDiecutRoundedOption();
         // ตัดเป็นตัว เจาะรู
-        $perforateOptions = [
-            0 => 'ตัดเป็นตัวอย่างเดียว',
-            1 => 'ตัดเป็นตัว + เจาะรูกลม',
-        ];
+        $perforateOptions = $queryBuilder->getPerforate();
+        // มุมที่เจาะ
         $perforateOptionOptions = $queryBuilder->getPerforateOption();
         // วิธีพับ
         $foldOptions = $queryBuilder->getFoldOption();
         // หน่วยฟอย์ล
-        $foilUnitOptions = ArrayHelper::map(TblUnit::find()->where(['unit_id' => [2, 3]])->asArray()->all(), 'unit_id', 'unit_name');
+        $foilUnitOptions = $queryBuilder->getFoilUnitOption();
         // สีฟอยล์
         $foilColorOptions = $queryBuilder->getFoilOption();
         // หน่วยปั๊มนูน
-        $embossUnitOptions = ArrayHelper::map(TblUnit::find()->where(['unit_id' => [2, 3]])->asArray()->all(), 'unit_id', 'unit_name');
+        $embossUnitOptions = $queryBuilder->getEmbossUnitOption();
+        // พิมพ์สองหน้า, พิมพ์หน้าเดียว
+        $printOptions = $queryBuilder->getPrintOption();
+        // เเคลือบด้านเดียว สองด้าน
+        $coatingOptionOptions = $queryBuilder->getCoatingOnePageTwoPageOption();
+        // ไดคัท
+        $dicutStatusOptions = $queryBuilder->getDicutStatusOption();
+        // ปั๊มฟอยล์หน้าหลัง
+        $foilPrintOptions = $queryBuilder->getFoilPrintOption();
+        // ปั๊มนูนหน้าหลัง
+        $embossPrintOptions = $queryBuilder->getEmbossPrintOption();
+        // ปะกาว
+        $glueOptions = $queryBuilder->getGlueOption();
+        // ร้อยเชือกหูถุง
+        $ropeOptions = $queryBuilder->getRopeOption();
+        // แนวตั้ง แนวนอน
+        $landOrientOptions = $queryBuilder->getLandOrientOption();
+        // ฟอยล์
+        $foilStatusOptions = $queryBuilder->getFoilStatusOption();
+        // ปั๊มนูน
+        $embossStatusOptions = $queryBuilder->getEmbossStatusOption();
+        // รูปแบบไดคัท
+        $dicutOptions = $queryBuilder->getDiecutOption();
+        // สถานะเข้าเล่ม
+        $bookBindingStatusOptions = $queryBuilder->getBookBindingStatusOption();
+        // ปรุฉีก
+        $perforatedRippedOptions = $queryBuilder->getPerforatedRippedOption();
+        // running number
+        $runningNumberOptions = $queryBuilder->getRunningNumberOptions();
+        // ติดหน้าต่าง
+        $windowBoxOptions = $queryBuilder->getWindowBoxOptions();
+        // หน่วยติดหน้าต่าง
+        $windowBoxUnitOption = $queryBuilder->getWindowBoxUnitOption();
+
+        // ฟิลด์ที่ไม่ต้องการให้แสดงรายละเอียด
+        $skipAttributes = InPutOptions::skipAttributes();
         return [
             'formOptions' => $formOptions,
             'formAttributes' => $QuotationDetail->getAttributes(),
             'product' => $product,
+            'skipAttributes' => $skipAttributes,
             'dataOptions' => [
                 'paperSizeOptions' => $paperSizeOptions,
                 'paperSizeUnitOptions' => $paperSizeUnitOptions,
@@ -116,13 +162,29 @@ class ApiController extends \yii\web\Controller {
                 'paperOptions' => $paperOptions,
                 'printColorOptions' => $printColorOptions,
                 'coatingOptions' => $coatingOptions,
-                'dicutOptions' => $dicutOptions,
+                'dicutRoundedOptions' => $dicutRoundedOptions,
                 'perforateOptions' => $perforateOptions,
                 'perforateOptionOptions' => $perforateOptionOptions,
                 'foldOptions' => $foldOptions,
                 'foilUnitOptions' => $foilUnitOptions,
                 'foilColorOptions' => $foilColorOptions,
                 'embossUnitOptions' => $embossUnitOptions,
+                'printOptions' => $printOptions,
+                'coatingOptionOptions' => $coatingOptionOptions,
+                'dicutStatusOptions' => $dicutStatusOptions,
+                'foilPrintOptions' => $foilPrintOptions,
+                'embossPrintOptions' => $embossPrintOptions,
+                'glueOptions' => $glueOptions,
+                'ropeOptions' => $ropeOptions,
+                'landOrientOptions' => $landOrientOptions,
+                'foilStatusOptions' => $foilStatusOptions,
+                'embossStatusOptions' => $embossStatusOptions,
+                'dicutOptions' => $dicutOptions,
+                'bookBindingStatusOptions' => $bookBindingStatusOptions,
+                'perforatedRippedOptions' => $perforatedRippedOptions,
+                'runningNumberOptions' => $runningNumberOptions,
+                'windowBoxOptions' => $windowBoxOptions,
+                'windowBoxUnitOption' => $windowBoxUnitOption,
             ],
         ];
     }

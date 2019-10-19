@@ -440,10 +440,10 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                 ?>
             </div>
         </div>
-        <div class="row foil-option" style="display: <?= $queryBuilder->isShowInput($option, 'foli_print') ? '' : 'none'; ?>">
+        <div class="row foil-option" style="display: <?= $queryBuilder->isShowInput($option, 'foil_print') ? '' : 'none'; ?>">
             <div class="col-xs-12 col-sm-12 col-md-12 foil-size-width">
                 <?php
-                echo $form->field($model, 'foli_print')->radioList([
+                echo $form->field($model, 'foil_print')->radioList([
                     'two_page' => 'ทั้งหน้า/หลัง',
                     'one_page' => 'หน้าเดียว'
                 ], [
@@ -451,7 +451,7 @@ $textRequired = Html::tag('span', '*', ['class' => 'text-danger']);
                     'item' => function ($index, $label, $name, $checked, $value) use ($model) {
                         $radio = Html::beginTag('div', ['class' => 'radio inline-block']) .
                             Html::beginTag('label', ['class' => 'radio-inline']) .
-                            Html::radio($name, $checked, ['value' => $value, 'id' => Html::getInputId($model, 'foli_print').'-'.$index]) .
+                            Html::radio($name, $checked, ['value' => $value, 'id' => Html::getInputId($model, 'foil_print').'-'.$index]) .
                             Html::tag('span', Icon::show('circle', ['class' => 'cr-icon']), ['class' => 'cr']) .
                             ucwords($label) .
                             Html::endTag('label') .

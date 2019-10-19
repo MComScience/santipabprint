@@ -14,9 +14,11 @@ class AppAsset extends AssetBundle
     public $css = [
         'bundle/site.css',
         'bundle/mobilemenu.css',
-        'https://fonts.googleapis.com/css?family=Prompt:400'
+        'https://fonts.googleapis.com/css?family=Prompt:400',
+        'css/loader.css'
     ];
     public $js = [
+        // 'bundle/app.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

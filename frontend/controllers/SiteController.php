@@ -2,12 +2,15 @@
 
 namespace frontend\controllers;
 
+use common\modules\app\models\TblProductCategory;
 use common\modules\webhook\events\messages\flex\FlexEmsTracking;
+use common\modules\webhook\events\messages\flex\FlexProduct;
 use common\modules\webhook\events\messages\flex\FlexQuotation;
 use common\modules\webhook\events\messages\flex\FlexSampleShopping;
 use common\modules\webhook\events\messages\flex\FlexShopping;
 use Yii;
 use yii\base\InvalidParamException;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -88,7 +91,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index.vue.php');
     }
 
     /**
@@ -261,8 +264,11 @@ class SiteController extends Controller
 
     public function actionInvoice()
     {
+        $categorys = TblProductCategory::find()->all();
+        $keywords = ArrayHelper::getColumn($categorys, 'product_category_name');
+        $category = TblProductCategory::findOne(['product_category_name' => 'การ์ด/นามบัตร/ป้าย tag สินค้า/ที่คั่นหนังสือ']);
         $flexMessageBuilder = FlexShopping::get();
-        return json_encode($flexMessageBuilder, JSON_UNESCAPED_UNICODE|JSON_INVALID_UTF8_IGNORE);
+        return Json::encode($flexMessageBuilder, JSON_UNESCAPED_UNICODE|JSON_INVALID_UTF8_IGNORE);
         // return $this->renderAjax('invoice');
     }
 
