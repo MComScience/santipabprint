@@ -974,7 +974,7 @@
             </div>
           </div>
           <div class="col-md-5 col-lg-4">
-            <div class="panel_scroll" :style="{ position: (step === 2 ? 'relative' : '') }">
+            <div class="panel_scroll" :style="{ position: (step === 2 ? 'absolute' : '') }">
               <!-- Icon -->
               <icon-check-list />
               <!-- รายละเอียด -->
