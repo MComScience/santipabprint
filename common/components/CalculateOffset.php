@@ -203,10 +203,10 @@ class CalculateOffset extends Component {
         if ($model['foil_status'] == 'Y') {
             $this->isFoil = true;
         }
-        if ($model['foli_print'] == 'one_page') {
+        if ($model['foil_print'] == 'one_page') {
             $this->foilOnePage = true;
         }
-        if ($model['foli_print'] == 'two_page') {
+        if ($model['foil_print'] == 'two_page') {
             $this->foilTwoPage = true;
         }
     }
