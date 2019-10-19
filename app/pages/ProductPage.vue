@@ -2041,6 +2041,10 @@ export default {
           $("select.select2")
             .val("")
             .trigger("change");
+        } else {
+          $("select.select2")
+            .val("")
+            .trigger("change");
         }
       } catch (error) {
         _this.setLoading(false);
@@ -2088,6 +2092,7 @@ export default {
     },
     // เลือกสินค้า
     onSelectProduct(productId) {
+      this.step = 1;
       this.productId = productId;
       this.formOptions = {};
       this.productData = null;
