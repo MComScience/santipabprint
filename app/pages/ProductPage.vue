@@ -2033,15 +2033,11 @@ export default {
         loadingInstance.close();
         _this.scrollTop();
         const cacheData = JSON.parse(localStorage.getItem("formData"));
-        if (!cacheData) {
+        if (_this.isEmpty(cacheData)) {
           $("select.select2")
             .val("")
             .trigger("change");
-        } else if (cacheData && !cacheData[_this.productId]) {
-          $("select.select2")
-            .val("")
-            .trigger("change");
-        } else {
+        } else if (!_this.isEmpty(cacheData) && !cacheData[_this.productId]) {
           $("select.select2")
             .val("")
             .trigger("change");
