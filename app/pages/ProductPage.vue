@@ -1990,7 +1990,13 @@ export default {
         const { data } = await window.axios.get(
           `/app/api/quotation?p=${_this.productId}`
         );
-        const { dataOptions, formOptions, formAttributes, product, skipAttributes } = data;
+        const {
+          dataOptions,
+          formOptions,
+          formAttributes,
+          product,
+          skipAttributes
+        } = data;
         // set options
         _this.dataOptions = await dataOptions; // ข้อมูลตัวเลือก
         _this.formOptions = await formOptions; // ข้อมูลตั้งค่าฟิลด์
@@ -2033,12 +2039,23 @@ export default {
         loadingInstance.close();
         _this.scrollTop();
         const cacheData = JSON.parse(localStorage.getItem("formData"));
+        const selectElm = $("#form-quotation").find("select.select2");
+        const select2 = [];
+        selectElm.each(function(index, el) {
+          if (_this.isEmpty(_this.attributes[el.id])) {
+            select2.push("#" + el.id);
+          }
+        });
         if (_this.isEmpty(cacheData)) {
           $("select.select2")
             .val("")
             .trigger("change");
         } else if (!_this.isEmpty(cacheData) && !cacheData[_this.productId]) {
           $("select.select2")
+            .val("")
+            .trigger("change");
+        } else if (select2.length) {
+          $(select2.join(", "))
             .val("")
             .trigger("change");
         }
@@ -2720,8 +2737,8 @@ export default {
         loadingInstance.close();
       } catch (error) {
         _this.loadingQty = false;
+        _this.$message.error(this.getErrorMessage(error));
         loadingInstance.close();
-        this.$message.error(this.getErrorMessage(error));
       }
     },
     // ลบจำนวน
@@ -2957,6 +2974,9 @@ h3,
 h4,
 h5 {
   font-family: "Prompt", sans-serif !important;
+}
+.ant-message {
+  z-index: 1200;
 }
 </style>
 
