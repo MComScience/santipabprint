@@ -82,7 +82,7 @@ class CalculateOffset extends Component {
         if (ArrayHelper::isIn($this->modelProduct['package_type_id'], [54, 66]) && ArrayHelper::isIn($this->modelProduct['product_category_id'], [17])) {
             $this->model['diecut'] = 'Default';
         }
-        if (!empty($model['diecut_id'])) {
+        if (!empty($model['diecut_id']) && $model['diecut_id'] !== null) {
             $this->modelDiCut = $this->findModelDiecut($model['diecut_id']);
         }
         if ($model['foil_status'] == 'Y' && !empty($model['foil_size_unit'])) {
