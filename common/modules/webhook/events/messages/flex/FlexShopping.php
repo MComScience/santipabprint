@@ -161,7 +161,7 @@ class FlexShopping
                     ->setAction(
                         new UriTemplateActionBuilder(
                             'ดูผลิตภัณฑ์อื่นๆ',
-                            'https://line.me/R/app/1583147071-w3v6DmZZ'
+                            'https://line.me/R/app/1629709716-kN7qEX7m'
                         )
                     )
             ]);
