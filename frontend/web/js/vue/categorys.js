@@ -441,16 +441,16 @@ Vue.component("v-rope", {
   props: ["options", "value"],
   $_veeValidate: {
     value() {
-      return this.$el.value;
+      return this.$el.value
     }
   },
   data() {
     return {
       checked: ""
-    };
+    }
   },
   mounted: function() {
-    this.checked = this.value;
+    this.checked = this.value
   },
   template: `
   <div id="tblquotationdetail-rope" role="radiogroup" aria-invalid="false">
@@ -468,7 +468,106 @@ Vue.component("v-rope", {
     </div>
   </div>
   `
-});
+})
+
+Vue.component("v-perforated-ripped", {
+  props: ["options", "value"],
+  $_veeValidate: {
+    value() {
+      return this.$el.value
+    }
+  },
+  data() {
+    return {
+      checked: ""
+    }
+  },
+  mounted: function() {
+    this.checked = this.value
+  },
+  template: `
+  <div id="tblquotationdetail-perforated-ripped" role="radiogroup" aria-invalid="false">
+    <div v-for="(option, key) in options" :key="key" class="radio inline-block">
+      <label class="radio-inline">
+        <input type="radio" 
+          :id="'tblquotationdetail-perforated-ripped-' + key" 
+          name="TblQuotationDetail[perforated-ripped]" 
+          :value="option.value"
+          v-model="checked"
+          v-on:input="$emit('input', $event.target.value)"
+          v-on:change="$emit('change', $event)">
+        <span class="cr"><i class="cr-icon fa fa-circle"></i></span> {{ option.text }}
+      </label>
+    </div>
+  </div>
+  `
+})
+
+Vue.component("v-running-number", {
+  props: ["options", "value"],
+  $_veeValidate: {
+    value() {
+      return this.$el.value
+    }
+  },
+  data() {
+    return {
+      checked: ""
+    }
+  },
+  mounted: function() {
+    this.checked = this.value
+  },
+  template: `
+  <div id="tblquotationdetail-running-number" role="radiogroup" aria-invalid="false">
+    <div v-for="(option, key) in options" :key="key" class="radio inline-block">
+      <label class="radio-inline">
+        <input type="radio" 
+          :id="'tblquotationdetail-running-number-' + key" 
+          name="TblQuotationDetail[running-number]" 
+          :value="option.value"
+          v-model="checked"
+          v-on:input="$emit('input', $event.target.value)"
+          v-on:change="$emit('change', $event)">
+        <span class="cr"><i class="cr-icon fa fa-circle"></i></span> {{ option.text }}
+      </label>
+    </div>
+  </div>
+  `
+})
+
+Vue.component("v-window-box", {
+  props: ["options", "value"],
+  $_veeValidate: {
+    value() {
+      return this.$el.value
+    }
+  },
+  data() {
+    return {
+      checked: ""
+    }
+  },
+  mounted: function() {
+    this.checked = this.value
+  },
+  template: `
+  <div id="tblquotationdetail-window-box" role="radiogroup" aria-invalid="false">
+    <div v-for="(option, key) in options" :key="key" class="radio inline-block">
+      <label class="radio-inline">
+        <input type="radio" 
+          :id="'tblquotationdetail-window-box-' + key" 
+          name="TblQuotationDetail[window-box]" 
+          :value="option.value"
+          v-model="checked"
+          v-on:input="$emit('input', $event.target.value)"
+          v-on:change="$emit('change', $event)">
+        <span class="cr"><i class="cr-icon fa fa-circle"></i></span> {{ option.text }}
+      </label>
+    </div>
+  </div>
+  `
+})
 
 Vue.config.productionTip = false
 
@@ -722,6 +821,15 @@ new Vue({
       width: "100%",
       language: "th"
     },
+    //เข้าเล่ม
+    bookBindingOptions: {
+      data: [{ id: "0", text: "ไม่เข้าเล่ม" }, { id: "1", text: "เข้าเล่ม" }],
+      placeholder: "เลือกรายการ ...",
+      allowClear: true,
+      theme: "bootstrap",
+      width: "100%",
+      language: "th"
+    },
     dataOptions: [],
     formOptions: null,
     formAttributes: {
@@ -763,9 +871,18 @@ new Vue({
       product_id: p,
       foil_status: "",
       emboss_status: "",
-      rope: ""
+      rope: "",
+      perforated_ripped: "",
+      running_number: "",
+      book_binding_status: "",
+      book_binding_qty: "",
+      window_box: "",
+      window_box_width: "",
+      window_box_lenght: "",
+      window_box_unit: ""
     },
     landOrientOptions: [],
+    perforatedRippedOptions: [],
     coatingOptionOptions: [],
     dicutOptions: [],
     foliPrintOptions: [],
@@ -775,6 +892,8 @@ new Vue({
     foilStatusOptions: [],
     embossStatusOptions: [],
     ropeOptions: [],
+    runningNumberOptions: [],
+    windowBoxOptions: [],
     radioChecked: ""
   },
   computed: {
@@ -804,7 +923,9 @@ new Vue({
     },
     landOrientDetail: function() {
       if (this.isEmptyValue("land_orient")) return "-"
-      const data = this.landOrientOptions.find(item => item.value.toString() === this.formAttributes.land_orient)
+      const data = this.landOrientOptions.find(
+        item => item.value.toString() === this.formAttributes.land_orient
+      )
       return this.getTextValue(data)
     },
     paperSizeDetail: function() {
@@ -943,10 +1064,51 @@ new Vue({
       const glue = this.findDataOption(this.glueOptions, "value", "glue")
       return this.getTextValue(glue)
     },
+    perforatedRippedDetail: function() {
+      if (this.isEmptyValue("perforated_ripped")) return "-"
+      const perforated_ripped = this.findDataOption(
+        this.perforatedRippedOptions,
+        "value",
+        "perforated_ripped"
+      )
+      return this.getTextValue(perforated_ripped)
+    },
+    runningNumberDetail: function() {
+      if (this.isEmptyValue("running_number")) return "-"
+      const running_number = this.findDataOption(
+        this.runningNumberOptions,
+        "value",
+        "running_number"
+      )
+      return this.getTextValue(running_number)
+    },
+    windowBoxDetail: function() {
+      if (!this.showWindowBoxInput) return "ไม่ติดหน้าต่างกล่อง"
+      let window_box_width = this.getFormValue("window_box_width")
+      let window_box_lenght = this.getFormValue("window_box_lenght")
+      const uint = this.findDataOption(
+        this.windowBoxUnitOpts.data,
+        "id",
+        "window_box_unit"
+      )
+      window_box_width = this.isEmpty(window_box_width)
+        ? ""
+        : window_box_width + "x"
+      window_box_lenght = this.isEmpty(window_box_lenght)
+        ? ""
+        : window_box_lenght
+      const unitTxt =
+        this.getTextValue(uint) === "-" ? "" : this.getTextValue(uint)
+      return `${window_box_width}${window_box_lenght} ${unitTxt}`
+    },
     coatingDetail: function() {
       if (this.isEmptyValue("coating_id")) return "-"
-      const coating = this.coatingIdOpts.data.find(item => item.id === this.formAttributes.coating_id)
-      const coating_option = this.coatingOptionOptions.find(item => item.value === this.formAttributes.coating_option)
+      const coating = this.coatingIdOpts.data.find(
+        item => item.id === this.formAttributes.coating_id
+      )
+      const coating_option = this.coatingOptionOptions.find(
+        item => item.value === this.formAttributes.coating_option
+      )
       const coatingTxt =
         this.getTextValue(coating_option) === "-"
           ? ""
@@ -954,8 +1116,11 @@ new Vue({
       return this.getTextValue(coating) + " " + coatingTxt
     },
     dicutDetail: function() {
-      if (!this.isDicut && this.formAttributes.diecut_status === "not-dicut") return "ไม่ไดคัท"
-      const diecut = this.dicutOpts.data.find(item => item.id === this.formAttributes.diecut)
+      if (!this.isDicut && this.formAttributes.diecut_status === "not-dicut")
+        return "ไม่ไดคัท"
+      const diecut = this.dicutOpts.data.find(
+        item => item.id === this.formAttributes.diecut
+      )
       const diecut_id = this.findDataOption(
         this.dicutIdOpts.data,
         "id",
@@ -993,6 +1158,10 @@ new Vue({
       })
       return data ? data.text : "-"
     },
+    book_binding_qty: function() {
+      if (!this.formAttributes.book_binding_qty) return "-"
+      return this.formAttributes.book_binding_qty
+    },
     page_qty: function() {
       if (!this.formAttributes.page_qty) return "-"
       return this.formAttributes.page_qty
@@ -1011,12 +1180,15 @@ new Vue({
     },
     radioOptions() {
       const options = []
-      if(!this.dataOptions) return []
+      if (!this.dataOptions) return []
       if (this.isvisibleInput("diecut")) {
         this.dataOptions.dicutStatusOptions.map(option => {
-          if (this.isvisibleInput("perforate") && option.value === 'perforate') {
+          if (
+            this.isvisibleInput("perforate") &&
+            option.value === "perforate"
+          ) {
             options.push(option)
-          } else if(option.value !== 'perforate'){
+          } else if (option.value !== "perforate") {
             options.push(option)
           }
         })
@@ -1028,7 +1200,6 @@ new Vue({
         //   value: "dicut",
         //   text: "ไดคัท"
         // })
-
       }
       // if (this.isvisibleInput("perforate")) {
       //   options.push({
@@ -1040,8 +1211,16 @@ new Vue({
     },
     ropeDetail: function() {
       if (!this.formAttributes.rope) return "-"
-      return this.formAttributes.rope === '1' ? 'ร้อยเชือกหูถุง' : 'ไม่ร้อยเชือกหูถุง'
+      return this.formAttributes.rope === "1"
+        ? "ร้อยเชือกหูถุง"
+        : "ไม่ร้อยเชือกหูถุง"
     },
+    isBookBinding() {
+      return this.formAttributes.book_binding_status === "1"
+    },
+    showWindowBoxInput: function() {
+      return this.formAttributes.window_box === "1"
+    }
   },
   created() {
     $(".loading, .product-detail").removeClass("hidden")
@@ -1256,7 +1435,7 @@ new Vue({
         this.formOptions = await formOptions
 
         vm.loading = false
-        setTimeout(function () {
+        setTimeout(function() {
           $("#loading, #loading2, .desc").hide()
         }, 300)
       } catch (error) {
@@ -1579,27 +1758,42 @@ new Vue({
       }
     },
     onChangeDiecutStatus: function(e) {
-      const vm = this;
-      const value = e.target.value;
+      const vm = this
+      const value = e.target.value
       if (value === "not-dicut" || value === "perforate") {
         vm.formAttributes.diecut = "N"
         vm.formAttributes.diecut_id = ""
-        setTimeout(function () {
+        setTimeout(function() {
           $("#diecut, #diecut_id, #perforate")
-              .val(null)
-              .trigger("change");
+            .val(null)
+            .trigger("change")
         }, 300)
         $('input[name="TblQuotationDetail[diecut]"]').prop("checked", false)
       } else if (value === "dicut") {
         vm.formAttributes.diecut = ""
         this.formAttributes.perforate = ""
         this.formAttributes.perforate_option_id = ""
-        setTimeout(function () {
+        setTimeout(function() {
           $("#perforate, #perforate_option_id")
-              .val(null)
-              .trigger("change");
+            .val(null)
+            .trigger("change")
         }, 300)
       }
+    },
+    onChangeBookBindingStatus: function(e) {
+      if (e.target.value === "0" || !e.target.value) {
+        this.formAttributes.book_binding_id = ""
+        this.formAttributes.book_binding_qty = ""
+      }
+    },
+    onChangePerforatedRipped: function(e) {
+      console.log(e.target.value)
+    },
+    onChangeRunningNumber: function(e) {
+      console.log(e.target.value)
+    },
+    onChangewindowBox: function(e) {
+      console.log(e.target.value)
     },
     findPaper: function(options) {
       let paper = null
@@ -1643,21 +1837,27 @@ new Vue({
     storeData: async function() {
       let formData = {}
       const cacheData = await JSON.parse(localStorage.getItem("formData"))
-      if(cacheData && cacheData[this.productId]) {
+      if (cacheData && cacheData[this.productId]) {
         const formAttributes = await this.formAttributes
         const cacheAttributes = await cacheData[this.productId]
-        for(let i in this.formAttributes) {
-          if(this.isEmpty(formAttributes[i]) && !this.isEmpty(cacheAttributes[i])) {
+        for (let i in this.formAttributes) {
+          if (
+            this.isEmpty(formAttributes[i]) &&
+            !this.isEmpty(cacheAttributes[i])
+          ) {
             formAttributes[i] = cacheAttributes[i]
           }
         }
         formData[this.productId] = await formAttributes
-      } else if(cacheData) {
-        formData[this.productId] = await this.formAttributes;
+      } else if (cacheData) {
+        formData[this.productId] = await this.formAttributes
         formData = await updateObject(formData, cacheData)
       }
       // formData[this.productId] = this.formAttributes
-      localStorage.setItem("formData", JSON.stringify(Object.assign(cacheData, formData)))
+      localStorage.setItem(
+        "formData",
+        JSON.stringify(Object.assign(cacheData, formData))
+      )
     },
     reStoreData: function() {
       if (localStorage.getItem("formData")) {
@@ -1847,9 +2047,9 @@ new Vue({
   },
   watch: {
     formAttributes: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         this.$nextTick(function() {
-          if(val.product_id) {
+          if (val.product_id) {
             this.storeData()
           }
         })
