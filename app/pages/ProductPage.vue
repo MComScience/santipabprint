@@ -1085,7 +1085,7 @@
                       <form-group input-label="อีเมล์">
                         <input
                           v-model="attributeQuotation.quotation_customer_email"
-                          type="text"
+                          type="email"
                           class="form-control"
                           name="quotation_customer_email"
                           id="quotation_customer_email"
@@ -1105,7 +1105,7 @@
                       <form-group input-label="เบอร์โทร">
                         <input
                           v-model="attributeQuotation.quotation_customer_tel"
-                          type="text"
+                          type="tel"
                           class="form-control"
                           name="quotation_customer_tel"
                           id="quotation_customer_tel"

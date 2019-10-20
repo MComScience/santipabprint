@@ -369,12 +369,12 @@ class ProductController extends \yii\web\Controller
                             ]);
                         }
                     }
-                    // ปั๊มฟอยล์
+                    // ปั๊มนูน
                     if ($attribute === 'emboss_status') {
                         $embossStatusOptions = InPutOptions::getOption('emboss_status');
                         $emboss_status = InPutOptions::getAttributeValue($model['emboss_status'], $embossStatusOptions);
                         // ปั๊ม
-                        if ($model['foil_status'] !== 'N') {
+                        if ($model['emboss_status'] !== 'N') {
                             // หน่วย
                             $embossSizeUnitOptions = InPutOptions::getOption('emboss_size_unit');
                             $emboss_size_unit = InPutOptions::getAttributeValue($model['emboss_size_unit'], $embossSizeUnitOptions);
