@@ -974,7 +974,7 @@
             </div>
           </div>
           <div class="col-md-5 col-lg-4">
-            <div class="panel_scroll" :style="{ position: (step === 2 ? 'absolute' : '') }">
+            <div class="panel_scroll">
               <!-- Icon -->
               <icon-check-list />
               <!-- รายละเอียด -->
@@ -2095,6 +2095,8 @@ export default {
     onSelectCategory(catId) {
       this.catId = catId;
       this.fetchDataProductCategory(catId);
+      /* const data = { "first name": "George", "last name": "Jetson", age: 110 };
+      const querystring = this.encodeQueryData(data); */
     },
     onSelectCat(catId) {
       this.catId = catId;
@@ -2648,6 +2650,8 @@ export default {
           }
         } else {
           panel_scroll.css("top", 0);
+          panel_scroll.css("position", "relative");
+          panel_scroll.css("padding", 0);
         }
       });
     },
@@ -2868,6 +2872,12 @@ export default {
         );
       }
       return window.scrollY > 100;
+    },
+    encodeQueryData(data) {
+      const ret = [];
+      for (let d in data)
+        ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+      return ret.join("&");
     }
   },
   watch: {
