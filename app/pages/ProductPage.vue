@@ -2730,7 +2730,10 @@ export default {
         formData.append("qty", qty);
         // ข้อมูลสินค้าที่เลือก tbl_quotation_detail
         Object.keys(_this.attributes).forEach(key =>
-          formData.append(key, _this.attributes[key])
+          formData.append(
+            key,
+            _this.isEmpty(_this.attributes[key]) ? "" : _this.attributes[key]
+          )
         );
         const { data } = await window.axios.post(
           `/app/api/calculate-price`,
@@ -3018,9 +3021,9 @@ hr {
   left: 0;
   width: 100%;
   padding: 0px 15px;
-  -webkit-transition: all 0.2s linear;
+  /* -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
-  -ms-transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear; */
 }
 @media (max-width: 767px) {
   .panel_scroll {
