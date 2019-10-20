@@ -422,6 +422,35 @@ class ProductController extends \yii\web\Controller
 
         }
 
+        $contents[] = [
+            "type" => "separator",
+            "margin" => "xxl",
+        ];
+        $contents[] = ArrayHelper::merge($box, [
+            'contents' => [
+                ArrayHelper::merge($contentLeft, [
+                    "text" => "จำนวน",
+                    "color" => "#ea7066",
+                ]),
+                ArrayHelper::merge($contentRight, [
+                    "text" => Yii::$app->formatter->format($model['cust_quantity'], ['decimal', 0]) . " ชิ้น",
+                    "color" => "#ea7066",
+                ]),
+            ],
+        ]);
+        $contents[] = ArrayHelper::merge($box, [
+            'contents' => [
+                ArrayHelper::merge($contentLeft, [
+                    "text" => "ราคา",
+                    "color" => "#ea7066",
+                ]),
+                ArrayHelper::merge($contentRight, [
+                    "text" => Yii::$app->formatter->format($model['final_price'], ['decimal', 2]) . " บ.",
+                    "color" => "#ea7066",
+                ]),
+            ],
+        ]);
+
         $body = [
             "type" => "box",
             "layout" => "vertical",
