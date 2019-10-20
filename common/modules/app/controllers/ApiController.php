@@ -366,7 +366,7 @@ class ApiController extends \yii\web\Controller
         $catagory = TblProductCategory::findOne($id);
         $itemProducts = [];
         if ($catagory) {
-            $products = TblProduct::find()->where(['product_category_id' => $id])->orderBy('package_type_id ASC, product_order ASC')->all();
+            $products = TblProduct::find()->where(['product_category_id' => $id])->orderBy('product_order ASC')->all();
             foreach ($products as $key => $product) {
                 $itemProducts[] = [
                     'product_id' => $product['product_id'],
