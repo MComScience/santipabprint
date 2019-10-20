@@ -898,6 +898,7 @@
                                 placeholder="จำนวนที่ต้องการ"
                                 v-model="cust_quantity"
                                 autofocus
+                                type="tel"
                               >
                                 <template slot="append">
                                   <el-button
