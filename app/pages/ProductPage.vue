@@ -2991,6 +2991,9 @@ h5 {
 .ant-message {
   z-index: 1200;
 }
+.bb-fixed-header {
+  position: absolute;
+}
 </style>
 
 <style scoped>
