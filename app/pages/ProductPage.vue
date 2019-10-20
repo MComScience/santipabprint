@@ -2012,54 +2012,42 @@ export default {
         _this.productData = await product; // ข้อมูลสินค้าที่เลือก
 
         await _this.setInputDataOptions(); // กำหนดข้อมูลตัวเลือก
-
-        await new Promise(resolve => {
-          // ซ่อน loading
-          setTimeout(function() {
-            $("#loading, #loading2, .desc").hide();
-            // $("select.select2")
-            //   // .val("")
-            //   .trigger("change");
-            resolve();
-          }, 300);
-        });
         _this.$nextTick(function() {
           _this.restoreStorage();
         });
         _this.setLoading(false);
-        await new Promise(resolve => {
-          setTimeout(function() {
-            $("#paper_size_id")
-              .val(_this.attributes.paper_size_id)
-              .trigger("change");
-            $("#loading, #loading2, .desc").hide();
-            _this.initScroll();
-            resolve();
-          }, 1000);
-        });
         loadingInstance.close();
         _this.scrollTop();
         const cacheData = JSON.parse(localStorage.getItem("formData"));
         const selectElm = $("#form-quotation").find("select.select2");
         const select2 = [];
-        selectElm.each(function(index, el) {
-          if (_this.isEmpty(_this.attributes[el.id])) {
-            select2.push("#" + el.id);
-          }
-        });
+
         if (_this.isEmpty(cacheData)) {
           $("select.select2")
             .val("")
             .trigger("change");
-        } else if (!_this.isEmpty(cacheData) && !cacheData[_this.productId]) {
-          $("select.select2")
-            .val("")
-            .trigger("change");
-        } else if (select2.length) {
-          $(select2.join(", "))
-            .val("")
-            .trigger("change");
         }
+        await new Promise(resolve => {
+          setTimeout(function() {
+            $("#paper_size_id")
+              .val(_this.attributes.paper_size_id)
+              .trigger("change");
+            selectElm.each(function(index, el) {
+              if (_this.isEmpty(_this.attributes[el.id])) {
+                $("#" + el.id)
+                  .val("")
+                  .trigger("change");
+              } else if (!_this.isEmpty(_this.attributes[el.id])) {
+                $("#" + el.id)
+                  .val(_this.attributes[el.id])
+                  .trigger("change");
+              }
+            });
+            $("#loading, #loading2, .desc").hide();
+            _this.initScroll();
+            resolve();
+          }, 1000);
+        });
       } catch (error) {
         _this.setLoading(false);
         loadingInstance.close();
@@ -2845,7 +2833,7 @@ export default {
     },
     getErrorMessage(error, defaultMsg = "Network Error") {
       let message = "";
-      if (error.response.hasOwnProperty("data")) {
+      if (error.response && error.response.hasOwnProperty("data")) {
         const { data } = error.response;
         if (data.hasOwnProperty("data")) {
           const data = error.response.data.data;
