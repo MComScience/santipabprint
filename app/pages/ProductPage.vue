@@ -2016,8 +2016,6 @@ export default {
           _this.restoreStorage();
         });
         _this.setLoading(false);
-        loadingInstance.close();
-        _this.scrollTop();
         const cacheData = JSON.parse(localStorage.getItem("formData"));
         const selectElm = $("#form-quotation").find("select.select2");
         const select2 = [];
@@ -2044,7 +2042,9 @@ export default {
               }
             });
             $("#loading, #loading2, .desc").hide();
+            loadingInstance.close();
             _this.initScroll();
+            _this.scrollTop();
             resolve();
           }, 1000);
         });
