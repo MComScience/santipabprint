@@ -2666,6 +2666,7 @@ export default {
       const _this = this;
       // คำนวณราคา
       _this.priceList = [];
+      _this.cust_quantity = "";
       await _this.fetchDataPriceList();
       _this.step = 2;
       _this.scrollTop();
