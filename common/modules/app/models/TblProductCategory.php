@@ -7,8 +7,11 @@ use trntv\filekit\behaviors\UploadBehavior;
 /**
  * This is the model class for table "tbl_product_category".
  *
- * @property string $product_category_id รหัส
+ * @property int $product_category_id รหัส
  * @property string $product_category_name หมวดหมู่
+ * @property string $image_path ที่อยู่รูปภาพ
+ * @property string $image_base_url ลิงค์ภาพ
+ * @property int $product_category_order ลำดับ
  */
 class TblProductCategory extends \yii\db\ActiveRecord
 {
@@ -47,6 +50,7 @@ class TblProductCategory extends \yii\db\ActiveRecord
     {
         return [
             [['product_category_name'], 'required'],
+            [['product_category_order'], 'integer'],
             [['product_category_name', 'image_path', 'image_base_url'], 'string', 'max' => 255],
             [['icon'], 'safe'],
         ];
@@ -62,6 +66,7 @@ class TblProductCategory extends \yii\db\ActiveRecord
             'product_category_name' => 'หมวดหมู่',
             'image_path' => 'ที่อยู่รูปภาพ',
             'image_base_url' => 'ลิงค์ภาพ',
+            'product_category_order' => 'ลำดับ',
         ];
     }
 

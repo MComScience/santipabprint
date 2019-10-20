@@ -2,29 +2,28 @@
 
 namespace common\modules\app\controllers;
 
+use common\components\CalculateDigital;
+use common\components\CalculateOffset;
+use common\components\InPutOptions;
 use common\components\QueryBuilder;
+use common\modules\app\models\TblBillPriceDetail;
 use common\modules\app\models\TblProduct;
 use common\modules\app\models\TblProductCategory;
 use common\modules\app\models\TblQuotationDetail;
-use common\modules\app\models\TblUnit;
-use common\modules\app\models\TblBillPrice;
-use common\modules\app\models\TblBillPriceDetail;
 use common\modules\app\traits\ModelTrait;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use common\components\CalculateDigital;
-use common\components\CalculateOffset;
-use yii\helpers\Url;
 use yii\helpers\Json;
-use common\components\InPutOptions;
 
-class ApiController extends \yii\web\Controller {
+class ApiController extends \yii\web\Controller
+{
 
     use ModelTrait;
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -40,7 +39,7 @@ class ApiController extends \yii\web\Controller {
                         'allow' => true,
                         'actions' => [
                             'product-category-list', 'quotation', 'calculate-price', 'bill-floor-options',
-                            'get-product-category', 'get-all-product'
+                            'get-product-category', 'get-all-product',
                         ],
                         'roles' => ['?', '@'],
                     ],
@@ -57,14 +56,16 @@ class ApiController extends \yii\web\Controller {
         return parent::beforeAction($action);
     }
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         return $this->render('index');
     }
 
-    public function actionProductCategoryList() {
+    public function actionProductCategoryList()
+    {
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
-        $catagorys = TblProductCategory::find()->all();
+        $catagorys = TblProductCategory::find()->orderBy('product_category_order ASC')->all();
         $itemCatagorys = [];
         $baseUrl = 'https://santipab.info';
         foreach ($catagorys as $key => $catagory) {
@@ -77,16 +78,17 @@ class ApiController extends \yii\web\Controller {
         return $itemCatagorys;
     }
 
-    public function actionQuotation($p) {
+    public function actionQuotation($p)
+    {
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
         $product = $this->findModelProduct($p);
         $modelProductOption = $this->findModelProductOption($p);
-        $formOptions = empty($product['product_options']) ? [] : unserialize($product['product_options']);//$product->options;
+        $formOptions = empty($product['product_options']) ? [] : unserialize($product['product_options']); //$product->options;
         $QuotationDetail = new TblQuotationDetail();
         $queryBuilder = new QueryBuilder([
             'modelOption' => $modelProductOption,
-            'product' => $product
+            'product' => $product,
         ]);
 
         // หน่วย ขนาดกำหนดเอง
@@ -190,14 +192,15 @@ class ApiController extends \yii\web\Controller {
         ];
     }
 
-    public function actionCalculatePrice() {
+    public function actionCalculatePrice()
+    {
         $request = Yii::$app->request;
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
         $qtys = [
             500,
             1000,
-            2000
+            2000,
         ];
         $priceList = [];
         $data = $request->post();
@@ -207,7 +210,7 @@ class ApiController extends \yii\web\Controller {
         if ($product['product_category_id'] == 19) {
             $unit = 'เล่ม';
             $billPriceDetails = TblBillPriceDetail::findAll([
-                        'bill_price_id' => $data['bill_detail_qty']
+                'bill_price_id' => $data['bill_detail_qty'],
             ]);
             foreach ($billPriceDetails as $key => $billPriceDetail) {
                 $priceList[] = [
@@ -216,10 +219,10 @@ class ApiController extends \yii\web\Controller {
                     'final_price' => number_format($billPriceDetail['bill_detail_price'] * $billPriceDetail['bill_detail_qty'], 2),
                     'paper' => [
                         'paper_detail' => [
-                            'paper_detail_id' => ''
-                        ]
+                            'paper_detail_id' => '',
+                        ],
                     ],
-                    'unit' => $unit
+                    'unit' => $unit,
                 ];
             }
             return [
@@ -230,8 +233,6 @@ class ApiController extends \yii\web\Controller {
         if (!empty($request->post('qty'))) {
             $qtys = \explode(',', $request->post('qty'));
         }
-
-
 
         foreach ($qtys as $qty) {
             $data['cust_quantity'] = $qty;
@@ -248,7 +249,7 @@ class ApiController extends \yii\web\Controller {
             $price_per_item_digital = $final_price_digital / $data['cust_quantity'];
 
 //            $final_price_offset = ceil($offsetAttr['final_price_offset'] / 10) * 10;
-//            $price_per_item_offset = $final_price_offset / $data['cust_quantity'];
+            //            $price_per_item_offset = $final_price_offset / $data['cust_quantity'];
             //ราคาต่อชิ้น digital
             $price_per_item_digital_decimal = (int) substr(number_format($price_per_item_digital, 2), -2);
             if ($price_per_item_digital_decimal < 90 && $price_per_item_digital_decimal > 0) {
@@ -260,13 +261,13 @@ class ApiController extends \yii\web\Controller {
             //ราคาต่อชิ้น offset
             $price_per_item_offset_decimal = number_format($offsetAttr['price_per_item_offset'], 2);
 //            if ($price_per_item_offset_decimal < 90 && $price_per_item_offset_decimal > 0) {
-//                $price_per_item_offset_decimal = (ceil($price_per_item_offset_decimal / 10)) * 10;
-//                $price_per_item_offset = (int) $offsetAttr['price_per_item_offset'] . '.' . $price_per_item_offset_decimal;
-//            } else {
-//                $price_per_item_offset = ceil($offsetAttr['price_per_item_offset']);
-//            }
+            //                $price_per_item_offset_decimal = (ceil($price_per_item_offset_decimal / 10)) * 10;
+            //                $price_per_item_offset = (int) $offsetAttr['price_per_item_offset'] . '.' . $price_per_item_offset_decimal;
+            //            } else {
+            //                $price_per_item_offset = ceil($offsetAttr['price_per_item_offset']);
+            //            }
             if ($product['product_category_id'] == 12) {
-                $unit = 'แผ่น (' . (round($qty / $data['book_binding_qty'])).' เล่ม)';
+                $unit = 'แผ่น (' . (round($qty / $data['book_binding_qty'])) . ' เล่ม)';
             }
             $cust_quantity = $qty;
             if ($final_price_digital > 0 && $offsetAttr['final_price_offset'] > 0) {
@@ -281,7 +282,7 @@ class ApiController extends \yii\web\Controller {
                         'paper' => $offsetAttr['0.6[paper]'],
                         'unit' => $unit,
                         'price_per_item_digital_decimal' => $price_per_item_digital_decimal,
-                        'price_per_item_offset_decimal' => $price_per_item_offset_decimal
+                        'price_per_item_offset_decimal' => $price_per_item_offset_decimal,
                     ];
                 } elseif ($final_price_digital < $offsetAttr['final_price_offset']) {
                     $priceList[] = [
@@ -294,7 +295,7 @@ class ApiController extends \yii\web\Controller {
                         'paper' => $digitalAttr['paper'],
                         'unit' => $unit,
                         'price_per_item_digital_decimal' => $price_per_item_digital_decimal,
-                        'price_per_item_offset_decimal' => $price_per_item_offset_decimal
+                        'price_per_item_offset_decimal' => $price_per_item_offset_decimal,
                     ];
                 }
             } elseif ($final_price_digital == 0 && $offsetAttr['final_price_offset'] > 0) {
@@ -308,7 +309,7 @@ class ApiController extends \yii\web\Controller {
                     'paper' => $offsetAttr['0.6[paper]'],
                     'unit' => $unit,
                     'price_per_item_digital_decimal' => $price_per_item_digital_decimal,
-                    'price_per_item_offset_decimal' => $price_per_item_offset_decimal
+                    'price_per_item_offset_decimal' => $price_per_item_offset_decimal,
                 ];
             } elseif ($final_price_digital > 0 && $offsetAttr['final_price_offset'] == 0) {
                 $priceList[] = [
@@ -321,7 +322,7 @@ class ApiController extends \yii\web\Controller {
                     'paper' => $digitalAttr['paper'],
                     'unit' => $unit,
                     'price_per_item_digital_decimal' => $price_per_item_digital_decimal,
-                    'price_per_item_offset_decimal' => $price_per_item_offset_decimal
+                    'price_per_item_offset_decimal' => $price_per_item_offset_decimal,
                 ];
             }
         }
@@ -329,41 +330,43 @@ class ApiController extends \yii\web\Controller {
             throw new \yii\web\HttpException(422, 'เนื่องจากขนาดชิ้นงานของท่านมีไชส์ใหญ่เกินระบบจะประมาณผล กรุณาติดต่อโรงพิมพ์');
         }
 //        $data = $request->post();
-//        $data['cust_quantity'] = 2000;
-//        $offset = new CalculateOffset([
-//            'model' => $data,
-//        ]);
-//        $offsetAttr = $offset->getAttributeValue();
+        //        $data['cust_quantity'] = 2000;
+        //        $offset = new CalculateOffset([
+        //            'model' => $data,
+        //        ]);
+        //        $offsetAttr = $offset->getAttributeValue();
         return [
             'price_list' => $priceList,
         ];
     }
 
-    public function actionBillFloorOptions($paper_size_id, $paper_id) {
+    public function actionBillFloorOptions($paper_size_id, $paper_id)
+    {
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
         $rows = (new \yii\db\Query())
-                ->select([
-                    'tbl_bill_price.bill_price_id',
-                    'tbl_bill_price.paper_size_id',
-                    'CONCAT(tbl_bill_price.bill_floor,\'  แผ่น \') as bill_floor',
-                    'tbl_bill_price.paper_id'
-                ])
-                ->from('tbl_bill_price')
-                ->where([
-                    'paper_size_id' => $paper_size_id,
-                    'paper_id' => $paper_id,
-                ])
-                ->all();
+            ->select([
+                'tbl_bill_price.bill_price_id',
+                'tbl_bill_price.paper_size_id',
+                'CONCAT(tbl_bill_price.bill_floor,\'  แผ่น \') as bill_floor',
+                'tbl_bill_price.paper_id',
+            ])
+            ->from('tbl_bill_price')
+            ->where([
+                'paper_size_id' => $paper_size_id,
+                'paper_id' => $paper_id,
+            ])
+            ->all();
         return ArrayHelper::map($rows, 'bill_price_id', 'bill_floor');
     }
 
-    public function actionGetProductCategory($id) {
+    public function actionGetProductCategory($id)
+    {
         $baseUrl = 'https://santipab.info';
         $catagory = TblProductCategory::findOne($id);
         $itemProducts = [];
         if ($catagory) {
-            $products = TblProduct::find()->where(['product_category_id' => $id])->orderBy('package_type_id ASC')->all();
+            $products = TblProduct::find()->where(['product_category_id' => $id])->orderBy('package_type_id ASC, product_order ASC')->all();
             foreach ($products as $key => $product) {
                 $itemProducts[] = [
                     'product_id' => $product['product_id'],
@@ -373,13 +376,14 @@ class ApiController extends \yii\web\Controller {
             }
         }
         return Json::encode([
-                    'items' => $itemProducts
+            'items' => $itemProducts,
         ]);
     }
 
-    public function actionGetAllProduct() {
+    public function actionGetAllProduct()
+    {
         $itemProducts = [];
-        $products = TblProduct::find()->orderBy('package_type_id ASC')->all();
+        $products = TblProduct::find()->orderBy('package_type_id ASC, product_order ASC')->all();
         $baseUrl = 'https://santipab.info';
         foreach ($products as $key => $product) {
             $itemProducts[] = [
@@ -391,8 +395,8 @@ class ApiController extends \yii\web\Controller {
             ];
         }
         return Json::encode([
-                    'items' => $itemProducts,
-                    'keywords' => ArrayHelper::getColumn($itemProducts, 'product_name')
+            'items' => $itemProducts,
+            'keywords' => ArrayHelper::getColumn($itemProducts, 'product_name'),
         ]);
     }
 

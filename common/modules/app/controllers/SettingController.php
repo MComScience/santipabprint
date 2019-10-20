@@ -272,6 +272,9 @@ class SettingController extends \yii\web\Controller
     {
         $searchModel = new TblProductCategorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort->defaultOrder = [
+            'product_category_order' => SORT_ASC
+        ];
 
         return $this->render('_product_category', [
             'searchModel' => $searchModel,
@@ -308,6 +311,7 @@ class SettingController extends \yii\web\Controller
        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
        $dataProvider->sort->defaultOrder = [
            'product_category_id' => SORT_ASC,
+           'product_order' => SORT_ASC
        ];
 
        return $this->render('_product', [
@@ -2578,5 +2582,35 @@ class SettingController extends \yii\web\Controller
         }
         return ['output' => '', 'selected' => ''];
     }*/
+
+    public function actionSortableProduct()
+    {
+        $request = Yii::$app->request;
+        if($request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $keys = $request->post('keys');
+            foreach ($keys as $index => $value) {
+                $model = TblProduct::findOne($value);
+                $model->product_order = $index + 1;
+                $model->save();
+            }
+            return 'Complete';
+        }
+    }
+
+    public function actionSortableProductCategory()
+    {
+        $request = Yii::$app->request;
+        if($request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $keys = $request->post('keys');
+            foreach ($keys as $index => $value) {
+                $model = TblProductCategory::findOne($value);
+                $model->product_category_order = $index + 1;
+                $model->save();
+            }
+            return 'Complete';
+        }
+    }
 
 }

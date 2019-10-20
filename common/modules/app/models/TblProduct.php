@@ -97,7 +97,7 @@ class TblProduct extends \yii\db\ActiveRecord
     {
         return [
             [['product_category_id', 'product_name'], 'required'],
-            [['product_category_id', 'package_type_id', 'created_by', 'updated_by'], 'integer'],
+            [['product_category_id', 'package_type_id', 'created_by', 'updated_by', 'product_order'], 'integer'],
             [['product_description', 'product_options'], 'string'],
             [['created_at', 'updated_at', 'icon', 'files'], 'safe'],
             [['product_id'], 'string', 'max' => 100],
@@ -120,6 +120,7 @@ class TblProduct extends \yii\db\ActiveRecord
             'product_options' => 'ตัวเลือก',
             'product_image_path' => 'ที่อยู่รูปภาพ',
             'product_image_base_url' => 'ลิงค์ภาพ',
+            'product_order' => 'ลำดับ',
             'created_by' => 'ผู้บันทึก',
             'created_at' => 'วันที่บันทึก',
             'updated_by' => 'ผู้แก้ไข',

@@ -10,12 +10,21 @@ use adminlte\helpers\Html;
 use kartik\icons\Icon;
 use yii\helpers\Url;
 use dominus77\sweetalert2\assets\SweetAlert2Asset;
+use yii\jui\JuiAsset;
 
 SweetAlert2Asset::register($this);
+JuiAsset::register($this);
 
 $this->title = 'หมวดหมู่สินค้า';
 $this->params['breadcrumbs'][] = ['label' => 'ตั้งค่า', 'url' => ['/app/setting/index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->registerCss(<<<CSS
+    td.sortable:hover {
+        cursor: move;
+    }
+CSS
+);
 ?>
 <?= $this->render('@common/modules/app/views/setting/index'); ?>
 <div class="box box-primary">
@@ -63,6 +72,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'tableOptions' => ['class' => 'small kv-table'],
             'columns' => [
+                [
+                    'header' => '#',
+                    'value' => function($model){
+                        return Html::tag('i', '', ['class' => 'fa fa-arrows']);
+                    },
+                    'format' => 'raw',
+                    'hAlign' => 'center',
+                    'contentOptions' => ['class' => 'sortable'],
+                    'width' => '30px'
+                ],
                 ['class' => '\kartik\grid\SerialColumn'],
                 [
                     'class' => 'kartik\grid\ExpandRowColumn',
@@ -94,6 +113,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     'format' => 'raw',
                     'width' => '15%',
+                ],
+                [
+                    'attribute' => 'product_category_order',
+                    'hAlign' => 'center',
+                    'width' => '35px'
                 ],
                 [
                     'class' => '\kartik\grid\ActionColumn',
@@ -137,5 +161,76 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile(
     '@web/js/yii-confirm.js',
     ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+$this->registerJs(<<<JS
+var methods = {
+    getRowKeys: function () {
+        var \$grid = $(this);
+        var keys = [];
+        \$grid.find("tbody tr").each(function () {
+            if ($(this).data('key')) {
+                keys.push($(this).data('key'));
+            }
+        });
+
+        return keys;
+    },
+    initSortable: function() {
+        $( "#grid-product-category-container tbody" ).sortable({
+            stop: function( event, ui ) {
+                var keys = $('#grid-product-category-container').gridView('getRowKeys');
+                $.ajax({
+                    method: "POST",
+                    url: "/app/setting/sortable-product-category",
+                    data: { keys: keys },
+                    dataType: "json",
+                    success: function(data) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        })
+
+                        Toast.fire({
+                            type: 'success',
+                            title: 'Sortable successfully'
+                        })
+                        $.pjax.reload({container: '#grid-product-category-pjax'});
+                    },
+                    error: function( jqXHR, textStatus, errorThrown) {
+                        Swal({
+                            type: "error",
+                            title: textStatus,
+                            text: errorThrown
+                        });
+                    }
+                });
+            }
+        });
+    }
+};
+
+(function ($) {
+    $.fn.gridView = function (method) {
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof method === 'object' || !method) {
+                return methods.init.apply(this, arguments);
+        } else {
+            $.error('Method ' + method + ' does not exist in jQuery.yiiGridView');
+            return false;
+        }
+    };
+})(window.jQuery);
+
+$("#grid-product-category-pjax").on("pjax:success", function() {
+    methods.initSortable();
+});
+
+$(window).on('load', function(){
+    methods.initSortable();
+});
+JS
 );
 ?>
