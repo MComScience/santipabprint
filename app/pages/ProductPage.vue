@@ -3021,9 +3021,9 @@ hr {
   left: 0;
   width: 100%;
   padding: 0px 15px;
-  /* -webkit-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
-  -ms-transition: all 0.2s linear; */
+  -ms-transition: all 0.2s linear;
 }
 @media (max-width: 767px) {
   .panel_scroll {
