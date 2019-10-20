@@ -2975,7 +2975,8 @@ h2,
 h3,
 h4,
 h5,
-p {
+p,
+body {
   font-family: "Prompt", sans-serif !important;
 }
 .ant-message {
