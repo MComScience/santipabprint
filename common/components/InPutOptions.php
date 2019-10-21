@@ -373,7 +373,7 @@ class InPutOptions
             "emboss_size_width",
             "emboss_size_height",
             "emboss_size_unit",
-            "book_binding_status",
+            // "book_binding_status",
             "window_box_width",
             "window_box_lenght",
             "window_box_unit",

@@ -1928,6 +1928,14 @@ export default {
         items.push(item.cust_quantity);
       });
       return items;
+    },
+    bookBindingStatus() {
+      if (this.isEmpty(this.attributes.book_binding_status)) return "-";
+      const data = this.bookBindingStatusOptions.find(
+        item => item.id === this.attributes.book_binding_status
+      );
+      if (this.isEmpty(data)) return "-";
+      return this.replaceHtml(data.text);
     }
   },
   mounted() {
@@ -2611,6 +2619,9 @@ export default {
           break;
         case "window_box":
           info = _this.windowBoxDetail;
+          break;
+        case "book_binding_status":
+          info = _this.bookBindingStatus;
           break;
         default:
           break;
