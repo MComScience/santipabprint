@@ -39,7 +39,7 @@ class TblProductCategorySearch extends TblProductCategory
      */
     public function search($params)
     {
-        $query = TblProductCategory::find()->orderBy('product_category_id  DESC');
+        $query = TblProductCategory::find();
 
         // add conditions that should always apply here
 
