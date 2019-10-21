@@ -73,16 +73,11 @@ CSS
             'tableOptions' => ['class' => 'small kv-table'],
             'columns' => [
                 [
-                    'header' => '#',
-                    'value' => function($model){
-                        return Html::tag('i', '', ['class' => 'fa fa-arrows']);
-                    },
-                    'format' => 'raw',
+                    'attribute' => 'product_category_order',
+                    'label' => 'ลำดับแสดง',
                     'hAlign' => 'center',
-                    'contentOptions' => ['class' => 'sortable'],
-                    'width' => '30px'
+                    'width' => '35px'
                 ],
-                ['class' => '\kartik\grid\SerialColumn'],
                 [
                     'class' => 'kartik\grid\ExpandRowColumn',
                     'width' => '50px',
@@ -94,17 +89,6 @@ CSS
                     'expandOneOnly' => true
                 ],
                 [
-                    'attribute' => 'product_category_id',
-                    'label' => 'รหัส',
-                    'hAlign' => 'center',
-                    'vAlign' => 'middle',
-                    'headerOptions' => [
-                        'style' => 'text-align:center;',
-                    ],
-                    'format' => 'raw',
-                    'width' => '15%',
-                ],
-                [
                     'attribute' => 'product_category_name',
                     'label' => 'ชื่อหมวดหมู่',
                     'vAlign' => 'middle',
@@ -113,11 +97,6 @@ CSS
                     ],
                     'format' => 'raw',
                     'width' => '15%',
-                ],
-                [
-                    'attribute' => 'product_category_order',
-                    'hAlign' => 'center',
-                    'width' => '35px'
                 ],
                 [
                     'class' => '\kartik\grid\ActionColumn',
