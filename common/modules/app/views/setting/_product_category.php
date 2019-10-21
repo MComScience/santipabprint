@@ -73,8 +73,18 @@ CSS
             'tableOptions' => ['class' => 'small kv-table'],
             'columns' => [
                 [
+                    'header' => '#',
+                    'value' => function($model){
+                        return Html::tag('i', '', ['class' => 'fa fa-arrows']);
+                    },
+                    'format' => 'raw',
+                    'hAlign' => 'center',
+                    'contentOptions' => ['class' => 'sortable'],
+                    'width' => '30px'
+                ],
+                [
                     'attribute' => 'product_category_order',
-                    'label' => 'ลำดับแสดง',
+                    'label' => 'ลำดับแสดงหน้า web',
                     'hAlign' => 'center',
                     'width' => '35px'
                 ],
@@ -98,6 +108,7 @@ CSS
                     'format' => 'raw',
                     'width' => '15%',
                 ],
+
                 [
                     'class' => '\kartik\grid\ActionColumn',
                     'noWrap' => true,
