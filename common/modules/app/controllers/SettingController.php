@@ -2132,6 +2132,7 @@ class SettingController extends \yii\web\Controller
             $book_binding_option = [];
             $perforate_option = [];
             $fieldOptions = [];
+            $paper_book_status_option = [];
             $i = 0;
             foreach ($postData as $key => $data) {
                 if ($data['filed_active']) {
@@ -2282,7 +2283,7 @@ class SettingController extends \yii\web\Controller
         $fieldNameOptions = [];
         $skipAttributes = ['quotation_detail_id', 'quotation_id', 'product_id', 'final_price', 'cust_quantity', 'paper_detail_id', 'print_one_page', 'print_two_page'];
         foreach ($attributes as $key => $attribute) {
-            $fieldNameOptions[$key] = $modelQuotationDetail->getAttributeLabel($key);
+            $fieldNameOptions[$key] = $modelQuotationDetail->getAttributeLabel($key) .' ('.$key.')';
         }
         if ($model->load($request->post())) {
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

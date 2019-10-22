@@ -40,7 +40,7 @@ class InPutOptions
             }
         }
         // กระดาษ
-        if ($attribute == 'paper_id') {
+        if (ArrayHelper::isIn($attribute, ['paper_id', 'book_covers_paper', 'book_inner_paper_without_color','book_inner_paper'])) {
             $papers = TblPaper::find()->orderBy('paper_type_id asc,paper_gram asc')->all();
             foreach ($papers as $paper) {
                 $list[] = [
@@ -50,7 +50,7 @@ class InPutOptions
             }
         }
         // สีที่พิมพ์
-        if ($attribute == 'print_color') {
+        if (ArrayHelper::isIn($attribute, ['print_color', 'book_covers_color', 'book_inner_color'])) {
             $options = TblColorPrinting::find()->all();
             foreach ($options as $option) {
                 $list[] = [
@@ -353,6 +353,20 @@ class InPutOptions
                 ],
             ];
         }
+        // สถานะพิมพ์ขาวดำเนื้อใน
+        /*
+        if ($attribute == 'inner_monochrome_book_status') {
+            $list = [
+                [
+                    'id' => 0,
+                    'name' => 'ไม่พิมพ์',
+                ],
+                [
+                    'id' => 1,
+                    'name' => 'พิมพ์',
+                ],
+            ];
+        }*/
         return $list;
     }
 
@@ -373,7 +387,7 @@ class InPutOptions
             "emboss_size_width",
             "emboss_size_height",
             "emboss_size_unit",
-            "book_binding_status",
+            // "book_binding_status",
             "window_box_width",
             "window_box_lenght",
             "window_box_unit",

@@ -82,7 +82,12 @@ CSS
                     'contentOptions' => ['class' => 'sortable'],
                     'width' => '30px'
                 ],
-                ['class' => '\kartik\grid\SerialColumn'],
+                [
+                    'attribute' => 'product_category_order',
+                    'label' => 'ลำดับแสดงหน้า web',
+                    'hAlign' => 'center',
+                    'width' => '35px'
+                ],
                 [
                     'class' => 'kartik\grid\ExpandRowColumn',
                     'width' => '50px',
@@ -94,17 +99,6 @@ CSS
                     'expandOneOnly' => true
                 ],
                 [
-                    'attribute' => 'product_category_id',
-                    'label' => 'รหัส',
-                    'hAlign' => 'center',
-                    'vAlign' => 'middle',
-                    'headerOptions' => [
-                        'style' => 'text-align:center;',
-                    ],
-                    'format' => 'raw',
-                    'width' => '15%',
-                ],
-                [
                     'attribute' => 'product_category_name',
                     'label' => 'ชื่อหมวดหมู่',
                     'vAlign' => 'middle',
@@ -114,11 +108,7 @@ CSS
                     'format' => 'raw',
                     'width' => '15%',
                 ],
-                [
-                    'attribute' => 'product_category_order',
-                    'hAlign' => 'center',
-                    'width' => '35px'
-                ],
+
                 [
                     'class' => '\kartik\grid\ActionColumn',
                     'noWrap' => true,

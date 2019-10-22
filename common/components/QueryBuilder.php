@@ -61,6 +61,73 @@ class QueryBuilder extends Component
         return $options;
     }
 
+    // กระดาษปกหนังสือ
+    public function getBookCoversPaperOption()
+    {
+        $setting = ArrayHelper::getValue($this->options, 'book_covers_paper', []);
+        $condition = empty($setting['options']) ? [] : ArrayHelper::getValue($setting, 'options', []);
+        $papers = TblPaper::find()->where(['paper_id' => $condition])->orderBy('paper_type_id asc,paper_gram asc')->all();
+        $paperTypes = TblPaperType::find()->where(['paper_type_id' => ArrayHelper::getColumn($papers, 'paper_type_id')])->all();
+        $options = [];
+        foreach ($paperTypes as $paperType) {
+            $children = [];
+            foreach ($papers as $paper) {
+                if ($paper['paper_type_id'] === $paperType['paper_type_id']) {
+                    $children[$paper['paper_id']] = $paper->paper_name;
+                }
+            }
+            if ($children) {
+                $options[$paperType['paper_type_name']] = $children;
+            }
+        }
+        return $options;;
+    }
+
+    // กระดาษขาวดำ(เนื้อใน)
+    public function getBookInnerPaperWithoutColorOption()
+    {
+        $setting = ArrayHelper::getValue($this->options, 'book_inner_paper_without_color', []);
+        $condition = empty($setting['options']) ? [] : ArrayHelper::getValue($setting, 'options', []);
+        $papers = TblPaper::find()->where(['paper_id' => $condition])->orderBy('paper_type_id asc,paper_gram asc')->all();
+        $paperTypes = TblPaperType::find()->where(['paper_type_id' => ArrayHelper::getColumn($papers, 'paper_type_id')])->all();
+        $options = [];
+        foreach ($paperTypes as $paperType) {
+            $children = [];
+            foreach ($papers as $paper) {
+                if ($paper['paper_type_id'] === $paperType['paper_type_id']) {
+                    $children[$paper['paper_id']] = $paper->paper_name;
+                }
+            }
+            if ($children) {
+                $options[$paperType['paper_type_name']] = $children;
+            }
+        }
+        return $options;;
+    }
+
+
+    // กระดาษเนื้อใน
+    public function getBookInnerPaperOption()
+    {
+        $setting = ArrayHelper::getValue($this->options, 'book_inner_paper', []);
+        $condition = empty($setting['options']) ? [] : ArrayHelper::getValue($setting, 'options', []);
+        $papers = TblPaper::find()->where(['paper_id' => $condition])->orderBy('paper_type_id asc,paper_gram asc')->all();
+        $paperTypes = TblPaperType::find()->where(['paper_type_id' => ArrayHelper::getColumn($papers, 'paper_type_id')])->all();
+        $options = [];
+        foreach ($paperTypes as $paperType) {
+            $children = [];
+            foreach ($papers as $paper) {
+                if ($paper['paper_type_id'] === $paperType['paper_type_id']) {
+                    $children[$paper['paper_id']] = $paper->paper_name;
+                }
+            }
+            if ($children) {
+                $options[$paperType['paper_type_name']] = $children;
+            }
+        }
+        return $options;;
+    }
+
     public function getPaperOption()
     {
         // $option = $this->modelOption;
@@ -563,6 +630,26 @@ class QueryBuilder extends Component
         $setting = ArrayHelper::getValue($this->options, 'window_box_unit', []);
         $condition = empty($setting['options']) ? [] : ArrayHelper::getValue($setting, 'options', []);
         return ArrayHelper::map(TblUnit::find()->where(['unit_id' => $condition])->asArray()->all(), 'unit_id', 'unit_name');
+    }
+
+    //สีที่พิมพ์ปกหนังสือ
+    public function getBookCoversColorOption()
+    {
+        $setting = ArrayHelper::getValue($this->options, 'book_covers_color', []);
+        $condition = empty($setting['options']) ? [] : ArrayHelper::getValue($setting, 'options', []);
+        $query = TblColorPrinting::find()->where(['color_printing_id' => $condition])->asArray()->all();
+        $options = $this->renderOption($query, 'color_printing_id', 'color_printing_name', 'color_printing_descriotion');
+        return $options;
+    }
+
+    //สี่ที่พิมพ์(เนื้อใน)
+    public function getBookInnerColorOption()
+    {
+        $setting = ArrayHelper::getValue($this->options, 'book_inner_color', []);
+        $condition = empty($setting['options']) ? [] : ArrayHelper::getValue($setting, 'options', []);
+        $query = TblColorPrinting::find()->where(['color_printing_id' => $condition])->asArray()->all();
+        $options = $this->renderOption($query, 'color_printing_id', 'color_printing_name', 'color_printing_descriotion');
+        return $options;
     }
 
 }
