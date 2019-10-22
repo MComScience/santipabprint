@@ -149,9 +149,18 @@ class ApiController extends \yii\web\Controller
         $windowBoxOptions = $queryBuilder->getWindowBoxOptions();
         // หน่วยติดหน้าต่าง
         $windowBoxUnitOption = $queryBuilder->getWindowBoxUnitOption();
-
         // ฟิลด์ที่ไม่ต้องการให้แสดงรายละเอียด
         $skipAttributes = InPutOptions::skipAttributes();
+        // กระดาษปกหนังสือ
+        $bookCoversPaperOption = $queryBuilder->getBookCoversPaperOption();
+        // สีที่พิมพ์ปกหนังสือ
+        $bookCoversColorOption = $queryBuilder->getBookCoversColorOption();
+        // กระดาษเนื้อใน
+        $bookInnerPaperOption = $queryBuilder->getBookInnerPaperOption();
+        // สี่ที่พิมพ์(เนื้อใน)
+        $bookInnerColorOption = $queryBuilder->getBookInnerColorOption();
+        // กระดาษขาวดำ(เนื้อใน)
+        $bookInnerPaperWithoutColorOption = $queryBuilder->getBookInnerPaperWithoutColorOption();
 
         return [
             'formOptions' => $formOptions,
@@ -188,6 +197,11 @@ class ApiController extends \yii\web\Controller
                 'runningNumberOptions' => $runningNumberOptions,
                 'windowBoxOptions' => $windowBoxOptions,
                 'windowBoxUnitOption' => $windowBoxUnitOption,
+                'bookCoversPaperOption' => $bookCoversPaperOption,
+                'bookCoversColorOption' => $bookCoversColorOption,
+                'bookInnerPaperOption' => $bookInnerPaperOption,
+                'bookInnerColorOption' => $bookInnerColorOption,
+                'bookInnerPaperWithoutColorOption' => $bookInnerPaperWithoutColorOption,
             ],
         ];
     }

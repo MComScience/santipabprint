@@ -241,7 +241,36 @@
                       <!-- end: สถานะเข้าเล่ม -->
                     </v-row>
                     <!-- begin: วิธีเข้าเล่ม -->
-                    <v-row v-show="isBookBindingStatus">
+                    <v-row v-if="isBookBindingStatus && !isvisibleInput('book_covers_paper')">
+                      <v-col v-show="isvisibleInput('book_binding_id')" xs="12" sm="6" md="6">
+                        <form-group :input-label="inputLabel('book_binding_id')">
+                          <select2
+                            id="book_binding_id"
+                            :options="bookBindingOption"
+                            v-model="attributes.book_binding_id"
+                            name="book_binding_id"
+                            @change="onChangeSelectInput"
+                          >
+                            <option disabled>เลือกรายการ...</option>
+                          </select2>
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                      <v-col v-show="isvisibleInput('book_binding_qty')" xs="12" sm="6" md="6">
+                        <form-group :input-label="inputLabel('book_binding_qty')">
+                          <input
+                            id="book_binding_qty"
+                            name="book_binding_qty"
+                            placeholder="ระบุจำนวน"
+                            class="form-control"
+                            v-model="attributes.book_binding_qty"
+                            @change="onChangeInput"
+                          />
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                    </v-row>
+                    <v-row v-if="isvisibleInput('book_covers_paper')">
                       <v-col v-show="isvisibleInput('book_binding_id')" xs="12" sm="6" md="6">
                         <form-group :input-label="inputLabel('book_binding_id')">
                           <select2
@@ -313,8 +342,69 @@
                     </v-row>
                     <!-- end: งานพิมพ์ -->
 
+                    <!-- begin: ปกหนังสือ -->
+                    <box-title
+                      v-show="isvisibleInput('book_covers_paper')"
+                      title="ข้อมูลปก"
+                      line
+                      class="text-center"
+                    />
+                    <!-- begin: กระดาษปกหนังสือ -->
+                    <v-row v-show="isvisibleInput('book_covers_paper')">
+                      <v-col xs="12" sm="12" md="6">
+                        <form-group :input-label="inputLabel('book_covers_paper')">
+                          <select2
+                            id="book_covers_paper"
+                            :options="bookCoversPaperOption"
+                            v-model="attributes.book_covers_paper"
+                            name="book_covers_paper"
+                            @change="onChangeSelectInput"
+                          >
+                            <option disabled>เลือกกระดาษ</option>
+                          </select2>
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                    </v-row>
+                    <!-- end: กระดาษปกหนังสือ -->
+
+                    <v-row v-show="isvisibleInput('book_covers_color') || isvisibleInput('book_covers_qty')">
+                      <!-- begin: สีที่พิมพ์ปกหนังสือ -->
+                      <v-col v-show="isvisibleInput('book_covers_color')" xs="12" sm="6" md="6">
+                        <form-group :input-label="inputLabel('book_covers_color')">
+                          <select2
+                            id="book_covers_color"
+                            :options="bookCoversColorOption"
+                            v-model="attributes.book_covers_color"
+                            name="book_covers_color"
+                            @change="onChangeSelectInput"
+                          >
+                            <option disabled>เลือกสีที่พิมพ์</option>
+                          </select2>
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                      <!-- end: สีที่พิมพ์ปกหนังสือ -->
+                      <!-- begin: จำนวนหน้าปกหนังสือ -->
+                      <v-col v-show="isvisibleInput('book_covers_qty')" xs="12" sm="6" md="6">
+                        <form-group :input-label="inputLabel('book_covers_qty')">
+                          <input
+                            id="book_covers_qty"
+                            name="book_covers_qty"
+                            placeholder="ระบุจำนวน"
+                            class="form-control"
+                            v-model="attributes.book_covers_qty"
+                            @change="onChangeInput"
+                          />
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                      <!-- end: จำนวนหน้าปกหนังสือ -->
+                    </v-row>
+                    <!-- begin: ปกหนังสือ -->
+
                     <!-- begin: งานเคลือบ -->
-                    <box-title v-show="isvisibleInput('coating_id')" title="งานเคลือบ" line />
+                    <box-title v-show="isvisibleInput('coating_id')" title="งานเคลือบ" :line="!isvisibleInput('book_covers_paper')" />
 
                     <v-row
                       v-show="isvisibleInput('coating_id') || isvisibleInput('coating_option')"
@@ -490,7 +580,7 @@
                     <!-- end: วิธีพับ -->
 
                     <!-- begin: ปั๊มฟอยล์ -->
-                    <box-title v-show="isvisibleInput('foil_status')" title="ปั๊มฟอยล์" line />
+                    <box-title v-show="isvisibleInput('foil_status')" title="ปั๊มฟอยล์" :line="!isvisibleInput('book_covers_paper')" />
                     <!-- begin: สถานะ ฟอยล์ -->
                     <v-row v-show="isvisibleInput('foil_status')">
                       <v-col xs="12" sm="12" md="12">
@@ -605,7 +695,7 @@
                     <!-- end: ปั๊มฟอยล์ -->
 
                     <!-- begin: ปั๊มนูน -->
-                    <box-title v-show="isvisibleInput('emboss_status')" title="ปั๊มนูน" line />
+                    <box-title v-show="isvisibleInput('emboss_status')" title="ปั๊มนูน" :line="!isvisibleInput('book_covers_paper')" />
                     <!-- begin: สถานะปั๊มนูน -->
                     <v-row v-show="isvisibleInput('emboss_status')">
                       <v-col xs="12" sm="12" md="12">
@@ -701,6 +791,113 @@
                     <!-- end: ปั๊มฟอยล์ทั้งหน้า/หลัง หรือหน้าเดียว? -->
 
                     <!-- end: ปั๊มนูน -->
+
+                    <!-- begin: เนื้อใน -->
+                    <box-title
+                      v-show="isvisibleInput('book_covers_paper')"
+                      title="ข้อมูลเนื้อใน"
+                      line
+                      class="text-center"
+                    />
+
+                    <box-title
+                      v-show="isvisibleInput('book_covers_paper')"
+                      title="พิมพ์สี"
+                      :line="false"
+                    />
+                    <v-row v-show="isvisibleInput('book_inner_paper') || isvisibleInput('book_inner_color')">
+                       <!-- begin: กระดาษเนื้อใน -->
+                      <v-col v-show="isvisibleInput('book_inner_paper')" xs="12" sm="6" md="6">
+                        <form-group :input-label="inputLabel('book_inner_paper')">
+                          <select2
+                            id="book_inner_paper"
+                            :options="bookInnerPaperOption"
+                            v-model="attributes.book_inner_paper"
+                            name="book_inner_paper"
+                            @change="onChangeSelectInput"
+                          >
+                            <option disabled>เลือกกระดาษ</option>
+                          </select2>
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                      <!-- end: กระดาษเนื้อใน -->
+                      <!-- begin: สี่ที่พิมพ์(เนื้อใน) -->
+                      <v-col v-show="isvisibleInput('book_inner_color')" xs="12" sm="6" md="6">
+                        <form-group :input-label="inputLabel('book_inner_color')">
+                          <select2
+                            id="book_inner_color"
+                            :options="bookInnerColorOption"
+                            v-model="attributes.book_inner_color"
+                            name="book_inner_color"
+                            @change="onChangeSelectInput"
+                          >
+                            <option disabled>เลือกสีที่พิมพ์</option>
+                          </select2>
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                      <!-- end: สี่ที่พิมพ์(เนื้อใน) -->
+                    </v-row>
+
+                    <!-- begin: จำนวนหน้า(เนื้อใน) -->
+                    <v-row v-show="isvisibleInput('book_inner_paper_qty')">
+                      <v-col v-show="isvisibleInput('book_inner_paper_qty')" xs="6" sm="12" md="6">
+                        <form-group :input-label="inputLabel('book_inner_paper_qty')">
+                          <input
+                            id="book_inner_paper_qty"
+                            name="book_inner_paper_qty"
+                            placeholder="ระบุจำนวน"
+                            class="form-control"
+                            v-model="attributes.book_inner_paper_qty"
+                            @change="onChangeInput"
+                          />
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                    </v-row>
+                    <!-- end: จำนวนหน้า(เนื้อใน) -->
+
+                    <box-title
+                      v-show="isvisibleInput('book_covers_paper')"
+                      title="พิมพ์ขาวดำ"
+                      :line="false"
+                    />
+                    <v-row v-show="isvisibleInput('book_inner_paper_without_color') || isvisibleInput('book_inner_without_color_qty')">
+                      <!-- begin: กระดาษขาวดำ(เนื้อใน) -->
+                      <v-col v-show="isvisibleInput('book_inner_paper_without_color')" xs="12" sm="6" md="6">
+                        <form-group :input-label="inputLabel('book_inner_paper_without_color')">
+                          <select2
+                            id="book_inner_paper_without_color"
+                            :options="bookInnerPaperWithoutColorOption"
+                            v-model="attributes.book_inner_paper_without_color"
+                            name="book_inner_paper_without_color"
+                            @change="onChangeSelectInput"
+                          >
+                            <option disabled>เลือกสีที่พิมพ์</option>
+                          </select2>
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                      <!-- end: กระดาษขาวดำ(เนื้อใน) -->
+
+                      <!-- begin: จำนวนหน้าขาวดำ(เนื้อใน) -->
+                      <v-col v-show="isvisibleInput('book_inner_without_color_qty')" xs="12" sm="6" md="6">
+                        <form-group :input-label="inputLabel('book_inner_without_color_qty')">
+                          <input
+                            id="book_inner_without_color_qty"
+                            name="book_inner_without_color_qty"
+                            placeholder="ระบุจำนวน"
+                            class="form-control"
+                            v-model="attributes.book_inner_without_color_qty"
+                            @change="onChangeInput"
+                          />
+                        </form-group>
+                        <help-block />
+                      </v-col>
+                      <!-- end: จำนวนหน้าขาวดำ(เนื้อใน) -->
+                    </v-row>
+                    <!-- end: เนื้อใน -->
 
                     <!-- begin: ปะกาว -->
                     <box-title v-show="isvisibleInput('glue')" title="ปะกาว" line />
@@ -1005,6 +1202,12 @@
                         v-show="isvisibleInput(attr) && !skipAttributes.includes(attr)"
                         class="widget-item"
                       >
+                        <p v-if="attr === 'book_covers_paper'" class="info-label text-center kt-font-brand">
+                          ข้อมูลปก
+                        </p>
+                        <p v-if="attr === 'book_inner_paper'" class="info-label text-center kt-font-brand">
+                          ข้อมูลเนื้อใน
+                        </p>
                         <span class="info-label">{{ inputLabel(attr, '') }}:</span>
                         <span class="float-right">{{ getProductInfo(attr) }}</span>
                       </li>
@@ -1455,6 +1658,61 @@ export default {
         placeholder: "เลือกหน่วย",
         language: "th"
       },
+      // กระดาษปกหนังสือ
+      bookCoversPaperOption: {
+        data: [],
+        allowClear: true,
+        theme: "bootstrap",
+        width: "100%",
+        placeholder: "เลือกกระดาษ",
+        language: "th"
+      },
+      // กระดาษเนื้อใน
+      bookInnerPaperOption: {
+        data: [],
+        allowClear: true,
+        theme: "bootstrap",
+        width: "100%",
+        placeholder: "เลือกกระดาษ",
+        language: "th"
+      },
+      // กระดาษขาวดำ(เนื้อใน)
+      bookInnerPaperWithoutColorOption: {
+        data: [],
+        allowClear: true,
+        theme: "bootstrap",
+        width: "100%",
+        placeholder: "เลือกกระดาษ",
+        language: "th"
+      },
+      // สีที่พิมพ์ปกหนังสือ
+      bookCoversColorOption: {
+        data: [],
+        allowClear: true,
+        templateResult: format,
+        templateSelection: format,
+        escapeMarkup: function(m) {
+          return m;
+        },
+        theme: "bootstrap",
+        width: "100%",
+        placeholder: "เลือกรายการ...",
+        language: "th"
+      },
+      // สี่ที่พิมพ์(เนื้อใน)
+      bookInnerColorOption: {
+        data: [],
+        allowClear: true,
+        templateResult: format,
+        templateSelection: format,
+        escapeMarkup: function(m) {
+          return m;
+        },
+        theme: "bootstrap",
+        width: "100%",
+        placeholder: "เลือกรายการ...",
+        language: "th"
+      },
 
       /* ข้อมูลตัวเลือก */
 
@@ -1643,6 +1901,63 @@ export default {
       if (this.isEmpty(paper)) return "-";
       return this.replaceHtml(paper.text);
     },
+    // กระดาษปกหนังสือ
+    bookCoversPaperDetail() {
+      if (!this.attributes.book_covers_paper) return "-";
+      let paper = null;
+
+      this.bookCoversPaperOption.data.map(item => {
+        if (item.id === this.attributes.book_covers_paper) {
+          paper = item;
+        } else if (item.children.length > 0) {
+          return item.children.map(children => {
+            if (children.id === this.attributes.book_covers_paper) {
+              paper = children;
+            }
+          });
+        }
+      });
+      if (this.isEmpty(paper)) return "-";
+      return this.replaceHtml(paper.text);
+    },
+    // กระดาษเนื้อใน
+    bookInnerPaperDetail() {
+      if (!this.attributes.book_inner_paper) return "-";
+      let paper = null;
+
+      this.bookInnerPaperOption.data.map(item => {
+        if (item.id === this.attributes.book_inner_paper) {
+          paper = item;
+        } else if (item.children.length > 0) {
+          return item.children.map(children => {
+            if (children.id === this.attributes.book_inner_paper) {
+              paper = children;
+            }
+          });
+        }
+      });
+      if (this.isEmpty(paper)) return "-";
+      return this.replaceHtml(paper.text);
+    },
+    // กระดาษขาวดำ(เนื้อใน)
+    bookInnerPaperWithoutColorDetail() {
+      if (!this.attributes.book_inner_paper_without_color) return "-";
+      let paper = null;
+
+      this.bookInnerPaperWithoutColorOption.data.map(item => {
+        if (item.id === this.attributes.book_inner_paper_without_color) {
+          paper = item;
+        } else if (item.children.length > 0) {
+          return item.children.map(children => {
+            if (children.id === this.attributes.book_inner_paper_without_color) {
+              paper = children;
+            }
+          });
+        }
+      });
+      if (this.isEmpty(paper)) return "-";
+      return this.replaceHtml(paper.text);
+    },
     // รายละเอียดแนวตั้ง แนวนอน
     landOrientDetail() {
       if (!this.attributes.land_orient) return "-";
@@ -1655,12 +1970,20 @@ export default {
     // รายละเอียดวิธีเข้าเล่ม
     bookBindingDetail() {
       if (this.isEmpty(this.attributes.book_binding_status)) return "-";
-      if (!this.attributes.book_binding_status) return "ไม่เข้าเล่ม";
-      const data = this.bookBindingOption.data.find(
-        item => item.id === this.attributes.book_binding_id
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      if(this.isvisibleInput('book_covers_paper')) {
+        const data = this.bookBindingOption.data.find(
+          item => item.id === this.attributes.book_binding_id
+        );
+        if (this.isEmpty(data)) return "-";
+        return this.replaceHtml(data.text);
+      } else {
+        if (!this.attributes.book_binding_status) return "ไม่เข้าเล่ม";
+        const data = this.bookBindingOption.data.find(
+          item => item.id === this.attributes.book_binding_id
+        );
+        if (this.isEmpty(data)) return "-";
+        return this.replaceHtml(data.text);
+      }
     },
     // รายละเอียดจำนวนหน้า/จำนวนแผ่น
     pageQty() {
@@ -1690,6 +2013,24 @@ export default {
       if (!this.attributes.print_color) return "-";
       const data = this.printColorOption.data.find(
         item => item.id === this.attributes.print_color
+      );
+      if (this.isEmpty(data)) return "-";
+      return this.replaceHtml(data.text);
+    },
+    // สีที่พิมพ์ปกหนังสือ
+    bookCoversColorDetail() {
+      if (!this.attributes.book_covers_color) return "-";
+      const data = this.bookCoversColorOption.data.find(
+        item => item.id === this.attributes.book_covers_color
+      );
+      if (this.isEmpty(data)) return "-";
+      return this.replaceHtml(data.text);
+    },
+    // สี่ที่พิมพ์(เนื้อใน)
+    bookInnerColorDetail() {
+      if (!this.attributes.book_inner_color) return "-";
+      const data = this.bookInnerColorOption.data.find(
+        item => item.id === this.attributes.book_inner_color
       );
       if (this.isEmpty(data)) return "-";
       return this.replaceHtml(data.text);
@@ -1936,7 +2277,22 @@ export default {
       );
       if (this.isEmpty(data)) return "-";
       return this.replaceHtml(data.text);
-    }
+    },
+    // จำนวนหน้าปกหนังสือ
+    book_covers_qty() {
+      if (!this.attributes.book_covers_qty) return "";
+      return this.attributes.book_covers_qty;
+    },
+    // จำนวนหน้า(เนื้อใน)
+    book_inner_paper_qty() {
+      if (!this.attributes.book_inner_paper_qty) return "";
+      return this.attributes.book_inner_paper_qty;
+    },
+    // จำนวนหน้าขาวดำ(เนื้อใน)
+    book_inner_without_color_qty() {
+      if (!this.attributes.book_inner_without_color_qty) return "";
+      return this.attributes.book_inner_without_color_qty;
+    },
   },
   mounted() {
     this.fetchDataProductCategoryList();
@@ -2515,6 +2871,22 @@ export default {
         _this.runningNumberOptions = await dataOptions.runningNumberOptions;
         // ติดหน้าต่าง
         _this.windowBoxOptions = await dataOptions.windowBoxOptions;
+        // กระดาษปกหนังสือ
+        await _this.mapSelect2Data("bookCoversPaperOption", dataOptions.bookCoversPaperOption);
+        // กระดาษเนื้อใน
+        await _this.mapSelect2Data("bookInnerPaperOption", dataOptions.bookInnerPaperOption);
+        // กระดาษขาวดำ(เนื้อใน)
+        await _this.mapSelect2Data("bookInnerPaperWithoutColorOption", dataOptions.bookInnerPaperWithoutColorOption);
+        // สีที่พิมพ์ปกหนังสือ
+        await _this.mapSelect2Data(
+          "bookCoversColorOption",
+          dataOptions.bookCoversColorOption
+        );
+        // สี่ที่พิมพ์(เนื้อใน)
+        await _this.mapSelect2Data(
+          "bookInnerColorOption",
+          dataOptions.bookInnerColorOption
+        );
 
         await _this.fetchDataBillFloorOptions();
       }
@@ -2622,6 +2994,30 @@ export default {
           break;
         case "book_binding_status":
           info = _this.bookBindingStatus;
+          break;
+        case "book_covers_paper":
+          info = _this.bookCoversPaperDetail;
+          break;
+        case "book_covers_color":
+          info = _this.bookCoversColorDetail;
+          break;
+        case "book_covers_qty":
+          info = _this.book_covers_qty;
+          break;
+        case "book_inner_paper":
+          info = _this.bookInnerPaperDetail;
+          break;
+        case "book_inner_color":
+          info = _this.bookInnerColorDetail;
+          break;
+        case "book_inner_paper_qty":
+          info = _this.book_inner_paper_qty;
+          break;
+        case "book_inner_paper_without_color":
+          info = _this.bookInnerPaperWithoutColorDetail;
+          break;
+        case "book_inner_without_color_qty":
+          info = _this.book_inner_without_color_qty;
           break;
         default:
           break;
