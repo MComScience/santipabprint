@@ -1208,7 +1208,7 @@
                         <p v-if="attr === 'book_inner_paper'" class="info-label text-center kt-font-brand">
                           ข้อมูลเนื้อใน
                         </p>
-                        <p v-if="attr === 'book_inner_color'" class="info-label text-left kt-font-brand">
+                        <p v-if="attr === 'book_inner_paper'" class="info-label text-left kt-font-brand">
                           พิมพ์สี
                         </p>
                         <p v-if="attr === 'book_inner_paper_without_color'" class="info-label text-left kt-font-brand">
