@@ -34,7 +34,7 @@ class ProductController extends ActiveController
 {
     use ModelTrait;
 
-    const BASE_URL = 'http://santipab.local';
+    const BASE_URL = 'https://admin.santipab.info';
 
     public $modelClass = 'common\modules\app\models\TblProduct';
 
