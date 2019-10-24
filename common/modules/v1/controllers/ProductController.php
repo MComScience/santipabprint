@@ -35,8 +35,6 @@ class ProductController extends ActiveController
 {
     use ModelTrait;
 
-    const BASE_URL = 'https://admin.santipab.info';
-
     public $modelClass = 'common\modules\app\models\TblProduct';
 
     public function __construct($id, $module, $config = [])
@@ -144,7 +142,7 @@ class ProductController extends ActiveController
     {
         $categories = TblProductCategory::find()->orderBy('product_category_order ASC')->all();
         $itemCategories = [];
-        $baseUrl = self::BASE_URL;
+        $baseUrl = Yii::$app->params['BASE_URL'];
         foreach ($categories as $key => $category) {
             $itemCategories[] = [
                 'product_category_id' => $category['product_category_id'],
@@ -158,7 +156,7 @@ class ProductController extends ActiveController
 
     public function actionCategory($id)
     {
-        $baseUrl = self::BASE_URL;
+        $baseUrl = Yii::$app->params['BASE_URL'];
         $category = $this->findModelProductCategory($id);
         $itemProducts = [];
         $products = TblProduct::find()->where(['product_category_id' => $id])->orderBy('product_order ASC')->all();
@@ -179,7 +177,7 @@ class ProductController extends ActiveController
 
     public function actionCatalog($id)
     {
-        $baseUrl = self::BASE_URL;
+        $baseUrl = Yii::$app->params['BASE_URL'];
         $category = $this->findModelProductCategory($id);
         $itemProducts = [];
         $products = TblCatalog::find()->where(['product_category_id' => $id])->all();
@@ -495,7 +493,7 @@ class ProductController extends ActiveController
                     return [
                         'success' => true,
                         'message' => 'Success',
-                        'url' => 'https://admin.santipab.info/app/product/quo?q='.$model['quotation_id'],
+                        'url' => Yii::$app->params['BASE_URL'].'/app/product/quo?q='.$model['quotation_id'],
                         'flexMessage' => [
                             "type" => "flex",
                             "altText" => "รายละเอียดสินค้า",
@@ -529,7 +527,7 @@ class ProductController extends ActiveController
         $details = '';
 
         // flex
-        $baseUrl = 'https://admin.santipab.info';
+        $baseUrl = Yii::$app->params['BASE_URL'];
         $hero = [
             "type" => "image",
             "url" => $baseUrl . $modelProduct->getImageUrl(),

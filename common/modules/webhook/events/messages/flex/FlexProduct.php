@@ -46,7 +46,7 @@ class FlexProduct
 
         $itemProducts = [];
         $products = TblProduct::find()->where(['product_category_id' => $category['product_category_id']])->orderBy('package_type_id ASC')->all();
-        $baseUrl = 'https://admin.santipab.info';
+        $baseUrl = Yii::$app->params['BASE_URL'];
         foreach ($products as $key => $product) {
             $itemProducts[] = [
                 'product_id' => $product['product_id'],
