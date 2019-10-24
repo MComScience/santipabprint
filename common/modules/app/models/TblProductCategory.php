@@ -84,7 +84,12 @@ class TblProductCategory extends \yii\db\ActiveRecord
         if($this->image_path){
             return Yii::getAlias('@web'.$this->image_base_url.(str_replace('\\', '/', $this->image_path)));
         } else {
-            return Yii::getAlias('@web/images/No_Image_Available.png');
+            return Yii::getAlias('@web/images/no-image.png');
         }
+    }
+
+    public function getDefaultImage()
+    {
+        return Yii::getAlias('@web/images/no-image.png');
     }
 }
