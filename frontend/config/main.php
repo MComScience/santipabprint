@@ -100,6 +100,9 @@ return [
 
                         'POST download' => 'download',
                         'OPTIONS download' => 'options',
+
+                        'GET catalog' => 'catalog',
+                        'OPTIONS catalog' => 'options',
                     ]
                 ],
 

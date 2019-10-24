@@ -19,6 +19,7 @@ use common\modules\app\models\TblProduct;
 use common\modules\app\models\TblProductCategory;
 use common\modules\app\models\TblQuotation;
 use common\modules\app\models\TblQuotationDetail;
+use common\modules\app\models\TblCatalog;
 use common\modules\app\traits\ModelTrait;
 use kartik\form\ActiveForm;
 use Yii;
@@ -65,6 +66,7 @@ class ProductController extends ActiveController
                 'bill-floor-option' => ['get'],
                 'calculate-price' => ['post'],
                 'download' => ['post'],
+                'catalog' => ['get'],
             ],
         ];
         // remove authentication filter
@@ -90,6 +92,7 @@ class ProductController extends ActiveController
             'bill-floor-option',
             'calculate-price',
             'download',
+            'catalog'
         ];
         // setup access
         $behaviors['access'] = [
@@ -103,7 +106,7 @@ class ProductController extends ActiveController
                 ],
                 [
                     'allow' => true,
-                    'actions' => ['product-categories', 'category', 'product-options', 'bill-floor-option', 'calculate-price', 'download'],
+                    'actions' => ['product-categories', 'category', 'product-options', 'bill-floor-option', 'calculate-price', 'download', 'catalog'],
                     'roles' => ['?'],
                 ],
             ],
@@ -164,6 +167,27 @@ class ProductController extends ActiveController
                 'product_id' => $product['product_id'],
                 'product_name' => $product['product_name'],
                 'product_description' => $product['product_description'],
+                'image_url' => $baseUrl . $product->getImageUrl(),
+                'default_image' => $baseUrl . $product->getDefaultImage(),
+            ];
+        }
+        return [
+            'category' => $category,
+            'products' => $itemProducts,
+        ];
+    }
+
+    public function actionCatalog($id)
+    {
+        $baseUrl = self::BASE_URL;
+        $category = $this->findModelProductCategory($id);
+        $itemProducts = [];
+        $products = TblCatalog::find()->where(['product_category_id' => $id])->all();
+        foreach ($products as $key => $product) {
+            $itemProducts[] = [
+                'catalog_id' => $product['catalog_id'],
+                'catalog_name' => $product['catalog_name'],
+                'catalog_detail' => $product['catalog_detail'],
                 'image_url' => $baseUrl . $product->getImageUrl(),
                 'default_image' => $baseUrl . $product->getDefaultImage(),
             ];
