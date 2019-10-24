@@ -6,9 +6,8 @@
 
 <script>
 export default {
-  name: "FormContainer"
-};
+  name: 'FormContainer'
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

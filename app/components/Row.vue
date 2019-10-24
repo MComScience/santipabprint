@@ -6,9 +6,8 @@
 
 <script>
 export default {
-  name: "Row"
-};
+  name: 'Row'
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

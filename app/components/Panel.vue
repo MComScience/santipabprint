@@ -12,9 +12,9 @@
 
 <script>
 export default {
-  name: "Panel",
-  props: ["productData"]
-};
+  name: 'Panel',
+  props: ['productData']
+}
 </script>
 
 <style scoped>

@@ -65,7 +65,7 @@
                     <!--end: ขนาด -->
 
                     <!--begin: ขนาดกำหนดเอง -->
-                    <v-row v-show="isvisibleInput('paper_size_id')  && isCustomPaper">
+                    <v-row v-show="isvisibleInput('paper_size_id') && isCustomPaper">
                       <!--begin: กว้าง -->
                       <v-col v-show="isvisibleInput('paper_size_width')" xs="12" sm="3" md="3">
                         <form-group :input-label="inputLabel('paper_size_width')">
@@ -166,7 +166,7 @@
                                 v-for="(option, index) in landOrientOptions"
                                 :key="index"
                                 :value="option.value"
-                              >{{option.text}}</a-radio>
+                              >{{ option.text }}</a-radio>
                             </a-radio-group>
                           </v-col>
                         </form-group>
@@ -229,10 +229,11 @@
                               @change="onChangeBookBindingStatus"
                             >
                               <a-radio
-                                v-for="(option, index) in bookBindingStatusOptions"
+                                v-for="(option,
+                                index) in bookBindingStatusOptions"
                                 :key="index"
                                 :value="option.id"
-                              >{{option.text}}</a-radio>
+                              >{{ option.text }}</a-radio>
                             </a-radio-group>
                           </v-col>
                         </form-group>
@@ -241,7 +242,12 @@
                       <!-- end: สถานะเข้าเล่ม -->
                     </v-row>
                     <!-- begin: วิธีเข้าเล่ม -->
-                    <v-row v-if="isBookBindingStatus && !isvisibleInput('book_covers_paper')">
+                    <v-row
+                      v-if="
+                        isBookBindingStatus &&
+                          !isvisibleInput('book_covers_paper')
+                      "
+                    >
                       <v-col v-show="isvisibleInput('book_binding_id')" xs="12" sm="6" md="6">
                         <form-group :input-label="inputLabel('book_binding_id')">
                           <select2
@@ -305,7 +311,12 @@
                     <!-- begin: งานพิมพ์ -->
                     <box-title v-show="isvisibleInput('print_option')" title="งานพิมพ์" line />
 
-                    <v-row v-show="isvisibleInput('print_option') || isvisibleInput('print_color')">
+                    <v-row
+                      v-show="
+                        isvisibleInput('print_option') ||
+                          isvisibleInput('print_color')
+                      "
+                    >
                       <!-- begin: พิมพ์สองหน้า/หน้าเดียว -->
                       <v-col v-show="isvisibleInput('print_option')" xs="12" sm="6" md="6">
                         <form-group :input-label="inputLabel('print_option')">
@@ -368,7 +379,12 @@
                     </v-row>
                     <!-- end: กระดาษปกหนังสือ -->
 
-                    <v-row v-show="isvisibleInput('book_covers_color') || isvisibleInput('book_covers_qty')">
+                    <v-row
+                      v-show="
+                        isvisibleInput('book_covers_color') ||
+                          isvisibleInput('book_covers_qty')
+                      "
+                    >
                       <!-- begin: สีที่พิมพ์ปกหนังสือ -->
                       <v-col v-show="isvisibleInput('book_covers_color')" xs="12" sm="6" md="6">
                         <form-group :input-label="inputLabel('book_covers_color')">
@@ -404,10 +420,17 @@
                     <!-- begin: ปกหนังสือ -->
 
                     <!-- begin: งานเคลือบ -->
-                    <box-title v-show="isvisibleInput('coating_id')" title="งานเคลือบ" :line="!isvisibleInput('book_covers_paper')" />
+                    <box-title
+                      v-show="isvisibleInput('coating_id')"
+                      title="งานเคลือบ"
+                      :line="!isvisibleInput('book_covers_paper')"
+                    />
 
                     <v-row
-                      v-show="isvisibleInput('coating_id') || isvisibleInput('coating_option')"
+                      v-show="
+                        isvisibleInput('coating_id') ||
+                          isvisibleInput('coating_option')
+                      "
                     >
                       <!-- begin: เคลือบ -->
                       <v-col v-show="isvisibleInput('coating_id')" xs="12" sm="6" md="6">
@@ -440,7 +463,7 @@
                                 v-for="(option, index) in coatingOptionOptions"
                                 :key="index"
                                 :value="option.value"
-                              >{{option.text}}</a-radio>
+                              >{{ option.text }}</a-radio>
                             </a-radio-group>
                           </v-col>
                         </form-group>
@@ -452,17 +475,25 @@
 
                     <!-- begin: ไดคัท -->
                     <box-title
-                      v-show="isvisibleInput('diecut')  && !isvisibleInput('perforate')"
+                      v-show="
+                        isvisibleInput('diecut') && !isvisibleInput('perforate')
+                      "
                       title="ไดคัท"
                       line
                     />
                     <box-title
-                      v-show="isvisibleInput('diecut')  && isvisibleInput('perforate')"
+                      v-show="
+                        isvisibleInput('diecut') && isvisibleInput('perforate')
+                      "
                       title="ไดคัท/ตัดเป็นตัว,เจาะ"
                       line
                     />
 
-                    <v-row v-if="isvisibleInput('diecut') || isvisibleInput('perforate')">
+                    <v-row
+                      v-if="
+                        isvisibleInput('diecut') || isvisibleInput('perforate')
+                      "
+                    >
                       <!-- begin: สถานะไดคัท -->
                       <v-col v-show="isvisibleInput('diecut_status')" xs="12" sm="12" md="12">
                         <form-group :label="false">
@@ -475,7 +506,7 @@
                               v-for="(option, index) in dicutStatusOptions"
                               :key="index"
                               :value="option.value"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                           <p></p>
                         </form-group>
@@ -542,7 +573,11 @@
 
                     <!-- begin: มุมที่เจาะ -->
                     <v-row
-                      v-show="isvisibleInput('perforate') && attributes.perforate === '1' && isPerforate"
+                      v-show="
+                        isvisibleInput('perforate') &&
+                          attributes.perforate === '1' &&
+                          isPerforate
+                      "
                     >
                       <v-col xs="12" sm="6" md="6">
                         <form-group :input-label="inputLabel('perforate_option_id')">
@@ -580,7 +615,11 @@
                     <!-- end: วิธีพับ -->
 
                     <!-- begin: ปั๊มฟอยล์ -->
-                    <box-title v-show="isvisibleInput('foil_status')" title="ปั๊มฟอยล์" :line="!isvisibleInput('book_covers_paper')" />
+                    <box-title
+                      v-show="isvisibleInput('foil_status')"
+                      title="ปั๊มฟอยล์"
+                      :line="!isvisibleInput('book_covers_paper')"
+                    />
                     <!-- begin: สถานะ ฟอยล์ -->
                     <v-row v-show="isvisibleInput('foil_status')">
                       <v-col xs="12" sm="12" md="12">
@@ -594,7 +633,7 @@
                               v-for="(option, index) in foilStatusOptions"
                               :key="index"
                               :value="option.value"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                         </form-group>
                         <help-block />
@@ -684,7 +723,7 @@
                               v-for="(option, index) in foliPrintOptions"
                               :key="index"
                               :value="option.value"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                         </form-group>
                         <help-block />
@@ -695,7 +734,11 @@
                     <!-- end: ปั๊มฟอยล์ -->
 
                     <!-- begin: ปั๊มนูน -->
-                    <box-title v-show="isvisibleInput('emboss_status')" title="ปั๊มนูน" :line="!isvisibleInput('book_covers_paper')" />
+                    <box-title
+                      v-show="isvisibleInput('emboss_status')"
+                      title="ปั๊มนูน"
+                      :line="!isvisibleInput('book_covers_paper')"
+                    />
                     <!-- begin: สถานะปั๊มนูน -->
                     <v-row v-show="isvisibleInput('emboss_status')">
                       <v-col xs="12" sm="12" md="12">
@@ -709,7 +752,7 @@
                               v-for="(option, index) in embossStatusOptions"
                               :key="index"
                               :value="option.value"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                         </form-group>
                         <help-block />
@@ -782,7 +825,7 @@
                               v-for="(option, index) in embossPrintOptions"
                               :key="index"
                               :value="option.value"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                         </form-group>
                         <help-block />
@@ -805,8 +848,13 @@
                       title="พิมพ์สี"
                       :line="false"
                     />
-                    <v-row v-show="isvisibleInput('book_inner_paper') || isvisibleInput('book_inner_color')">
-                       <!-- begin: กระดาษเนื้อใน -->
+                    <v-row
+                      v-show="
+                        isvisibleInput('book_inner_paper') ||
+                          isvisibleInput('book_inner_color')
+                      "
+                    >
+                      <!-- begin: กระดาษเนื้อใน -->
                       <v-col v-show="isvisibleInput('book_inner_paper')" xs="12" sm="6" md="6">
                         <form-group :input-label="inputLabel('book_inner_paper')">
                           <select2
@@ -863,10 +911,26 @@
                       title="พิมพ์ขาวดำ"
                       :line="false"
                     />
-                    <v-row v-show="isvisibleInput('book_inner_paper_without_color') || isvisibleInput('book_inner_without_color_qty')">
+                    <v-row
+                      v-show="
+                        isvisibleInput('book_inner_paper_without_color') ||
+                          isvisibleInput('book_inner_without_color_qty')
+                      "
+                    >
                       <!-- begin: กระดาษขาวดำ(เนื้อใน) -->
-                      <v-col v-show="isvisibleInput('book_inner_paper_without_color')" xs="12" sm="6" md="6">
-                        <form-group :input-label="inputLabel('book_inner_paper_without_color')">
+                      <v-col
+                        v-show="
+                          isvisibleInput('book_inner_paper_without_color')
+                        "
+                        xs="12"
+                        sm="6"
+                        md="6"
+                      >
+                        <form-group
+                          :input-label="
+                            inputLabel('book_inner_paper_without_color')
+                          "
+                        >
                           <select2
                             id="book_inner_paper_without_color"
                             :options="bookInnerPaperWithoutColorOption"
@@ -882,8 +946,17 @@
                       <!-- end: กระดาษขาวดำ(เนื้อใน) -->
 
                       <!-- begin: จำนวนหน้าขาวดำ(เนื้อใน) -->
-                      <v-col v-show="isvisibleInput('book_inner_without_color_qty')" xs="12" sm="6" md="6">
-                        <form-group :input-label="inputLabel('book_inner_without_color_qty')">
+                      <v-col
+                        v-show="isvisibleInput('book_inner_without_color_qty')"
+                        xs="12"
+                        sm="6"
+                        md="6"
+                      >
+                        <form-group
+                          :input-label="
+                            inputLabel('book_inner_without_color_qty')
+                          "
+                        >
                           <input
                             id="book_inner_without_color_qty"
                             name="book_inner_without_color_qty"
@@ -913,7 +986,7 @@
                               v-for="(option, index) in glueOptions"
                               :key="index"
                               :value="option.value"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                         </form-group>
                         <help-block />
@@ -935,7 +1008,7 @@
                               v-for="(option, index) in ropeOptions"
                               :key="index"
                               :value="option.value"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                         </form-group>
                         <help-block />
@@ -957,7 +1030,7 @@
                               v-for="(option, index) in perforatedRippedOptions"
                               :key="index"
                               :value="option.id"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                         </form-group>
                         <help-block />
@@ -990,7 +1063,7 @@
                               v-for="(option, index) in runningNumberOptions"
                               :key="index"
                               :value="option.id"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                         </form-group>
                         <help-block />
@@ -1013,7 +1086,7 @@
                               v-for="(option, index) in windowBoxOptions"
                               :key="index"
                               :value="option.id"
-                            >{{option.text}}</a-radio>
+                            >{{ option.text }}</a-radio>
                           </a-radio-group>
                         </form-group>
                         <help-block />
@@ -1123,7 +1196,9 @@
                           >
                             <widget1-item
                               :title="item.cust_quantity + ' ' + item.unit"
-                              :desc="item.price_per_item + ' THB ต่อ' + item.unit"
+                              :desc="
+                                item.price_per_item + ' THB ต่อ' + item.unit
+                              "
                               :number="item.final_price + ' THB'"
                             >
                               <el-button
@@ -1187,9 +1262,13 @@
                     <ul class="quotation-detail" style="font-size: 14px;padding: 0;">
                       <li>
                         <span>สินค้า</span>
-                        <span
-                          class="float-right"
-                        >{{ productSelected ? productSelected.product_name : null }}</span>
+                        <span class="float-right">
+                          {{
+                          productSelected
+                          ? productSelected.product_name
+                          : null
+                          }}
+                        </span>
                       </li>
                     </ul>
                     <!-- loading -->
@@ -1199,21 +1278,27 @@
                       <li
                         v-for="(value, attr) in formOptions"
                         :key="attr"
-                        v-show="isvisibleInput(attr) && !skipAttributes.includes(attr)"
+                        v-show="
+                          isvisibleInput(attr) && !skipAttributes.includes(attr)
+                        "
                         class="widget-item"
                       >
-                        <p v-if="attr === 'book_covers_paper'" class="info-label text-center kt-font-brand">
-                          ข้อมูลปก
-                        </p>
-                        <p v-if="attr === 'book_inner_paper'" class="info-label text-center kt-font-brand">
-                          ข้อมูลเนื้อใน
-                        </p>
-                        <p v-if="attr === 'book_inner_paper'" class="info-label text-left kt-font-brand">
-                          พิมพ์สี
-                        </p>
-                        <p v-if="attr === 'book_inner_paper_without_color'" class="info-label text-left kt-font-brand">
-                          พิมพ์ขาวดำ
-                        </p>
+                        <p
+                          v-if="attr === 'book_covers_paper'"
+                          class="info-label text-center kt-font-brand"
+                        >ข้อมูลปก</p>
+                        <p
+                          v-if="attr === 'book_inner_paper'"
+                          class="info-label text-center kt-font-brand"
+                        >ข้อมูลเนื้อใน</p>
+                        <p
+                          v-if="attr === 'book_inner_paper'"
+                          class="info-label text-left kt-font-brand"
+                        >พิมพ์สี</p>
+                        <p
+                          v-if="attr === 'book_inner_paper_without_color'"
+                          class="info-label text-left kt-font-brand"
+                        >พิมพ์ขาวดำ</p>
                         <span class="info-label">{{ inputLabel(attr, '') }}:</span>
                         <span class="float-right">{{ getProductInfo(attr) }}</span>
                       </li>
@@ -1278,7 +1363,9 @@
                     <ValidationProvider name="ที่อยู่" rules="required" v-slot="{ errors }">
                       <form-group input-label="ที่อยู่">
                         <textarea
-                          v-model="attributeQuotation.quotation_customer_address"
+                          v-model="
+                            attributeQuotation.quotation_customer_address
+                          "
                           type="text"
                           class="form-control"
                           name="quotation_customer_address"
@@ -1361,38 +1448,38 @@
 </template>
 
 <script>
-import { Loading } from "element-ui";
-import Swal from "sweetalert2";
-import Select2 from "../components/Select2";
-import ProductGrid from "../components/ProductGrid";
-import Panel from "../components/Panel";
-import SectionTitle from "../components/SectionTitle";
-import FormContainer from "../components/FormContainer";
-import ImageForm from "../components/ImageForm";
-import LoadingContent from "../components/Loading";
-import VCol from "../components/Col";
-import VRow from "../components/Row";
-import BoxTitle from "../components/BoxTitle";
-import FormGroup from "../components/InputFormGroup";
-import HelpBlock from "../components/HelpBlock";
-import KtPortlet from "../components/KtPortlet";
-import KtWidget1 from "../components/KtWidget1";
-import Widget1Item from "../components/Widget1Item";
-import IconCheckList from "../components/IconCheckList";
-import { ValidationObserver } from "vee-validate";
+import { Loading } from 'element-ui'
+import Swal from 'sweetalert2'
+import Select2 from '../components/Select2'
+import ProductGrid from '../components/ProductGrid'
+// import Panel from '../components/Panel'
+import SectionTitle from '../components/SectionTitle'
+import FormContainer from '../components/FormContainer'
+import ImageForm from '../components/ImageForm'
+import LoadingContent from '../components/Loading'
+import VCol from '../components/Col'
+import VRow from '../components/Row'
+import BoxTitle from '../components/BoxTitle'
+import FormGroup from '../components/InputFormGroup'
+import HelpBlock from '../components/HelpBlock'
+import KtPortlet from '../components/KtPortlet'
+import KtWidget1 from '../components/KtWidget1'
+import Widget1Item from '../components/Widget1Item'
+import IconCheckList from '../components/IconCheckList'
+import { ValidationObserver } from 'vee-validate'
 
 function format(state) {
-  if (!state.id) return state.text; // optgroup
-  return state.text;
+  if (!state.id) return state.text // optgroup
+  return state.text
 }
-let token = document.head.querySelector('meta[name="csrf-token"]');
+let token = document.head.querySelector('meta[name="csrf-token"]')
 
 export default {
-  name: "ProductPage",
+  name: 'ProductPage',
   components: {
     Select2,
     ProductGrid,
-    Panel,
+    // Panel,
     SectionTitle,
     FormContainer,
     ImageForm,
@@ -1413,26 +1500,26 @@ export default {
       loading: false,
       loadingQty: false,
       liffData: null,
-      checkList: "",
-      cust_quantity: "", // จำนวนที่ต้องการ
-      options: [{ id: 1, text: "Hello" }, { id: 2, text: "World" }],
+      checkList: '',
+      cust_quantity: '', // จำนวนที่ต้องการ
+      options: [{ id: 1, text: 'Hello' }, { id: 2, text: 'World' }],
       categories: [], // ประเภทสินค้า
       products: [], // สินค้า
 
       radioStyle: {
-        display: "block",
-        height: "30px",
-        lineHeight: "30px"
+        display: 'block',
+        height: '30px',
+        lineHeight: '30px'
       },
 
-      catId: "", // ไอดีประเภทสินค้า
-      productId: "", // ไอดีสินค้า
+      catId: '', // ไอดีประเภทสินค้า
+      productId: '', // ไอดีสินค้า
 
       dataOptions: {},
       formOptions: {},
       productData: null,
       attributes: {
-        "_csrf-frontend": window.yii ? window.yii.getCsrfToken() : token.content
+        '_csrf-frontend': window.yii ? window.yii.getCsrfToken() : token.content
       },
 
       step: 1,
@@ -1445,21 +1532,21 @@ export default {
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกขนาด",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกขนาด',
+        language: 'th'
       },
       // หน่วยขนาด
       pageSizeUnitOption: {
         data: [],
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกหน่วย",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกหน่วย',
+        language: 'th'
       },
       // เข้าเล่ม
       bookBindingOption: {
@@ -1468,21 +1555,21 @@ export default {
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกรายการ...",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกรายการ...',
+        language: 'th'
       },
       // กระดาษ
       paperIdOption: {
         data: [],
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกกระดาษ",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกกระดาษ',
+        language: 'th'
       },
       // สีที่พิมพ์
       printColorOption: {
@@ -1491,205 +1578,195 @@ export default {
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกรายการ...",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกรายการ...',
+        language: 'th'
       },
       // จำนวนแผ่นต่อชุด
       billQtyOption: {
         data: [],
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกจำนวนแผ่นต่อชุด",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกจำนวนแผ่นต่อชุด',
+        language: 'th'
       },
       // เคลือบ
       coatingIdOption: {
         data: [],
-        placeholder: "เลือกรายการ ...",
         allowClear: true,
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกวิธีเคลือบ",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกวิธีเคลือบ',
+        language: 'th'
       },
       // ไดคัทมุมมน
       dicutIdOption: {
         data: [],
-        placeholder: "เลือกรายการ ...",
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกไดคัท",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกไดคัท',
+        language: 'th'
       },
       // ตัดเป็นตัว/เจาะ
       perforateOption: {
         data: [],
-        placeholder: "เลือกรายการ ...",
+        placeholder: 'เลือกรายการ ...',
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือก",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        language: 'th'
       },
       // พับ
       foldIdOption: {
         data: [],
-        placeholder: "เลือกรายการ ...",
+        placeholder: 'เลือกรายการ ...',
         allowClear: true,
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        language: 'th'
       },
       // หน่วยฟอยล์
       foilSizeUnitOption: {
         data: [],
-        placeholder: "เลือกหน่วย ...",
+        placeholder: 'เลือกหน่วย ...',
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกหน่วย",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        language: 'th'
       },
       // สีฟอย์ล
       foilColorIdOption: {
         data: [],
-        placeholder: "เลือกสีฟอยล์ ...",
+        placeholder: 'เลือกสีฟอยล์ ...',
         allowClear: true,
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกสีฟอยล์",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        language: 'th'
       },
       // หน่วยปั๊มนูน
       embossSizeUnitOption: {
         data: [],
-        placeholder: "เลือกหน่วย ...",
+        placeholder: 'เลือกหน่วย ...',
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกหน่วย",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        language: 'th'
       },
       // เจาะ
       perforateOptionOption: {
         data: [],
-        placeholder: "เลือกรายการ ...",
         allowClear: true,
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกมุมเจาะ",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกมุมเจาะ',
+        language: 'th'
       },
       // สถานะปั๊มฟอยล์
       foilStatusOption: {
         data: [],
-        placeholder: "เลือกรายการ ...",
+        placeholder: 'เลือกรายการ ...',
         allowClear: true,
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        language: 'th'
       },
       // สถานะปั๊มนูน
       embossStatusOption: {
         data: [],
-        placeholder: "เลือกรายการ ...",
+        placeholder: 'เลือกรายการ ...',
         allowClear: true,
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        language: 'th'
       },
       // พิมพ์สองหน้าหรือหน้าเดียว
       printOptionOption: {
         data: [],
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกรายการ...",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกรายการ...',
+        language: 'th'
       },
       // ไดคัท
       dicutOption: {
         data: [],
-        placeholder: "เลือกรายการ ...",
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกรูปแบบไดคัท",
-        language: "th",
-        data: []
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกรูปแบบไดคัท',
+        language: 'th'
       },
       // หน่วยติดหน้าต่าง
       windowBoxUnitOption: {
         data: [],
-        placeholder: "เลือกหน่วย ...",
+        placeholder: 'เลือกหน่วย ...',
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกหน่วย",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        language: 'th'
       },
       // กระดาษปกหนังสือ
       bookCoversPaperOption: {
         data: [],
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกกระดาษ",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกกระดาษ',
+        language: 'th'
       },
       // กระดาษเนื้อใน
       bookInnerPaperOption: {
         data: [],
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกกระดาษ",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกกระดาษ',
+        language: 'th'
       },
       // กระดาษขาวดำ(เนื้อใน)
       bookInnerPaperWithoutColorOption: {
         data: [],
         allowClear: true,
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกกระดาษ",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกกระดาษ',
+        language: 'th'
       },
       // สีที่พิมพ์ปกหนังสือ
       bookCoversColorOption: {
@@ -1698,12 +1775,12 @@ export default {
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกรายการ...",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกรายการ...',
+        language: 'th'
       },
       // สี่ที่พิมพ์(เนื้อใน)
       bookInnerColorOption: {
@@ -1712,12 +1789,12 @@ export default {
         templateResult: format,
         templateSelection: format,
         escapeMarkup: function(m) {
-          return m;
+          return m
         },
-        theme: "bootstrap",
-        width: "100%",
-        placeholder: "เลือกรายการ...",
-        language: "th"
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: 'เลือกรายการ...',
+        language: 'th'
       },
 
       /* ข้อมูลตัวเลือก */
@@ -1754,1550 +1831,1551 @@ export default {
       skipAttributes: [],
       // ฟิลด์ฟอร์มดาวน์โหลดใบเสนอราคา
       attributeQuotation: {
-        "_csrf-frontend": window.yii
+        '_csrf-frontend': window.yii
           ? window.yii.getCsrfToken()
           : token.content,
-        quotation_customer_name: "",
-        quotation_customer_address: "",
-        quotation_customer_email: "",
-        quotation_customer_tel: "",
-        quotation_customer_fax: ""
+        quotation_customer_name: '',
+        quotation_customer_address: '',
+        quotation_customer_email: '',
+        quotation_customer_tel: '',
+        quotation_customer_fax: ''
       }
-    };
+    }
   },
   computed: {
     // สถานะการเลือกประเภทสินค้า
     isSelectedCategory() {
-      return !this.isEmpty(this.catId);
+      return !this.isEmpty(this.catId)
     },
     // สถานะการเลือกสินค้า
     isSelectedProduct() {
-      return !this.isEmpty(this.productId);
+      return !this.isEmpty(this.productId)
     },
     // สินค้าที่เลือก
     productSelected() {
-      if (!this.isSelectedProduct || !this.products) return null;
-      return this.products.find(item => item.product_id === this.productId);
+      if (!this.isSelectedProduct || !this.products) return null
+      return this.products.find(item => item.product_id === this.productId)
     },
     // ประเภทสินค้าที่เลือก
     categorySelected() {
-      if (!this.isSelectedCategory) return null;
+      if (!this.isSelectedCategory) return null
       return this.categories.find(
         item => item.product_category_id === this.catId
-      );
+      )
     },
     sectionTitle() {
-      if (!this.isSelectedCategory && !this.isSelectedProduct)
-        return "หมวดหมู่";
-      if (this.isSelectedCategory && !this.isSelectedProduct) return "สินค้า";
+      if (!this.isSelectedCategory && !this.isSelectedProduct) return 'หมวดหมู่'
+      if (this.isSelectedCategory && !this.isSelectedProduct) return 'สินค้า'
       if (this.isSelectedProduct && this.productSelected) {
-        return this.productSelected.product_name;
+        return this.productSelected.product_name
       }
-      return "หมวดหมู่";
+      return 'หมวดหมู่'
     },
     // กำหนดขนาดเอง true or false
     isCustomPaper() {
-      if (this.isEmpty(this.attributes["paper_size_id"])) return false;
-      return this.attributes.paper_size_id === "custom";
+      if (this.isEmpty(this.attributes['paper_size_id'])) return false
+      return this.attributes.paper_size_id === 'custom'
     },
     // เคลือบ ไม่เคลือบ true or false
     isCoating() {
-      if (this.isEmpty(this.attributes["coating_id"])) return false;
-      return this.attributes.coating_id && this.attributes.coating_id !== "N";
+      if (this.isEmpty(this.attributes['coating_id'])) return false
+      return this.attributes.coating_id && this.attributes.coating_id !== 'N'
     },
     // ไดคัท true or false
     isDicut() {
-      if (this.isEmpty(this.attributes["diecut_status"])) return false;
-      return this.attributes.diecut_status === "dicut";
+      if (this.isEmpty(this.attributes['diecut_status'])) return false
+      return this.attributes.diecut_status === 'dicut'
     },
     // ไดคัมมุมมน true or false
     isDicutCurve() {
-      if (!this.isDicut) return false;
+      if (!this.isDicut) return false
       return (
-        this.attributes.diecut === "Curve" && this.isvisibleInput("diecut_id")
-      );
+        this.attributes.diecut === 'Curve' && this.isvisibleInput('diecut_id')
+      )
     },
     // สถานะตัดเป็นตัว เจาะ true or false
     isPerforate() {
-      return this.attributes.diecut_status === "perforate";
+      return this.attributes.diecut_status === 'perforate'
     },
     // สถานะปั๊มฟอยล์ true or false
     isFoil() {
-      if (this.isEmpty(this.attributes["foil_status"])) return false;
-      return this.attributes.foil_status === "Y";
+      if (this.isEmpty(this.attributes['foil_status'])) return false
+      return this.attributes.foil_status === 'Y'
     },
     // สถานะปั๊มนูน true or false
     isEmboss() {
-      if (this.isEmpty(this.attributes["emboss_status"])) return false;
-      return this.attributes.emboss_status === "Y";
+      if (this.isEmpty(this.attributes['emboss_status'])) return false
+      return this.attributes.emboss_status === 'Y'
     },
     // สถานะเข้าเล่ม true or false
     isBookBindingStatus() {
-      if (this.isEmpty(this.attributes["book_binding_status"])) return false;
-      return this.attributes.book_binding_status === 1;
+      if (this.isEmpty(this.attributes['book_binding_status'])) return false
+      return this.attributes.book_binding_status === 1
     },
     // สถานะ running number true or false
     isRunningNumber() {
-      if (this.isEmpty(this.attributes["running_number"])) return false;
-      return this.attributes.running_number === 1;
+      if (this.isEmpty(this.attributes['running_number'])) return false
+      return this.attributes.running_number === 1
     },
     // สถานะติดหน้าต่าง true or false
     isWindowbox() {
-      if (this.isEmpty(this.attributes["window_box"])) return false;
-      return this.attributes.window_box === 1;
+      if (this.isEmpty(this.attributes['window_box'])) return false
+      return this.attributes.window_box === 1
     },
     // รายละเอียดขนาด
     paperSizeDetail() {
-      const _this = this;
-      if (_this.isEmpty(_this.attributes.paper_size_id)) return "-"; // ถ้าไม่เลือกขนาด
-      const paper = _this.paperSizeIdOption.data.find((item, index) => {
-        return item.id === _this.attributes.paper_size_id;
-      }); // หาขนาดที่เลือก
-      if (_this.isEmpty(paper)) return "-"; // ไม่เจอขนาดที่เลือก
+      const _this = this
+      if (_this.isEmpty(_this.attributes.paper_size_id)) return '-' // ถ้าไม่เลือกขนาด
+      const paper = _this.paperSizeIdOption.data.find(item => {
+        return item.id === _this.attributes.paper_size_id
+      }) // หาขนาดที่เลือก
+      if (_this.isEmpty(paper)) return '-' // ไม่เจอขนาดที่เลือก
       if (_this.isCustomPaper) {
         // ถ้าเลือกขนาดกำหนดเอง
         if (_this.paper_size_height) {
           // ถ้ามีขนาดความสูง return {กว้าง x ยาว x สูง หน่วย}
-          return `${_this.paper_size_width}x${_this.paper_size_lenght}x${_this.paper_size_height} ${_this.paper_size_unit}`;
+          return `${_this.paper_size_width}x${_this.paper_size_lenght}x${_this.paper_size_height} ${_this.paper_size_unit}`
         }
         // ถ้าไม่มีขนาดความสูง return {กว้าง x ยาว หน่วย}
-        return `${_this.paper_size_width}x${_this.paper_size_lenght} ${_this.paper_size_unit}`;
+        return `${_this.paper_size_width}x${_this.paper_size_lenght} ${_this.paper_size_unit}`
       }
-      return _this.replaceHtml(paper.text); // ชื่อขนาด
+      return _this.replaceHtml(paper.text) // ชื่อขนาด
     },
     // ความกว้างกำหนดเอง
     paper_size_width() {
-      if (!this.attributes.paper_size_width) return "";
-      return this.attributes.paper_size_width;
+      if (!this.attributes.paper_size_width) return ''
+      return this.attributes.paper_size_width
     },
     // ความยาวกำหนดเอง
     paper_size_lenght() {
-      if (!this.attributes.paper_size_lenght) return "";
-      return this.attributes.paper_size_lenght;
+      if (!this.attributes.paper_size_lenght) return ''
+      return this.attributes.paper_size_lenght
     },
     // ความสูงกำหนดเอง
     paper_size_height() {
-      if (!this.attributes.paper_size_height) return "";
-      return this.attributes.paper_size_height;
+      if (!this.attributes.paper_size_height) return ''
+      return this.attributes.paper_size_height
     },
     // หน่วยกำหนดเอง
     paper_size_unit() {
-      if (!this.attributes.paper_size_unit) return "";
+      if (!this.attributes.paper_size_unit) return ''
       const data = this.pageSizeUnitOption.data.find(item => {
-        return item.id === this.attributes.paper_size_unit;
-      });
-      return data ? this.replaceHtml(data.text) : "";
+        return item.id === this.attributes.paper_size_unit
+      })
+      return data ? this.replaceHtml(data.text) : ''
     },
     // รายละเอียดกระดาษ
     paperDetail: function() {
-      if (!this.attributes.paper_id) return "-";
-      let paper = null;
+      if (!this.attributes.paper_id) return '-'
+      let paper = null
 
       this.paperIdOption.data.map(item => {
         if (item.id === this.attributes.paper_id) {
-          paper = item;
+          paper = item
         } else if (item.children.length > 0) {
           return item.children.map(children => {
             if (children.id === this.attributes.paper_id) {
-              paper = children;
+              paper = children
             }
-          });
+          })
         }
-      });
-      if (this.isEmpty(paper)) return "-";
-      return this.replaceHtml(paper.text);
+      })
+      if (this.isEmpty(paper)) return '-'
+      return this.replaceHtml(paper.text)
     },
     // กระดาษปกหนังสือ
     bookCoversPaperDetail() {
-      if (!this.attributes.book_covers_paper) return "-";
-      let paper = null;
+      if (!this.attributes.book_covers_paper) return '-'
+      let paper = null
 
       this.bookCoversPaperOption.data.map(item => {
         if (item.id === this.attributes.book_covers_paper) {
-          paper = item;
+          paper = item
         } else if (item.children.length > 0) {
           return item.children.map(children => {
             if (children.id === this.attributes.book_covers_paper) {
-              paper = children;
+              paper = children
             }
-          });
+          })
         }
-      });
-      if (this.isEmpty(paper)) return "-";
-      return this.replaceHtml(paper.text);
+      })
+      if (this.isEmpty(paper)) return '-'
+      return this.replaceHtml(paper.text)
     },
     // กระดาษเนื้อใน
     bookInnerPaperDetail() {
-      if (!this.attributes.book_inner_paper) return "-";
-      let paper = null;
+      if (!this.attributes.book_inner_paper) return '-'
+      let paper = null
 
       this.bookInnerPaperOption.data.map(item => {
         if (item.id === this.attributes.book_inner_paper) {
-          paper = item;
+          paper = item
         } else if (item.children.length > 0) {
           return item.children.map(children => {
             if (children.id === this.attributes.book_inner_paper) {
-              paper = children;
+              paper = children
             }
-          });
+          })
         }
-      });
-      if (this.isEmpty(paper)) return "-";
-      return this.replaceHtml(paper.text);
+      })
+      if (this.isEmpty(paper)) return '-'
+      return this.replaceHtml(paper.text)
     },
     // กระดาษขาวดำ(เนื้อใน)
     bookInnerPaperWithoutColorDetail() {
-      if (!this.attributes.book_inner_paper_without_color) return "-";
-      let paper = null;
+      if (!this.attributes.book_inner_paper_without_color) return '-'
+      let paper = null
 
       this.bookInnerPaperWithoutColorOption.data.map(item => {
         if (item.id === this.attributes.book_inner_paper_without_color) {
-          paper = item;
+          paper = item
         } else if (item.children.length > 0) {
           return item.children.map(children => {
-            if (children.id === this.attributes.book_inner_paper_without_color) {
-              paper = children;
+            if (
+              children.id === this.attributes.book_inner_paper_without_color
+            ) {
+              paper = children
             }
-          });
+          })
         }
-      });
-      if (this.isEmpty(paper)) return "-";
-      return this.replaceHtml(paper.text);
+      })
+      if (this.isEmpty(paper)) return '-'
+      return this.replaceHtml(paper.text)
     },
     // รายละเอียดแนวตั้ง แนวนอน
     landOrientDetail() {
-      if (!this.attributes.land_orient) return "-";
+      if (!this.attributes.land_orient) return '-'
       const data = this.landOrientOptions.find(
         item => item.value === this.attributes.land_orient
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // รายละเอียดวิธีเข้าเล่ม
     bookBindingDetail() {
-      if (this.isEmpty(this.attributes.book_binding_status)) return "-";
-      if(this.isvisibleInput('book_covers_paper')) {
+      if (this.isEmpty(this.attributes.book_binding_status)) return '-'
+      if (this.isvisibleInput('book_covers_paper')) {
         const data = this.bookBindingOption.data.find(
           item => item.id === this.attributes.book_binding_id
-        );
-        if (this.isEmpty(data)) return "-";
-        return this.replaceHtml(data.text);
+        )
+        if (this.isEmpty(data)) return '-'
+        return this.replaceHtml(data.text)
       } else {
-        if (!this.attributes.book_binding_status) return "ไม่เข้าเล่ม";
+        if (!this.attributes.book_binding_status) return 'ไม่เข้าเล่ม'
         const data = this.bookBindingOption.data.find(
           item => item.id === this.attributes.book_binding_id
-        );
-        if (this.isEmpty(data)) return "-";
-        return this.replaceHtml(data.text);
+        )
+        if (this.isEmpty(data)) return '-'
+        return this.replaceHtml(data.text)
       }
     },
     // รายละเอียดจำนวนหน้า/จำนวนแผ่น
     pageQty() {
-      if (this.isEmpty(this.attributes.page_qty)) return "-";
-      return this.attributes.page_qty;
+      if (this.isEmpty(this.attributes.page_qty)) return '-'
+      return this.attributes.page_qty
     },
     // รายละเอียดจำนวนแผ่นต่อชุด
     billQty() {
-      if (!this.attributes.bill_detail_qty) return "-";
+      if (!this.attributes.bill_detail_qty) return '-'
       const data = this.billQtyOption.data.find(
         item => item.id === this.attributes.bill_detail_qty
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // รายละเอียดพิมพ์สองหน้า พิมพ์หน้าเดียว
     printOptionDetail() {
-      if (!this.attributes.print_option) return "-";
+      if (!this.attributes.print_option) return '-'
       const data = this.printOptionOption.data.find(
         item => item.id === this.attributes.print_option
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // รายละเอียดสีที่พิมพ์
     printColorDetail() {
-      if (!this.attributes.print_color) return "-";
+      if (!this.attributes.print_color) return '-'
       const data = this.printColorOption.data.find(
         item => item.id === this.attributes.print_color
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // สีที่พิมพ์ปกหนังสือ
     bookCoversColorDetail() {
-      if (!this.attributes.book_covers_color) return "-";
+      if (!this.attributes.book_covers_color) return '-'
       const data = this.bookCoversColorOption.data.find(
         item => item.id === this.attributes.book_covers_color
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // สี่ที่พิมพ์(เนื้อใน)
     bookInnerColorDetail() {
-      if (!this.attributes.book_inner_color) return "-";
+      if (!this.attributes.book_inner_color) return '-'
       const data = this.bookInnerColorOption.data.find(
         item => item.id === this.attributes.book_inner_color
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // รายละเอียดเคลือบ
     coatingDetail() {
-      if (!this.attributes.coating_id) return "-";
+      if (!this.attributes.coating_id) return '-'
       const data = this.coatingIdOption.data.find(
         item => item.id === this.attributes.coating_id
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text) + " " + this.coatingOptionDetail;
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text) + ' ' + this.coatingOptionDetail
     },
     // รายละเอียดด้านที่เคลือบ
     coatingOptionDetail() {
-      if (!this.attributes.coating_option) return "";
+      if (!this.attributes.coating_option) return ''
       const data = this.coatingOptionOptions.find(
         item => item.value === this.attributes.coating_option
-      );
-      if (this.isEmpty(data)) return "";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return ''
+      return this.replaceHtml(data.text)
     },
     // รายละเอียดไดคัท/ตัดเป็นตัว,เจาะ
     dicutStatusDetail() {
-      if (!this.attributes.diecut_status) return "-";
+      if (!this.attributes.diecut_status) return '-'
       const data = this.dicutStatusOptions.find(
         item => item.value === this.attributes.diecut_status
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // รายละเอียดตัดเป็นตัว+เจาะมุม,ตัดเป็นตัว
     perforateDetail() {
-      if (!this.attributes.perforate) return "-";
+      if (!this.attributes.perforate) return '-'
       const data = this.perforateOption.data.find(
         item => item.id === this.attributes.perforate
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // มุมที่เจาะ
     perforateOptionDetail() {
-      if (!this.attributes.perforate_option_id) return "-";
-      let perforate = null;
+      if (!this.attributes.perforate_option_id) return '-'
+      let perforate = null
 
       this.perforateOptionOption.data.map(item => {
         if (item.id === this.attributes.perforate_option_id) {
-          perforate = item;
+          perforate = item
         } else if (item.children.length > 0) {
           return item.children.map(children => {
             if (children.id === this.attributes.perforate_option_id) {
-              perforate = children;
+              perforate = children
             }
-          });
+          })
         }
-      });
-      if (this.isEmpty(perforate)) return "-";
-      return this.replaceHtml(perforate.text);
+      })
+      if (this.isEmpty(perforate)) return '-'
+      return this.replaceHtml(perforate.text)
     },
     // รูปแบบไดคัท
     diecutDetail() {
-      if (!this.attributes.diecut) return "-";
+      if (!this.attributes.diecut) return '-'
       const data = this.dicutOption.data.find(
         item => item.id === this.attributes.diecut
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // ไดคัทมุมมน
     dicutCurveDetail() {
-      if (!this.attributes.diecut_id) return "-";
+      if (!this.attributes.diecut_id) return '-'
       const data = this.dicutIdOption.data.find(
         item => item.id === this.attributes.diecut_id
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // วิธีพับ
     foldDetail() {
-      if (!this.attributes.fold_id) return "-";
+      if (!this.attributes.fold_id) return '-'
       const data = this.foldIdOption.data.find(
         item => item.id === this.attributes.fold_id
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // ปั๊มฟอยล์
     foilDetail() {
-      if (this.attributes.foil_status === "N") return "ไม่ปั๊มฟอยล์";
-      if (!this.isFoil) return "-";
-      return `${this.foil_size_width}x${this.foil_size_height} ${this.foil_size_unit} ${this.foil_color} ${this.foil_print}`;
+      if (this.attributes.foil_status === 'N') return 'ไม่ปั๊มฟอยล์'
+      if (!this.isFoil) return '-'
+      return `${this.foil_size_width}x${this.foil_size_height} ${this.foil_size_unit} ${this.foil_color} ${this.foil_print}`
     },
     // ความกว้าง(ฟอยล์)
     foil_size_width() {
-      if (!this.attributes.foil_size_width) return "";
-      return this.attributes.foil_size_width;
+      if (!this.attributes.foil_size_width) return ''
+      return this.attributes.foil_size_width
     },
     // ความยาว(ฟอยล์)
     foil_size_height() {
-      if (!this.attributes.foil_size_height) return "";
-      return this.attributes.foil_size_height;
+      if (!this.attributes.foil_size_height) return ''
+      return this.attributes.foil_size_height
     },
     // หน่วย(ฟอยล์)
     foil_size_unit() {
-      if (!this.attributes.foil_size_unit) return "";
+      if (!this.attributes.foil_size_unit) return ''
       const data = this.foilSizeUnitOption.data.find(
         item => item.id === this.attributes.foil_size_unit
-      );
-      if (this.isEmpty(data)) return "";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return ''
+      return this.replaceHtml(data.text)
     },
     // สีฟอยล์
     foil_color() {
-      if (!this.attributes.foil_color_id) return "";
+      if (!this.attributes.foil_color_id) return ''
       const data = this.foilColorIdOption.data.find(
         item => item.id === this.attributes.foil_color_id
-      );
-      if (this.isEmpty(data)) return "";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return ''
+      return this.replaceHtml(data.text)
     },
     // ปั๊มฟอยล์ หน้า-หลัง/หน้าเดียว
     foil_print() {
-      if (!this.attributes.foil_print) return "-";
+      if (!this.attributes.foil_print) return '-'
       const data = this.foliPrintOptions.find(
         item => item.value === this.attributes.foil_print
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // ปั๊มนูน
     embossDetail() {
-      if (this.attributes.emboss_status === "N") return "ไม่ปั๊มนูน";
-      if (!this.isEmboss) return "-";
-      return `${this.emboss_size_width}x${this.emboss_size_height} ${this.emboss_size_unit} ${this.emboss_print}`;
+      if (this.attributes.emboss_status === 'N') return 'ไม่ปั๊มนูน'
+      if (!this.isEmboss) return '-'
+      return `${this.emboss_size_width}x${this.emboss_size_height} ${this.emboss_size_unit} ${this.emboss_print}`
     },
     // กว้าง(ปั๊มนูน)
     emboss_size_width() {
-      if (!this.attributes.emboss_size_width) return "";
-      return this.attributes.emboss_size_width;
+      if (!this.attributes.emboss_size_width) return ''
+      return this.attributes.emboss_size_width
     },
     // ยาว(ปั๊มนูน)
     emboss_size_height() {
-      if (!this.attributes.emboss_size_height) return "";
-      return this.attributes.emboss_size_height;
+      if (!this.attributes.emboss_size_height) return ''
+      return this.attributes.emboss_size_height
     },
     // หน่วย(ปั๊มนูน)
     emboss_size_unit() {
-      if (!this.attributes.emboss_size_unit) return "";
+      if (!this.attributes.emboss_size_unit) return ''
       const data = this.embossSizeUnitOption.data.find(
         item => item.id === this.attributes.emboss_size_unit
-      );
-      if (this.isEmpty(data)) return "";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return ''
+      return this.replaceHtml(data.text)
     },
     // ปั๊มนูน หน้า-หลัง/หน้าเดียว
     emboss_print() {
-      if (!this.attributes.emboss_print) return "-";
+      if (!this.attributes.emboss_print) return '-'
       const data = this.embossPrintOptions.find(
         item => item.value === this.attributes.emboss_print
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // ปะกาว
     glueDetail() {
-      if (!this.attributes.glue) return "-";
+      if (!this.attributes.glue) return '-'
       const data = this.glueOptions.find(
         item => item.value === this.attributes.glue
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // ร้อยเชือกหูถุง
     ropeDetail() {
-      if (!this.attributes.rope) return "-";
+      if (!this.attributes.rope) return '-'
       const data = this.ropeOptions.find(
         item => item.value === this.attributes.rope
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // รายละเอียดปรุฉีก
     perforatedRippedDetail() {
-      if (this.isEmpty(this.attributes.perforated_ripped)) return "-";
+      if (this.isEmpty(this.attributes.perforated_ripped)) return '-'
       const data = this.perforatedRippedOptions.find(
         item => item.id === this.attributes.perforated_ripped
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // จำนวนแผ่นต่อเล่ม(คูปอง)
     book_binding_qty() {
-      if (!this.attributes.book_binding_qty) return "-";
-      return this.attributes.book_binding_qty;
+      if (!this.attributes.book_binding_qty) return '-'
+      return this.attributes.book_binding_qty
     },
     // รายละเอียด running_number
     runningNumberDetail() {
-      if (this.isEmpty(this.attributes.running_number)) return "-";
+      if (this.isEmpty(this.attributes.running_number)) return '-'
       const data = this.runningNumberOptions.find(
         item => item.id === this.attributes.running_number
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // ติดหน้าต่าง
     windowBoxDetail() {
-      if (this.isEmpty(this.attributes.window_box)) return "-";
-      if (!this.attributes.window_box) return "ไม่ติดหน้าต่าง";
-      if (!this.isWindowbox) return "-";
-      return `${this.window_box_width}x${this.window_box_lenght} ${this.window_box_unit}`;
+      if (this.isEmpty(this.attributes.window_box)) return '-'
+      if (!this.attributes.window_box) return 'ไม่ติดหน้าต่าง'
+      if (!this.isWindowbox) return '-'
+      return `${this.window_box_width}x${this.window_box_lenght} ${this.window_box_unit}`
     },
     // ความกว้างติดหน้าต่าง
     window_box_width() {
-      if (!this.attributes.window_box_width) return "";
-      return this.attributes.window_box_width;
+      if (!this.attributes.window_box_width) return ''
+      return this.attributes.window_box_width
     },
     // ความยาวติดหน้าต่าง
     window_box_lenght() {
-      if (!this.attributes.window_box_lenght) return "";
-      return this.attributes.window_box_lenght;
+      if (!this.attributes.window_box_lenght) return ''
+      return this.attributes.window_box_lenght
     },
     // หน่วย(ปั๊มนูน)
     window_box_unit() {
-      if (!this.attributes.window_box_unit) return "";
+      if (!this.attributes.window_box_unit) return ''
       const data = this.windowBoxUnitOption.data.find(
         item => item.id === this.attributes.window_box_unit
-      );
-      if (this.isEmpty(data)) return "";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return ''
+      return this.replaceHtml(data.text)
     },
     // จำนวน
     oldQtyItems() {
-      const _this = this;
-      const items = [];
+      const _this = this
+      const items = []
       _this.priceList.map(item => {
-        items.push(item.cust_quantity);
-      });
-      return items;
+        items.push(item.cust_quantity)
+      })
+      return items
     },
     bookBindingStatus() {
-      if (this.isEmpty(this.attributes.book_binding_status)) return "-";
+      if (this.isEmpty(this.attributes.book_binding_status)) return '-'
       const data = this.bookBindingStatusOptions.find(
         item => item.id === this.attributes.book_binding_status
-      );
-      if (this.isEmpty(data)) return "-";
-      return this.replaceHtml(data.text);
+      )
+      if (this.isEmpty(data)) return '-'
+      return this.replaceHtml(data.text)
     },
     // จำนวนหน้าปกหนังสือ
     book_covers_qty() {
-      if (!this.attributes.book_covers_qty) return "";
-      return this.attributes.book_covers_qty;
+      if (!this.attributes.book_covers_qty) return ''
+      return this.attributes.book_covers_qty
     },
     // จำนวนหน้า(เนื้อใน)
     book_inner_paper_qty() {
-      if (!this.attributes.book_inner_paper_qty) return "";
-      return this.attributes.book_inner_paper_qty;
+      if (!this.attributes.book_inner_paper_qty) return ''
+      return this.attributes.book_inner_paper_qty
     },
     // จำนวนหน้าขาวดำ(เนื้อใน)
     book_inner_without_color_qty() {
-      if (!this.attributes.book_inner_without_color_qty) return "";
-      return this.attributes.book_inner_without_color_qty;
-    },
+      if (!this.attributes.book_inner_without_color_qty) return ''
+      return this.attributes.book_inner_without_color_qty
+    }
   },
   mounted() {
-    this.fetchDataProductCategoryList();
-    this.initializeApp();
+    this.fetchDataProductCategoryList()
+    this.initializeApp()
   },
   methods: {
     async fetchDataProductCategoryList() {
-      var _this = this;
-      _this.setLoading(true);
-      let loadingInstance = Loading.service({ fullscreen: true });
-      const params = this.$route.query; // window.yii.getQueryParams(window.location.search);
+      const _this = this
+      _this.setLoading(true)
+      let loadingInstance = Loading.service({ fullscreen: true })
+      const params = this.$route.query // window.yii.getQueryParams(window.location.search);
 
       try {
         const { data } = await window.axios.get(
-          "/app/api/product-category-list"
-        );
+          '/app/api/product-category-list'
+        )
         // handle success
-        _this.categories = await data;
+        _this.categories = data
         if (!_this.isEmpty(params) && !_this.isEmpty(params.catId)) {
-          this.catId = parseInt(params.catId);
-          await _this.fetchDataProductCategory(params.catId);
-          await _this.onSelectProduct(params.productId);
+          this.catId = parseInt(params.catId)
+          await _this.fetchDataProductCategory(params.catId)
+          await _this.onSelectProduct(params.productId)
         }
         setTimeout(function() {
-          _this.initLazyImages();
-        });
-        _this.setLoading(false);
-        loadingInstance.close();
+          _this.initLazyImages()
+        })
+        _this.setLoading(false)
+        loadingInstance.close()
       } catch (error) {
         // handle error
-        _this.setLoading(false);
-        loadingInstance.close();
-        this.$message.error(this.getErrorMessage(error));
+        _this.setLoading(false)
+        loadingInstance.close()
+        this.$message.error(this.getErrorMessage(error))
       }
     },
     // กลุ่มสินค้า
     async fetchDataProductCategory(id) {
-      var _this = this;
-      _this.setLoading(true);
-      let loadingInstance = Loading.service({ fullscreen: true });
+      var _this = this
+      _this.setLoading(true)
+      let loadingInstance = Loading.service({ fullscreen: true })
       try {
         const { data } = await window.axios.get(
           `/app/api/get-product-category?id=${id}`
-        );
-        _this.products = await data.items;
-        _this.setLoading(false);
-        loadingInstance.close();
-        _this.scrollTop();
+        )
+        _this.products = await data.items
+        _this.setLoading(false)
+        loadingInstance.close()
+        _this.scrollTop()
       } catch (error) {
-        _this.setLoading(false);
-        loadingInstance.close();
-        this.$message.error(this.getErrorMessage(error));
+        _this.setLoading(false)
+        loadingInstance.close()
+        this.$message.error(this.getErrorMessage(error))
       }
     },
     // ข้อมูลตัวเลือก
     async fetchDataOptions() {
-      const _this = this;
-      _this.setLoading(true);
-      let loadingInstance = Loading.service({ fullscreen: true });
+      const _this = this
+      _this.setLoading(true)
+      let loadingInstance = Loading.service({ fullscreen: true })
       try {
         const { data } = await window.axios.get(
           `/app/api/quotation?p=${_this.productId}`
-        );
+        )
         const {
           dataOptions,
           formOptions,
           formAttributes,
           product,
           skipAttributes
-        } = data;
+        } = data
         // set options
-        _this.dataOptions = await dataOptions; // ข้อมูลตัวเลือก
-        _this.formOptions = await formOptions; // ข้อมูลตั้งค่าฟิลด์
-        _this.skipAttributes = await skipAttributes; // ข้อมูลตั้งค่าฟิลด์
+        _this.dataOptions = await dataOptions // ข้อมูลตัวเลือก
+        _this.formOptions = await formOptions // ข้อมูลตั้งค่าฟิลด์
+        _this.skipAttributes = await skipAttributes // ข้อมูลตั้งค่าฟิลด์
         _this.attributes = await _this.updateObject(
           // ฟิลด์ข้อมูล tbl_quotation_detail
           _this.attributes,
           this.updateObject(formAttributes, {
             product_id: _this.productId
           })
-        );
-        _this.productData = await product; // ข้อมูลสินค้าที่เลือก
+        )
+        _this.productData = await product // ข้อมูลสินค้าที่เลือก
 
-        await _this.setInputDataOptions(); // กำหนดข้อมูลตัวเลือก
+        await _this.setInputDataOptions() // กำหนดข้อมูลตัวเลือก
         _this.$nextTick(function() {
-          _this.restoreStorage();
-        });
-        _this.setLoading(false);
-        const cacheData = JSON.parse(localStorage.getItem("formData"));
-        const selectElm = $("#form-quotation").find("select.select2");
-        const select2 = [];
+          _this.restoreStorage()
+        })
+        _this.setLoading(false)
+        const cacheData = JSON.parse(localStorage.getItem('formData'))
+        const selectElm = $('#form-quotation').find('select.select2')
 
         if (_this.isEmpty(cacheData)) {
-          $("select.select2")
-            .val("")
-            .trigger("change");
+          $('select.select2')
+            .val('')
+            .trigger('change')
         }
         await new Promise(resolve => {
           setTimeout(function() {
-            $("#paper_size_id")
+            $('#paper_size_id')
               .val(_this.attributes.paper_size_id)
-              .trigger("change");
+              .trigger('change')
             selectElm.each(function(index, el) {
               if (_this.isEmpty(_this.attributes[el.id])) {
-                $("#" + el.id)
-                  .val("")
-                  .trigger("change");
+                $('#' + el.id)
+                  .val('')
+                  .trigger('change')
               } else if (!_this.isEmpty(_this.attributes[el.id])) {
-                $("#" + el.id)
+                $('#' + el.id)
                   .val(_this.attributes[el.id])
-                  .trigger("change");
+                  .trigger('change')
               }
-            });
-            $("#loading, #loading2, .desc").hide();
-            loadingInstance.close();
-            _this.initScroll();
-            _this.scrollTop();
-            resolve();
-          }, 1000);
-        });
+            })
+            $('#loading, #loading2, .desc').hide()
+            loadingInstance.close()
+            _this.initScroll()
+            _this.scrollTop()
+            resolve()
+          }, 1000)
+        })
       } catch (error) {
-        _this.setLoading(false);
-        loadingInstance.close();
-        this.$message.error(this.getErrorMessage(error));
+        _this.setLoading(false)
+        loadingInstance.close()
+        this.$message.error(this.getErrorMessage(error))
       }
     },
     // จำนวนแผ่นต่อชุด
     async fetchDataBillFloorOptions() {
-      let attributes = this.attributes;
-      if (this.isvisibleInput("bill_detail_qty")) {
+      let attributes = this.attributes
+      if (this.isvisibleInput('bill_detail_qty')) {
         try {
           const { data } = await window.axios.get(
             `/app/api/bill-floor-options?paper_size_id=${attributes.paper_size_id}&paper_id=${attributes.paper_id}`
-          );
+          )
           // handle success
           this.billQtyOption = await this.updateObject(this.billQtyOption, {
             data: this.mapDataOptions(data)
-          });
+          })
           // this.$nextTick(function() {
           //   this.attributes.bill_detail_qty = "";
           // });
           setTimeout(() => {
-            $("#bill_detail_qty")
+            $('#bill_detail_qty')
               .val(this.attributes.bill_detail_qty)
-              .trigger("change");
-          }, 500);
+              .trigger('change')
+          }, 500)
         } catch (error) {
-          this.$message.error(this.getErrorMessage(error));
+          this.$message.error(this.getErrorMessage(error))
         }
       }
     },
     // เลือกประเภทสินค้า
     onSelectCategory(catId) {
-      this.catId = catId;
-      this.fetchDataProductCategory(catId);
+      this.catId = catId
+      this.fetchDataProductCategory(catId)
       /* const data = { "first name": "George", "last name": "Jetson", age: 110 };
       const querystring = this.encodeQueryData(data); */
     },
     onSelectCat(catId) {
-      this.catId = catId;
-      this.productId = "";
+      this.catId = catId
+      this.productId = ''
     },
     onSelectGroup() {
-      this.catId = "";
-      this.productId = "";
+      this.catId = ''
+      this.productId = ''
     },
     // เลือกสินค้า
     onSelectProduct(productId) {
-      this.step = 1;
-      this.productId = productId;
-      this.formOptions = {};
-      this.productData = null;
-      this.fetchDataOptions();
+      this.step = 1
+      this.productId = productId
+      this.formOptions = {}
+      this.productData = null
+      this.fetchDataOptions()
     },
     onSubmit() {
-      console.log("onSubmit");
+      console.log('onSubmit')
     },
     setLoading: function(loading) {
-      this.loading = loading;
+      this.loading = loading
     },
     initLazyImages: function() {
-      var lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+      var lazyImages = [].slice.call(document.querySelectorAll('img.lazy'))
 
-      if ("IntersectionObserver" in window) {
-        let lazyImageObserver = new IntersectionObserver(function(
-          entries,
-          observer
-        ) {
+      if ('IntersectionObserver' in window) {
+        let lazyImageObserver = new IntersectionObserver(function(entries) {
           entries.forEach(function(entry) {
             if (entry.isIntersecting) {
-              let lazyImage = entry.target;
-              lazyImage.src = lazyImage.dataset.src;
-              lazyImage.srcset = lazyImage.dataset.srcset;
-              lazyImage.classList.remove("lazy");
+              let lazyImage = entry.target
+              lazyImage.src = lazyImage.dataset.src
+              lazyImage.srcset = lazyImage.dataset.srcset
+              lazyImage.classList.remove('lazy')
               setTimeout(function() {
-                lazyImage.classList.remove("blur");
-              }, 1000);
-              lazyImageObserver.unobserve(lazyImage);
+                lazyImage.classList.remove('blur')
+              }, 1000)
+              lazyImageObserver.unobserve(lazyImage)
             }
-          });
-        });
+          })
+        })
 
         lazyImages.forEach(function(lazyImage) {
-          lazyImageObserver.observe(lazyImage);
-        });
+          lazyImageObserver.observe(lazyImage)
+        })
       }
     },
     isEmpty: function(value) {
-      return value === null || value === undefined || value.length === 0;
+      return value === null || value === undefined || value.length === 0
     },
     isvisibleInput: function(attribute) {
-      if (this.isEmpty(this.formOptions)) return false;
-      if (this.isEmpty(this.formOptions[attribute])) return false;
+      if (this.isEmpty(this.formOptions)) return false
+      if (this.isEmpty(this.formOptions[attribute])) return false
       return (
-        this.formOptions[attribute] && this.formOptions[attribute].value === "1"
-      );
+        this.formOptions[attribute] && this.formOptions[attribute].value === '1'
+      )
     },
     // event เลือกขนาด
     onChangePaperSizeId: function(e) {
-      const _this = this;
-      if (e.target.value !== "custom") {
+      const _this = this
+      if (e.target.value !== 'custom') {
         // กำหนดเอง
         _this.attributes = _this.updateObject(_this.attributes, {
-          paper_size_width: "",
-          paper_size_lenght: "",
-          paper_size_height: "",
-          paper_size_unit: ""
-        });
-        $("#paper_size_unit")
-          .val("")
-          .trigger("change");
+          paper_size_width: '',
+          paper_size_lenght: '',
+          paper_size_height: '',
+          paper_size_unit: ''
+        })
+        $('#paper_size_unit')
+          .val('')
+          .trigger('change')
       }
       // จำนวนแผ่นต่อชุด
-      if (this.isvisibleInput("bill_detail_qty")) {
-        this.fetchDataBillFloorOptions();
+      if (this.isvisibleInput('bill_detail_qty')) {
+        this.fetchDataBillFloorOptions()
       }
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     // event เลือกกระดาษ
-    onChangePaperId: function(e) {
+    onChangePaperId: function() {
       // จำนวนแผ่นต่อชุด
-      if (this.isvisibleInput("bill_detail_qty")) {
-        this.fetchDataBillFloorOptions();
+      if (this.isvisibleInput('bill_detail_qty')) {
+        this.fetchDataBillFloorOptions()
       }
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     // event เลือกเคลือบ
     onChangeCoatingId: function(e) {
-      if (e.target.value === "N" || this.isEmpty(e.target.value)) {
+      if (e.target.value === 'N' || this.isEmpty(e.target.value)) {
         // ถ้าไม่เคลือบ ให้เคลียร์ข้อมูลด้านที่เคลือบ
-        this.attributes.coating_option = "";
+        this.attributes.coating_option = ''
       }
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     // event เลือกไดคัท
     onChangeDiecutStatus: function(e) {
-      const _this = this;
+      const _this = this
       // const value = e.target.value;
-      if (e.target.value === "not-dicut" || e.target.value === "perforate") {
+      if (e.target.value === 'not-dicut' || e.target.value === 'perforate') {
         // ไม่ไดคัท หรือ ตัดเจาะ
-        _this.attributes.diecut = "N";
-        _this.attributes.diecut_id = ""; // set empty รูปแบบไดคัท
+        _this.attributes.diecut = 'N'
+        _this.attributes.diecut_id = '' // set empty รูปแบบไดคัท
         setTimeout(function() {
           // set empty รูปแบบไดคัท, มุมไดคัท, ตัดเป็นตัว เจาะ
-          $("#diecut, #diecut_id, #perforate")
-            .val("")
-            .trigger("change");
-        }, 300);
-      } else if (e.target.value === "dicut") {
+          $('#diecut, #diecut_id, #perforate')
+            .val('')
+            .trigger('change')
+        }, 300)
+      } else if (e.target.value === 'dicut') {
         // ไดคัท
-        _this.attributes.diecut = ""; // set empty รูปแบบไดคัท
-        _this.attributes.perforate = ""; // set empty ตัดเป็นตัว เจาะ
-        _this.attributes.perforate_option_id = ""; // set empty มุมที่เจาะ
+        _this.attributes.diecut = '' // set empty รูปแบบไดคัท
+        _this.attributes.perforate = '' // set empty ตัดเป็นตัว เจาะ
+        _this.attributes.perforate_option_id = '' // set empty มุมที่เจาะ
         setTimeout(function() {
           // set empty
-          $("#perforate, #perforate_option_id")
-            .val("")
-            .trigger("change");
-        }, 300);
+          $('#perforate, #perforate_option_id')
+            .val('')
+            .trigger('change')
+        }, 300)
       }
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     // event เลือกรูปแบบไดคัท
     onChangeDicut: function(value) {
-      if (value === "N" || value === "Default" || this.isEmpty(value)) {
+      if (value === 'N' || value === 'Default' || this.isEmpty(value)) {
         // ถ้าไม่ไดคัท หรือ ไดคัทตามรูปแบบ
-        this.attributes.diecut_id = ""; // set empty
-        $("#diecut_id") // set empty
-          .val("")
-          .trigger("change");
+        this.attributes.diecut_id = '' // set empty
+        $('#diecut_id') // set empty
+          .val('')
+          .trigger('change')
       }
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     // เลือกตัดเป็นตัว+เจาะมุม,ตัดเป็นตัว
     onChangePerforate: function(e) {
-      const _this = this;
-      if (e.target.value !== "1") {
+      const _this = this
+      if (e.target.value !== '1') {
         // ไม่ตัดเป็นตัว
-        _this.attributes.perforate_option_id = ""; // set empty มุมที่เจาะ
-        $("#perforate_option_id") // set empty
-          .val("")
-          .trigger("change");
+        _this.attributes.perforate_option_id = '' // set empty มุมที่เจาะ
+        $('#perforate_option_id') // set empty
+          .val('')
+          .trigger('change')
       }
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     // event เลือกสถานะปั๊มฟอยล์
     onChangeFoilStatus: function(e) {
-      if (e.target.value !== "Y" || this.isEmpty(e.target.value)) {
+      if (e.target.value !== 'Y' || this.isEmpty(e.target.value)) {
         // ไม่ปั๊ม
         this.attributes = this.updateObject(this.attributes, {
-          foil_color_id: "", // set empty สี
-          foil_size_height: "", // set empty ความสูง
-          foil_size_unit: "", // set empty หน่วย
-          foil_size_width: "", // set empty ความกว้าง
-          foil_print: "" // set empty ปั๊มฟอยล์ทั้งหน้า/หลังหรือหน้าเดียว
-        });
+          foil_color_id: '', // set empty สี
+          foil_size_height: '', // set empty ความสูง
+          foil_size_unit: '', // set empty หน่วย
+          foil_size_width: '', // set empty ความกว้าง
+          foil_print: '' // set empty ปั๊มฟอยล์ทั้งหน้า/หลังหรือหน้าเดียว
+        })
       }
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     // event เลือกสถานะปั๊มนูน
     onChangeEmbossStatus: function(e) {
-      if (e.target.value !== "Y" || this.isEmpty(e.target.value)) {
+      if (e.target.value !== 'Y' || this.isEmpty(e.target.value)) {
         // ไม่ปั๊ม
         this.attributes = this.updateObject(this.attributes, {
-          emboss_size_height: "", // set empty ความสูง
-          emboss_size_unit: "", // set empty หน่วย
-          emboss_size_width: "", // set empty ความกว้าง
-          emboss_print: "" // set empty ปั๊มทั้งหน้า/หลังหรือหน้าเดียว
-        });
+          emboss_size_height: '', // set empty ความสูง
+          emboss_size_unit: '', // set empty หน่วย
+          emboss_size_width: '', // set empty ความกว้าง
+          emboss_print: '' // set empty ปั๊มทั้งหน้า/หลังหรือหน้าเดียว
+        })
       }
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     // event เลือกเข้าเล่ม
     onChangeBookBindingStatus: function(e) {
-      const _this = this;
+      const _this = this
       if (e.target.value === 0) {
         // ไม่เข้าเล่ม
-        _this.attributes.book_binding_id = ""; // set empty วิธีเข้าเล่ม
-        $("#book_binding_id")
-          .val("")
-          .trigger("change");
+        _this.attributes.book_binding_id = '' // set empty วิธีเข้าเล่ม
+        $('#book_binding_id')
+          .val('')
+          .trigger('change')
       }
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     onChangeInput() {
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     onChangeRadioInput() {
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     onChangeSelectInput() {
       this.$nextTick(function() {
-        this.saveStorage();
-      });
+        this.saveStorage()
+      })
     },
     updateObject(oldObject, updatedProperties) {
       return {
         ...oldObject,
         ...updatedProperties
-      };
+      }
     },
     storeData: async function() {
-      let formData = {};
-      const cacheData = await JSON.parse(localStorage.getItem("formData"));
+      let formData = {}
+      const cacheData = await JSON.parse(localStorage.getItem('formData'))
       if (cacheData && cacheData[this.productId]) {
-        const attributes = await this.attributes;
-        const cacheAttributes = await cacheData[this.productId];
+        const attributes = await this.attributes
+        const cacheAttributes = await cacheData[this.productId]
         for (let i in this.attributes) {
           if (
             this.isEmpty(attributes[i]) &&
             !this.isEmpty(cacheAttributes[i])
           ) {
-            attributes[i] = cacheAttributes[i];
+            attributes[i] = cacheAttributes[i]
           }
         }
-        formData[this.productId] = await attributes;
+        formData[this.productId] = await attributes
       } else if (cacheData) {
-        formData[this.productId] = await this.attributes;
-        formData = await this.updateObject(formData, cacheData);
+        formData[this.productId] = await this.attributes
+        formData = await this.updateObject(formData, cacheData)
       }
       localStorage.setItem(
-        "formData",
+        'formData',
         JSON.stringify(Object.assign(cacheData, formData))
-      );
+      )
     },
     saveStorage() {
-      let formData = {};
-      const cacheData = JSON.parse(localStorage.getItem("formData"));
-      formData[this.productId] = this.attributes;
+      let formData = {}
+      const cacheData = JSON.parse(localStorage.getItem('formData'))
+      formData[this.productId] = this.attributes
       if (cacheData) {
         localStorage.setItem(
-          "formData",
+          'formData',
           JSON.stringify(Object.assign(cacheData, formData))
-        );
+        )
       } else {
-        localStorage.setItem("formData", JSON.stringify(formData));
+        localStorage.setItem('formData', JSON.stringify(formData))
       }
     },
     restoreStorage() {
-      const cacheData = JSON.parse(localStorage.getItem("formData"));
+      const cacheData = JSON.parse(localStorage.getItem('formData'))
       if (cacheData && cacheData[this.productId]) {
         this.attributes = Object.assign(
           this.attributes,
           cacheData[this.productId]
-        );
+        )
       }
     },
     mapDataOptions: function(options) {
-      let dataOptions = [];
+      let dataOptions = []
       for (const key in options) {
-        if (typeof options[key] === "object") {
+        if (typeof options[key] === 'object') {
           dataOptions.push({
             id: key,
             text: key,
             children: this.mapDataOptions(options[key])
-          });
+          })
         } else {
-          dataOptions.push({ id: key, text: options[key] });
+          dataOptions.push({ id: key, text: options[key] })
         }
       }
-      return dataOptions;
+      return dataOptions
     },
     async setInputDataOptions() {
-      const _this = this;
-      const { dataOptions, formOptions } = _this;
+      const _this = this
+      const { dataOptions, formOptions } = _this
       if (!_this.isEmpty(dataOptions) && !_this.isEmpty(formOptions)) {
         // ขนาด
         if (
-          _this.isvisibleInput("paper_size_width") &&
-          _this.isvisibleInput("paper_size_lenght") &&
-          _this.isvisibleInput("paper_size_unit")
+          _this.isvisibleInput('paper_size_width') &&
+          _this.isvisibleInput('paper_size_lenght') &&
+          _this.isvisibleInput('paper_size_unit')
         ) {
           await _this.mapSelect2Data(
-            "paperSizeIdOption",
+            'paperSizeIdOption',
             dataOptions.paperSizeOptions
-          );
+          )
         } else {
-          const paperSizeOptions = {};
+          const paperSizeOptions = {}
           for (const key in dataOptions.paperSizeOptions) {
-            if (key !== "custom") {
-              paperSizeOptions[key] = dataOptions.paperSizeOptions[key];
+            if (key !== 'custom') {
+              paperSizeOptions[key] = dataOptions.paperSizeOptions[key]
             }
           }
           await _this.mapSelect2Data(
-            "paperSizeIdOption",
+            'paperSizeIdOption',
             dataOptions.paperSizeOptions
-          );
+          )
         }
 
         // หน่วยขนาด
         await _this.mapSelect2Data(
-          "pageSizeUnitOption",
+          'pageSizeUnitOption',
           dataOptions.paperSizeUnitOptions
-        );
+        )
         // เข้าเล่ม
         await _this.mapSelect2Data(
-          "bookBindingOption",
+          'bookBindingOption',
           dataOptions.bookBindingOptions
-        );
+        )
         // กระดาษ
-        await _this.mapSelect2Data("paperIdOption", dataOptions.paperOptions);
+        await _this.mapSelect2Data('paperIdOption', dataOptions.paperOptions)
         // สีที่พิมพ์
         await _this.mapSelect2Data(
-          "printColorOption",
+          'printColorOption',
           dataOptions.printColorOptions
-        );
+        )
         // เคลือบ
         await _this.mapSelect2Data(
-          "coatingIdOption",
+          'coatingIdOption',
           dataOptions.coatingOptions
-        );
+        )
         // ไดคัทมุมมน
         await _this.mapSelect2Data(
-          "dicutIdOption",
+          'dicutIdOption',
           dataOptions.dicutRoundedOptions
-        );
+        )
         // ตัดเป็นตัว เจาะ
         await _this.mapSelect2Data(
-          "perforateOption",
+          'perforateOption',
           dataOptions.perforateOptions
-        );
+        )
         // วิธีพับ
-        await _this.mapSelect2Data("foldIdOption", dataOptions.foldOptions);
+        await _this.mapSelect2Data('foldIdOption', dataOptions.foldOptions)
         // หน่วยฟอยล์
         await _this.mapSelect2Data(
-          "foilSizeUnitOption",
+          'foilSizeUnitOption',
           dataOptions.foilUnitOptions
-        );
+        )
         // สีฟอยล์
         await _this.mapSelect2Data(
-          "foilColorIdOption",
+          'foilColorIdOption',
           dataOptions.foilColorOptions
-        );
+        )
         // หน่วยปั๊มนูน
         await _this.mapSelect2Data(
-          "embossSizeUnitOption",
+          'embossSizeUnitOption',
           dataOptions.embossUnitOptions
-        );
+        )
 
         // มุมที่เจาะ
         await _this.mapSelect2Data(
-          "perforateOptionOption",
+          'perforateOptionOption',
           dataOptions.perforateOptionOptions
-        );
+        )
         // ปํ๊มฟอยล์หรือไม่
         await _this.mapSelect2Data(
-          "foilStatusOption",
+          'foilStatusOption',
           dataOptions.foilStatusOpts
-        );
+        )
         // ปํ๊มนูนหรือไม่
         await _this.mapSelect2Data(
-          "embossStatusOption",
+          'embossStatusOption',
           dataOptions.embossStatusOpts
-        );
+        )
         // หน่วยติดหน้าต่าง
         await _this.mapSelect2Data(
-          "windowBoxUnitOption",
+          'windowBoxUnitOption',
           dataOptions.windowBoxUnitOption
-        );
+        )
         // พิมพ์สองหน้า หน้าเดียว
         _this.printOptionOption = await _this.updateObject(
           _this.printOptionOption,
           {
             data: dataOptions.printOptions
           }
-        );
+        )
         // รูปแบบไดคัท
         _this.dicutOption = await _this.updateObject(_this.dicutOption, {
           data: dataOptions.dicutOptions
-        });
+        })
         // สถานะปั๊มฟอยล์
-        _this.foilStatusOptions = await dataOptions.foilStatusOptions;
+        _this.foilStatusOptions = await dataOptions.foilStatusOptions
         // ปั๊มฟอยล์ ทั้งหน้าหลัง
-        _this.foliPrintOptions = await dataOptions.foilPrintOptions;
+        _this.foliPrintOptions = await dataOptions.foilPrintOptions
         // สถานะปั๊มนูน
-        _this.embossStatusOptions = await dataOptions.embossStatusOptions;
+        _this.embossStatusOptions = await dataOptions.embossStatusOptions
         // ปัีมนุน หน้าหลัง
-        _this.embossPrintOptions = await dataOptions.embossPrintOptions;
+        _this.embossPrintOptions = await dataOptions.embossPrintOptions
         // ปะกาว
-        _this.glueOptions = await dataOptions.glueOptions;
+        _this.glueOptions = await dataOptions.glueOptions
         // ร้อยเชือกหูถุง
-        _this.ropeOptions = await dataOptions.ropeOptions;
+        _this.ropeOptions = await dataOptions.ropeOptions
         // แนวตั้ง แนวนอน
-        _this.landOrientOptions = await dataOptions.landOrientOptions;
+        _this.landOrientOptions = await dataOptions.landOrientOptions
         // วิธีเคลือบ
-        _this.coatingOptionOptions = await dataOptions.coatingOptionOptions;
+        _this.coatingOptionOptions = await dataOptions.coatingOptionOptions
         // สถานะไดคัท
-        _this.dicutStatusOptions = await dataOptions.dicutStatusOptions;
+        _this.dicutStatusOptions = await dataOptions.dicutStatusOptions
         // สถานะเข้าเล่ม
-        _this.bookBindingStatusOptions = await dataOptions.bookBindingStatusOptions;
+        _this.bookBindingStatusOptions = await dataOptions.bookBindingStatusOptions
         // ปรุฉีก
-        _this.perforatedRippedOptions = await dataOptions.perforatedRippedOptions;
+        _this.perforatedRippedOptions = await dataOptions.perforatedRippedOptions
         // running number
-        _this.runningNumberOptions = await dataOptions.runningNumberOptions;
+        _this.runningNumberOptions = await dataOptions.runningNumberOptions
         // ติดหน้าต่าง
-        _this.windowBoxOptions = await dataOptions.windowBoxOptions;
+        _this.windowBoxOptions = await dataOptions.windowBoxOptions
         // กระดาษปกหนังสือ
-        await _this.mapSelect2Data("bookCoversPaperOption", dataOptions.bookCoversPaperOption);
+        await _this.mapSelect2Data(
+          'bookCoversPaperOption',
+          dataOptions.bookCoversPaperOption
+        )
         // กระดาษเนื้อใน
-        await _this.mapSelect2Data("bookInnerPaperOption", dataOptions.bookInnerPaperOption);
+        await _this.mapSelect2Data(
+          'bookInnerPaperOption',
+          dataOptions.bookInnerPaperOption
+        )
         // กระดาษขาวดำ(เนื้อใน)
-        await _this.mapSelect2Data("bookInnerPaperWithoutColorOption", dataOptions.bookInnerPaperWithoutColorOption);
+        await _this.mapSelect2Data(
+          'bookInnerPaperWithoutColorOption',
+          dataOptions.bookInnerPaperWithoutColorOption
+        )
         // สีที่พิมพ์ปกหนังสือ
         await _this.mapSelect2Data(
-          "bookCoversColorOption",
+          'bookCoversColorOption',
           dataOptions.bookCoversColorOption
-        );
+        )
         // สี่ที่พิมพ์(เนื้อใน)
         await _this.mapSelect2Data(
-          "bookInnerColorOption",
+          'bookInnerColorOption',
           dataOptions.bookInnerColorOption
-        );
+        )
 
-        await _this.fetchDataBillFloorOptions();
+        await _this.fetchDataBillFloorOptions()
       }
     },
     mapSelect2Data(optionKey, options = []) {
-      const _this = this;
+      const _this = this
       _this[optionKey] = _this.updateObject(_this[optionKey], {
         data: _this.mapDataOptions(options)
-      });
+      })
     },
-    inputLabel: function(attr, defaultLabel = "") {
-      if (!this.formOptions[attr]) return defaultLabel;
-      return this.formOptions[attr].label;
+    inputLabel: function(attr, defaultLabel = '') {
+      if (!this.formOptions[attr]) return defaultLabel
+      return this.formOptions[attr].label
     },
     replaceHtml: function(value) {
-      return value.replace(/<p>(.*)<\/p>/g, "");
+      return value.replace(/<p>(.*)<\/p>/g, '')
     },
     // รายละเอียดสินค้า
     getProductInfo(field) {
-      const _this = this;
-      const { attributes, skipAttributes } = _this;
-      let info = "";
-      if (skipAttributes.includes(field)) return;
+      const _this = this
+      const { skipAttributes } = _this
+      let info = ''
+      if (skipAttributes.includes(field)) return
       switch (field) {
-        case "paper_size_id":
-          info = _this.paperSizeDetail;
-          break;
-        case "page_qty":
-          info = _this.pageQty;
-          break;
-        case "bill_detail_qty":
-          info = _this.billQty;
-          break;
-        case "print_option":
-          info = _this.printOptionDetail;
-          break;
-        case "print_color":
-          info = _this.printColorDetail;
-          break;
-        case "paper_id":
-          info = _this.paperDetail;
-          break;
-        case "coating_id":
-          info = _this.coatingDetail;
-          break;
-        case "coating_option":
-          info = _this.coatingOptionDetail;
-          break;
-        case "diecut_status":
-          info = _this.dicutStatusDetail;
-          break;
-        case "diecut":
-          info = _this.diecutDetail;
-          break;
-        case "diecut_id":
-          info = _this.dicutCurveDetail;
-          break;
-        case "perforate":
-          info = _this.perforateDetail;
-          break;
-        case "perforate_option_id":
-          info = _this.perforateOptionDetail;
-          break;
-        case "fold_id":
-          info = _this.foldDetail;
-          break;
-        case "foil_status":
-          info = _this.foilDetail;
-          break;
-        case "foil_status":
-          info = _this.foilDetail;
-          break;
-        case "foil_print":
-          info = _this.foil_print;
-          break;
-        case "emboss_status":
-          info = _this.embossDetail;
-          break;
-        case "emboss_print":
-          info = _this.emboss_print;
-          break;
-        case "glue":
-          info = _this.glueDetail;
-          break;
-        case "rope":
-          info = _this.ropeDetail;
-          break;
-        case "land_orient":
-          info = _this.landOrientDetail;
-          break;
-        case "book_binding_id":
-          info = _this.bookBindingDetail;
-          break;
-        case "perforated_ripped":
-          info = _this.perforatedRippedDetail;
-          break;
-        case "book_binding_qty":
-          info = _this.book_binding_qty;
-          break;
-        case "running_number":
-          info = _this.runningNumberDetail;
-          break;
-        case "window_box":
-          info = _this.windowBoxDetail;
-          break;
-        case "book_binding_status":
-          info = _this.bookBindingStatus;
-          break;
-        case "book_covers_paper":
-          info = _this.bookCoversPaperDetail;
-          break;
-        case "book_covers_color":
-          info = _this.bookCoversColorDetail;
-          break;
-        case "book_covers_qty":
-          info = _this.book_covers_qty;
-          break;
-        case "book_inner_paper":
-          info = _this.bookInnerPaperDetail;
-          break;
-        case "book_inner_color":
-          info = _this.bookInnerColorDetail;
-          break;
-        case "book_inner_paper_qty":
-          info = _this.book_inner_paper_qty;
-          break;
-        case "book_inner_paper_without_color":
-          info = _this.bookInnerPaperWithoutColorDetail;
-          break;
-        case "book_inner_without_color_qty":
-          info = _this.book_inner_without_color_qty;
-          break;
+        case 'paper_size_id':
+          info = _this.paperSizeDetail
+          break
+        case 'page_qty':
+          info = _this.pageQty
+          break
+        case 'bill_detail_qty':
+          info = _this.billQty
+          break
+        case 'print_option':
+          info = _this.printOptionDetail
+          break
+        case 'print_color':
+          info = _this.printColorDetail
+          break
+        case 'paper_id':
+          info = _this.paperDetail
+          break
+        case 'coating_id':
+          info = _this.coatingDetail
+          break
+        case 'coating_option':
+          info = _this.coatingOptionDetail
+          break
+        case 'diecut_status':
+          info = _this.dicutStatusDetail
+          break
+        case 'diecut':
+          info = _this.diecutDetail
+          break
+        case 'diecut_id':
+          info = _this.dicutCurveDetail
+          break
+        case 'perforate':
+          info = _this.perforateDetail
+          break
+        case 'perforate_option_id':
+          info = _this.perforateOptionDetail
+          break
+        case 'fold_id':
+          info = _this.foldDetail
+          break
+        case 'foil_status':
+          info = _this.foilDetail
+          break
+        case 'foil_print':
+          info = _this.foil_print
+          break
+        case 'emboss_status':
+          info = _this.embossDetail
+          break
+        case 'emboss_print':
+          info = _this.emboss_print
+          break
+        case 'glue':
+          info = _this.glueDetail
+          break
+        case 'rope':
+          info = _this.ropeDetail
+          break
+        case 'land_orient':
+          info = _this.landOrientDetail
+          break
+        case 'book_binding_id':
+          info = _this.bookBindingDetail
+          break
+        case 'perforated_ripped':
+          info = _this.perforatedRippedDetail
+          break
+        case 'book_binding_qty':
+          info = _this.book_binding_qty
+          break
+        case 'running_number':
+          info = _this.runningNumberDetail
+          break
+        case 'window_box':
+          info = _this.windowBoxDetail
+          break
+        case 'book_binding_status':
+          info = _this.bookBindingStatus
+          break
+        case 'book_covers_paper':
+          info = _this.bookCoversPaperDetail
+          break
+        case 'book_covers_color':
+          info = _this.bookCoversColorDetail
+          break
+        case 'book_covers_qty':
+          info = _this.book_covers_qty
+          break
+        case 'book_inner_paper':
+          info = _this.bookInnerPaperDetail
+          break
+        case 'book_inner_color':
+          info = _this.bookInnerColorDetail
+          break
+        case 'book_inner_paper_qty':
+          info = _this.book_inner_paper_qty
+          break
+        case 'book_inner_paper_without_color':
+          info = _this.bookInnerPaperWithoutColorDetail
+          break
+        case 'book_inner_without_color_qty':
+          info = _this.book_inner_without_color_qty
+          break
         default:
-          break;
+          break
       }
-      return info;
+      return info
     },
     initScroll() {
-      const _this = this;
-      var scrollHight = $(".mainstage").height(),
-        panel_scroll = $(".panel_scroll"),
-        cPostion = $(".product-panel").offset().top,
+      const _this = this
+      var scrollHight = $('.mainstage').height(),
+        panel_scroll = $('.panel_scroll'),
+        cPostion = $('.product-panel').offset().top,
         panelHeight = panel_scroll.height(),
-        limitScroll = scrollHight - panelHeight + cPostion;
+        limitScroll = scrollHight - panelHeight + cPostion
       // $(".product-panel").height(scrollHight);
       $(window).scroll(function() {
-        var wTop = $(window).scrollTop();
+        var wTop = $(window).scrollTop()
         if (_this.step === 1) {
           if (wTop >= cPostion && wTop <= limitScroll) {
-            panel_scroll.css("top", wTop - cPostion + 100);
+            panel_scroll.css('top', wTop - cPostion + 100)
           }
           if (wTop < cPostion) {
-            panel_scroll.css("top", 0);
+            panel_scroll.css('top', 0)
           }
           if (wTop > limitScroll) {
-            panel_scroll.css("top", scrollHight - panelHeight);
+            panel_scroll.css('top', scrollHight - panelHeight)
           }
         } else {
-          panel_scroll.css("top", 0);
-          panel_scroll.css("position", "relative");
-          panel_scroll.css("padding", 0);
+          panel_scroll.css('top', 0)
+          panel_scroll.css('position', 'relative')
+          panel_scroll.css('padding', 0)
         }
-      });
+      })
     },
     scrollTop() {
-      $("html, body").animate(
-        { scrollTop: $("#form-container").offset().top - 80 },
-        "slow"
-      );
+      $('html, body').animate(
+        { scrollTop: $('#form-container').offset().top - 80 },
+        'slow'
+      )
     },
     // ขั้นตอนถัดไป
     async handleNextStep() {
-      const _this = this;
+      const _this = this
       // คำนวณราคา
-      _this.priceList = [];
-      _this.cust_quantity = "";
-      await _this.fetchDataPriceList();
-      _this.step = 2;
-      _this.scrollTop();
+      _this.priceList = []
+      _this.cust_quantity = ''
+      await _this.fetchDataPriceList()
+      _this.step = 2
+      _this.scrollTop()
     },
     // ขั้นตอนก่อนหน้า
     handleBackStep() {
-      const _this = this;
-      _this.step = 1;
-      _this.scrollTop();
+      const _this = this
+      _this.step = 1
+      _this.scrollTop()
     },
     // ดาวน์โหลดใบเสนอราคา
     handleDownload() {
       if (!this.isEmpty(this.attributes.cust_quantity)) {
         // ถ้าเลือกจำนวนที่ต้องการ
-        this.$refs.form.reset();
-        const modal = $("#myModal"); // แสดง modal
-        modal.modal("show");
+        this.$refs.form.reset()
+        const modal = $('#myModal') // แสดง modal
+        modal.modal('show')
       } else {
         Swal.fire({
-          type: "warning",
-          title: "กรุณาเลือกจำนวนที่ต้องการ!",
+          type: 'warning',
+          title: 'กรุณาเลือกจำนวนที่ต้องการ!',
           allowOutsideClick: false,
           allowEscapeKey: false,
           showConfirmButton: false,
           showCancelButton: false,
           timer: 3000
-        });
+        })
       }
     },
     // เพิ่มจำนวน
     handleAddQty() {
-      const _this = this;
+      const _this = this
       // หาที่จำนวนที่เพิ่มเข้ามา ในรายการที่คำนวณไว้ก่อนหน้า
       const item = _this.priceList.find(
         item => parseInt(item.cust_quantity) === parseInt(_this.cust_quantity)
-      );
+      )
       if (!_this.isEmpty(_this.cust_quantity) && _this.isEmpty(item)) {
         // ถ้าไม่มีจำนวนที่ตรงกัน
-        _this.fetchDataPriceList(); // คำนวณราคา
-        _this.attributes.cust_quantity = "";
+        _this.fetchDataPriceList() // คำนวณราคา
+        _this.attributes.cust_quantity = ''
       }
     },
     // คำนวณราคา
     async fetchDataPriceList() {
-      const _this = this;
-      const formData = new FormData();
-      let loadingInstance = Loading.service({ fullscreen: true });
+      const _this = this
+      const formData = new FormData()
+      let loadingInstance = Loading.service({ fullscreen: true })
       try {
-        _this.loadingQty = true;
-        let qty = [];
+        _this.loadingQty = true
+        let qty = []
         // เก็บจำนวนที่คำนวณไว้ [500, 1000, 2000]
         _this.priceList.map(item => {
-          qty.push(item.cust_quantity);
-        });
+          qty.push(item.cust_quantity)
+        })
         // ถ้าไม่มีจำนวนเดิมอยู่แล้ว และจำนวนที่เพิ่มเข้ามาไม่มีอยู่ในจำนวนเดิม
         if (
           !qty.includes(_this.cust_quantity) &&
           !_this.isEmpty(_this.cust_quantity)
         ) {
-          qty.push(_this.cust_quantity);
+          qty.push(_this.cust_quantity)
         }
-        formData.append("qty", qty);
+        formData.append('qty', qty)
         // ข้อมูลสินค้าที่เลือก tbl_quotation_detail
         Object.keys(_this.attributes).forEach(key =>
           formData.append(
             key,
-            _this.isEmpty(_this.attributes[key]) ? "" : _this.attributes[key]
+            _this.isEmpty(_this.attributes[key]) ? '' : _this.attributes[key]
           )
-        );
+        )
         const { data } = await window.axios.post(
           `/app/api/calculate-price`,
           formData
-        );
+        )
         // เก็บราคาที่คำนวณ
-        _this.priceList = data.price_list;
+        _this.priceList = data.price_list
 
-        _this.loadingQty = false;
-        loadingInstance.close();
+        _this.loadingQty = false
+        loadingInstance.close()
       } catch (error) {
-        _this.loadingQty = false;
-        _this.$message.error(this.getErrorMessage(error));
-        loadingInstance.close();
+        _this.loadingQty = false
+        _this.$message.error(this.getErrorMessage(error))
+        loadingInstance.close()
       }
     },
     // ลบจำนวน
     onRemovePriceList(qty) {
       if (qty === this.attributes.cust_quantity) {
-        this.attributes.cust_quantity = "";
+        this.attributes.cust_quantity = ''
       }
-      this.priceList = this.priceList.filter(
-        item => item.cust_quantity !== qty
-      );
+      this.priceList = this.priceList.filter(item => item.cust_quantity !== qty)
     },
     initializeApp() {
-      const _this = this;
+      const _this = this
       liff.init(
         data => {
           // Now you can call LIFF API
-          _this.liffData = data;
+          _this.liffData = data
         },
         err => {
           // LIFF initialization failed
-          console.log(err);
-          _this.$message.error("LIFF initialization failed");
+          console.log(err)
+          _this.$message.error('LIFF initialization failed')
         }
-      );
+      )
     },
     sendMessages(messages) {
-      const _this = this;
+      const _this = this
       if (_this.liffData && messages) {
         liff
           .sendMessages([messages])
           .then(function() {
-            _this.$message.success("Message sent");
+            _this.$message.success('Message sent')
           })
           .catch(function(error) {
-            _this.$message.error("Error sending message: " + error);
-          });
+            _this.$message.error('Error sending message: ' + error)
+          })
       }
     },
     async onSubmitDownload() {
       const item = await this.priceList.find(
         item => item.cust_quantity === this.attributes.cust_quantity
-      );
-      const isValid = await this.$refs.form.validate();
-      if (!item) return;
+      )
+      const isValid = await this.$refs.form.validate()
+      if (!item) return
 
       this.attributes = this.updateObject(this.attributes, {
         final_price: item.final_price,
         paper_detail_id: item.paper.paper_detail.paper_detail_id
-      });
-      const formData = new FormData();
+      })
+      const formData = new FormData()
       Object.keys(this.attributeQuotation).forEach(key =>
         formData.append(key, this.attributeQuotation[key])
-      );
+      )
       Object.keys(this.attributes).forEach(key =>
         formData.append(
           key,
-          this.isEmpty(this.attributes[key]) ? "" : this.attributes[key]
+          this.isEmpty(this.attributes[key]) ? '' : this.attributes[key]
         )
-      );
+      )
       // formData.append("final_price", this.attributes.cust_quantity);
       if (isValid) {
         const loading = this.$loading({
           lock: true,
-          text: "Loading",
-          spinner: "el-icon-loading",
-          background: "rgba(0, 0, 0, 0.7)"
-        });
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         try {
           const { data } = await window.axios.post(
             `/app/product/download?p=${this.productId}`,
             formData
-          );
+          )
           if (data.success) {
-            await this.sendMessages(data.flexMessage);
+            await this.sendMessages(data.flexMessage)
             setTimeout(function() {
-              window.location.href = data.url;
-              loading.close();
-            }, 1000);
+              window.location.href = data.url
+              loading.close()
+            }, 1000)
           } else {
-            loading.close();
+            loading.close()
             Swal({
-              type: "error",
-              title: "Oops!",
-              text: "เกิดข้อผิดพลาด!"
-            });
+              type: 'error',
+              title: 'Oops!',
+              text: 'เกิดข้อผิดพลาด!'
+            })
           }
-          this.$refs.form.reset();
+          this.$refs.form.reset()
         } catch (error) {
-          this.$refs.form.reset();
-          loading.close();
-          this.$message.error(this.getErrorMessage(error));
+          this.$refs.form.reset()
+          loading.close()
+          this.$message.error(this.getErrorMessage(error))
         }
       }
     },
-    getErrorMessage(error, defaultMsg = "Network Error") {
-      let message = "";
-      if (error.response && error.response.hasOwnProperty("data")) {
-        const { data } = error.response;
-        if (data.hasOwnProperty("data")) {
-          const data = error.response.data.data;
+    getErrorMessage(error, defaultMsg = 'Network Error') {
+      let message = ''
+      if (error.response && error.response.hasOwnProperty('data')) {
+        const { data } = error.response
+        if (data.hasOwnProperty('data')) {
+          const data = error.response.data.data
           if (data.message) {
-            message = data.message;
+            message = data.message
           } else if (data.errors) {
-            message = data.errors;
+            message = data.errors
           } else if (data.statusText) {
-            message = data.statusText;
+            message = data.statusText
           }
         } else if (data.message) {
-          message = data.message;
+          message = data.message
         } else if (data.errors) {
-          message = data.errors;
+          message = data.errors
         } else if (data.statusText) {
-          message = data.statusText;
+          message = data.statusText
         }
       } else if (error.message) {
-        message = error.message;
+        message = error.message
       }
-      return message || defaultMsg;
+      return message || defaultMsg
     },
     handleScroll: function(evt, el) {
       if (window.scrollY > 50) {
         el.setAttribute(
-          "style",
-          "opacity: 1; transform: translate3d(0, -10px, 0)"
-        );
+          'style',
+          'opacity: 1; transform: translate3d(0, -10px, 0)'
+        )
       }
-      return window.scrollY > 100;
+      return window.scrollY > 100
     },
     encodeQueryData(data) {
-      const ret = [];
+      const ret = []
       for (let d in data)
-        ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
-      return ret.join("&");
+        ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]))
+      return ret.join('&')
     }
   },
   watch: {
-    productId: function(value, oldValue) {
-      this.attributes.product_id = value;
+    productId: function(value) {
+      this.attributes.product_id = value
     },
     attributes: {
-      handler: function(val, oldVal) {
+      handler: function(val) {
         this.$nextTick(function() {
           if (val.product_id) {
             // this.storeData()
             // this.saveStorage();
           }
-        });
+        })
       },
       deep: true
     }
@@ -3306,21 +3384,21 @@ export default {
     focus: {
       // directive definition
       inserted: function(el) {
-        el.focus();
+        el.focus()
       }
     },
     scroll: {
       inserted: function(el, binding) {
         let f = function(evt) {
           if (binding.value(evt, el)) {
-            window.removeEventListener("scroll", f);
+            window.removeEventListener('scroll', f)
           }
-        };
-        window.addEventListener("scroll", f);
+        }
+        window.addEventListener('scroll', f)
       }
     }
   }
-};
+}
 </script>
 
 <style>
@@ -3390,7 +3468,7 @@ h4,
 h5,
 p,
 body {
-  font-family: "Prompt", sans-serif !important;
+  font-family: 'Prompt', sans-serif !important;
 }
 .ant-message {
   z-index: 1200;
@@ -3401,12 +3479,12 @@ body {
 </style>
 
 <style scoped>
-@import url("../assets/css/kt-portlet.css");
-@import url("../assets/css/kt-widget4.css");
-@import url("../assets/css/kt-widget1.css");
-@import url("../assets/css/product_grid.css");
-@import url("../assets/css/quotation.css");
-@import url("../assets/css/index.css");
+@import url('../assets/css/kt-portlet.css');
+@import url('../assets/css/kt-widget4.css');
+@import url('../assets/css/kt-widget1.css');
+@import url('../assets/css/product_grid.css');
+@import url('../assets/css/quotation.css');
+@import url('../assets/css/index.css');
 .select2-container--bootstrap .select2-selection,
 .form-control {
   background-color: #fafafa;

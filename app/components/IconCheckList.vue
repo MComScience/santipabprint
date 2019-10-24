@@ -17,6 +17,6 @@
 
 <script>
 export default {
-  name: "IconCheckList"
-};
+  name: 'IconCheckList'
+}
 </script>

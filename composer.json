@@ -56,7 +56,8 @@
     "froala/yii2-froala-editor": "^2.9",
     "2amigos/yii2-tinymce-widget": "~1.1",
     "kartik-v/yii2-checkbox-x": "@dev",
-    "bower-asset/sweetalert2": "^7.25.0"
+    "bower-asset/sweetalert2": "^7.25.0",
+    "firebase/php-jwt": "^5.0"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0.0",

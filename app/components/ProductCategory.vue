@@ -6,12 +6,14 @@
         data-toggle="collapse__35"
         role="button"
         aria-expanded="true"
-        aria-controls="collapse__35">
+        aria-controls="collapse__35"
+      >
         <a
           class="product-link product-cate-sub"
           @click="$emit('select-category', category.product_category_id)"
           :data-block-id="'block_coll_' + category.product_category_id"
-          :data-point-id="'point-active-' + category.product_category_id">
+          :data-point-id="'point-active-' + category.product_category_id"
+        >
           <span class="icon">&nbsp;</span>
           <div class="product-sub">
             <img
@@ -19,7 +21,8 @@
               :src="category.image_url"
               :data-src="category.image_url"
               :data-srcset="category.image_url"
-              alt="image">
+              alt="image"
+            />
           </div>
           <div class="media-body">
             <p class="product-sub-name">
@@ -33,20 +36,18 @@
 </template>
 
 <script>
-  export default {
-    name: "ProductCategory",
-    props: {
-      categories: {
-        type: Array,
-        required: true,
-        default: function() {
-          return []
-        }
+export default {
+  name: 'ProductCategory',
+  props: {
+    categories: {
+      type: Array,
+      required: true,
+      default: function() {
+        return []
       }
-    },
+    }
   }
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

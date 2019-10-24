@@ -20,22 +20,22 @@
 
 <script>
 export default {
-  name: "Widget1Item",
+  name: 'Widget1Item',
   props: {
     title: {
       type: String,
-      default: ""
+      default: ''
     },
     desc: {
       type: String,
-      default: ""
+      default: ''
     },
     number: {
       type: String,
-      default: ""
+      default: ''
     }
   }
-};
+}
 </script>
 
 <style scoped>

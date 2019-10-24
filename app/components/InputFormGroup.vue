@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "InputFormGroup",
+  name: 'InputFormGroup',
   props: {
     label: {
       type: Boolean,
@@ -16,10 +16,10 @@ export default {
     },
     inputLabel: {
       type: String,
-      default: ""
+      default: ''
     }
   }
-};
+}
 </script>
 
 <style scoped>

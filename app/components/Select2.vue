@@ -5,30 +5,30 @@
 </template>
 
 <script>
-import "select2";
+import 'select2'
 
 export default {
-  name: "Select2",
-  props: ["options", "value"],
+  name: 'Select2',
+  props: ['options', 'value'],
   mounted: function() {
-    var _this = this;
+    var _this = this
     // init select2
     $(_this.$el)
       .select2(this.options)
       .val(this.value)
-      .trigger("change")
+      .trigger('change')
       // emit event on change.
-      .on("change", function(e) {
-        _this.$emit("input", this.value);
-        _this.$emit("change", e);
+      .on('change', function(e) {
+        _this.$emit('input', this.value)
+        _this.$emit('change', e)
       })
-      .on("select2:clear", function(e) {
-        _this.$emit("input", this.value);
-        _this.$emit("clear", e);
-      });
+      .on('select2:clear', function(e) {
+        _this.$emit('input', this.value)
+        _this.$emit('clear', e)
+      })
   },
   watch: {
-    value: function(value) {
+    value: function() {
       // console.log('watch[select2][value]: ', value)
       // update value
       /* if (value) {
@@ -41,15 +41,15 @@ export default {
       // update options
       $(this.$el)
         .empty()
-        .select2(options);
+        .select2(options)
     }
   },
   destroyed: function() {
     $(this.$el)
       .off()
-      .select2("destroy");
+      .select2('destroy')
   }
-};
+}
 </script>
 
 <style>
@@ -65,6 +65,6 @@ export default {
 </style>
 
 <style scoped>
-@import url("../assets/css/select2.min.css");
-@import url("../assets/css/select2-bootstrap.min.css");
+@import url('../assets/css/select2.min.css');
+@import url('../assets/css/select2-bootstrap.min.css');
 </style>
