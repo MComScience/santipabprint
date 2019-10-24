@@ -9,7 +9,7 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log','languagepicker'],
+    'bootstrap' => ['log', 'languagepicker'],
     'controllerNamespace' => 'frontend\controllers',
     'defaultRoute' => 'site/index',
     'controllerMap' => [
@@ -19,10 +19,13 @@ return [
         'request' => [
             'csrfParam' => '_csrf-frontend',
             'baseUrl' => '',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityCookie' => [
-                'name'     => '_frontendIdentity',
+                'name' => '_frontendIdentity',
                 'httpOnly' => true,
             ],
         ],
@@ -50,6 +53,56 @@ return [
             'rules' => [
                 // 'สินค้า' => 'app/product/index',
                 // '<slug>' => 'app/product/quotation',
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/user',
+                    'pluralize' => false,
+                    'tokens' => [
+                        '{id}' => '<id:\d+>',
+                    ],
+                    'extraPatterns' => [
+                        'OPTIONS {id}' => 'options',
+                        // รายชื่อผู้ใช้งาน
+                        'GET index' => 'index',
+                        'OPTIONS index' => 'options',
+                        // เข้าสู่ระบบ
+                        'POST login' => 'login',
+                        'OPTIONS login' => 'options',
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/product',
+                    'pluralize' => false,
+                    'tokens' => [
+                        '{id}' => '<id:\d+>',
+                    ],
+                    'extraPatterns' => [
+                        'OPTIONS {id}' => 'options',
+
+                        'GET index' => 'index',
+                        'OPTIONS index' => 'options',
+
+                        'POST product-categories' => 'product-categories',
+                        'OPTIONS product-categories' => 'options',
+
+                        'POST category' => 'category',
+                        'OPTIONS category' => 'options',
+
+                        'POST product-options' => 'product-options',
+                        'OPTIONS product-options' => 'options',
+
+                        'POST bill-floor-option' => 'bill-floor-option',
+                        'OPTIONS bill-floor-option' => 'options',
+
+                        'POST calculate-price' => 'calculate-price',
+                        'OPTIONS calculate-price' => 'options',
+
+                        'POST download' => 'download',
+                        'OPTIONS download' => 'options',
+                    ]
+                ],
+
                 '<controller:(about|login|product)>' => 'site/index',
                 '<controller:(\w|-)+>/' => '<controller>/index',
                 '<controller:\w+>/<action:(\w|-)+>/<id:\d+>' => '<controller>/<action>',
@@ -78,7 +131,7 @@ return [
             ],
         ],
         'authClientCollection' => [
-            'class'   => 'yii\authclient\Collection',
+            'class' => 'yii\authclient\Collection',
             'clients' => [
                 'line' => [
                     'class' => 'common\clients\Line',
@@ -108,6 +161,33 @@ return [
             'cachePath' => '@runtime/glide',
             'signKey' => '4XBqD5icTH/ST9HVgOSfhr+kssBGFi5GE3RI84n/DE6WqfB/rd/twPdLxo+yAnv6BJ92OqCxr7sjhqzw9rIiXg==' // "false" if you do not want to use HTTP signatures
         ],
+        /*'response' => [
+            'class' => 'yii\web\Response',
+            'on beforeSend' => function ($event) {
+                $response = $event->sender;
+                if ($response->format == 'html') {
+                    return $response;
+                }
+                $responseData = $response->data;
+                if (is_string($responseData) && json_decode($responseData)) {
+                    $responseData = json_decode($responseData, true);
+                }
+                if ($response->statusCode >= 200 && $response->statusCode <= 299) {
+                    $response->data = [
+                        'success' => true,
+                        'status' => $response->statusCode,
+                        'data' => $responseData,
+                    ];
+                } else {
+                    $response->data = [
+                        'success' => false,
+                        'status' => $response->statusCode,
+                        'data' => $responseData,
+                    ];
+                }
+                return $response;
+            },
+        ]*/
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
@@ -121,7 +201,8 @@ return [
             'product/*',
             'app/product/*',
             'glide/*',
-            'app/api/*'
+            'app/api/*',
+            'v1/*'
         ]
     ],
     'params' => $params,
