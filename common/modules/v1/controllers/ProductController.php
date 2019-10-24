@@ -471,7 +471,7 @@ class ProductController extends ActiveController
                     return [
                         'success' => true,
                         'message' => 'Success',
-                        'url' => Url::to(['quo', 'q' => $model['quotation_id']]),
+                        'url' => 'https://admin.santipab.info/app/product/quo?q='.$model['quotation_id'],
                         'flexMessage' => [
                             "type" => "flex",
                             "altText" => "รายละเอียดสินค้า",
