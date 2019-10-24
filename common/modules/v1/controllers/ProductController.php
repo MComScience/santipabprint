@@ -505,7 +505,7 @@ class ProductController extends ActiveController
         $details = '';
 
         // flex
-        $baseUrl = 'https://santipab.info';
+        $baseUrl = 'https://admin.santipab.info';
         $hero = [
             "type" => "image",
             "url" => $baseUrl . $modelProduct->getImageUrl(),

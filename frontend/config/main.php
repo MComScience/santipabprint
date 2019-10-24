@@ -137,7 +137,7 @@ return [
                     'class' => 'common\clients\Line',
                     'clientId' => '1631959964',
                     'clientSecret' => 'a5b6a3136ae0eb30009c3612dcfbb578',
-                    'returnUrl' => 'https://santipab.info/user/security/auth?authclient=line'
+                    'returnUrl' => 'https://admin.santipab.info/user/security/auth?authclient=line'
                 ],
                 /* 'doh' => [
                     'class' => 'common\components\DohClient',
