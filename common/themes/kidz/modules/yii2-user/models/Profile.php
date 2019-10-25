@@ -99,4 +99,13 @@ class Profile extends BaseProfile
     {
         return $this->first_name.' '.$this->last_name;
     }
+
+    public function getImageUrl()
+    {
+        if($this->avatar_path) {
+            return $this->avatar_base_url.str_replace('\\', '/', $this->avatar_path);
+        } else {
+            return '/media/users/doctor.png';
+        }
+    }
 }

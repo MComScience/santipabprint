@@ -260,7 +260,7 @@ class ProductController extends \yii\web\Controller
         $details = '';
 
         // flex
-        $baseUrl = 'https://santipab.info';
+        $baseUrl = Yii::$app->params['BASE_URL'];
         $hero = [
             "type" => "image",
             "url" => $baseUrl . $modelProduct->getImageUrl(),
@@ -608,7 +608,7 @@ class ProductController extends \yii\web\Controller
 
     private function getFlexMessage($q)
     {
-        $baseUrl = 'https://santipab.info';
+        $baseUrl = Yii::$app->params['BASE_URL'];
         $model = $this->findModelQuotation($q);
         $item = TblQuotationDetail::find()->where(['quotation_id' => $q])->one();
         $items = [];

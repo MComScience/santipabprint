@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "BoxTitle",
+  name: 'BoxTitle',
   props: {
     title: {
       type: String,
@@ -18,7 +18,7 @@ export default {
       default: false
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -32,6 +32,6 @@ hr {
   margin-bottom: 10px;
 }
 .kt-font-brand {
-    color: #22b9ff !important;
+  color: #22b9ff !important;
 }
 </style>

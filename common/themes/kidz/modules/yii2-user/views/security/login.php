@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     </style>
     <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
+        'id' => 'login-form-ajax',
         'enableAjaxValidation' => true,
         'enableClientValidation' => false,
         'validateOnBlur' => false,
@@ -106,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'validateOnType' => false,
                                 'validateOnChange' => false,
                             ]) ?>
-                            <?php ActiveForm::end(); ?>
+                            
                             <div class="form-group formField">
                                 <?php if ($module->debug): ?>
                                     <?= $form->field($model, 'login', [
@@ -157,6 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ['class' => 'btn btn-primary btn-block', 'tabindex' => '4', 'id' => 'btn-login']
                                 ) ?>
                             </div>
+                            <?php ActiveForm::end(); ?>
                             <div class="form-group formField">
                                 <?php if ($module->enableConfirmation): ?>
                                     <p class="text-center">

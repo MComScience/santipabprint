@@ -116,5 +116,8 @@ return [
             'class' => 'common\modules\app\Module',
             'layout' => '@adminlte/views/layouts/main',
         ],
+        'v1' => [
+            'class' => 'common\modules\v1\Module',
+        ],
     ],
 ];

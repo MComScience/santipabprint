@@ -4,15 +4,14 @@
 
 <script>
 export default {
-  name: "HelpBlock",
+  name: 'HelpBlock',
   props: {
     message: {
       type: String,
-      default: ""
+      default: ''
     }
   }
-};
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

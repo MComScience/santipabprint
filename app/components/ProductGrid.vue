@@ -31,11 +31,11 @@
 </template>
 
 <script>
-import ProductCategory from "./ProductCategory";
-import Product from "./Product.vue";
+import ProductCategory from './ProductCategory'
+import Product from './Product.vue'
 
 export default {
-  name: "ProductGrid",
+  name: 'ProductGrid',
   components: {
     ProductCategory,
     Product
@@ -45,14 +45,14 @@ export default {
       type: Array,
       required: true,
       default: function() {
-        return [];
+        return []
       }
     },
     products: {
       type: Array,
       required: true,
       default: function() {
-        return [];
+        return []
       }
     },
     loading: {
@@ -73,14 +73,13 @@ export default {
   },
   methods: {
     onSelectCategory(id) {
-      this.$emit("select-category", id);
+      this.$emit('select-category', id)
     },
     onSelectProduct(id) {
-      this.$emit("select-product", id);
+      this.$emit('select-product', id)
     }
   }
-};
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

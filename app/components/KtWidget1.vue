@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  name: "KtWidget1"
-};
+  name: 'KtWidget1'
+}
 </script>
 
 <style scoped>

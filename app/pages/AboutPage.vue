@@ -14,27 +14,25 @@
 </template>
 
 <script>
-  export default {
-    name: "AboutPage",
-    head: {
-      // if no subcomponents specify a metaInfo.title, this title will be used
-      title: 'Default Title',
-      // all titles will be injected into this template
-      titleTemplate: '%s | บริษัท สันติภาพแพ็คพริ้นท์ จำกัด'
-    },
-    data() {
-      return {
-        loading: true
-      }
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        this.loading = false;
-      })
-    },
+export default {
+  name: 'AboutPage',
+  head: {
+    // if no subcomponents specify a metaInfo.title, this title will be used
+    title: 'Default Title',
+    // all titles will be injected into this template
+    titleTemplate: '%s | บริษัท สันติภาพแพ็คพริ้นท์ จำกัด'
+  },
+  data() {
+    return {
+      loading: true
+    }
+  },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.loading = false
+    })
   }
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

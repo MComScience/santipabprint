@@ -66,7 +66,7 @@ class FlexShopping
 
         $catagorys = TblProductCategory::find()->all();
         $itemCatagorys = [];
-        $baseUrl = 'https://santipab.info';
+        $baseUrl = Yii::$app->params['BASE_URL'];
         foreach ($catagorys as $key => $catagory) {
             $itemCatagorys[] = [
                 'product_category_id' => $catagory['product_category_id'],

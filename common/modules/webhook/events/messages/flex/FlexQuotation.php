@@ -85,11 +85,11 @@ class FlexQuotation
     private static function createHeroBlock()
     {
         return ImageComponentBuilder::builder()
-            ->setUrl('https://santipab.info/uploads/1/YKZPT0ynNZBqRmIssFy39X1kaD5Fmziv.jpg')
+            ->setUrl('https://admin.santipab.info/uploads/1/YKZPT0ynNZBqRmIssFy39X1kaD5Fmziv.jpg')
             ->setSize(ComponentImageSize::FULL)
             ->setAspectRatio(ComponentImageAspectRatio::R20TO13)
             ->setAspectMode(ComponentImageAspectMode::COVER)
-            ->setAction(new UriTemplateActionBuilder(null, 'https://santipab.info/uploads/1/YKZPT0ynNZBqRmIssFy39X1kaD5Fmziv.jpg'));
+            ->setAction(new UriTemplateActionBuilder(null, 'https://admin.santipab.info/uploads/1/YKZPT0ynNZBqRmIssFy39X1kaD5Fmziv.jpg'));
     }
 
     private static function createBodyBlock()

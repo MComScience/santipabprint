@@ -67,12 +67,13 @@ class ApiController extends \yii\web\Controller
         $response->format = \yii\web\Response::FORMAT_JSON;
         $catagorys = TblProductCategory::find()->orderBy('product_category_order ASC')->all();
         $itemCatagorys = [];
-        $baseUrl = 'https://santipab.info';
+        $baseUrl = Yii::$app->params['BASE_URL'];
         foreach ($catagorys as $key => $catagory) {
             $itemCatagorys[] = [
                 'product_category_id' => $catagory['product_category_id'],
                 'product_category_name' => $catagory['product_category_name'],
                 'image_url' => $baseUrl . $catagory->getImageUrl(),
+                'default_image' => $baseUrl . $catagory->getDefaultImage()
             ];
         }
         return $itemCatagorys;
@@ -376,7 +377,7 @@ class ApiController extends \yii\web\Controller
 
     public function actionGetProductCategory($id)
     {
-        $baseUrl = 'https://santipab.info';
+        $baseUrl = Yii::$app->params['BASE_URL'];
         $catagory = TblProductCategory::findOne($id);
         $itemProducts = [];
         if ($catagory) {
@@ -398,7 +399,7 @@ class ApiController extends \yii\web\Controller
     {
         $itemProducts = [];
         $products = TblProduct::find()->orderBy('package_type_id ASC, product_order ASC')->all();
-        $baseUrl = 'https://santipab.info';
+        $baseUrl = Yii::$app->params['BASE_URL'];
         foreach ($products as $key => $product) {
             $itemProducts[] = [
                 'product_id' => $product['product_id'],

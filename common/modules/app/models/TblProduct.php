@@ -190,7 +190,7 @@ class TblProduct extends \yii\db\ActiveRecord
             return $this->product_image_base_url.str_replace('\\', '/', $this->product_image_path);
             //Url::to(['/glide', 'path' => $this->product_image_base_url.str_replace('\\', '/', $this->product_image_path)]);
         }
-        return Yii::getAlias('@web/images/No_Image_Available.png');
+        return Yii::getAlias('@web/images/no-image.png');
         //return Url::to(['/glide', 'path' => 'images/No_Image_Available.png']);
         // return $urlBuilder->getUrl('images/No_Image_Available.png', []);
     }
@@ -227,5 +227,10 @@ class TblProduct extends \yii\db\ActiveRecord
     public function getfileAttachments() {
         return $this->hasMany(FileAttachment::className(), ['ref_id' => 'product_id'])
                         ->andOnCondition(['ref_table_name' => 'tbl_product']);
+    }
+
+    public function getDefaultImage()
+    {
+        return Yii::getAlias('@web/images/no-image.png');
     }
 }

@@ -15,20 +15,23 @@
         <a
           @click="$emit('select-cat', category.product_category_id)"
           href="javascript:void(0)"
-        >{{ category.product_category_name }}</a>
+          >{{ category.product_category_name }}</a
+        >
       </li>
-      <li v-if="isSelectedProduct && product" class="active">{{ product.product_name }}</li>
+      <li v-if="isSelectedProduct && product" class="active">
+        {{ product.product_name }}
+      </li>
     </ol>
   </div>
 </template>
 
 <script>
 export default {
-  name: "SectionTitle",
+  name: 'SectionTitle',
   props: {
     title: {
       type: String,
-      default: "หมวดหมู่"
+      default: 'หมวดหมู่'
     },
     isSelectedCategory: {
       type: Boolean,
@@ -41,18 +44,17 @@ export default {
     category: {
       type: Object,
       default: function() {
-        return {};
+        return {}
       }
     },
     product: {
       type: Object,
       default: function() {
-        return {};
+        return {}
       }
     }
   }
-};
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

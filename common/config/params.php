@@ -26,5 +26,7 @@ return [
             "sSortAscending" => ": เปิดใช้งานการเรียงข้อมูลจากน้อยไปมาก",
             "sSortDescending" => ": เปิดใช้งานการเรียงข้อมูลจากมากไปน้อย"
         ]
-    ]
+    ],
+    'secretKey' => 'restApiSecretKey',
+    'expiresIn' => '+8 hours'
 ];

@@ -3,7 +3,9 @@
     <div
       class="kt-portlet__head kt-portlet__head--noborder kt-ribbon kt-ribbon--success2 kt-ribbon--shadow"
     >
-      <div class="kt-ribbon__target" style="top: 12px; right: -2px;">{{ ribbonTitle }}</div>
+      <div class="kt-ribbon__target" style="top: 12px; right: -2px;">
+        {{ ribbonTitle }}
+      </div>
       <div class="kt-portlet__head-label">
         <h3 class="kt-portlet__head-title">{{ title }}</h3>
       </div>
@@ -19,22 +21,22 @@
 
 <script>
 export default {
-  name: "KtPortlet",
+  name: 'KtPortlet',
   props: {
     ribbonTitle: {
       type: String,
-      default: ""
+      default: ''
     },
     title: {
       type: String,
-      default: ""
+      default: ''
     },
     footer: {
       type: Boolean,
       default: true
     }
   }
-};
+}
 </script>
 
 <style scoped>

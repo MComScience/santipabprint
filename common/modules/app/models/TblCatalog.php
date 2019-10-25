@@ -71,14 +71,19 @@ class TblCatalog extends \yii\db\ActiveRecord {
 
     public function getImageUrl() {
         if ($this->image_path) {
-            return Yii::getAlias('@web' . $this->image_base_url . $this->image_path);
+            return$this->image_base_url.str_replace('\\', '/', $this->image_path); //Yii::getAlias('@web' . $this->image_base_url . $this->image_path);
         } else {
-            return Yii::getAlias('@web/images/No_Image_Available.png');
+            return Yii::getAlias('@web/images/no-image.png');
         }
     }
 
     public function getProductCategory() {
 // a comment has one customer
         return $this->hasOne(TblProductCategory::className(), ['product_category_id' => 'product_category_id']);
+    }
+
+    public function getDefaultImage()
+    {
+        return Yii::getAlias('@web/images/no-image.png');
     }
 }

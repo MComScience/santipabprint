@@ -27,18 +27,17 @@
 
 <script>
 export default {
-  name: "Product",
+  name: 'Product',
   props: {
     products: {
       type: Array,
       required: true,
       default: function() {
-        return [];
+        return []
       }
     }
   }
-};
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
