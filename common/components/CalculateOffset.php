@@ -404,6 +404,7 @@ class CalculateOffset extends Component {
                 $this->print_sheet_total = CalculetFnc::calculateEnvelopePrintSheetTotal($model, 150, 50); //จำนวนจากหน้าจอ
             }
             $this->envelope_price_place = CalculetFnc::calculateEnvelopePricePlace($this->fourColors, $this->oneColors, $this->twoColors); //ราคาเพลทซองจดหมาย,ซองเอกสาร
+            $this->findCoating();
         } else {
             if ($paperDetails) {
                 $this->paperDetails = $paperDetails;
