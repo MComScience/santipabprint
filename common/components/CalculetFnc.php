@@ -19,11 +19,12 @@ class CalculetFnc {
     }
 
     public static function convertCmToIn($size) { ////เซนติเมตรเป็นนิ้ว
-        $result = $size * 0.4; 
+        $result = $size * 0.4;
         return Yii::$app->formatter->format($result, ['decimal', 2]);
     }
+
     public static function convertCmToFt($size) { ////เซนติเมตรเป็นฟุต
-        $result = $size * 0.0328084; 
+        $result = $size * 0.0328084;
         return round($result);
     }
 
@@ -49,20 +50,20 @@ class CalculetFnc {
     public static function calculateVerticalLayWidth($print_area_width, $size_width_cal, $print_area_length, $size_length_cal) {
         $vertical_lay_width = $print_area_width / $size_width_cal;
         $vertical_lay_length = $print_area_length / $size_length_cal;
-        return (int)($vertical_lay_width * $vertical_lay_length);
+        return (int) ($vertical_lay_width * $vertical_lay_length);
     }
 
     public static function calculateHorizonLayWidth($print_area_width, $size_width_cal, $print_area_length, $size_length_cal) {
         $horizon_lay_width = $print_area_width / $size_length_cal;
         $horizon_lay_length = $print_area_length / $size_width_cal;
-        return (int)($horizon_lay_width * $horizon_lay_length);
+        return (int) ($horizon_lay_width * $horizon_lay_length);
     }
-    
+
     public static function calculateCoatingPrice($coating_prices, $coating_id, $sq, $cal_print_sheet_total) { //คำนวนราคาเคลือบ
         $laminate_price = 0;
         $coating = null;
         foreach ($coating_prices as $key => $coating_price) {
-           if ($sq <= $coating_price['coating_sq_in']) { //ขนาดกระดาษที่หาได้ไม่เกินขนาดในฐานข้อมูล
+            if ($sq <= $coating_price['coating_sq_in']) { //ขนาดกระดาษที่หาได้ไม่เกินขนาดในฐานข้อมูล
                 $coating = $coating_price;
                 switch ($coating_id) {
                     case "C-00001"://เคลือบ pvc ด้าน
@@ -141,7 +142,7 @@ class CalculetFnc {
                 $params['dicut_price'] = 300;
             }
             $params['dicut_price'] = $params['block_dicut_price'] + $params['dicut_price']; //ราคาบล๊อก + ราคาไดคัท
-        }else if(!$params['isSticker'] && $params['cal_print_sheet_total'] <= 20){//ไม่ใช่สติกเกอร์และมีกระดาษน้อยกว่า 20 แผ่น
+        } else if (!$params['isSticker'] && $params['cal_print_sheet_total'] <= 20) {//ไม่ใช่สติกเกอร์และมีกระดาษน้อยกว่า 20 แผ่น
             $params['print_sheet_total'] = $params['print_sheet_total'] + 5; //ต้องมีการเผื่อกระดาษ 5 แผ่น
             $params['block_dicut_price'] = 800; //ค่าบล๊อก
             $params['dicut_price'] = $params['cal_print_sheet_total'] * 50; //ถ้าไม่เกิน 20 แผ่น ให้คิดไดคัทแผ่นละ 50 บาท
@@ -150,8 +151,7 @@ class CalculetFnc {
                 $params['dicut_price'] = 300;
             }
             $params['dicut_price'] = $params['block_dicut_price'] + $params['dicut_price']; //ราคาบล๊อก + ราคาไดคัท
-            
-        }else if (!$params['isSticker'] && $params['cal_print_sheet_total'] <= 100) {//ไม่ใช่สติกเกอร์และมีกระดาษน้อยกว่า 100 แผ่น
+        } else if (!$params['isSticker'] && $params['cal_print_sheet_total'] <= 100) {//ไม่ใช่สติกเกอร์และมีกระดาษน้อยกว่า 100 แผ่น
             $params['print_sheet_total'] = $params['print_sheet_total'] + 5; //ต้องมีการเผื่อกระดาษ 5 แผ่น
             $params['block_dicut_price'] = 800; //ค่าบล๊อก
             $params['dicut_price'] = $params['cal_print_sheet_total'] * 0.3;
@@ -176,7 +176,7 @@ class CalculetFnc {
         }
         return $print_sheet_total;
     }
-    
+
     public static function calculatePrintSheetTotal2($print_sheet_total, $total_1, $total_2) {
         if ($print_sheet_total <= 100) {
             $print_sheet_total = $print_sheet_total + $total_1; // บวกเผื่อกระดาษ (เริ่มต้นที่ 20 ใบ)
@@ -184,6 +184,17 @@ class CalculetFnc {
             //บวกเพิ่ม 5 ใบ ทุก ๆ 100 แผ่นพิมพ์
             $for_paper = ceil(($print_sheet_total / 100));
             $print_sheet_total = $print_sheet_total + ($total_2 * $for_paper);
+        }
+        return $print_sheet_total;
+    }
+
+    public static function calculateEnvelopePrintSheetTotal($model, $total_1, $total_2) { //สำหรับ ซองจดหมาย,ซองเอกสาร
+        if ($model['cust_quantity'] < 2000) {
+            $print_sheet_total = $model['cust_quantity'] + $total_1; // จำนวนจากหน้าจอ บวกเผื่อกระดาษ (เริ่มต้นที่ 20 ใบ)
+        } else {
+            //บวกเพิ่ม 20 ใบ ทุก ๆ 1000 แผ่นพิมพ์
+            $for_paper = ceil(($model['cust_quantity'] / 1000));
+            $print_sheet_total = $model['cust_quantity'] + ($total_2 * $for_paper);
         }
         return $print_sheet_total;
     }
@@ -221,7 +232,7 @@ class CalculetFnc {
         if ($isFourColor) { // งาน 4 สี
             // ขนาดไม่เกิน 21*29 นิ้ว
             if ($w <= 21 && $l <= 29) {
-                 //ขนาดตัดเพลท
+                //ขนาดตัดเพลท
                 if ($w <= 18 && $l <= 25) {// ขนาดไม่เกิน 18*25
                     $place_cut = 4;
                     $price = 2000;
@@ -263,8 +274,21 @@ class CalculetFnc {
         }
         return [
             'place_cut' => $place_cut,
-            'place_price' =>  $price
+            'place_price' => $price
         ];
+    }
+
+    public static function calculateEnvelopePricePlace($isFourColor, $oneColors, $twoColors) {
+        $price = 0;
+        if ($isFourColor) { // งาน 4 สี
+            $price = 2000;
+        } else if ($oneColors) { // ถ้าเป็นงาน 1 สี
+            $price = 500;
+        } else if($twoColors) {// ถ้าเป็นงาน 2 สี
+            $price = 1000;
+        }
+        return $price;
+       
     }
 
 }
