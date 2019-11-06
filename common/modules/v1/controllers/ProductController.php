@@ -277,6 +277,8 @@ class ProductController extends ActiveController
         $bookInnerColorOption = $queryBuilder->getBookInnerColorOption();
         // กระดาษขาวดำ(เนื้อใน)
         $bookInnerPaperWithoutColorOption = $queryBuilder->getBookInnerPaperWithoutColorOption();
+        //ปกกับเนื้อในกระดาษเดียวกัน
+        $bookPaperStatusOption = $queryBuilder->getBookPaperStatusOption();
 
         return [
             'formOptions' => $formOptions,
@@ -318,6 +320,7 @@ class ProductController extends ActiveController
                 'bookInnerPaperOption' => $bookInnerPaperOption,
                 'bookInnerColorOption' => $bookInnerColorOption,
                 'bookInnerPaperWithoutColorOption' => $bookInnerPaperWithoutColorOption,
+                'bookPaperStatusOption' => $bookPaperStatusOption,
             ],
         ];
     }
