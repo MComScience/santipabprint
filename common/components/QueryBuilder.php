@@ -651,5 +651,22 @@ class QueryBuilder extends Component
         $options = $this->renderOption($query, 'color_printing_id', 'color_printing_name', 'color_printing_descriotion');
         return $options;
     }
+    
+    public function getBookPaperStatusOption() //หนังสือ ปก/เนื้อในอันเดียวกัน
+    {
+        $dataOptions = [];
+        $setting = ArrayHelper::getValue($this->options, 'book_paper_status', []);
+        $condition = empty($setting['options']) ? [] : ArrayHelper::getValue($setting, 'options', []);
+        $inputOptions = InPutOptions::getOption('book_paper_status');
+        foreach ($inputOptions as $option) {
+            if (ArrayHelper::isIn($option['id'], $condition)) {
+                $dataOptions[] = [
+                    'id' => $option['id'],
+                    'text' => $option['name'],
+                ];
+            }
+        }
+        return $dataOptions;
+    }
 
 }

@@ -353,6 +353,19 @@ class InPutOptions
                 ],
             ];
         }
+        //ปกกับเนื้อในกระดาษเดียวกัน
+        if ($attribute == 'book_paper_status') {
+            $list = [
+                [
+                    'id' => 1,
+                    'name' => 'ไม่ใช่',
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'ใช่',
+                ],
+            ];
+        }
         // สถานะพิมพ์ขาวดำเนื้อใน
         /*
         if ($attribute == 'inner_monochrome_book_status') {

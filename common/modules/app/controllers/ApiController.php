@@ -152,6 +152,8 @@ class ApiController extends \yii\web\Controller
         $windowBoxUnitOption = $queryBuilder->getWindowBoxUnitOption();
         // ฟิลด์ที่ไม่ต้องการให้แสดงรายละเอียด
         $skipAttributes = InPutOptions::skipAttributes();
+        //ปกกับเนื้อในกระดาษเดียวกัน
+        $bookPaperStatusOption = $queryBuilder->getBookPaperStatusOption();
         // กระดาษปกหนังสือ
         $bookCoversPaperOption = $queryBuilder->getBookCoversPaperOption();
         // สีที่พิมพ์ปกหนังสือ
@@ -203,6 +205,7 @@ class ApiController extends \yii\web\Controller
                 'bookInnerPaperOption' => $bookInnerPaperOption,
                 'bookInnerColorOption' => $bookInnerColorOption,
                 'bookInnerPaperWithoutColorOption' => $bookInnerPaperWithoutColorOption,
+                'bookPaperStatusOption' => $bookPaperStatusOption
             ],
         ];
     }

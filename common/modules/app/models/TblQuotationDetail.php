@@ -84,7 +84,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
         return [
             [['quotation_id', 'product_id'], 'required'],
             [['paper_size_width', 'paper_size_height', 'paper_size_lenght', 'foil_size_width', 'foil_size_height', 'emboss_size_width', 'emboss_size_height', 'window_box_width', 'window_box_lenght', 'cust_quantity', 'final_price'], 'number'],
-            [['paper_size_unit', 'paper_detail_id', 'perforate', 'perforate_option_id', 'foil_size_unit', 'emboss_size_unit', 'glue', 'rope', 'perforated_ripped', 'running_number', 'window_box', 'window_box_unit', 'land_orient', 'book_binding_status', 'page_qty', 'bill_detail_qty', 'book_binding_qty', 'book_covers_qty', 'book_inner_paper_qty', 'book_inner_without_color_qty'], 'integer'],
+            [['paper_size_unit', 'paper_detail_id', 'perforate', 'perforate_option_id', 'foil_size_unit', 'emboss_size_unit', 'glue', 'rope', 'perforated_ripped', 'running_number', 'window_box', 'window_box_unit', 'land_orient', 'book_binding_status', 'page_qty', 'bill_detail_qty', 'book_binding_qty', 'book_covers_qty', 'book_inner_paper_qty', 'book_inner_without_color_qty','book_paper_status'], 'integer'],
             [['quotation_id', 'product_id', 'paper_size_id', 'print_one_page', 'print_two_page', 'paper_id', 'coating_id', 'diecut_id', 'fold_id', 'foil_color_id', 'book_binding_id', 'book_covers_paper', 'book_covers_color', 'book_inner_paper', 'book_inner_color', 'book_inner_paper_without_color'], 'string', 'max' => 100],
             [['print_option', 'print_color', 'diecut_status', 'diecut', 'foil_print', 'emboss_print', 'book_type'], 'string', 'max' => 50],
             [['coating_option'], 'string', 'max' => 10],
@@ -146,7 +146,7 @@ class TblQuotationDetail extends \yii\db\ActiveRecord
             'window_box_width' => 'กว้าง(ติดหน้าต่าง)',
             'window_box_lenght' => 'ยาว(ติดหน้าต่าง)',
             'window_box_unit' => 'หน่วย(ติดหน้าต่าง)',
-            'paper_book_status' => 'ปกหนังสือกับเนื้อในเป็นกระดาษเดียวกัน',
+            'book_paper_status' => 'ปกหนังสือกับเนื้อในเป็นกระดาษเดียวกัน',
             'book_type' => 'ปกนอก/เนื้อใน หนังสือ',
             'book_covers_paper' => 'กระดาษปกหนังสือ',
             'book_covers_color' => 'สีที่พิมพ์ปกหนังสือ',
